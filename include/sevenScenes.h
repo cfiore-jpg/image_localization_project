@@ -33,7 +33,11 @@ namespace sevenScenes
 
     vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, int>> pairSelection(const vector<pair<int, float>> &result, const vector<string> &listImage, const string &query, double loThresh, int maxNum, int method);
 
-    bool findEssentialMatrix(const string &db_image, const string &query_image, int method, Eigen::Matrix3d &R, Eigen::Vector3d &t, int& num_points);
+    bool findMatches(const string& db_image, const string& query_image, const string& method, vector<cv::Point2d>& pts_db, vector<cv::Point2d>& pts_query);
+
+    vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<cv::Point2d>, vector<cv::Point2d>>> getTopXImageMatches(const vector<pair<int, float>> &result, const vector<string> &listImage, const string &queryImage, int num_images, const string& method);
+
+    void handle(const vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<cv::Point2d>, vector<cv::Point2d>>>& lst, const cv::Mat& K, Eigen::Matrix3d& R, Eigen::Vector3d& t, vector<vector<double>>& cams, vector<vector<vector<double>>>& matches);
 
     double triangulateRays(const Eigen::Vector3d& ci, const Eigen::Vector3d& di, const Eigen::Vector3d& cj, const Eigen::Vector3d& dj, Eigen::Vector3d &intersect);
 }

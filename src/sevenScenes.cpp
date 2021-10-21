@@ -23,6 +23,80 @@ using namespace std;
 
 //Pre-processing
 
+vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::createInfoVector()
+{
+    vector<tuple<string, string, vector<string>, vector<string>>> info;
+
+    tuple<string, string, vector<string>, vector<string>> chess;
+    vector<string> train0 {"01", "02", "04", "06"};
+    vector<string> test0 {"03", "05"};
+    get<0>(chess) = "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/";
+    get<1>(chess) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<2>(chess) = train0;
+    get<3>(chess) = test0;
+    info.push_back(chess);
+
+    tuple<string, string, vector<string>, vector<string>> fire;
+    vector<string> train1 {"01", "02"};
+    vector<string> test1 {"03", "04"};
+    get<0>(fire) = "/Users/cameronfiore/C++/ImageMatcherProject/data/fire/";
+    get<1>(fire) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<2>(fire) = train1;
+    get<3>(fire) = test1;
+    info.push_back(fire);
+
+    tuple<string, string, vector<string>, vector<string>> heads;
+    vector<string> train2 {"02"};
+    vector<string> test2 {"01"};
+    get<0>(heads) = "/Users/cameronfiore/C++/ImageMatcherProject/data/heads/";
+    get<1>(heads) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<2>(heads) = train2;
+    get<3>(heads) = test2;
+    info.push_back(heads);
+
+    tuple<string, string, vector<string>, vector<string>> office;
+    vector<string> train3 {"01", "03", "04", "05", "08", "10"};
+    vector<string> test3 {"02", "06", "07", "09"};
+    get<0>(office) = "/Users/cameronfiore/C++/ImageMatcherProject/data/office/";
+    get<1>(office) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<2>(office) = train3;
+    get<3>(office) = test3;
+    info.push_back(office);
+
+    tuple<string, string, vector<string>, vector<string>> pumpkin;
+    vector<string> train4 {"02", "03", "06", "08"};
+    vector<string> test4 {"01", "07"};
+    get<0>(pumpkin) = "/Users/cameronfiore/C++/ImageMatcherProject/data/pumpkin/";
+    get<1>(pumpkin) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<2>(pumpkin) = train4;
+    get<3>(pumpkin) = test4;
+    info.push_back(pumpkin);
+
+    tuple<string, string, vector<string>, vector<string>> redkitchen;
+    vector<string> train5 {"01", "02", "05", "07", "08", "11", "13"};
+    vector<string> test5 {"03", "04", "06", "12", "14"};
+    get<0>(redkitchen) = "/Users/cameronfiore/C++/ImageMatcherProject/data/redkitchen/";
+    get<1>(redkitchen) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<2>(redkitchen) = train5;
+    get<3>(redkitchen) = test5;
+    info.push_back(redkitchen);
+
+    tuple<string, string, vector<string>, vector<string>> stairs;
+    vector<string> train6 {"02", "03", "05", "06"};
+    vector<string> test6 {"01", "04"};
+    get<0>(stairs) = "/Users/cameronfiore/C++/ImageMatcherProject/data/stairs/";
+    get<1>(stairs) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_500.txt";
+    get<2>(stairs) = train6;
+    get<3>(stairs) = test6;
+    info.push_back(stairs);
+
+    return info;
+}
+
+
+
+//Math
+
 Eigen::Matrix3d sevenScenes::getR(const string& image)
 {
     Eigen::Matrix3d R;
@@ -97,120 +171,19 @@ Eigen::Vector3d sevenScenes::getT(const string& image)
     }
 }
 
-vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::createInfoVector()
+double sevenScenes::triangulateRays(const Eigen::Vector3d& ci, const Eigen::Vector3d& di, const Eigen::Vector3d& cj, const Eigen::Vector3d& dj, Eigen::Vector3d &intersect)
 {
-    vector<tuple<string, string, vector<string>, vector<string>>> info;
-
-    tuple<string, string, vector<string>, vector<string>> chess;
-    vector<string> train0 {"01", "02", "04", "06"};
-    vector<string> test0 {"03", "05"};
-    get<0>(chess) = "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/";
-    get<1>(chess) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
-    get<2>(chess) = train0;
-    get<3>(chess) = test0;
-    info.push_back(chess);
-
-    tuple<string, string, vector<string>, vector<string>> fire;
-    vector<string> train1 {"01", "02"};
-    vector<string> test1 {"03", "04"};
-    get<0>(fire) = "/Users/cameronfiore/C++/ImageMatcherProject/data/fire/";
-    get<1>(fire) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
-    get<2>(fire) = train1;
-    get<3>(fire) = test1;
-    info.push_back(fire);
-
-    tuple<string, string, vector<string>, vector<string>> heads;
-    vector<string> train2 {"02"};
-    vector<string> test2 {"01"};
-    get<0>(heads) = "/Users/cameronfiore/C++/ImageMatcherProject/data/heads/";
-    get<1>(heads) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
-    get<2>(heads) = train2;
-    get<3>(heads) = test2;
-    info.push_back(heads);
-
-    tuple<string, string, vector<string>, vector<string>> office;
-    vector<string> train3 {"01", "03", "04", "05", "08", "10"};
-    vector<string> test3 {"02", "06", "07", "09"};
-    get<0>(office) = "/Users/cameronfiore/C++/ImageMatcherProject/data/office/";
-    get<1>(office) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
-    get<2>(office) = train3;
-    get<3>(office) = test3;
-    info.push_back(office);
-
-    tuple<string, string, vector<string>, vector<string>> pumpkin;
-    vector<string> train4 {"02", "03", "06", "08"};
-    vector<string> test4 {"01", "07"};
-    get<0>(pumpkin) = "/Users/cameronfiore/C++/ImageMatcherProject/data/pumpkin/";
-    get<1>(pumpkin) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
-    get<2>(pumpkin) = train4;
-    get<3>(pumpkin) = test4;
-    info.push_back(pumpkin);
-
-    tuple<string, string, vector<string>, vector<string>> redkitchen;
-    vector<string> train5 {"01", "02", "05", "07", "08", "11", "13"};
-    vector<string> test5 {"03", "04", "06", "12", "14"};
-    get<0>(redkitchen) = "/Users/cameronfiore/C++/ImageMatcherProject/data/redkitchen/";
-    get<1>(redkitchen) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
-    get<2>(redkitchen) = train5;
-    get<3>(redkitchen) = test5;
-    info.push_back(redkitchen);
-
-    tuple<string, string, vector<string>, vector<string>> stairs;
-    vector<string> train6 {"02", "03", "05", "06"};
-    vector<string> test6 {"01", "04"};
-    get<0>(stairs) = "/Users/cameronfiore/C++/ImageMatcherProject/data/stairs/";
-    get<1>(stairs) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_500.txt";
-    get<2>(stairs) = train6;
-    get<3>(stairs) = test6;
-    info.push_back(stairs);
-
-    return info;
+    Eigen::Vector3d dq = di.cross(dj);
+    Eigen::Matrix3d D;
+    D.col(0) = di;
+    D.col(1) = -dj;
+    D.col(2) = dq;
+    Eigen::Vector3d b = cj - ci;
+    Eigen::Vector3d sol = D.colPivHouseholderQr().solve(b);
+    intersect = ci + sol(0)*di + (sol(2)/2)*dq;
+    Eigen::Vector3d toReturn = sol(2)*dq;
+    return toReturn.norm();
 }
-
-vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, int>> sevenScenes::pairSelection(const vector<pair<int, float>> &result, const vector<string> &listImage, const string &queryImage, double loThresh, int maxNum, int method)
-{
-    int i = 0;
-    vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, int>> rel_images;
-    while(i < result.size() && rel_images.size() < maxNum)
-    {
-        string cur_image = listImage[result[i].first];
-        Eigen::Vector3d curLoc = getT(cur_image);
-        Eigen::Matrix3d Riq;
-        Eigen::Vector3d tiq;
-        int points;
-        if(rel_images.empty())
-        {
-            if(findEssentialMatrix(cur_image, queryImage, method, Riq, tiq, points))
-            {
-                rel_images.push_back(tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, int> (getR(cur_image), curLoc, Riq, tiq, points));
-            }
-        } else
-        {
-            bool tooClose = false;
-            for (auto &ri : rel_images)
-            {
-                double dist = getDistBetween(curLoc, get<1>(ri));
-                if (dist < loThresh) {
-                    tooClose = true;
-                    break;
-                }
-            }
-            if(!tooClose)
-            {
-                if(findEssentialMatrix(cur_image, queryImage, method, Riq, tiq, points))
-                {
-                    rel_images.push_back(tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, int> (getR(cur_image), curLoc, Riq, tiq, points));
-                }
-            }
-        }
-        ++i;
-    }
-    return rel_images;
-}
-
-
-
-//Vector Measurements
 
 double sevenScenes::getDistBetween(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2)
 {
@@ -231,8 +204,7 @@ double sevenScenes::getAngleBetween(const Eigen::Vector3d &d1, const Eigen::Vect
 
 // Processing
 
-bool sevenScenes::findEssentialMatrix(const string &db_image, const string &query_image, int method, Eigen::Matrix3d &R, Eigen::Vector3d &t, int& num_points)
-{
+bool sevenScenes::findMatches(const string& db_image, const string& query_image, const string& method, vector<cv::Point2d>& pts_db, vector<cv::Point2d>& pts_query) {
 
     cv::Mat image1 = cv::imread(query_image + ".color.png");
     cv::Mat image2 = cv::imread(db_image + ".color.png");
@@ -245,15 +217,15 @@ bool sevenScenes::findEssentialMatrix(const string &db_image, const string &quer
     vector<cv::KeyPoint> kp_vec1, kp_vec2;
     cv::Mat desc1, desc2;
 
-    if(method == 0)
+    if(method == "ORB")
     {
         orb->detectAndCompute(image1, mask1, kp_vec1, desc1);
         orb->detectAndCompute(image2, mask2, kp_vec2, desc2);
-    } else if(method == 1)
+    } else if(method == "SURF")
     {
         surf->detectAndCompute(image1, mask1, kp_vec1, desc1);
         surf->detectAndCompute(image2, mask2, kp_vec2, desc2);
-    } else if(method == 2)
+    } else if(method == "SIFT")
     {
         sift->detectAndCompute(image1, mask1, kp_vec1, desc1);
         sift->detectAndCompute(image2, mask2, kp_vec2, desc2);
@@ -264,12 +236,12 @@ bool sevenScenes::findEssentialMatrix(const string &db_image, const string &quer
     }
 
     cv::BFMatcher matcher(cv::NORM_L2, false);
-    vector< vector<cv::DMatch> > matches_2nn_12, matches_2nn_21;
-    matcher.knnMatch( desc1, desc2, matches_2nn_12, 2 );
-    matcher.knnMatch( desc2, desc1, matches_2nn_21, 2 );
+    vector<vector<cv::DMatch>> matches_2nn_12, matches_2nn_21;
+    matcher.knnMatch(desc1, desc2, matches_2nn_12, 2);
+    matcher.knnMatch(desc2, desc1, matches_2nn_21, 2);
     const double ratio = 0.8;
     vector<cv::Point2d> pts1, pts2;
-    for (int i = 0; i < matches_2nn_12.size(); i++) { // i is queryIdx
+    for (int i = 0; i < matches_2nn_12.size(); i++) {
         if( matches_2nn_12[i][0].distance/matches_2nn_12[i][1].distance < ratio
             and
             matches_2nn_21[matches_2nn_12[i][0].trainIdx][0].distance
@@ -279,191 +251,148 @@ bool sevenScenes::findEssentialMatrix(const string &db_image, const string &quer
                == matches_2nn_12[i][0].queryIdx)
             {
                 pts1.push_back(kp_vec1[matches_2nn_12[i][0].queryIdx].pt);
-                pts2.push_back(
-                        kp_vec2[matches_2nn_21[matches_2nn_12[i][0].trainIdx][0].queryIdx].pt
-                );
+                pts2.push_back(kp_vec2[matches_2nn_21[matches_2nn_12[i][0].trainIdx][0].queryIdx].pt);
             }
         }
     }
 
-    if(pts1.size() < 3)
+    if(pts1.size() < 5)
     {
         return false;
     }
 
-    try {
+    pts_query = pts1;
+    pts_db = pts2;
+    return true;
+}
 
-//        cv::Mat im2_points = image2.clone();
-//        for(const auto &p: pts2)
-//        {
-//            cv::circle(im2_points, p, 3, cv::Scalar(0, 0, 0), -1);
-//        }
-//        cv::imshow("DB Image Points", im2_points);
-//        cv::waitKey();
+vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<cv::Point2d>, vector<cv::Point2d>>> sevenScenes::getTopXImageMatches(const vector<pair<int, float>> &result, const vector<string> &listImage, const string &queryImage, int num_images, const string& method) {
 
+    vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<cv::Point2d>, vector<cv::Point2d>>> to_return;
+    int i = 0;
 
-//        cv::Mat src1;
-//        cv::hconcat(image1, image2, src1);
-//        for(int i = 0; i < pts1.size(); i++) {
-//            cv::line( src1, pts1[i],
-//                      cv::Point2d(pts2[i].x + image1.cols, pts2[i].y),
-//                      1, 1, 0 );
-//        }
-//        cv::imshow("Before Filtering", src1);
-//        cv::waitKey();
-//
-//        int num_clusters = pts2.size() / 10;
-//        if(num_clusters == 0)
-//        {
-//            num_clusters = 1;
-//        }
-//
-//        vector<pair<vector<cv::Point2d>, vector<cv::Point2d>>> clusters = sevenScenes::findClusters(pts1, pts2, num_clusters, image2);
-//
-//        cv::Mat mask, src2;
-//        vector<cv::Point2d> inlier_points1, inlier_points2;
-//        int color = 0;
-//        for(const auto & c:clusters)
-//        {
-//            src2.release();
-//            cv::hconcat(image1, image2, src2);
-//            int r = 30*color % 255;
-//            int g = 60*color % 255;
-//            int b = 90*color % 255;
-//            for(int i = 0; i < c.first.size(); i++) {
-//                cv::line( src2, c.first[i],
-//                          cv::Point2d(c.second[i].x + image1.cols, c.second[i].y),
-//                          cv::Scalar (r, g, b), 1, 0 );
-//            }
-//            cv::imshow("Before Homography", src2);
-//            cv::waitKey();
-//            try {
-//                cv::findHomography(c.first, c.second, cv::RANSAC, 1.0, mask);
-//                vector<cv::Point2d> new_points1, new_points2;
-//                for (int i = 0; i < mask.rows; i++) {
-//                    if (mask.at<unsigned char>(i)) {
-//                        inlier_points1.push_back(c.first[i]);
-//                        inlier_points2.push_back(c.second[i]);
-//                        new_points1.push_back(c.first[i]);
-//                        new_points2.push_back(c.second[i]);
-//                    }
-//                }
-//                src2.release();
-//                cv::hconcat(image1, image2, src2);
-//                for(int i = 0; i < new_points1.size(); i++) {
-//                    cv::line( src2, new_points1[i],
-//                              cv::Point2d(new_points2[i].x + image1.cols, new_points2[i].y),
-//                              cv::Scalar (r, g, b), 1, 0 );
-//                }
-//                cv::imshow("After Homography", src2);
-//                cv::waitKey();
-//            } catch (exception &e){}
-//            mask.release();
-//            ++color;
-//        }
-//
-//        cv::Mat src3;
-//        cv::hconcat(image1, image2, src3);
-//        for(int i = 0; i < inlier_points1.size(); i++) {
-//            cv::line( src3, inlier_points1[i],
-//                      cv::Point2d(inlier_points2[i].x + image1.cols, inlier_points2[i].y),
-//                      1, 1, 0 );
-//        }
-//        cv::imshow("After Filtering", src3);
-//        cv::waitKey();
+    while(i < result.size() and to_return.size() < num_images) {
 
+        string cur_image = listImage[result[i].first];
+        Eigen::Matrix3d R = getR(cur_image).transpose();
+        Eigen::Vector3d t = -R * getT(cur_image);
 
-//        cv::Mat maskF;
-//        cv::Mat F = cv::findFundamentalMat(pts1, pts2, cv::FM_RANSAC, 2.0, 0.99, maskF);
-//
-//        vector<cv::Point2d> new_pts1, new_pts2;
-//        for(int i = 0; i < maskF.rows; i++) {
-//            if(maskF.at<unsigned char>(i)){
-//                new_pts1.push_back(pts1[i]);
-//                new_pts2.push_back(pts2[i]);
-//            }
-//        }
-//
-//        vector<cv::Point2d> inlier_points1, inlier_points2;
-//        cv::correctMatches(F, new_pts1, new_pts2, inlier_points1, inlier_points2);
-
-        cv::Mat maskE;
-        cv::Mat K = (cv::Mat_<double>(3,3) <<
-                500,   0, image1.cols / 2,
-                0, 500, image1.rows / 2,
-                0.f,   0,   1);
-        cv::Mat E = cv::findEssentialMat(pts1, pts2, K, cv::RANSAC, 0.999, 1.0, maskE);
-
-        vector<cv::Point2d> recover_points1, recover_points2;
-        for(int i = 0; i < maskE.rows; i++) {
-            if(maskE.at<unsigned char>(i)){
-                recover_points1.push_back(pts1[i]);
-                recover_points2.push_back(pts2[i]);
-            }
+        vector<cv::Point2d> pts_db, pts_query;
+        if(findMatches(cur_image, queryImage, method, pts_db, pts_query)) {
+            to_return.emplace_back(R, t, pts_query, pts_db);
+        } else {
+            continue;
         }
+        i++;
+    }
+
+    sort(to_return.begin(), to_return.end(), [](const auto& lhs, const auto& rhs){
+        return get<2>(lhs).size() > get<2>(rhs).size();
+    });
 
 
-        for(int i = 0; i < recover_points1.size(); i++)
-        {
-            cv::Mat x = (cv::Mat_<double>(3,1) << recover_points1[i].x, recover_points1[i].y, 1);
-            cv::Mat x_h = (cv::Mat_<double>(1,3) << recover_points2[i].x, recover_points2[i].y, 1);
+    return to_return;
+}
 
-            cv::Mat final = x_h * K.inv().t() * E * K.inv() * x;
-            cout << final << endl;
-//            Eigen::Vector3d value = first.transpose() * x_h;
+void sevenScenes::handle(const vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<cv::Point2d>, vector<cv::Point2d>>>& lst, const cv::Mat& K, Eigen::Matrix3d& R, Eigen::Vector3d& t, vector<vector<double>>& cams, vector<vector<vector<double>>>& matches) {
+
+    auto image_j = lst[0];
+    auto R_wj = get<0>(image_j);
+    auto t_wj = get<1>(image_j);
+    auto pts_q_j = get<2>(image_j);
+    auto pts_j = get<3>(image_j);
+
+    auto image_k = lst[1];
+    auto R_wk = get<0>(image_k);
+    auto t_wk = get<1>(image_k);
+    auto pts_q_k = get<2>(image_k);
+    auto pts_k = get<3>(image_k);
+
+    cv::Mat mask_j, mask_k;
+    cv::Mat E_qj = cv::findEssentialMat(pts_q_j, pts_j, K, cv::RANSAC, 0.999, 1.0, mask_j);
+    cv::Mat E_qk = cv::findEssentialMat(pts_q_k, pts_k, K, cv::RANSAC, 0.999, 1.0, mask_k);
+
+
+    vector<cv::Point2d> rp_q_j, rp_j, rp_q_k, rp_k;
+    for(int i = 0; i < mask_j.rows; i++) {
+        if(mask_j.at<unsigned char>(i)){
+            rp_q_j.push_back(pts_q_j[i]);
+            rp_j.push_back(pts_j[i]);
         }
+    }
 
-
-
-//        cv::Mat src2;
-//        cv::hconcat(image1, image2, src2);
-//        for(int i = 0; i < recover_points1.size(); i++) {
-//            cv::line( src2, recover_points1[i],
-//                      cv::Point2d(recover_points2[i].x + image1.cols, recover_points2[i].y),
-//                      1, 1, 0 );
-//        }
-//        cv::imshow("After RANSAC Filtering", src2);
-//        cv::waitKey();
-
-        cv::Mat R_cv, t_cv, maskR;
-        cv::recoverPose(E.clone(), recover_points1, recover_points2, K, R_cv, t_cv,maskR);
-
-        num_points = 0;
-        for(int i = 0; i < maskR.rows; i++) {
-            if(maskE.at<unsigned char>(i)){
-                num_points++;
-            }
+    for(int i = 0; i < mask_k.rows; i++) {
+        if(mask_k.at<unsigned char>(i)){
+            rp_q_k.push_back(pts_q_k[i]);
+            rp_k.push_back(pts_k[i]);
         }
+    }
 
-        cv::Mat R_inv = R_cv.t();
-        cv::Mat T = -R_inv * t_cv;
-        cv::cv2eigen(R_inv, R);
-        cv::cv2eigen(T, t);
-        return true;
-    } catch (exception& e)
-    {
-        return false;
+
+    Eigen::Matrix3d R_jq, R_kq;
+    Eigen::Vector3d t_jq, t_kq;
+
+    cv::Mat R_cv_j, t_cv_j, maskR_j;
+    cv::recoverPose(E_qj, rp_q_j, rp_j, K, R_cv_j, t_cv_j, maskR_j);
+    cv::Mat R_inv = R_cv_j.t();
+    cv::Mat T = -R_inv * t_cv_j;
+    cv::cv2eigen(R_inv, R_jq);
+    cv::cv2eigen(T, t_jq);
+
+    cv::Mat R_cv_k, t_cv_k, maskR_k;
+    cv::recoverPose(E_qk, rp_q_k, rp_k, K, R_cv_k, t_cv_k, maskR_k);
+    R_inv = R_cv_k.t();
+    T = -R_inv * t_cv_k;
+    cv::cv2eigen(R_inv, R_kq);
+    cv::cv2eigen(T, t_kq);
+
+    Eigen::Vector3d c_j = -R_wj.transpose()*t_wj;
+    Eigen::Vector3d ray_j = R_wj.transpose()*R_jq.transpose()*t_jq;
+
+    Eigen::Vector3d c_k = -R_wk.transpose()*t_wk;
+    Eigen::Vector3d ray_k = R_wk.transpose()*R_kq.transpose()*t_kq;
+
+    Eigen::Vector3d c_q_w;
+    triangulateRays(c_j, ray_j, c_k, ray_k, c_q_w);
+
+
+
+    // This is the initial estimate of pose
+    R = R_wj*R_jq;
+    t = -R.transpose()*c_q_w;
+
+
+
+    // This is the refinement set
+    cams.clear();
+    matches.clear();
+    for(int i = 2; i < lst.size(); i++){
+        auto R_wi = get<0>(lst[i]);
+        auto t_wi = get<1>(lst[i]);
+        vector<cv::Point2d> pts_q = get<2>(lst[i]);
+        vector<cv::Point2d> pts_i = get<3>(lst[i]);
+
+        vector<double> cam_i {R_wi(0,0),
+                              R_wi(1,0),
+                              R_wi(2,0),
+
+                              R_wi(0,1),
+                              R_wi(1,1),
+                              R_wi(2,1),
+
+                              R_wi(0,2),
+                              R_wi(1,2),
+                              R_wi(2,2)};
+        cams.push_back(cam_i);
+
+        vector<vector<double>> matches_i;
+        for(int j = 0; j < pts_q.size(); j++) {
+            vector<double> match {pts_q[j].x, pts_q[j].y, pts_i[j].x, pts_i[j].y};
+            matches_i.push_back(match);
+        }
+        matches.push_back(matches_i);
     }
 }
-
-double sevenScenes::triangulateRays(const Eigen::Vector3d& ci, const Eigen::Vector3d& di, const Eigen::Vector3d& cj, const Eigen::Vector3d& dj, Eigen::Vector3d &intersect)
-{
-    Eigen::Vector3d dq = di.cross(dj);
-    Eigen::Matrix3d D;
-    D.col(0) = di;
-    D.col(1) = -dj;
-    D.col(2) = dq;
-    Eigen::Vector3d b = cj - ci;
-    Eigen::Vector3d sol = D.colPivHouseholderQr().solve(b);
-    intersect = ci + sol(0)*di + (sol(2)/2)*dq;
-    Eigen::Vector3d toReturn = sol(2)*dq;
-    return toReturn.norm();
-}
-
-
-
-
-// Hypothesis
 
 
 
