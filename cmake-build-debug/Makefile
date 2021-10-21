@@ -196,6 +196,33 @@ src/KDTree.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.s
 .PHONY : src/KDTree.cpp.s
 
+src/Regression.o: src/Regression.cpp.o
+
+.PHONY : src/Regression.o
+
+# target to build an object file
+src/Regression.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o
+.PHONY : src/Regression.cpp.o
+
+src/Regression.i: src/Regression.cpp.i
+
+.PHONY : src/Regression.i
+
+# target to preprocess a source file
+src/Regression.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.i
+.PHONY : src/Regression.cpp.i
+
+src/Regression.s: src/Regression.cpp.s
+
+.PHONY : src/Regression.s
+
+# target to generate assembly for a file
+src/Regression.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.s
+.PHONY : src/Regression.cpp.s
+
 src/imageMatcher.o: src/imageMatcher.cpp.o
 
 .PHONY : src/imageMatcher.o
@@ -292,6 +319,9 @@ help:
 	@echo "... src/KDTree.o"
 	@echo "... src/KDTree.i"
 	@echo "... src/KDTree.s"
+	@echo "... src/Regression.o"
+	@echo "... src/Regression.i"
+	@echo "... src/Regression.s"
 	@echo "... src/imageMatcher.o"
 	@echo "... src/imageMatcher.i"
 	@echo "... src/imageMatcher.s"

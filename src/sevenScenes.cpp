@@ -309,8 +309,8 @@ void sevenScenes::handle(const vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, ve
     auto pts_k = get<3>(image_k);
 
     cv::Mat mask_j, mask_k;
-    cv::Mat E_qj = cv::findEssentialMat(pts_q_j, pts_j, K, cv::RANSAC, 0.999, 1.0, mask_j);
-    cv::Mat E_qk = cv::findEssentialMat(pts_q_k, pts_k, K, cv::RANSAC, 0.999, 1.0, mask_k);
+    cv::Mat E_jq = cv::findEssentialMat(pts_j, pts_q_j, K, cv::RANSAC, 0.999, 1.0, mask_j);
+    cv::Mat E_kq = cv::findEssentialMat(pts_k, pts_q_k, K, cv::RANSAC, 0.999, 1.0, mask_k);
 
 
     vector<cv::Point2d> rp_q_j, rp_j, rp_q_k, rp_k;
@@ -320,7 +320,6 @@ void sevenScenes::handle(const vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, ve
             rp_j.push_back(pts_j[i]);
         }
     }
-
     for(int i = 0; i < mask_k.rows; i++) {
         if(mask_k.at<unsigned char>(i)){
             rp_q_k.push_back(pts_q_k[i]);
@@ -333,18 +332,14 @@ void sevenScenes::handle(const vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, ve
     Eigen::Vector3d t_jq, t_kq;
 
     cv::Mat R_cv_j, t_cv_j, maskR_j;
-    cv::recoverPose(E_qj, rp_q_j, rp_j, K, R_cv_j, t_cv_j, maskR_j);
-    cv::Mat R_inv = R_cv_j.t();
-    cv::Mat T = -R_inv * t_cv_j;
-    cv::cv2eigen(R_inv, R_jq);
-    cv::cv2eigen(T, t_jq);
+    cv::recoverPose(E_jq, rp_j, rp_q_j,K, R_cv_j, t_cv_j, maskR_j);
+    cv::cv2eigen(R_cv_j, R_jq);
+    cv::cv2eigen(t_cv_j, t_jq);
 
     cv::Mat R_cv_k, t_cv_k, maskR_k;
-    cv::recoverPose(E_qk, rp_q_k, rp_k, K, R_cv_k, t_cv_k, maskR_k);
-    R_inv = R_cv_k.t();
-    T = -R_inv * t_cv_k;
-    cv::cv2eigen(R_inv, R_kq);
-    cv::cv2eigen(T, t_kq);
+    cv::recoverPose(E_kq, rp_k, rp_q_k, K, R_cv_k, t_cv_k, maskR_k);
+    cv::cv2eigen(R_cv_k, R_kq);
+    cv::cv2eigen(t_cv_k, t_kq);
 
     Eigen::Vector3d c_j = -R_wj.transpose()*t_wj;
     Eigen::Vector3d ray_j = R_wj.transpose()*R_jq.transpose()*t_jq;
@@ -382,7 +377,11 @@ void sevenScenes::handle(const vector<tuple<Eigen::Matrix3d, Eigen::Vector3d, ve
 
                               R_wi(0,2),
                               R_wi(1,2),
-                              R_wi(2,2)};
+                              R_wi(2,2),
+
+                              t_wi[0],
+                              t_wi[1],
+                              t_wi[2]};
         cams.push_back(cam_i);
 
         vector<vector<double>> matches_i;
