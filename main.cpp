@@ -12,6 +12,7 @@
 
 
 #define FOLDER "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/"
+#define SCENE 0
 #define IMAGE_LIST "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt"
 #define EXT ".color.png"
 //#define MIN 0.5
@@ -45,16 +46,21 @@ int main()
 
     vector<tuple<string, string, vector<string>, vector<string>>> info = sevenScenes::createInfoVector();
 
-    int scene = 0;
-    createImageVector(listImage, info, scene);
-    createQueryVector(listQuery, info, scene);
+    createImageVector(listImage, info, SCENE);
+    createQueryVector(listQuery, info, SCENE);
 
+
+    // Loading specific to SURF
     if (GENERATE_DATABASE) {
         vector<vector<vector<float>>> features;
         loadFeaturesSURF(listImage, features);
         DatabaseSaveSURF(features);
     }
+    string dbFile = "db.yml.gz";
+    imageMatcher_Orb im(IMAGE_LIST, FOLDER + dbFile, "SURF", "vocabularyTree");
+    cout << "Loading done!" << endl;
 
+    // Loading Specific to ORB
 //    if (GENERATE_DATABASE)
 //    {
 //        vector<vector<cv::Mat>> features;
@@ -68,69 +74,15 @@ int main()
 
     cout << "Running queries..." << endl;
     double totalError = 0;
-    int totalRels = 0;
-    int totalInliers = 0;
-    double min = 0;
-    double med = 0;
-    double max = 0;
     int startIdx = 0;
     for (int i = startIdx; i < listQuery.size(); ++i)
     {
 //        vector<pair<int, float>> result = im.matching_one_image(listQuery[i] + EXT);
 //        saveResultVector(result, listQuery[i], "surf_jts");
-        vector<pair<int, float>> result = getResultVector(listQuery[i], "surf");
+          vector<pair<int, float>> result = getResultVector(listQuery[i], "surf");
 
 //        cout << ", Cur Error = " << toAdd << ", Avg Error = " << totalError / (i - startIdx + 1) << endl;
 
-//        stringstream q(listQuery[i]);
-//        stringstream m(listImage[result[0].first]);
-//        string segment;
-//        vector<std::string> qSeglist;
-//        vector<std::string> mSeglist;
-//        while (std::getline(q, segment, '/')) {
-//            qSeglist.push_back(segment);
-//        }
-//        while (std::getline(m, segment, '/')) {
-//            mSeglist.push_back(segment);
-//        }
-//        if (qSeglist[6] != mSeglist[6]) {
-//            ++outOfBounds;
-//            continue;
-//        }
-
-//        Eigen::Vector3d bestMatchCenter = sevenScenes::getT(listImage[result[0].first]);
-//
-//        double distX = queryCenter(0) - bestMatchCenter(0);
-//        double distY = queryCenter(1) - bestMatchCenter(1);
-//        double distZ = queryCenter(2) - bestMatchCenter(2);
-//        double toAdd = sqrt(pow(distX, 2.0) + pow(distY, 2.0) + pow(distZ, 2.0));
-//
-//        totalError += toAdd;
-//
-//        for (pair<int, float> match : result) {
-//            Eigen::Vector3d imageCenter = sevenScenes::getT(listImage[match.first]);
-//
-//            distX = queryCenter(0) - imageCenter(0);
-//            distY = queryCenter(1) - imageCenter(1);
-//            distZ = queryCenter(2) - imageCenter(2);
-//            double dist = sqrt(pow(distX, 2.0) + pow(distY, 2.0) + pow(distZ, 2.0));
-//
-//            if (dist > MIN) {
-//                ++min;
-//            }
-//            if (dist > MED) {
-//                ++med;
-//            }
-//            if (dist > MAX) {
-//                ++max;
-//            }
-//        }
-    }
-//    cout << "Done!" << endl;
-//
-//    cout << "Average Error [m]: " << totalError / listQuery.size() << endl;
-//    cout << "Average Number of Outliers (> 0.5): " << min / listQuery.size() << ", (> 2.0): " << med / listQuery.size() << ", (> 5.0): " << max / listQuery.size() << endl;
-//    cout << "Percentage of best matches from outside the correct scene: " << (outOfBounds / listQuery.size()) * 100 << endl;
     cout << "Average error: " << totalError / listQuery.size() << endl;
 
 }
