@@ -142,32 +142,32 @@ ImageMatcherProject/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/build
 .PHONY : ImageMatcherProject/fast
 
-main.o: main.cpp.o
+src/Calibrate.o: src/Calibrate.cpp.o
 
-.PHONY : main.o
+.PHONY : src/Calibrate.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/Calibrate.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o
+.PHONY : src/Calibrate.cpp.o
 
-main.i: main.cpp.i
+src/Calibrate.i: src/Calibrate.cpp.i
 
-.PHONY : main.i
+.PHONY : src/Calibrate.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/Calibrate.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.i
+.PHONY : src/Calibrate.cpp.i
 
-main.s: main.cpp.s
+src/Calibrate.s: src/Calibrate.cpp.s
 
-.PHONY : main.s
+.PHONY : src/Calibrate.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/Calibrate.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.s
+.PHONY : src/Calibrate.cpp.s
 
 src/KDTree.o: src/KDTree.cpp.o
 
@@ -195,33 +195,6 @@ src/KDTree.s: src/KDTree.cpp.s
 src/KDTree.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.s
 .PHONY : src/KDTree.cpp.s
-
-src/Regression.o: src/Regression.cpp.o
-
-.PHONY : src/Regression.o
-
-# target to build an object file
-src/Regression.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o
-.PHONY : src/Regression.cpp.o
-
-src/Regression.i: src/Regression.cpp.i
-
-.PHONY : src/Regression.i
-
-# target to preprocess a source file
-src/Regression.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.i
-.PHONY : src/Regression.cpp.i
-
-src/Regression.s: src/Regression.cpp.s
-
-.PHONY : src/Regression.s
-
-# target to generate assembly for a file
-src/Regression.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.s
-.PHONY : src/Regression.cpp.s
 
 src/imageMatcher.o: src/imageMatcher.cpp.o
 
@@ -313,15 +286,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... ImageMatcherProject"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... src/Calibrate.o"
+	@echo "... src/Calibrate.i"
+	@echo "... src/Calibrate.s"
 	@echo "... src/KDTree.o"
 	@echo "... src/KDTree.i"
 	@echo "... src/KDTree.s"
-	@echo "... src/Regression.o"
-	@echo "... src/Regression.i"
-	@echo "... src/Regression.s"
 	@echo "... src/imageMatcher.o"
 	@echo "... src/imageMatcher.i"
 	@echo "... src/imageMatcher.s"

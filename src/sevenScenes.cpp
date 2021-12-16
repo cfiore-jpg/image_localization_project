@@ -235,30 +235,31 @@ bool sevenScenes::findMatches(const string& db_image, const string& query_image,
         exit(1);
     }
 
-    cv::BFMatcher matcher(cv::NORM_L2, false);
-    vector<vector<cv::DMatch>> matches_2nn_12, matches_2nn_21;
-    matcher.knnMatch(desc1, desc2, matches_2nn_12, 2);
-    matcher.knnMatch(desc2, desc1, matches_2nn_21, 2);
-    const double ratio = 0.8;
-    vector<cv::Point2d> pts1, pts2;
-    for (int i = 0; i < matches_2nn_12.size(); i++) {
-        if( matches_2nn_12[i][0].distance/matches_2nn_12[i][1].distance < ratio
-            and
-            matches_2nn_21[matches_2nn_12[i][0].trainIdx][0].distance
-            / matches_2nn_21[matches_2nn_12[i][0].trainIdx][1].distance < ratio )
-        {
-            if(matches_2nn_21[matches_2nn_12[i][0].trainIdx][0].trainIdx
-               == matches_2nn_12[i][0].queryIdx)
-            {
-                pts1.push_back(kp_vec1[matches_2nn_12[i][0].queryIdx].pt);
-                pts2.push_back(kp_vec2[matches_2nn_21[matches_2nn_12[i][0].trainIdx][0].queryIdx].pt);
-            }
+    cv::BFMatcher matcher(cv::NORM_L2, true);
+    vector<cv::DMatch> matches;
+    vector<vector<cv::DMatch>> vmatches;
+    matcher.knnMatch(desc1, desc2, vmatches, 1);
+    for (int i = 0; i < static_cast<int>(vmatches.size()); ++i) {
+        if (vmatches[i].empty()) {
+            continue;
         }
+        matches.push_back(vmatches[i][0]);
     }
-
-    if(pts1.size() < 5)
+    std::sort(matches.begin(), matches.end());
+    while (matches.front().distance * 4.0 < matches.back().distance) {
+        matches.pop_back();
+    }
+    while (matches.size() > 50) {
+        matches.pop_back();
+    }
+    if(matches.size() < 5)
     {
         return false;
+    }
+    vector<cv::Point2d> pts1, pts2;
+    for (int i = 0; i < matches.size(); i++) {
+        pts1.push_back(kp_vec1[matches[i].queryIdx].pt);
+        pts2.push_back(kp_vec2[matches[i].trainIdx].pt);
     }
 
     pts_query = pts1;

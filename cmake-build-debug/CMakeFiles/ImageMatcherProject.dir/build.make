@@ -76,22 +76,9 @@ include CMakeFiles/ImageMatcherProject.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ImageMatcherProject.dir/flags.make
 
-CMakeFiles/ImageMatcherProject.dir/main.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
-CMakeFiles/ImageMatcherProject.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ImageMatcherProject.dir/main.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/main.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/main.cpp
-
-CMakeFiles/ImageMatcherProject.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ImageMatcherProject.dir/main.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cameronfiore/C++/ImageMatcherProject/main.cpp > CMakeFiles/ImageMatcherProject.dir/main.cpp.i
-
-CMakeFiles/ImageMatcherProject.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ImageMatcherProject.dir/main.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/ImageMatcherProject/main.cpp -o CMakeFiles/ImageMatcherProject.dir/main.cpp.s
-
 CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
 CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o: ../src/imageMatcher_Orb.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/src/imageMatcher_Orb.cpp
 
 CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.i: cmake_force
@@ -104,7 +91,7 @@ CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.s: cmake_force
 
 CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
 CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o: ../src/sevenScenes.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/src/sevenScenes.cpp
 
 CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.i: cmake_force
@@ -117,7 +104,7 @@ CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.s: cmake_force
 
 CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
 CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o: ../src/KDTree.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/src/KDTree.cpp
 
 CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.i: cmake_force
@@ -130,7 +117,7 @@ CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.s: cmake_force
 
 CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
 CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o: ../src/imageMatcher.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/src/imageMatcher.cpp
 
 CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.i: cmake_force
@@ -141,37 +128,35 @@ CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/ImageMatcherProject/src/imageMatcher.cpp -o CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.s
 
-CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
-CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o: ../src/Regression.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/src/Regression.cpp
+CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
+CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o: ../src/Calibrate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp
 
-CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cameronfiore/C++/ImageMatcherProject/src/Regression.cpp > CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.i
+CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp > CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.i
 
-CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/ImageMatcherProject/src/Regression.cpp -o CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.s
+CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp -o CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.s
 
 # Object files for target ImageMatcherProject
 ImageMatcherProject_OBJECTS = \
-"CMakeFiles/ImageMatcherProject.dir/main.cpp.o" \
 "CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o" \
 "CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o" \
 "CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o" \
 "CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o" \
-"CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o"
+"CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o"
 
 # External object files for target ImageMatcherProject
 ImageMatcherProject_EXTERNAL_OBJECTS =
 
-ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/main.cpp.o
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o
-ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o
+ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/build.make
 ImageMatcherProject: /Users/cameronfiore/C++/build_opencv/lib/libopencv_gapi.4.5.2.dylib
 ImageMatcherProject: /Users/cameronfiore/C++/build_opencv/lib/libopencv_stitching.4.5.2.dylib
@@ -242,7 +227,7 @@ ImageMatcherProject: /usr/local/lib/libgflags.2.2.2.dylib
 ImageMatcherProject: /Users/cameronfiore/opt/anaconda3/lib/libQt5Gui.5.9.7.dylib
 ImageMatcherProject: /Users/cameronfiore/opt/anaconda3/lib/libQt5Core.5.9.7.dylib
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable ImageMatcherProject"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable ImageMatcherProject"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ImageMatcherProject.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

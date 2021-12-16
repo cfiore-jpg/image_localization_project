@@ -234,13 +234,10 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/main.cpp">
+		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp">
 			<Option target="ImageMatcherProject"/>
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/KDTree.cpp">
-			<Option target="ImageMatcherProject"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/Regression.cpp">
 			<Option target="ImageMatcherProject"/>
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/imageMatcher.cpp">

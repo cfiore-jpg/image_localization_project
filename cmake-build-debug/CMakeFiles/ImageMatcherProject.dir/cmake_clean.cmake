@@ -1,7 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ImageMatcherProject.dir/main.cpp.o"
+  "CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o"
   "CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o"
-  "CMakeFiles/ImageMatcherProject.dir/src/Regression.cpp.o"
   "CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o"
   "CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o"
   "CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o"

@@ -75,13 +75,13 @@ int main()
     cout << "Running queries..." << endl;
     double totalError = 0;
     int startIdx = 0;
-    for (int i = startIdx; i < listQuery.size(); ++i)
-    {
+    for (int i = startIdx; i < listQuery.size(); ++i) {
 //        vector<pair<int, float>> result = im.matching_one_image(listQuery[i] + EXT);
 //        saveResultVector(result, listQuery[i], "surf_jts");
-          vector<pair<int, float>> result = getResultVector(listQuery[i], "surf");
+        vector<pair<int, float>> result = getResultVector(listQuery[i], "surf");
 
 //        cout << ", Cur Error = " << toAdd << ", Avg Error = " << totalError / (i - startIdx + 1) << endl;
+    }
 
     cout << "Average error: " << totalError / listQuery.size() << endl;
 

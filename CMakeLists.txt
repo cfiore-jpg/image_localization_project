@@ -17,7 +17,7 @@ include_directories(/Users/cameronfiore/C++/DBoW2/include/DBoW2)
 include_directories(${COLMAP_INCLUDE_DIRS})
 link_directories(${COLMAP_LINK_DIRS})
 
-add_executable(ImageMatcherProject main.cpp src/imageMatcher_Orb.cpp src/sevenScenes.cpp src/KDTree.cpp src/imageMatcher.cpp src/Regression.cpp)
+add_executable(ImageMatcherProject src/imageMatcher_Orb.cpp src/sevenScenes.cpp src/KDTree.cpp src/imageMatcher.cpp src/Calibrate.cpp)
 
 target_link_libraries(ImageMatcherProject ${OpenCV_LIBS})
 target_link_libraries(ImageMatcherProject /Users/cameronfiore/C++/DBoW2/cmake-build-debug/libDBoW2.dylib)
