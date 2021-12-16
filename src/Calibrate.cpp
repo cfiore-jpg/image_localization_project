@@ -5,6 +5,7 @@
 #include "ceres/ceres.h"
 #include "glog/logging.h"
 #include "../include/sevenScenes.h"
+#include "../include/processing.h"
 #include <Eigen/Dense>
 #include "ceres/rotation.h"
 #include <opencv2/opencv.hpp>
@@ -22,7 +23,7 @@ using ceres::Solve;
 using ceres::Solver;
 using namespace std;
 void createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
-int num_matches = 10;
+const int num_matches = 10;
 struct SnavelyReprojectionError {
     SnavelyReprojectionError(const vector<double>& E,
                              const vector<vector<double>>& points_i,
@@ -85,14 +86,14 @@ int main()
     K[2] = 320;
     K[3] = 240;
 
-    for (int i = 0; i < 3999; i+=1) {
+    for (int i = 0; i < images.size()-5; i+=5) {
         string im_i = images[i];
         Eigen::Matrix3d R_iw = sevenScenes::getR(im_i);
         Eigen::Vector3d t_iw = sevenScenes::getT(im_i);
         Eigen::Matrix3d R_wi = R_iw.transpose();
         Eigen::Vector3d t_wi = -R_wi * t_iw;
 
-        string im_j = images[i+1];
+        string im_j = images[i+5];
         Eigen::Matrix3d R_jw = sevenScenes::getR(im_j);
         Eigen::Vector3d t_jw = sevenScenes::getT(im_j);
         Eigen::Matrix3d R_wj = R_jw.transpose();
@@ -118,7 +119,7 @@ int main()
                              E(2, 2)};
 
         vector<cv::Point2d> pts_i, pts_j;
-        sevenScenes::findMatches(im_i, im_j, "SIFT", pts_i, pts_j);
+        processing::findMatches(im_i, im_j, "SIFT", pts_i, pts_j);
 
         vector<vector<double>> points_i, points_j;
         int idx = 0;

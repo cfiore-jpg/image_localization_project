@@ -8,6 +8,7 @@
 #include <base/database.h>
 #include <base/image.h>
 #include "include/sevenScenes.h"
+#include "include/processing.h"
 #include "include/KDTree.h"
 
 
@@ -42,23 +43,39 @@ vector<pair<int, float>> getResultVector(const string& query_image, const string
 
 int main()
 {
-    vector<string> listImage, listQuery;
+    string query = "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000350";
+    vector<string> ensemble {
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000300",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000310",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000320",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000330",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000340",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000360",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000370",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000380",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000390",
+            "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/seq-01/frame-000400"
+    };
 
-    vector<tuple<string, string, vector<string>, vector<string>>> info = sevenScenes::createInfoVector();
+    Eigen::Vector3d c_q = processing::hypothesizeQueryCenter(query, ensemble);
 
-    createImageVector(listImage, info, SCENE);
-    createQueryVector(listQuery, info, SCENE);
 
+
+
+//    vector<string> listImage, listQuery;
+//    vector<tuple<string, string, vector<string>, vector<string>>> info = sevenScenes::createInfoVector();
+//    createImageVector(listImage, info, SCENE);
+//    createQueryVector(listQuery, info, SCENE);
 
     // Loading specific to SURF
-    if (GENERATE_DATABASE) {
-        vector<vector<vector<float>>> features;
-        loadFeaturesSURF(listImage, features);
-        DatabaseSaveSURF(features);
-    }
-    string dbFile = "db.yml.gz";
-    imageMatcher_Orb im(IMAGE_LIST, FOLDER + dbFile, "SURF", "vocabularyTree");
-    cout << "Loading done!" << endl;
+//    if (GENERATE_DATABASE) {
+//        vector<vector<vector<float>>> features;
+//        loadFeaturesSURF(listImage, features);
+//        DatabaseSaveSURF(features);
+//    }
+//    string dbFile = "db.yml.gz";
+//    imageMatcher_Orb im(IMAGE_LIST, FOLDER + dbFile, "SURF", "vocabularyTree");
+//    cout << "Loading done!" << endl;
 
     // Loading Specific to ORB
 //    if (GENERATE_DATABASE)
@@ -72,18 +89,18 @@ int main()
 //    imageMatcher_Orb im(IMAGE_LIST, FOLDER + dbFile, "ORB", "vocabularyTree");
 //    cout << "Loading done!" << endl;
 
-    cout << "Running queries..." << endl;
-    double totalError = 0;
-    int startIdx = 0;
-    for (int i = startIdx; i < listQuery.size(); ++i) {
-//        vector<pair<int, float>> result = im.matching_one_image(listQuery[i] + EXT);
-//        saveResultVector(result, listQuery[i], "surf_jts");
-        vector<pair<int, float>> result = getResultVector(listQuery[i], "surf");
-
-//        cout << ", Cur Error = " << toAdd << ", Avg Error = " << totalError / (i - startIdx + 1) << endl;
-    }
-
-    cout << "Average error: " << totalError / listQuery.size() << endl;
+//    cout << "Running queries..." << endl;
+//    double totalError = 0;
+//    int startIdx = 0;
+//    for (int i = startIdx; i < listQuery.size(); ++i) {
+////        vector<pair<int, float>> result = im.matching_one_image(listQuery[i] + EXT);
+////        saveResultVector(result, listQuery[i], "surf_jts");
+//        vector<pair<int, float>> result = getResultVector(listQuery[i], "surf");
+//
+////        cout << ", Cur Error = " << toAdd << ", Avg Error = " << totalError / (i - startIdx + 1) << endl;
+//    }
+//
+//    cout << "Average error: " << totalError / listQuery.size() << endl;
 
 }
 

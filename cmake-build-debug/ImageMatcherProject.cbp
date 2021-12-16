@@ -234,6 +234,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/include/processing.h">
+			<Option target="ImageMatcherProject"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/main.cpp">
+			<Option target="ImageMatcherProject"/>
+		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp">
 			<Option target="ImageMatcherProject"/>
 		</Unit>
