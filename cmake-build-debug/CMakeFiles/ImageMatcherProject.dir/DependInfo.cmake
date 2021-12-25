@@ -5,10 +5,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/cameronfiore/C++/ImageMatcherProject/main.cpp" "/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles/ImageMatcherProject.dir/main.cpp.o"
-  "/Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp" "/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o"
   "/Users/cameronfiore/C++/ImageMatcherProject/src/KDTree.cpp" "/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o"
   "/Users/cameronfiore/C++/ImageMatcherProject/src/imageMatcher.cpp" "/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o"
   "/Users/cameronfiore/C++/ImageMatcherProject/src/imageMatcher_Orb.cpp" "/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.o"
+  "/Users/cameronfiore/C++/ImageMatcherProject/src/processing.cpp" "/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.o"
   "/Users/cameronfiore/C++/ImageMatcherProject/src/sevenScenes.cpp" "/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
@@ -30,9 +30,11 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/Users/cameronfiore/C++/DBoW2/include/DBoW2"
+  "/Users/cameronfiore/C++/DBoW3/src"
   "/usr/local/share/colmap/../../include"
   "/usr/local/share/colmap/../../include/colmap"
   "/usr/local/share/colmap/../../include/colmap/lib"
+  "/usr/local/include"
   "/Users/cameronfiore/C++/build_opencv"
   "/Users/cameronfiore/C++/opencv/include"
   "/Users/cameronfiore/C++/opencv/modules/core/include"
@@ -88,7 +90,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/Users/cameronfiore/C++/opencv_contrib/modules/superres/include"
   "/Users/cameronfiore/C++/opencv_contrib/modules/tracking/include"
   "/Users/cameronfiore/C++/opencv_contrib/modules/stereo/include"
-  "/usr/local/include"
   "/usr/local/include/eigen3"
   "/Users/cameronfiore/opt/anaconda3/include/qt"
   "/Users/cameronfiore/opt/anaconda3/include/qt/QtCore"

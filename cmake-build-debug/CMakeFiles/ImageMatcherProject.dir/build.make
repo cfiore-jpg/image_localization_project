@@ -141,18 +141,18 @@ CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/ImageMatcherProject/src/imageMatcher.cpp -o CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.s
 
-CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
-CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o: ../src/Calibrate.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp
+CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.o: CMakeFiles/ImageMatcherProject.dir/flags.make
+CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.o: ../src/processing.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.o -c /Users/cameronfiore/C++/ImageMatcherProject/src/processing.cpp
 
-CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp > CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.i
+CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cameronfiore/C++/ImageMatcherProject/src/processing.cpp > CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.i
 
-CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp -o CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.s
+CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/ImageMatcherProject/src/processing.cpp -o CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.s
 
 # Object files for target ImageMatcherProject
 ImageMatcherProject_OBJECTS = \
@@ -161,7 +161,7 @@ ImageMatcherProject_OBJECTS = \
 "CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o" \
 "CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o" \
 "CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o" \
-"CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o"
+"CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.o"
 
 # External object files for target ImageMatcherProject
 ImageMatcherProject_EXTERNAL_OBJECTS =
@@ -171,7 +171,7 @@ ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/sevenScenes.cpp.o
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/KDTree.cpp.o
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/imageMatcher.cpp.o
-ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o
+ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.o
 ImageMatcherProject: CMakeFiles/ImageMatcherProject.dir/build.make
 ImageMatcherProject: /Users/cameronfiore/C++/build_opencv/lib/libopencv_gapi.4.5.2.dylib
 ImageMatcherProject: /Users/cameronfiore/C++/build_opencv/lib/libopencv_stitching.4.5.2.dylib

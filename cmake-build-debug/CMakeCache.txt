@@ -267,11 +267,20 @@ COLMAP_DIR:PATH=/usr/local/share/colmap
 //The directory containing a CMake configuration file for Ceres.
 Ceres_DIR:PATH=/usr/local/lib/cmake/Ceres
 
+//The directory containing a CMake configuration file for DB.
+DB_DIR:PATH=DB_DIR-NOTFOUND
+
 //Path to a file.
 DBoW2_INCLUDE_DIR:PATH=DBoW2_INCLUDE_DIR-NOTFOUND
 
 //Path to a library.
 DBoW2_LIBRARY:FILEPATH=DBoW2_LIBRARY-NOTFOUND
+
+//The directory containing a CMake configuration file for DBoW3.
+DBoW3_DIR:PATH=DBoW3_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for DBoW.
+DBoW_DIR:PATH=DBoW_DIR-NOTFOUND
 
 //Path to a file.
 EIGEN3_INCLUDE_DIRS:PATH=/usr/local/include/eigen3

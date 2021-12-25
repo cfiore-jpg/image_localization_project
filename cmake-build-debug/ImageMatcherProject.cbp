@@ -5,7 +5,7 @@
 		<Option title="ImageMatcherProject"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\build_opencv\;CMake Files\..\DBoW2\;CMake Files\..\DBoW2\cmake-build-debug\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\usr\local\share\colmap\;CMake Files\..\..\..\..\usr\local\share\colmap\cmake\;CMake Files\..\..\..\..\usr\local\share\eigen3\;CMake Files\..\..\..\..\usr\local\share\eigen3\cmake\;CMake Files\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\usr\local\lib\cmake\Ceres\;CMake Files\..\..\..\..\usr\local\lib\cmake\glog\;CMake Files\..\..\..\..\usr\local\lib\cmake\gflags\;CMake Files\..\..\..\..\usr\local\lib\cmake\Boost-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_headers-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_program_options-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_filesystem-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_system-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_unit_test_framework-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\CGAL\;CMake Files\..\..\opt\;CMake Files\..\..\opt\anaconda3\;CMake Files\..\..\opt\anaconda3\lib\;CMake Files\..\..\opt\anaconda3\lib\cmake\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5Core\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5OpenGL\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5Widgets\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5Gui\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\build_opencv\;CMake Files\..\DBoW2\;CMake Files\..\DBoW2\cmake-build-debug\;CMake Files\..\DBoW3\;CMake Files\..\DBoW3\build\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\usr\local\share\colmap\;CMake Files\..\..\..\..\usr\local\share\colmap\cmake\;CMake Files\..\..\..\..\usr\local\share\eigen3\;CMake Files\..\..\..\..\usr\local\share\eigen3\cmake\;CMake Files\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\usr\local\lib\cmake\Ceres\;CMake Files\..\..\..\..\usr\local\lib\cmake\glog\;CMake Files\..\..\..\..\usr\local\lib\cmake\gflags\;CMake Files\..\..\..\..\usr\local\lib\cmake\Boost-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_headers-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_program_options-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_filesystem-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_system-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\boost_unit_test_framework-1.76.0\;CMake Files\..\..\..\..\usr\local\lib\cmake\CGAL\;CMake Files\..\..\opt\;CMake Files\..\..\opt\anaconda3\;CMake Files\..\..\opt\anaconda3\lib\;CMake Files\..\..\opt\anaconda3\lib\cmake\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5Core\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5OpenGL\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5Widgets\;CMake Files\..\..\opt\anaconda3\lib\cmake\Qt5Gui\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="/Users/cameronfiore/C++/ImageMatcherProject/cmake-build-debug"/>
@@ -55,9 +55,11 @@
 					<Add option="-DBOOST_PROGRAM_OPTIONS_DYN_LINK"/>
 					<Add option="-DBOOST_SYSTEM_DYN_LINK"/>
 					<Add directory="/Users/cameronfiore/C++/DBoW2/include/DBoW2"/>
+					<Add directory="/Users/cameronfiore/C++/DBoW3/src"/>
 					<Add directory="/usr/local/share/colmap/../../include"/>
 					<Add directory="/usr/local/share/colmap/../../include/colmap"/>
 					<Add directory="/usr/local/share/colmap/../../include/colmap/lib"/>
+					<Add directory="/usr/local/include"/>
 					<Add directory="/Users/cameronfiore/C++/build_opencv"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/core/include"/>
@@ -113,7 +115,6 @@
 					<Add directory="/Users/cameronfiore/C++/opencv_contrib/modules/superres/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv_contrib/modules/tracking/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv_contrib/modules/stereo/include"/>
-					<Add directory="/usr/local/include"/>
 					<Add directory="/usr/local/include/eigen3"/>
 					<Add directory="/Users/cameronfiore/opt/anaconda3/include/qt"/>
 					<Add directory="/Users/cameronfiore/opt/anaconda3/include/qt/QtCore"/>
@@ -153,9 +154,11 @@
 					<Add option="-DBOOST_PROGRAM_OPTIONS_DYN_LINK"/>
 					<Add option="-DBOOST_SYSTEM_DYN_LINK"/>
 					<Add directory="/Users/cameronfiore/C++/DBoW2/include/DBoW2"/>
+					<Add directory="/Users/cameronfiore/C++/DBoW3/src"/>
 					<Add directory="/usr/local/share/colmap/../../include"/>
 					<Add directory="/usr/local/share/colmap/../../include/colmap"/>
 					<Add directory="/usr/local/share/colmap/../../include/colmap/lib"/>
+					<Add directory="/usr/local/include"/>
 					<Add directory="/Users/cameronfiore/C++/build_opencv"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/core/include"/>
@@ -211,7 +214,6 @@
 					<Add directory="/Users/cameronfiore/C++/opencv_contrib/modules/superres/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv_contrib/modules/tracking/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv_contrib/modules/stereo/include"/>
-					<Add directory="/usr/local/include"/>
 					<Add directory="/usr/local/include/eigen3"/>
 					<Add directory="/Users/cameronfiore/opt/anaconda3/include/qt"/>
 					<Add directory="/Users/cameronfiore/opt/anaconda3/include/qt/QtCore"/>
@@ -234,13 +236,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/include/processing.h">
-			<Option target="ImageMatcherProject"/>
-		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/main.cpp">
-			<Option target="ImageMatcherProject"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/Calibrate.cpp">
 			<Option target="ImageMatcherProject"/>
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/KDTree.cpp">
@@ -250,6 +246,9 @@
 			<Option target="ImageMatcherProject"/>
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/imageMatcher_Orb.cpp">
+			<Option target="ImageMatcherProject"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/processing.cpp">
 			<Option target="ImageMatcherProject"/>
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/src/sevenScenes.cpp">
@@ -269,6 +268,9 @@
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/../DBoW2/cmake-build-debug/DBoW2Config.cmake">
 			<Option virtualFolder="CMake Files\..\DBoW2\cmake-build-debug\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/../DBoW3/build/DBoW3Config.cmake">
+			<Option virtualFolder="CMake Files\..\DBoW3\build\"/>
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/ImageMatcherProject/../../../../usr/local/share/colmap/COLMAPConfig.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\colmap\"/>

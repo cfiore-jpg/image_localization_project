@@ -132,7 +132,7 @@ vector<pair<int, float> > imageMatcher_Orb::matching_one_image(string query_imag
 	cv::Mat descriptors;
 	orb->detectAndCompute(image, mask, keypoints, descriptors);
 	changeStructure(descriptors, feature);
-	db_orb.query(feature, results, 50);
+	db_orb.query(feature, results, 100);
 
 	for (int j = 0; j < results.size(); j++)
 	{

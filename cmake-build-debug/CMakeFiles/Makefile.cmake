@@ -45,6 +45,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.19/Modules/Platform/UnixPaths.cmake"
   "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.19/Modules/ProcessorCount.cmake"
   "/Users/cameronfiore/C++/DBoW2/cmake-build-debug/DBoW2Config.cmake"
+  "/Users/cameronfiore/C++/DBoW3/build/DBoW3Config.cmake"
   "../CMakeLists.txt"
   "CMakeFiles/3.19.2/CMakeCCompiler.cmake"
   "CMakeFiles/3.19.2/CMakeCXXCompiler.cmake"

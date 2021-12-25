@@ -169,33 +169,6 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-src/Calibrate.o: src/Calibrate.cpp.o
-
-.PHONY : src/Calibrate.o
-
-# target to build an object file
-src/Calibrate.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.o
-.PHONY : src/Calibrate.cpp.o
-
-src/Calibrate.i: src/Calibrate.cpp.i
-
-.PHONY : src/Calibrate.i
-
-# target to preprocess a source file
-src/Calibrate.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.i
-.PHONY : src/Calibrate.cpp.i
-
-src/Calibrate.s: src/Calibrate.cpp.s
-
-.PHONY : src/Calibrate.s
-
-# target to generate assembly for a file
-src/Calibrate.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/Calibrate.cpp.s
-.PHONY : src/Calibrate.cpp.s
-
 src/KDTree.o: src/KDTree.cpp.o
 
 .PHONY : src/KDTree.o
@@ -277,6 +250,33 @@ src/imageMatcher_Orb.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/imageMatcher_Orb.cpp.s
 .PHONY : src/imageMatcher_Orb.cpp.s
 
+src/processing.o: src/processing.cpp.o
+
+.PHONY : src/processing.o
+
+# target to build an object file
+src/processing.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.o
+.PHONY : src/processing.cpp.o
+
+src/processing.i: src/processing.cpp.i
+
+.PHONY : src/processing.i
+
+# target to preprocess a source file
+src/processing.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.i
+.PHONY : src/processing.cpp.i
+
+src/processing.s: src/processing.cpp.s
+
+.PHONY : src/processing.s
+
+# target to generate assembly for a file
+src/processing.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageMatcherProject.dir/build.make CMakeFiles/ImageMatcherProject.dir/src/processing.cpp.s
+.PHONY : src/processing.cpp.s
+
 src/sevenScenes.o: src/sevenScenes.cpp.o
 
 .PHONY : src/sevenScenes.o
@@ -316,9 +316,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... src/Calibrate.o"
-	@echo "... src/Calibrate.i"
-	@echo "... src/Calibrate.s"
 	@echo "... src/KDTree.o"
 	@echo "... src/KDTree.i"
 	@echo "... src/KDTree.s"
@@ -328,6 +325,9 @@ help:
 	@echo "... src/imageMatcher_Orb.o"
 	@echo "... src/imageMatcher_Orb.i"
 	@echo "... src/imageMatcher_Orb.s"
+	@echo "... src/processing.o"
+	@echo "... src/processing.i"
+	@echo "... src/processing.s"
 	@echo "... src/sevenScenes.o"
 	@echo "... src/sevenScenes.i"
 	@echo "... src/sevenScenes.s"
