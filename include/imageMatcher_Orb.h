@@ -75,9 +75,6 @@ private:
 	vector<string> indexed_image_list_;
 	vector<string> query_list_;
 
-	Surf64Database db_;
-	cv::Ptr<cv::xfeatures2d::SURF> surf;
-
     OrbDatabase db_orb;
     cv::Ptr<cv::ORB> orb;
 

@@ -13,9 +13,8 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/calib3d.hpp>
 #include <opencv2/xfeatures2d.hpp>
-#include <base/database.h>
-#include <base/image.h>
 #include <fstream>
+#include "../include/functions.h"
 
 #define PI 3.14159265
 
@@ -28,8 +27,8 @@ vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::creat
     tuple<string, string, vector<string>, vector<string>> chess;
     vector<string> train0 {"01", "02", "04", "06"};
     vector<string> test0 {"03", "05"};
-    get<0>(chess) = "/Users/cameronfiore/C++/ImageMatcherProject/data/chess/";
-    get<1>(chess) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<0>(chess) = "/Users/cameronfiore/C++/image_localization_project/data/chess/";
+    get<1>(chess) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
     get<2>(chess) = train0;
     get<3>(chess) = test0;
     info.push_back(chess);
@@ -37,8 +36,8 @@ vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::creat
     tuple<string, string, vector<string>, vector<string>> fire;
     vector<string> train1 {"01", "02"};
     vector<string> test1 {"03", "04"};
-    get<0>(fire) = "/Users/cameronfiore/C++/ImageMatcherProject/data/fire/";
-    get<1>(fire) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<0>(fire) = "/Users/cameronfiore/C++/image_localization_project/data/fire/";
+    get<1>(fire) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
     get<2>(fire) = train1;
     get<3>(fire) = test1;
     info.push_back(fire);
@@ -46,8 +45,8 @@ vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::creat
     tuple<string, string, vector<string>, vector<string>> heads;
     vector<string> train2 {"02"};
     vector<string> test2 {"01"};
-    get<0>(heads) = "/Users/cameronfiore/C++/ImageMatcherProject/data/heads/";
-    get<1>(heads) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<0>(heads) = "/Users/cameronfiore/C++/image_localization_project/data/heads/";
+    get<1>(heads) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
     get<2>(heads) = train2;
     get<3>(heads) = test2;
     info.push_back(heads);
@@ -55,8 +54,8 @@ vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::creat
     tuple<string, string, vector<string>, vector<string>> office;
     vector<string> train3 {"01", "03", "04", "05", "08", "10"};
     vector<string> test3 {"02", "06", "07", "09"};
-    get<0>(office) = "/Users/cameronfiore/C++/ImageMatcherProject/data/office/";
-    get<1>(office) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<0>(office) = "/Users/cameronfiore/C++/image_localization_project/data/office/";
+    get<1>(office) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
     get<2>(office) = train3;
     get<3>(office) = test3;
     info.push_back(office);
@@ -64,8 +63,8 @@ vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::creat
     tuple<string, string, vector<string>, vector<string>> pumpkin;
     vector<string> train4 {"02", "03", "06", "08"};
     vector<string> test4 {"01", "07"};
-    get<0>(pumpkin) = "/Users/cameronfiore/C++/ImageMatcherProject/data/pumpkin/";
-    get<1>(pumpkin) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<0>(pumpkin) = "/Users/cameronfiore/C++/image_localization_project/data/pumpkin/";
+    get<1>(pumpkin) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
     get<2>(pumpkin) = train4;
     get<3>(pumpkin) = test4;
     info.push_back(pumpkin);
@@ -73,8 +72,8 @@ vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::creat
     tuple<string, string, vector<string>, vector<string>> redkitchen;
     vector<string> train5 {"01", "02", "05", "07", "08", "11", "13"};
     vector<string> test5 {"03", "04", "06", "12", "14"};
-    get<0>(redkitchen) = "/Users/cameronfiore/C++/ImageMatcherProject/data/redkitchen/";
-    get<1>(redkitchen) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_1000.txt";
+    get<0>(redkitchen) = "/Users/cameronfiore/C++/image_localization_project/data/redkitchen/";
+    get<1>(redkitchen) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
     get<2>(redkitchen) = train5;
     get<3>(redkitchen) = test5;
     info.push_back(redkitchen);
@@ -82,8 +81,8 @@ vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::creat
     tuple<string, string, vector<string>, vector<string>> stairs;
     vector<string> train6 {"02", "03", "05", "06"};
     vector<string> test6 {"01", "04"};
-    get<0>(stairs) = "/Users/cameronfiore/C++/ImageMatcherProject/data/stairs/";
-    get<1>(stairs) = "/Users/cameronfiore/C++/ImageMatcherProject/data/images_500.txt";
+    get<0>(stairs) = "/Users/cameronfiore/C++/image_localization_project/data/stairs/";
+    get<1>(stairs) = "/Users/cameronfiore/C++/image_localization_project/data/images_500.txt";
     get<2>(stairs) = train6;
     get<3>(stairs) = test6;
     info.push_back(stairs);
@@ -162,6 +161,28 @@ Eigen::Vector3d sevenScenes::getT(const string& image)
         cout << "Pose file does not exist for: " << image << endl;
         Eigen::Vector3d l;
         return l;
+    }
+}
+
+bool sevenScenes::get3dfrom2d(const cv::Point2d & point_2d, const cv::Mat & depth, cv::Point3d & point_3d) {
+
+    double d = depth.at<unsigned short>(point_2d);
+
+    if (d != 65535 && d != 0) {
+
+        double x_over_z = (point_2d.x - 320.) / 585.;
+        double y_over_z = (point_2d.y - 240.) / 585.;
+
+        double z = d / sqrt(1. + x_over_z*x_over_z + y_over_z*y_over_z);
+        double x = x_over_z * z;
+        double y = y_over_z * z;
+
+        point_3d = cv::Point3d (x, y, z) / 1000.;
+
+        return true;
+
+    } else {
+        return false;
     }
 }
 

@@ -13,8 +13,6 @@
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/calib3d.hpp>
 #include <utility>
-#include <base/database.h>
-#include <base/image.h>
 
 using namespace std;
 
@@ -26,7 +24,10 @@ namespace sevenScenes
 
     Eigen::Vector3d getT(const string& image);
 
+    bool get3dfrom2d(const cv::Point2d & point_2d, const cv::Mat & depth, cv::Point3d & point_3d);
+
     void getAbsolutePose(const string& image, Eigen::Matrix3d &R_wi, Eigen::Vector3d &t_wi);
+
 }
 
 
