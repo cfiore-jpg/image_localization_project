@@ -19,8 +19,6 @@ using namespace cv;
 
 int main() {
 
-    UMat
-
 //    calibrate::run();
 
 //    string query = "/Users/cameronfiore/C++/image_localization_project/data/chess/seq-03/frame-000400";

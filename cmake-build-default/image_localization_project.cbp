@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="image_localization_project"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\opencv\;CMake Files\..\opencv\build\;CMake Files\..\DBoW2\;CMake Files\..\DBoW2\build\;CMake Files\..\DBoW3\;CMake Files\..\DBoW3\build\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\opt\;CMake Files\..\..\..\..\opt\homebrew\;CMake Files\..\..\..\..\opt\homebrew\lib\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\;CMake Files\..\..\..\..\opt\homebrew\share\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\cmake\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/cameronfiore/C++/image_localization_project/cmake-build-default"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/cameronfiore/C++/image_localization_project/cmake-build-default"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/cameronfiore/C++/image_localization_project/cmake-build-default"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="image_localization_project">
+				<Option output="/Users/cameronfiore/C++/image_localization_project/cmake-build-default/image_localization_project" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/cameronfiore/C++/image_localization_project/cmake-build-default"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DGFLAGS_IS_A_DLL=0"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Users/cameronfiore/C++/DBoW2/include/DBoW2"/>
+					<Add directory="/Users/cameronfiore/C++/DBoW3/src"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/build"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/core/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/flann/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/imgproc/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/intensity_transform/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/ml/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/phase_unwrapping/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/photo/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/plot/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/quality/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/reg/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/surface_matching/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/xphoto/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/alphamat/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/dnn/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/dnn_superres/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/features2d/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/fuzzy/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/hfs/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/img_hash/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/imgcodecs/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/line_descriptor/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/saliency/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/text/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/videoio/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/wechat_qrcode/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/barcode/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/calib3d/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/datasets/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/highgui/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/mcc/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/objdetect/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/rapid/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/rgbd/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/shape/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/structured_light/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/ts/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/video/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/videostab/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/ximgproc/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/xobjdetect/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/aruco/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/bgsegm/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/bioinspired/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/ccalib/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/dnn_objdetect/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/dpm/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/face/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/gapi/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/optflow/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/sfm/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/stitching/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/superres/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/tracking/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/stereo/include"/>
+					<Add directory="/opt/homebrew/include"/>
+					<Add directory="/opt/homebrew/include/eigen3"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 image_localization_project"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="image_localization_project/fast">
+				<Option output="/Users/cameronfiore/C++/image_localization_project/cmake-build-default/image_localization_project" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/cameronfiore/C++/image_localization_project/cmake-build-default"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DGFLAGS_IS_A_DLL=0"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Users/cameronfiore/C++/DBoW2/include/DBoW2"/>
+					<Add directory="/Users/cameronfiore/C++/DBoW3/src"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/build"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/core/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/flann/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/imgproc/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/intensity_transform/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/ml/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/phase_unwrapping/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/photo/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/plot/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/quality/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/reg/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/surface_matching/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/xphoto/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/alphamat/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/dnn/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/dnn_superres/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/features2d/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/fuzzy/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/hfs/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/img_hash/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/imgcodecs/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/line_descriptor/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/saliency/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/text/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/videoio/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/wechat_qrcode/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/barcode/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/calib3d/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/datasets/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/highgui/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/mcc/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/objdetect/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/rapid/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/rgbd/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/shape/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/structured_light/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/ts/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/video/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/videostab/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/ximgproc/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/xobjdetect/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/aruco/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/bgsegm/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/bioinspired/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/ccalib/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/dnn_objdetect/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/dpm/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/face/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/gapi/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/optflow/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/sfm/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/modules/stitching/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/superres/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/tracking/include"/>
+					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/stereo/include"/>
+					<Add directory="/opt/homebrew/include"/>
+					<Add directory="/opt/homebrew/include/eigen3"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 image_localization_project/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/cameronfiore/C++/image_localization_project/cmake-build-default/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/include/calibrate.h">
+			<Option target="image_localization_project"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/main.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/Space.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/calibrate.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/functions.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/imageMatcher.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/imageMatcher_Orb.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/sevenScenes.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../opencv/build/OpenCVConfig-version.cmake">
+			<Option virtualFolder="CMake Files\..\opencv\build\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../opencv/build/OpenCVConfig.cmake">
+			<Option virtualFolder="CMake Files\..\opencv\build\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../opencv/build/OpenCVModules.cmake">
+			<Option virtualFolder="CMake Files\..\opencv\build\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../DBoW2/build/DBoW2Config.cmake">
+			<Option virtualFolder="CMake Files\..\DBoW2\build\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../DBoW3/build/DBoW3Config.cmake">
+			<Option virtualFolder="CMake Files\..\DBoW3\build\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/CeresConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/CeresConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/CeresTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/CeresTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/glog/glog-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/glog/glog-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/glog/glog-modules.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/glog/glog-targets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/glog/glog-targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/gflags/gflags-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/gflags/gflags-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/gflags/gflags-nonamespace-targets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/gflags/gflags-nonamespace-targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/share/eigen3/cmake/Eigen3Config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\share\eigen3\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/share/eigen3/cmake/Eigen3ConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\share\eigen3\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/share/eigen3/cmake/Eigen3Targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\share\eigen3\cmake\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
