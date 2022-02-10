@@ -111,7 +111,7 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
     int total_triplets = 0;
 
 // convert K to eigen vector
-    Eigen::Matrix3d K_eig {
+    Eigen::Matrix3d K_eig{
             {K[0], 0.,   K[2]},
             {0.,   K[1], K[3]},
             {0.,   0.,   1.}};
@@ -130,19 +130,20 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
     for (int q = 0; q < listQuery.size(); q++) {
 
         string query = listQuery[q];
-        vector<string> topN = functions::retrieveSimilar(query, 50, 1.6);
-        vector<string> top2 = functions::optimizeSpacing(topN, 2);
-        string im_1 = top2[0]; if (im_1.empty()) continue;
-        string im_2 = top2[1]; if (im_2.empty()) continue;
+        vector<string> topN = functions::retrieveSimilar(query, 20, 1.6);
+        vector<string> top2 = functions::optimizeSpacing(topN, 2, false);
+        if (top2.size() < 2) continue;
+        string im_1 = top2[0];
+        string im_2 = top2[1];
 
         // Get point correspondences for this triplet
         vector<cv::Point2d> pts_1, pts_2, pts_q1, pts_q2;
-        functions::findMatches(im_1, query, "SIFT", 0.4, pts_1, pts_q1);
-        functions::findMatches(im_2, query, "SIFT", 0.4, pts_2, pts_q2);
+        functions::findMatches(im_1, query, "ORB", 0.8, pts_1, pts_q1);
+        functions::findMatches(im_2, query, "ORB", 0.8, pts_2, pts_q2);
 
-        if (pts_1.size() >= 8 && pts_2.size() >= 8) {
+        if (pts_1.size() >= 24 && pts_2.size() >= 24) {
 
-            // Filter outliers
+//             Filter outliers
             cv::Mat mask1, mask2;
             vector<cv::Point2d> inliers_1, inliers_2, inliers_q1, inliers_q2;
             cv::findFundamentalMat(pts_1, pts_q1, cv::FM_RANSAC, 3.0, 0.999999, mask1);
@@ -230,15 +231,44 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
                     cv::Point3d line_1 = lines_on_q_from_1[c];
                     cv::Point3d line_2 = lines_on_q_from_2[c];
 
-                    double angle = functions::getAngleBetween(Eigen::Vector3d {line_1.x, line_1.y, 0.},
-                                                          Eigen::Vector3d {line_2.x, line_2.y, 0.});
-
-                    double x_pred = ((line_1.y / line_2.y) * line_2.z - line_1.z) / (line_1.x - (line_1.y / line_2.y) * line_2.x);
+                    double x_pred = ((line_1.y / line_2.y) * line_2.z - line_1.z) /
+                                    (line_1.x - (line_1.y / line_2.y) * line_2.x);
                     double y_pred = -(line_1.z + line_1.x * x_pred) / line_1.y;
                     double error = sqrt(pow(triplets_q[c].x - x_pred, 2) + pow(triplets_q[c].y - y_pred, 2));
 
-                    if (angle >= 20. && angle <= 160.) {
-                        CostFunction *cost_function = ReprojectionError2D::Create(E_q1, E_q2, triplets_1[c],
+
+                    if (error > 15.) {
+//                            cv::Mat image_1 = cv::imread(im_1 + ".color.png");
+//                            cv::Mat image_2 = cv::imread(im_2 + ".color.png");
+//                            cv::Mat image_q = cv::imread(query + ".color.png");
+//
+//                            vector<cv::Scalar> colors = {cv::Scalar((double) std::rand() / RAND_MAX * 255,
+//                                                                    (double) std::rand() / RAND_MAX * 255,
+//                                                                    (double) std::rand() / RAND_MAX * 255)};
+//
+//                            vector<cv::Point2d> triplet_q = {triplets_q[c]};
+//                            vector<cv::Point2d> triplet_1 = {triplets_1[c]};
+//                            vector<cv::Point2d> triplet_2 = {triplets_2[c]};
+//                            vector<cv::Point3d> line_on_q_from_1 = {line_1};
+//                            vector<cv::Point3d> line_on_q_from_2 = {line_2};
+//                            vector<cv::Point3d> line_on_1_from_q, line_on_2_from_q;
+//                            cv::computeCorrespondEpilines(triplet_q, 2, F_q1_mat, line_on_1_from_q);
+//                            cv::computeCorrespondEpilines(triplet_q, 2, F_q2_mat, line_on_2_from_q);
+//                            functions::drawLines(image_1, image_q, line_on_1_from_q, line_on_q_from_1, triplet_1,
+//                                                 triplet_q,
+//                                                 colors);
+//                            functions::drawLines(image_2, image_q, line_on_2_from_q, line_on_q_from_2, triplet_2,
+//                                                 triplet_q,
+//                                                 colors);
+//                            cv::imshow("Query", image_q);
+//                            cv::waitKey();
+//                            cv::imshow("Image 1", image_1);
+//                            cv::waitKey();
+//                            cv::imshow("Image 2", image_2);
+//                            cv::waitKey();
+                    } else {
+                        CostFunction *cost_function = ReprojectionError2D::Create(E_q1, E_q2,
+                                                                                  triplets_1[c],
                                                                                   triplets_2[c],
                                                                                   triplets_q[c]);
                         problem.AddResidualBlock(cost_function, loss_function, K);
@@ -246,8 +276,12 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
                         total_triplets++;
                     }
                 }
-
                 if (display_triplets) {
+
+                    cv::Mat image_1 = cv::imread(im_1 + ".color.png");
+                    cv::Mat image_2 = cv::imread(im_2 + ".color.png");
+                    cv::Mat image_q = cv::imread(query + ".color.png");
+
                     vector<cv::Scalar> colors;
                     colors.reserve(triplets_q.size());
                     for (int i = 0; i < triplets_q.size(); i++) {
@@ -257,18 +291,15 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
                                 (double) std::rand() / RAND_MAX * 255
                         );
                     }
-                    cv::Mat image_1 = cv::imread(im_1 + ".color.png");
-                    cv::Mat image_2 = cv::imread(im_2 + ".color.png");
-                    cv::Mat image_q = cv::imread(query + ".color.png");
 
                     vector<cv::Point3d> lines_on_1_from_q, lines_on_2_from_q;
                     cv::computeCorrespondEpilines(triplets_q, 2, F_q1_mat, lines_on_1_from_q);
                     cv::computeCorrespondEpilines(triplets_q, 2, F_q2_mat, lines_on_2_from_q);
 
                     functions::drawLines(image_1, image_q, lines_on_1_from_q, lines_on_q_from_1, triplets_1, triplets_q,
-                                     colors);
+                                         colors);
                     functions::drawLines(image_2, image_q, lines_on_2_from_q, lines_on_q_from_2, triplets_2, triplets_q,
-                                     colors);
+                                         colors);
                     cv::imshow("Query", image_q);
                     cv::waitKey();
                     cv::imshow("Image 1", image_1);
@@ -306,40 +337,40 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
 void calibrate::run() {
 
 
-//    int scene = 0;
-//    string first = "chess/seq-06/frame-000779";
-//    string second = "chess/seq-01/frame-000088";
-//    double K[4] = {521.064, 527.243, 313.407, 239.965};
+    int scene = 0;
+    string first = "chess/seq-03/frame-000000";
+    string second = "chess/seq-04/frame-000629";
+    double K[4] = {523.538, 529.669, 314.245, 237.595};
 
 //    int scene = 1;
 //    string first = "fire/seq-02/frame-000011";
 //    string second = "fire/seq-01/frame-000309";
-//    double K[4] = {521.935, 527.489, 312.033, 238.735};
+//    double K[4] = {520.208, 525.499, 314.99, 240.479};
 
 //    int scene = 2;
 //    string first = "heads/seq-02/frame-000369";
 //    string second = "heads/seq-02/frame-000866";
-//    double K[4] = {529.044, 536.24, 308.832, 237.342};
+//    double K[4] = {535.661, 530.986, 310.016, 237.958};
 
-    int scene = 3;
-    string first = "office/seq-04/frame-000005";
-    string second = "office/seq-08/frame-000956";
-    double K[4] = {522.753, 525.275, 315.591, 240.971};
+//    int scene = 3;
+//    string first = "office/seq-04/frame-000005";
+//    string second = "office/seq-08/frame-000956";
+//    double K[4] = {524.264, 520.141, 314.283, 241.606};
 
 //    int scene = 4;
 //    string first = "pumpkin/seq-08/frame-000469";
 //    string second = "pumpkin/seq-06/frame-000454";
-//    double K[4] = {525., 525., 320., 240.};
+//    double K[4] = {528.865, 525.468, 318.446, 237.14};
 
 //    int scene = 5;
 //    string first = "redkitchen/seq-07/frame-000069";
 //    string second = "redkitchen/seq-02/frame-000201";
-//    double K[4] = {521.741, 523.49, 318.801, 232.282};
+//    double K[4] = {516.217, 523.613, 314.216, 238.271};
 
 //    int scene = 6;
 //    string first = "stairs/seq-03/frame-000072";
 //    string second = "stairs/seq-03/frame-000049";
-//    double K[4] = {577.965, 516.097, 320.941, 228.885};
+//    double K[4] = {510.482, 542.358, 311.003, 235.719};
 
 //    calibrate::calibrate(K, scene, false);
 
@@ -349,7 +380,7 @@ void calibrate::run() {
     Eigen::Vector3d c1 = sevenScenes::getT(im1);
     Eigen::Vector3d c2 = sevenScenes::getT(im2);
     double separation = functions::getDistBetween(c1, c2);
-    cout << "Separation: " << separation << endl;
+    cout << "Separation: " << separation << " meters." << endl;
 
 
     //// GT GEOMETRY -------------------------------------------------------------------------------
@@ -362,10 +393,9 @@ void calibrate::run() {
     t_real = t_2 - R_real * t_1;
 
     Eigen::Matrix3d t_cross {
-            {0, -t_real(2), t_real(1)},
-            {t_real(2), 0, -t_real(0)},
-            {-t_real(1), t_real(0), 0}
-    };
+            {0,               -t_real(2), t_real(1)},
+            {t_real(2),  0,              -t_real(0)},
+            {-t_real(1), t_real(0),               0}};
     Eigen::Matrix3d E_12 = t_cross * R_real;
 
     Eigen::Matrix3d K_rgb_eig{{K[0], 0.,   K[2]},
@@ -419,39 +449,30 @@ void calibrate::run() {
     //// 5-point GEOMETRY DONE-------------------------------------------------------------------------------
 
 
-    //// DISPLAY ITEMS
+    //// DISPLAY ITEMS---------------------------------------------------------------------------------------
+    cv::Mat mask3;
     vector<cv::Point2d> points_display_1;
     vector<cv::Point2d> points_display_2;
-//    for (int i = 0; i < recover_inliers1.size(); i++) {
-//        auto p1 = recover_inliers1[i];
-//        bool too_close = false;
-//        for (const auto & p2 : points_display_1) {
-//            double dist = sqrt(pow((p1.x-p2.x), 2.0) + pow((p1.y-p2.y), 2.0));
-//            if (dist < 30.) {
-//                too_close = true;
-//                break;
-//            }
-//        }
-//        if (!too_close) {
-//            points_display_1.push_back(p1);
-//            points_display_2.push_back(recover_inliers2[i]);
-//        }
-//    }
-
-    functions::findMatches(im1, im2, "SIFT", 0.4, points_display_1, points_display_2);
-
+    cv::findFundamentalMat(pts1, pts2,
+                           cv::FM_RANSAC,3.0,0.999999, mask3);
+    for (int i = 0; i < pts1.size(); i++) {
+        if (mask3.at<unsigned char>(i)){
+            points_display_1.push_back(pts1[i]);
+            points_display_2.push_back(pts2[i]);
+        }
+    }
 
     cout << "Using " << points_display_1.size() << " test points." << endl;
 
     vector<cv::Scalar> colors;
     colors.reserve(points_display_1.size());
     for (int i = 0; i < points_display_1.size(); i++) {
-        colors.emplace_back(
-                (double) std::rand() / RAND_MAX * 255,
-                (double) std::rand() / RAND_MAX * 255,
-                (double) std::rand() / RAND_MAX * 255
-        );
+        colors.emplace_back((double) std::rand() / RAND_MAX * 255,
+                            (double) std::rand() / RAND_MAX * 255,
+                            (double) std::rand() / RAND_MAX * 255);
     }
+    //// DISPLAY ITEMS END-----------------------------------------------------------------------------------
+
 
 
 
@@ -514,14 +535,14 @@ void calibrate::run() {
             0., 585., 240.,
             0., 0., 1.);
 
-    cv::Mat mask3, distCoeffs, R_ir, Rvec, t_ir;
+    cv::Mat mask4, distCoeffs, R_ir, Rvec, t_ir;
     cv::solvePnPRansac(pts1_3d, pts2_2d, K_ir,
-                       distCoeffs, Rvec, t_ir,mask3);
+                       distCoeffs, Rvec, t_ir,mask4);
     cv::Rodrigues(Rvec, R_ir);
 
     int inlier_points = 0;
-    for (int i = 0; i < mask3.rows; i++) {
-        if (mask3.at<unsigned char>(i)) {
+    for (int i = 0; i < mask4.rows; i++) {
+        if (mask4.at<unsigned char>(i)) {
             inlier_points++;
         }
     }

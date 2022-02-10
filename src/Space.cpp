@@ -7,24 +7,28 @@
 #include <iostream>
 #include <string>
 #include <Eigen/Dense>
+#include <opencv2/opencv.hpp>
 #include <opencv2/core/eigen.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include <opencv2/calib3d.hpp>
+#include <opencv2/xfeatures2d.hpp>
 #include <utility>
 
 using namespace std;
 
-//Node function
-Point * newPoint(const string & name, int i, int num_energies, const Eigen::Vector3d & position) {
+//Point functions
+Point * newPoint(const string & name, int num, int num_energies, const Eigen::Vector3d & position) {
     auto * temp = new Point;
     temp->name = name;
-    temp->number = i;
+    temp->number = num;
     temp->energies = vector<Energy*> (num_energies);
     temp->position = position;
     temp->total_energy = 0.;
     return temp;
 }
 
-// Edge Functions
+// Energy Functions
 void newEnergy(Point * a, Point * b) {
     auto * temp = new Energy;
     temp->magnitude = 1. / pow((a->position - b->position).norm(), 2);
@@ -61,8 +65,11 @@ void Space::removeHighestEnergyPoint() {
 }
 
 
-void Space::getOptimalSpacing(int N) {
+void Space::getOptimalSpacing(int N, bool show_process) {
     while (points.size() > N) {
+        if (show_process) {
+            projectPointsTo2D();
+        }
         removeHighestEnergyPoint();
     }
 }
@@ -75,67 +82,80 @@ vector<string> Space::getPointNames() {
     return names;
 }
 
-//void Space::projectPointsTo2D () {
-//
-//    sort(points.begin(), points.end(), [](Point * lhs, Point * rhs){
-//        return lhs->total_energy > rhs->total_energy;
-//    });
-//
-//    // get average 2d position
-//    Eigen::Vector3d total {0, 0, 0};
-//    for (const auto & point : points) {
-//        total += point->position;
-//    }
-//    Eigen::Vector3d average = total / points.size();
-//
-//    double farthest_x = 0.;
-//    double farthest_y = 0.;
-//    double farthest_z = 0.;
-//    for (const auto & point : points) {
-//        double x_dist = abs(average[0] - point->position[0]);
-//        double y_dist = abs(average[2] - point->position[2]);
-//        double z_dist = abs(average[1] - point->position[1]);
-//        if (x_dist > farthest_x) farthest_x = x_dist;
-//        if (y_dist > farthest_y) farthest_y = y_dist;
-//        if (z_dist > farthest_z) farthest_z = z_dist;
-//
-//    }
-//
-//
-//    double height = 2500.;
-//    double width = 2500.;
-//    double border = 25.;
-//    double m_over_px_x = (farthest_x / (width/2. - border));
-//    double m_over_px_y = (farthest_y / (height/2. - border)) ;
-//    cv::Mat canvasImage(int (height), int (width), CV_8UC3, cv::Scalar(255., 255., 255.));
-//
-//
-//    cv::Point2d im_center {width / 2, height / 2};
-//    for (const auto & point : points) {
-//
-//        // get center point
-//        cv::Point2d c_pt {
-//                im_center.x + ((get<0>(c)[0] - average[0]) / m_over_px_x),
-//                im_center.y + ((get<0>(c)[2] - average[2]) / m_over_px_y)
-//        };
-//
-//        // get view point
-//        double x_dir = get<1>(c)[0] / m_over_px_x;
-//        double y_dir = get<1>(c)[2] / m_over_px_y;
-//        double length_dir = sqrt(pow(x_dir, 2) + pow(y_dir, 2));
-//        double scale =  20. / length_dir;
-//        x_dir = scale * x_dir;
-//        y_dir = scale * y_dir;
-//        cv::Point2d dir_pt {c_pt.x + x_dir, c_pt.y + y_dir};
-//
-//        // get color
-//        cv::Scalar color = get<2>(c);
-//
-//        // draw center and direction
-//        cv::circle(canvasImage, c_pt, 10, color, -1);
-//        cv::line(canvasImage, c_pt, dir_pt, color, 5.);
-//    }
-//    cv::imshow(Title, canvasImage);
-//    cv::waitKey();
-//}
+void Space::projectPointsTo2D () {
+
+    auto highest_energy_point = points[0];
+    Eigen::Vector3d total {0, 0, 0};
+    for (const auto & point : points) {
+        if (point->total_energy > highest_energy_point->total_energy) {
+            highest_energy_point = point;
+        }
+        total += point->position;;
+    }
+    Eigen::Vector3d average = total / points.size();
+
+    double farthest_x = 0.;
+    double farthest_y = 0.;
+    double max_z = 0;
+    double min_z = 0;
+    for (const auto & point : points) {
+        double x_dist = abs(average[0] - point->position[0]);
+        double y_dist = abs(average[2] - point->position[2]);
+        double h = point->position[1];
+        if (x_dist > farthest_x) farthest_x = x_dist;
+        if (y_dist > farthest_y) farthest_y = y_dist;
+        if (h > max_z) {
+            max_z = h;
+        } else if (h < min_z) {
+            min_z = h;
+        }
+    }
+    double med_z = (max_z + min_z) / 2.;
+
+
+    double height = 1964.; //3.85
+    double width = 3024.; //2.39
+    double avg_radius = 15.;
+    double radial_variance = avg_radius * .5;
+    double border = 4 * avg_radius;
+    double m_over_px_x = (farthest_x / (width/2. - border));
+    double m_over_px_y = (farthest_y / (height/2. - border));
+    double m_over_px_z = ((max_z - med_z) / radial_variance);
+    cv::Mat canvasImage(int (height), int (width), CV_8UC3, cv::Scalar(255., 255., 255.));
+    cout << "Window is " << m_over_px_x * width << " meters wide and " << m_over_px_y * height << " meters tall." << endl;
+
+
+    cv::Point2d im_center {width / 2, height / 2};
+    for (const auto & point : points) {
+
+        // get center point
+        cv::Point2d c_pt {
+                im_center.x + ((point->position[0] - average[0]) / m_over_px_x),
+                im_center.y + ((point->position[2] - average[2]) / m_over_px_y)
+        };
+
+        // get radius
+        double radius = avg_radius + (point->position[1] - med_z) / m_over_px_z;
+
+
+        // get color
+        cv::Scalar color;
+        if (point != highest_energy_point) {
+            color = cv::Scalar (0., 0., 0.);
+        }
+
+        // draw center and direction
+        cv::circle(canvasImage, c_pt, int (radius), color, -1);
+    }
+
+    cv::Point2d c_pt {
+            im_center.x + ((highest_energy_point->position[0] - average[0]) / m_over_px_x),
+            im_center.y + ((highest_energy_point->position[2] - average[2]) / m_over_px_y)
+    };
+    double radius = avg_radius + (highest_energy_point->position[1] - med_z) / m_over_px_z;
+    cv::circle(canvasImage, c_pt, int (radius), cv::Scalar (0., 255., 0.), -1);
+
+    imshow("Spacing with " + to_string(points.size()) + " points remaining.", canvasImage);
+    cv::waitKey(0);
+}
 

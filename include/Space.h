@@ -40,8 +40,8 @@ public:
     Space ();
     explicit Space (const vector<string> & images);
     void removeHighestEnergyPoint();
-    void getOptimalSpacing(int N);
+    void getOptimalSpacing(int N, bool show_process);
     vector<string> getPointNames();
-//    void projectPointsTo2D ();
+    void projectPointsTo2D ();
 };
 

@@ -118,7 +118,9 @@ Eigen::Matrix3d sevenScenes::getR(const string& image)
             }
         }
         im_pose.close();
-        return R;
+        Eigen::JacobiSVD<Eigen::Matrix3d> svd (R, Eigen::ComputeFullU | Eigen::ComputeFullV);
+        Eigen::Matrix3d new_R = svd.matrixU() * svd.matrixV().transpose();
+        return new_R;
     } else
     {
         cout << "Pose file does not exist for: " << image << endl;

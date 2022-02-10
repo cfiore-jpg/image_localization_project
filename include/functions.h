@@ -8,6 +8,8 @@
 #endif //IMAGEMATCHERPROJECT_UTILS_H
 
 #include <iostream>
+#include <unordered_map>
+#include <unordered_set>
 #include <string>
 #include <Eigen/Dense>
 #include <opencv2/core/eigen.hpp>
@@ -22,59 +24,31 @@ namespace functions {
 
     double getDistBetween(const Eigen::Vector3d &p1, const Eigen::Vector3d &p2);
 
+    double getPoint3DLineDist(const Eigen::Vector3d & h, const Eigen::Vector3d & c_k, const Eigen::Vector3d & v_k);
+
     double getAngleBetween(const Eigen::Vector3d &d1, const Eigen::Vector3d &d2);
 
     double rotationDifference(const Eigen::Matrix3d &r1, const Eigen::Matrix3d &r2);
 
-    bool
-    findMatches(const string &db_image, const string &query_image, const string &method, double ratio, vector<cv::Point2d> &pts_db,
-                vector<cv::Point2d> &pts_query);
+    bool findMatches(const string &db_image, const string &query_image, const string &method, double ratio,
+                     vector<cv::Point2d> &pts_db, vector<cv::Point2d> &pts_query);
 
-    int getRelativePose(const string &db_image, const string &query_image, const string &method, Eigen::Matrix3d &R_kq,
-                         Eigen::Vector3d &t_kq);
+    bool findMatchesSorted(const string &db_image, const string &query_image, const string &method, double ratio,
+                           vector<tuple<cv::Point2d, cv::Point2d, double>> & points);
+
+    vector<pair<cv::Point2d, cv::Point2d>> findInliersForFundamental(const Eigen::Matrix3d & F, double threshold,
+                                                                     const vector<tuple<cv::Point2d, cv::Point2d, double>> & points);
+
+    int getRelativePose(const string & db_image, const string & query_image, const double * K, const string & method,
+                        Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
+
+    bool getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, const double * K,
+                        Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
     int getRelativePose3D(const string &db_image, const string &query_image, const string &method,
                                     Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
-    Eigen::Vector3d
-    hypothesizeQueryCenter(const string &query_image, const vector<string> &ensemble, const string &dataset);
-
-    Eigen::Vector3d
-    hypothesizeQueryCenter(const vector<Eigen::Matrix3d> &R_k,
-                           const vector<Eigen::Vector3d> &t_k,
-                           const vector<Eigen::Matrix3d> &R_qk,
-                           const vector<Eigen::Vector3d> &t_qk);
-
-    template<typename DataType, typename ForwardIterator>
-    Eigen::Quaternion<DataType> averageQuaternions(ForwardIterator const &begin, ForwardIterator const &end);
-
-    Eigen::Matrix3d rotationAverage(const vector<Eigen::Matrix3d> &rotations);
-
-    void getEnsemble(const int & max_size,
-                     const string & dataset,
-                     const string & query,
-                     const vector<string> & images,
-                     vector<Eigen::Matrix3d> & R_k,
-                     vector<Eigen::Vector3d> & t_k,
-                     vector<Eigen::Matrix3d> & R_qk,
-                     vector<Eigen::Vector3d> & t_qk);
-
-    void useRANSAC(const vector<Eigen::Matrix3d> &R_k,
-                              const vector<Eigen::Vector3d> &t_k,
-                              const vector<Eigen::Matrix3d> &R_qk,
-                              const vector<Eigen::Vector3d> &t_qk,
-                              Eigen::Matrix3d & R_q,
-                              Eigen::Vector3d & c_q,
-                              double threshold);
-
-    double drawLines(cv::Mat & im1, cv::Mat & im2,
-                               const vector<cv::Point3d> & lines_draw_on_1,
-                               const vector<cv::Point3d> & lines_draw_on_2,
-                               const vector<cv::Point2d> & pts1,
-                               const vector<cv::Point2d> & pts2,
-                               const vector<cv::Scalar> & colors);
-
-    vector<string> optimizeSpacing(const vector<string> & images, int N);
+    vector<string> optimizeSpacing(const vector<string> & images, int N, bool show_process);
 
     void createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
     void createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
@@ -94,13 +68,30 @@ namespace functions {
     vector<pair<int, float>> getResultVector(const string& query_image, const string& method, const string & num);
     string getScene(const string & image);
     string getSequence(const string & image);
-    vector<pair<string, double>> getTopN(const string& query_image, int N);
+    vector<string> getTopN(const string& query_image, int N);
     vector<string> retrieveSimilar(const string& query_image, int max_num, double max_descriptor_dist);
+    vector<string> spaceWithMostMatches(const string & query_image, const double * cam_matrix, int K,
+                                        int N_thresh, double max_descriptor_dist, double separation, int min_matches,
+                                        vector<Eigen::Matrix3d> & R_k,
+                                        vector<Eigen::Vector3d> & t_k,
+                                        vector<Eigen::Matrix3d> & R_qk,
+                                        vector<Eigen::Vector3d> & t_qk);
 
 //// Visualization
     void showTop1000(const string & query_image, int max_num, double max_descriptor_dist, int inliers);
-    void projectCentersTo2D(const string & query, const vector<string> & images,
-                            vector<pair<string, cv::Scalar>> & seq_colors,
-                            const string & Title);
+    cv::Mat projectCentersTo2D(const string & query, const vector<string> & images,
+                               unordered_map<string, cv::Scalar> & seq_colors,
+                               const string & Title);
+    double drawLines(cv::Mat & im1, cv::Mat & im2,
+                     const vector<cv::Point3d> & lines_draw_on_1,
+                     const vector<cv::Point3d> & lines_draw_on_2,
+                     const vector<cv::Point2d> & pts1,
+                     const vector<cv::Point2d> & pts2,
+                     const vector<cv::Scalar> & colors);
+    cv::Mat showAllImages(const string & query, const vector<string> & images,
+                          unordered_map<string, cv::Scalar> & seq_colors,
+                          const unordered_set<string> & unincluded_all,
+                          const unordered_set<string> & unincluded_top1000,
+                          const string & Title);
 
 }

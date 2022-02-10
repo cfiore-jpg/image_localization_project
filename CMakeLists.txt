@@ -13,12 +13,23 @@ find_package(Ceres REQUIRED)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(/opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/include/python3.9)
+include_directories(/opt/homebrew/lib/python3.9/site-packages/numpy/core/include/numpy)
+include_directories(/Users/cameronfiore/C++/matplotlib-cpp)
 include_directories(/Users/cameronfiore/C++/DBoW2/include/DBoW2)
 include_directories(/Users/cameronfiore/C++/DBoW3/src)
 
-add_executable(image_localization_project main.cpp src/calibrate.cpp src/imageMatcher_Orb.cpp src/sevenScenes.cpp src/Space.cpp src/imageMatcher.cpp src/functions.cpp include/calibrate.h)
+add_executable(image_localization_project
+        main.cpp
+        src/calibrate.cpp src/imageMatcher_Orb.cpp
+        src/sevenScenes.cpp
+        src/Space.cpp
+        src/imageMatcher.cpp
+        src/functions.cpp
+        src/poseEstimation.cpp)
 
 target_link_libraries(image_localization_project ${OpenCV_LIBS})
 target_link_libraries(image_localization_project /Users/cameronfiore/C++/DBoW2/build/libDBoW2.dylib)
 target_link_libraries(image_localization_project /Users/cameronfiore/C++/DBow3/build/src/libDBoW3.dylib)
 target_link_libraries(image_localization_project Ceres::ceres)
+target_link_libraries(image_localization_project /opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/lib/libpython3.9.dylib)

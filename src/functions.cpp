@@ -45,14 +45,22 @@ double functions::getDistBetween(const Eigen::Vector3d &p1, const Eigen::Vector3
     return sqrt(pow(x, 2.0) + pow(y, 2.0) + pow(z, 2.0));
 }
 
+double functions::getPoint3DLineDist(const Eigen::Vector3d & h, const Eigen::Vector3d & c_k, const Eigen::Vector3d & v_k) {
+    double numerator = (h - c_k).cross(h - (c_k + v_k)).norm();
+    double denominator = v_k.norm();
+    return numerator/denominator;
+}
+
 double functions::getAngleBetween(const Eigen::Vector3d &d1, const Eigen::Vector3d &d2) {
     return acos(d1.dot(d2) / (d1.norm() * d2.norm())) * 180.0 / PI;
 }
 
 double functions::rotationDifference(const Eigen::Matrix3d & r1, const Eigen::Matrix3d & r2) {
 
-    Eigen::Matrix3d R = r1 * r2.transpose();
-    double theta = acos((R.trace()-1)/2);
+    Eigen::Matrix3d R12 = r1 * r2.transpose();
+    double trace = R12.trace();
+    if (trace > 3.) trace = 3.;
+    double theta = acos((trace-1.)/2.);
     theta = theta * 180. / PI;
     return theta;
 }
@@ -60,38 +68,46 @@ double functions::rotationDifference(const Eigen::Matrix3d & r1, const Eigen::Ma
 bool functions::findMatches(const string &db_image, const string &query_image, const string &method, double ratio,
                              vector<Point2d> &pts_db, vector<Point2d> &pts_query) {
 
-    Mat image1 = imread(query_image + EXT, IMREAD_GRAYSCALE);
-    Mat image2 = imread(db_image + EXT, IMREAD_GRAYSCALE);
 
-    Ptr<ORB> orb = ORB::create();
-    Ptr<xfeatures2d::SURF> surf = xfeatures2d::SURF::create(400, 4, 2, false);
-    Ptr<SIFT> sift = SIFT::create();
-
-    Mat mask1, mask2;
     vector<KeyPoint> kp_vec1, kp_vec2;
     Mat desc1, desc2;
-
     if (method == "ORB") {
-        orb->detectAndCompute(image1, mask1, kp_vec1, desc1);
-        orb->detectAndCompute(image2, mask2, kp_vec2, desc2);
+        Ptr<ORB> orb = ORB::create();
+        cv::UMat image1, image2, gray1, gray2;
+        imread(query_image + EXT, IMREAD_COLOR).copyTo(image1);
+        cvtColor(image1, gray1, COLOR_RGB2GRAY);
+        imread(db_image + EXT, IMREAD_COLOR).copyTo(image2);
+        cvtColor(image2, gray2, COLOR_RGB2GRAY);
+        orb->detectAndCompute(gray1, Mat(), kp_vec1, desc1);
+        orb->detectAndCompute(gray2, Mat(), kp_vec2, desc2);
     } else if (method == "SURF") {
-        surf->detectAndCompute(image1, mask1, kp_vec1, desc1);
-        surf->detectAndCompute(image2, mask2, kp_vec2, desc2);
+        Ptr<xfeatures2d::SURF> surf = xfeatures2d::SURF::create(400, 4, 2, false);
+        cv::UMat image1, image2, gray1, gray2;
+        imread(query_image + EXT, IMREAD_COLOR).copyTo(image1);
+        cvtColor(image1, gray1, COLOR_RGB2GRAY);
+        imread(db_image + EXT, IMREAD_COLOR).copyTo(image2);
+        cvtColor(image2, gray2, COLOR_RGB2GRAY);
+        surf->detectAndCompute(image1, Mat(), kp_vec1, desc1);
+        surf->detectAndCompute(image2, Mat(), kp_vec2, desc2);
     } else if (method == "SIFT") {
-        sift->detectAndCompute(image1, mask1, kp_vec1, desc1);
-        sift->detectAndCompute(image2, mask2, kp_vec2, desc2);
+        Ptr<SIFT> sift = SIFT::create();
+
+        Mat image1 = imread(query_image + EXT, 0);
+        Mat image2 = imread(db_image + EXT, 0);
+        sift->detectAndCompute(image1, Mat(), kp_vec1, desc1);
+        sift->detectAndCompute(image2, Mat(), kp_vec2, desc2);
     } else {
         cout << "Not a valid method for feature matching..." << endl;
         exit(1);
     }
 
     auto matcher = BFMatcher::create(NORM_L2, false);
-    vector< vector<DMatch> > matches_2nn_this2, matches_2nn_21;
-    matcher->knnMatch( desc1, desc2, matches_2nn_this2, 2 );
+    vector< vector<DMatch> > matches_2nn_12, matches_2nn_21;
+    matcher->knnMatch( desc1, desc2, matches_2nn_12, 2 );
     matcher->knnMatch( desc2, desc1, matches_2nn_21, 2 );
     vector<Point2d> selected_points1, selected_points2;
 
-    for (const auto & m : matches_2nn_this2) { // i is queryIdx
+    for (const auto & m : matches_2nn_12) { // i is queryIdx
         if( m[0].distance/m[1].distance < ratio
             and
             matches_2nn_21[m[0].trainIdx][0].distance
@@ -106,15 +122,6 @@ bool functions::findMatches(const string &db_image, const string &query_image, c
         }
     }
 
-//    vector<DMatch> matches;
-//    BFMatcher desc_matcher(NORM_L2, true);
-//    desc_matcher.match(desc1, desc2, matches, Mat());
-//    std::sort(matches.begin(), matches.end());
-//    for (const auto & m : matches) {
-//        selected_points1.push_back(kp_vec1[m.queryIdx].pt);
-//        selected_points2.push_back(kp_vec2[m.trainIdx].pt);
-//    }
-
     pts_query = selected_points1;
     pts_db = selected_points2;
 
@@ -125,21 +132,102 @@ bool functions::findMatches(const string &db_image, const string &query_image, c
     }
 }
 
-int functions::getRelativePose(const string &db_image, const string &query_image, const string &method,
-                                 Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq) {
-//    try {
+bool functions::findMatchesSorted(const string &db_image, const string &query_image, const string &method, double ratio,
+                                  vector<tuple<Point2d, Point2d, double>> & points) {
+
+
+    vector<KeyPoint> kp_vec1, kp_vec2;
+    Mat desc1, desc2;
+    if (method == "ORB") {
+        Ptr<ORB> orb = ORB::create();
+        cv::UMat image1, image2, gray1, gray2;
+        imread(query_image + EXT, IMREAD_COLOR).copyTo(image1);
+        cvtColor(image1, gray1, COLOR_RGB2GRAY);
+        imread(db_image + EXT, IMREAD_COLOR).copyTo(image2);
+        cvtColor(image2, gray2, COLOR_RGB2GRAY);
+        orb->detectAndCompute(gray1, Mat(), kp_vec1, desc1);
+        orb->detectAndCompute(gray2, Mat(), kp_vec2, desc2);
+    } else if (method == "SURF") {
+        Ptr<xfeatures2d::SURF> surf = xfeatures2d::SURF::create(400, 4, 2, false);
+        cv::UMat image1, image2, gray1, gray2;
+        imread(query_image + EXT, IMREAD_COLOR).copyTo(image1);
+        cvtColor(image1, gray1, COLOR_RGB2GRAY);
+        imread(db_image + EXT, IMREAD_COLOR).copyTo(image2);
+        cvtColor(image2, gray2, COLOR_RGB2GRAY);
+        surf->detectAndCompute(image1, Mat(), kp_vec1, desc1);
+        surf->detectAndCompute(image2, Mat(), kp_vec2, desc2);
+    } else if (method == "SIFT") {
+        Ptr<SIFT> sift = SIFT::create();
+        Mat image1 = imread(query_image + EXT, 0);
+        Mat image2 = imread(db_image + EXT, 0);
+        sift->detectAndCompute(image1, Mat(), kp_vec1, desc1);
+        sift->detectAndCompute(image2, Mat(), kp_vec2, desc2);
+    } else {
+        cout << "Not a valid method for feature matching..." << endl;
+        exit(1);
+    }
+
+    auto matcher = BFMatcher::create(NORM_L2, false);
+    vector< vector<DMatch> > matches_2nn_12, matches_2nn_21;
+    matcher->knnMatch( desc1, desc2, matches_2nn_12, 2 );
+    matcher->knnMatch( desc2, desc1, matches_2nn_21, 2 );
+    vector<tuple<Point2d, Point2d, double>> selected_points; // query, db, match_ratio
+
+    for (const auto & m : matches_2nn_12) {
+        double r = m[0].distance/m[1].distance;
+        if (r < ratio and matches_2nn_21[m[0].trainIdx][0].distance/matches_2nn_21[m[0].trainIdx][1].distance < ratio )
+        {
+            if(matches_2nn_21[m[0].trainIdx][0].trainIdx == m[0].queryIdx)
+            {
+                selected_points.emplace_back(kp_vec1[m[0].queryIdx].pt,
+                                             kp_vec2[matches_2nn_21[m[0].trainIdx][0].queryIdx].pt,
+                                             r);
+            }
+        }
+    }
+
+    if (selected_points.empty()) return false;
+
+    sort(selected_points.begin(), selected_points.end(), [](const auto & lhs, const auto & rhs){
+        return get<2>(lhs) < get<2>(rhs);
+    });
+    points = selected_points;
+    return true;
+}
+
+vector<pair<cv::Point2d, cv::Point2d>> functions::findInliersForFundamental(const Eigen::Matrix3d & F, double threshold,
+                                                                 const vector<tuple<cv::Point2d, cv::Point2d, double>> & points) {
+    vector<pair<cv::Point2d, cv::Point2d>> inliers;
+    for (const auto & tup : points) {
+        Eigen::Vector3d pt_q {get<0>(tup).x, get<0>(tup).y, 1.};
+        Eigen::Vector3d pt_db {get<1>(tup).x, get<1>(tup).y, 1.};
+
+        Eigen::Vector3d epiline = F * pt_db;
+
+        double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
+                       sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+
+        if (error <= threshold) {
+            inliers.emplace_back(cv::Point2d {get<0>(tup).x, get<0>(tup).y},
+                                 cv::Point2d {get<1>(tup).x, get<1>(tup).y});
+        }
+    }
+    return inliers;
+}
+
+int functions::getRelativePose(const string & db_image, const string & query_image, const double * K, const string & method,
+                               Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq) {
+    try {
         vector<Point2d> pts_db, pts_q;
-        if (!findMatches(db_image, query_image, method, 0.8, pts_db, pts_q)) { return 0; }
+        if (!findMatches(db_image, query_image, method, 0.8, pts_db, pts_q)) return 0;
 
         Mat im = imread(db_image + EXT);
         Mat mask;
-        Mat K = (Mat_<double>(3, 3) <<
-                524., 0., 316.7,
-                0., 524., 238.5,
-                0., 0., 1.);
-        Mat E_kq = findEssentialMat(pts_db,
-                                            pts_q,
-                                            K, RANSAC, 0.999, 1.0, mask);
+        Mat K_mat = (Mat_<double>(3, 3) <<
+                K[0], 0., K[2],
+                0., K[1], K[3],
+                0., 0.,   1.);
+        Mat E_kq = findEssentialMat(pts_db,pts_q,K_mat, RANSAC, 0.999999, 3.0, mask);
 
         vector<Point2d> inlier_db_points, inlier_q_points;
         for (int i = 0; i < mask.rows; i++) {
@@ -149,13 +237,9 @@ int functions::getRelativePose(const string &db_image, const string &query_image
             }
         }
 
-
         mask.release();
         Mat R, t;
-        recoverPose(E_kq,
-                        inlier_db_points,
-                        inlier_q_points,
-                        K, R, t, mask);
+        recoverPose(E_kq,inlier_db_points,inlier_q_points,K_mat, R, t, mask);
 
         vector<Point2d> recover_db_points, recover_q_points;
         for (int i = 0; i < mask.rows; i++) {
@@ -165,24 +249,55 @@ int functions::getRelativePose(const string &db_image, const string &query_image
             }
         }
 
+        cv2eigen(R, R_kq);
+        cv2eigen(t, t_kq);
+
+        return int (recover_db_points.size());
+    } catch (...) {
+        return 0;
+    }
+}
+
+bool functions::getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, const double * K,
+                               Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq) {
+    try {
+        Mat mask;
+        Mat K_mat = (Mat_<double>(3, 3) <<
+                K[0], 0., K[2],
+                0., K[1], K[3],
+                0., 0.,   1.);
+
+        Mat E_kq = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.999999, 3.0, mask);
+
+        vector<Point2d> inlier_db_points, inlier_q_points;
+        for (int i = 0; i < mask.rows; i++) {
+            if (mask.at<unsigned char>(i)) {
+                inlier_db_points.push_back(pts_db[i]);
+                inlier_q_points.push_back(pts_q[i]);
+            }
+        }
+
+        mask.release();
+        Mat R, t;
+        recoverPose(E_kq, inlier_db_points, inlier_q_points, K_mat, R, t, mask);
+
+        vector<Point2d> recover_db_points, recover_q_points;
+        for (int i = 0; i < mask.rows; i++) {
+            if (mask.at<unsigned char>(i)) {
+                recover_db_points.push_back(inlier_db_points[i]);
+                recover_q_points.push_back(inlier_q_points[i]);
+            }
+        }
 
         cv2eigen(R, R_kq);
         cv2eigen(t, t_kq);
 
-//        cout << R.at<double>(0,0) << ", " << R_kq(0, 0) << endl;
-//        cout << R.at<double>(0,1) << ", " << R_kq(0, 1) << endl;
-//        cout << R.at<double>(0,2) << ", " << R_kq(0, 2) << endl;
-//        cout << R.at<double>(1,0) << ", " << R_kq(1, 0) << endl;
-//        cout << R.at<double>(1,1) << ", " << R_kq(1, 1) << endl;
-//        cout << R.at<double>(1,2) << ", " << R_kq(1, 2) << endl;
-//        cout << R.at<double>(2,0) << ", " << R_kq(2, 0) << endl;
-//        cout << R.at<double>(2,1) << ", " << R_kq(2, 1) << endl;
-//        cout << R.at<double>(2,2) << ", " << R_kq(2, 2) << endl;
-
-        return (int) recover_db_points.size();
-//    } catch (...) {
-        return 0;
-//    }
+        pts_db = recover_db_points;
+        pts_q = recover_q_points;
+        return true;
+    } catch (...) {
+        return false;
+    }
 }
 
 int functions::getRelativePose3D(const string &db_image, const string &query_image, const string &method,
@@ -233,267 +348,6 @@ int functions::getRelativePose3D(const string &db_image, const string &query_ima
 //    }
 }
 
-Eigen::Vector3d functions::hypothesizeQueryCenter(const string &query_image, const vector<string> &ensemble, const string & dataset) {
-
-    size_t K = ensemble.size();
-    Eigen::Matrix3d A; A << 0, 0, 0, 0, 0, 0, 0, 0, 0;
-    Eigen::Vector3d b; b << 0, 0, 0;
-
-    for (const auto& im_k : ensemble) {
-        Eigen::Matrix3d R_k;
-        Eigen::Vector3d t_k;
-        if (dataset == "7-Scenes") {
-            sevenScenes::getAbsolutePose(im_k, R_k, t_k);
-        } else {
-            cout << "No support for this dataset." << endl;
-            exit(1);
-        }
-        Eigen::Matrix3d R_qk;
-        Eigen::Vector3d t_qk;
-        functions::getRelativePose(im_k, query_image, "SIFT", R_qk, t_qk);
-
-        Eigen::Vector3d c_k = -R_k.transpose() * t_k;
-        Eigen::Vector3d v_k = -R_k.transpose() * R_qk.transpose() * t_qk;
-
-        A += v_k * v_k.transpose();
-        b += c_k - c_k.dot(v_k) * v_k;
-    }
-
-    A = K * Eigen::Matrix3d::Identity() - A;
-
-    Eigen::Vector3d c_q = A.colPivHouseholderQr().solve(b);
-
-    return c_q;
-}
-
-Eigen::Vector3d functions::hypothesizeQueryCenter(const vector<Eigen::Matrix3d> &R_k,
-                                                   const vector<Eigen::Vector3d> &t_k,
-                                                   const vector<Eigen::Matrix3d> &R_qk,
-                                                   const vector<Eigen::Vector3d> &t_qk) {
-
-    size_t K = R_k.size();
-
-    Eigen::Matrix3d A; A << 0, 0, 0, 0, 0, 0, 0, 0, 0;
-    Eigen::Vector3d b; b << 0, 0, 0;
-
-    for (int i = 0; i < K; i++) {
-        Eigen::Matrix3d R = R_k[i];
-        Eigen::Vector3d t = t_k[i];
-        Eigen::Matrix3d R_ = R_qk[i];
-        Eigen::Vector3d t_ = t_qk[i];
-
-        Eigen::Vector3d c_k = -R.transpose() * t;
-        Eigen::Vector3d v_k = -R.transpose() * R_.transpose() * t_;
-
-        A += v_k * v_k.transpose();
-        b += c_k - c_k.dot(v_k) * v_k;
-    }
-
-    A = K * Eigen::Matrix3d::Identity() - A;
-
-    Eigen::Vector3d c_q = A.colPivHouseholderQr().solve(b);
-
-    return c_q;
-}
-
-template<typename DataType, typename ForwardIterator>
-Eigen::Quaternion<DataType> functions::averageQuaternions(ForwardIterator const & begin, ForwardIterator const & end) {
-
-    if (begin == end) {
-            throw std::logic_error("Cannot average orientations over an empty range.");
-    }
-
-    Eigen::Matrix<DataType, 4, 4> A = Eigen::Matrix<DataType, 4, 4>::Zero();
-    uint sum(0);
-    for (ForwardIterator it = begin; it != end; ++it) {
-        Eigen::Matrix<DataType, 1, 4> q(1,4);
-        q(0) = it->w();
-        q(1) = it->x();
-        q(2) = it->y();
-        q(3) = it->z();
-        A += q.transpose()*q;
-        sum++;
-    }
-    A /= sum;
-
-    Eigen::EigenSolver<Eigen::Matrix<DataType, 4, 4>> es(A);
-
-    Eigen::Matrix<std::complex<DataType>, 4, 1> mat(es.eigenvalues());
-    int index;
-    mat.real().maxCoeff(&index);
-    Eigen::Matrix<DataType, 4, 1> largest_ev(es.eigenvectors().real().block(0, index, 4, 1));
-
-    return Eigen::Quaternion<DataType>(largest_ev(0), largest_ev(1), largest_ev(2), largest_ev(3));
-}
-
-Eigen::Matrix3d functions::rotationAverage(const vector<Eigen::Matrix3d> & rotations) {
-
-    vector<Eigen::Quaterniond> quaternions;
-    for (const auto & rot: rotations) {
-        Eigen::Quaterniond q(rot);
-        quaternions.push_back(q);
-    }
-
-    Eigen::Quaterniond avg_Q = averageQuaternions<double>(quaternions.begin(), quaternions.end());
-    Eigen::Matrix3d avg_M = avg_Q.toRotationMatrix();
-    return avg_M;
-
-}
-
-//void functions::getEnsemble(const int & max_size,
-//                             const string & dataset,
-//                             const string & query,
-//                             const vector<string> & images,
-//                             vector<Eigen::Matrix3d> & R_k,
-//                             vector<Eigen::Vector3d> & t_k,
-//                             vector<Eigen::Matrix3d> & R_qk,
-//                             vector<Eigen::Vector3d> & t_qk) {
-//
-//    bool first = true;
-//    for (const auto &image: images) {
-//        Eigen::Matrix3d R;
-//        Eigen::Vector3d t;
-//        Eigen::Matrix3d R_;
-//        Eigen::Vector3d t_;
-//
-//        if (dataset == "7-Scenes") { sevenScenes::getAbsolutePose(image, R, t); }
-//        else {
-//            cout << "No support for this dataset." << endl;
-//            exit(1);
-//        }
-//
-//        Eigen::Vector3d c_k = -R.transpose() * t;
-//
-//        bool too_close = false;
-//        bool close_enough = false;
-//        for (int j = 0; j < R_k.size(); j++) {
-//            Eigen::Vector3d c_l = -R_k[j].transpose() * t_k[j];
-//            double d = getDistBetween(c_k, c_l);
-//            if (d < 4) {
-//                close_enough = true;
-//            }
-//            if (d < 0.04) {
-//                too_close = true;
-//                break;
-//            }
-//        }
-//
-//        if ((!too_close && close_enough) || first) {
-//            if (!getRelativePose(image, query, "SIFT", R_, t_)) {
-//                continue;
-//            }
-//            first = false;
-//            R_k.push_back(R);
-//            t_k.push_back(t);
-//            R_qk.push_back(R_);
-//            t_qk.push_back(t_);
-//        }
-//
-//        if (R_k.size() == max_size) {
-//            break;
-//        }
-//    }
-//}
-
-void functions::getEnsemble(const int & max_size,
-                             const string & dataset,
-                             const string & query,
-                             const vector<string> & images,
-                             vector<Eigen::Matrix3d> & R_k,
-                             vector<Eigen::Vector3d> & t_k,
-                             vector<Eigen::Matrix3d> & R_qk,
-                             vector<Eigen::Vector3d> & t_qk) {
-    vector<tuple<Eigen::Matrix3d,
-    Eigen::Vector3d,
-    Eigen::Matrix3d,
-    Eigen::Vector3d,
-    int>> vec;
-    for (int k =0; k < 50; k++) {
-        string image = images[k];
-        Eigen::Matrix3d R;
-        Eigen::Vector3d t;
-        Eigen::Matrix3d R_;
-        Eigen::Vector3d t_;
-        int num_inliers;
-
-        if (dataset == "7-Scenes") { sevenScenes::getAbsolutePose(image, R, t); }
-        else {
-            cout << "No support for this dataset." << endl;
-            exit(1);
-        }
-
-        num_inliers = functions::getRelativePose(image, query, "SURF", R_, t_);
-        if (num_inliers == 0) continue;
-        vec.emplace_back(R, t, R_, t_, num_inliers);
-    }
-
-//    sort(vec.begin(), vec.end(), [](const auto & lhs, const auto & rhs) {
-//        return get<4>(lhs) > get<4>(rhs);
-//    });
-
-    for (int i = 0; i < min((int) vec.size(), max_size); i++) {
-        R_k.push_back(get<0>(vec[i]));
-        t_k.push_back(get<1>(vec[i]));
-        R_qk.push_back(get<2>(vec[i]));
-        t_qk.push_back(get<3>(vec[i]));
-    }
-}
-
-void functions::useRANSAC(const vector<Eigen::Matrix3d> &R_k,
-                           const vector<Eigen::Vector3d> &t_k,
-                           const vector<Eigen::Matrix3d> &R_qk,
-                           const vector<Eigen::Vector3d> &t_qk,
-                           Eigen::Matrix3d & R_q,
-                           Eigen::Vector3d & c_q,
-                           double threshold) {
-
-    auto K = R_k.size();
-    vector<Eigen::Matrix3d> R;
-    vector<Eigen::Vector3d> t;
-    vector<Eigen::Matrix3d> R_;
-    vector<Eigen::Vector3d> t_;
-
-    for (int i = 0; i < K - 1; i++) {
-        for (int j = i + 1; j < K; j++) {
-            vector<Eigen::Matrix3d>  R_this; R_this.push_back(R_k[i]); R_this.push_back(R_k[j]);
-            vector<Eigen::Vector3d> t_this; t_this.push_back(t_k[i]); t_this.push_back(t_k[j]);
-            vector<Eigen::Matrix3d> R_q_this; R_q_this.push_back(R_qk[i]); R_q_this.push_back(R_qk[j]);
-            vector<Eigen::Vector3d> t_q_this; t_q_this.push_back(t_qk[i]); t_q_this.push_back(t_qk[j]);
-            Eigen::Vector3d h = hypothesizeQueryCenter(R_this, t_this, R_q_this, t_q_this);
-
-            for (int k = 0; k < K; k++) {
-                if (k != i && k != j) {
-                    Eigen::Vector3d c_k = -R_k[k].transpose() * t_k[k];
-                    Eigen::Vector3d v_k = -R_k[k].transpose() * R_qk[k].transpose() * t_qk[k];
-                    double dist = (v_k.cross((c_k - h))).norm() / v_k.norm();
-
-                    if (dist <= threshold) {
-                        R_this.push_back(R_k[k]);
-                        t_this.push_back(t_k[k]);
-                        R_q_this.push_back(R_qk[k]);
-                        t_q_this.push_back(t_qk[k]);
-                    }
-                }
-            }
-            if (R_this.size() > R.size()) {
-                R = R_this;
-                t = t_this;
-                R_ = R_q_this;
-                t_ = t_q_this;
-            }
-        }
-    }
-
-    cout << "Number of inliers: " << to_string(R.size()) << "/" << to_string(K) << endl;
-    c_q = hypothesizeQueryCenter(R, t, R_, t_);
-    vector<Eigen::Matrix3d> rotations;
-    rotations.reserve(R.size());
-    for (int x = 0; x < R.size(); x++) {
-        rotations.emplace_back(R_[x] * R[x]);
-    }
-    R_q = rotationAverage(rotations);
-}
-
 double functions::drawLines(Mat & im1, Mat & im2,
                const vector<Point3d> & lines_draw_on_1,
                const vector<Point3d> & lines_draw_on_2,
@@ -527,9 +381,9 @@ double functions::drawLines(Mat & im1, Mat & im2,
     return total_rep_error / double (pts1.size());
 }
 
-vector<string> functions::optimizeSpacing(const vector<string> & images, int N) {
+vector<string> functions::optimizeSpacing(const vector<string> & images, int N, bool show_process) {
     Space space (images);
-    space.getOptimalSpacing(N);
+    space.getOptimalSpacing(N, show_process);
     vector<string> names = space.getPointNames();
     return names;
 }
@@ -682,115 +536,115 @@ void functions::createQueryVector(vector<string> &listQuery, vector<tuple<string
 //}
 
 
-// ORB functions
-void functions::loadFeaturesORB(const vector<string> &listImage, vector<vector<Mat>> &features)
-{
-    features.clear();
-    Ptr<ORB> orb = ORB::create();
-
-    for (const string& im : listImage)
-    {
-        Mat image = imread(im + EXT, IMREAD_GRAYSCALE);
-        if (image.empty())
-        {
-            cout << "The image " << im << "is empty" << endl;
-            exit(1);
-        }
-        Mat mask;
-        vector<KeyPoint> keyPoints;
-        Mat descriptors;
-
-        orb->detectAndCompute(image, mask, keyPoints, descriptors);
-        features.emplace_back();
-        changeStructureORB(descriptors, features.back());
-
-        cout << im << endl;
-    }
-    cout << "Done!" << endl;
-}
-
-void functions::changeStructureORB(const Mat &plain, vector<Mat> &out)
-{
-    out.resize(plain.rows);
-
-    for(int i = 0; i < plain.rows; ++i)
-    {
-        out[i] = plain.row(i);
-    }
-}
-
-void functions::DatabaseSaveORB(const vector<vector<Mat>> &features)
-{
-    OrbVocabulary voc;
-
-    cout << "Creating vocabulary..." << endl;
-    voc.create(features);
-    cout << "... done!" << endl;
-
-    cout << "Vocabulary information: " << endl << voc << endl;
-
-    cout << "Saving vocabulary..." << endl;
-    string vocFile = "voc_orb.yml.gz";
-    voc.save(FOLDER + vocFile);
-    cout << "Done" << endl;
-    cout << "Creating database..." << endl;
-
-    OrbDatabase db(voc, false, 0);
-
-    for(const auto & feature : features)
-    {
-        db.add(feature);
-    }
-
-    cout << "... done!" << endl;
-
-    cout << "Database information: " << endl << db << endl;
-
-    cout << "Saving database..." << endl;
-    string dbFile = "db_orb.yml.gz";
-    db.save(FOLDER + dbFile);
-    cout << "... done!" << endl;
-
-}
+//// ORB functions
+//void functions::loadFeaturesORB(const vector<string> &listImage, vector<vector<Mat>> &features)
+//{
+//    features.clear();
+//    Ptr<ORB> orb = ORB::create();
+//
+//    for (const string& im : listImage)
+//    {
+//        Mat image = imread(im + EXT, IMREAD_GRAYSCALE);
+//        if (image.empty())
+//        {
+//            cout << "The image " << im << "is empty" << endl;
+//            exit(1);
+//        }
+//        Mat mask;
+//        vector<KeyPoint> keyPoints;
+//        Mat descriptors;
+//
+//        orb->detectAndCompute(image, mask, keyPoints, descriptors);
+//        features.emplace_back();
+//        changeStructureORB(descriptors, features.back());
+//
+//        cout << im << endl;
+//    }
+//    cout << "Done!" << endl;
+//}
+//
+//void functions::changeStructureORB(const Mat &plain, vector<Mat> &out)
+//{
+//    out.resize(plain.rows);
+//
+//    for(int i = 0; i < plain.rows; ++i)
+//    {
+//        out[i] = plain.row(i);
+//    }
+//}
+//
+//void functions::DatabaseSaveORB(const vector<vector<Mat>> &features)
+//{
+//    OrbVocabulary voc;
+//
+//    cout << "Creating vocabulary..." << endl;
+//    voc.create(features);
+//    cout << "... done!" << endl;
+//
+//    cout << "Vocabulary information: " << endl << voc << endl;
+//
+//    cout << "Saving vocabulary..." << endl;
+//    string vocFile = "voc_orb.yml.gz";
+//    voc.save(FOLDER + vocFile);
+//    cout << "Done" << endl;
+//    cout << "Creating database..." << endl;
+//
+//    OrbDatabase db(voc, false, 0);
+//
+//    for(const auto & feature : features)
+//    {
+//        db.add(feature);
+//    }
+//
+//    cout << "... done!" << endl;
+//
+//    cout << "Database information: " << endl << db << endl;
+//
+//    cout << "Saving database..." << endl;
+//    string dbFile = "db_orb.yml.gz";
+//    db.save(FOLDER + dbFile);
+//    cout << "... done!" << endl;
+//
+//}
 
 // surf
 // orb
 // optional _jts meaning "just this scene"
-void functions::saveResultVector(const vector<pair<int, float>>& result, const string& query_image, const string& method, const string & num)
-{
-    ofstream file (query_image + "." + method + ".top" + num + ".txt");
-    if(file.is_open())
-    {
-        for (const pair<int, float>& r : result)
-        {
-            file << to_string(r.first) + "  " + to_string(r.second) + "\n";
-        }
-        file.close();
-    }
-}
-
-vector<pair<int, float>> functions::getResultVector(const string& query_image, const string& method, const string & num)
-{
-    vector<pair<int, float>> result;
-    ifstream file (query_image + "." + method + ".top" + num + ".txt");
-    if(file.is_open())
-    {
-        string line;
-        while (getline(file, line))
-        {
-            stringstream ss (line);
-            string n;
-            vector<string> temp;
-            while(ss >> n)
-            {
-                temp.push_back(n);
-            }
-            result.emplace_back(stoi(temp[0]), stof(temp[1]));
-        }
-        file.close();
-    }
-    return result;
-}
+//void functions::saveResultVector(const vector<pair<int, float>>& result, const string& query_image, const string& method, const string & num)
+//{
+//    ofstream file (query_image + "." + method + ".top" + num + ".txt");
+//    if(file.is_open())
+//    {
+//        for (const pair<int, float>& r : result)
+//        {
+//            file << to_string(r.first) + "  " + to_string(r.second) + "\n";
+//        }
+//        file.close();
+//    }
+//}
+//
+//vector<pair<int, float>> functions::getResultVector(const string& query_image, const string& method, const string & num)
+//{
+//    vector<pair<int, float>> result;
+//    ifstream file (query_image + "." + method + ".top" + num + ".txt");
+//    if(file.is_open())
+//    {
+//        string line;
+//        while (getline(file, line))
+//        {
+//            stringstream ss (line);
+//            string n;
+//            vector<string> temp;
+//            while(ss >> n)
+//            {
+//                temp.push_back(n);
+//            }
+//            result.emplace_back(stoi(temp[0]), stof(temp[1]));
+//        }
+//        file.close();
+//    }
+//    return result;
+//}
 
 string functions::getScene(const string & image) {
     string scene = image;
@@ -807,8 +661,8 @@ string functions::getSequence(const string & image) {
     return seq;
 }
 
-vector<pair<string, double>> functions::getTopN(const string& query_image, int N) {
-    vector<pair<string, double>> result;
+vector<string> functions::getTopN(const string& query_image, int N) {
+    vector<string> result;
     ifstream file (query_image + EXT + ".1000nn.txt");
     if(file.is_open())
     {
@@ -820,18 +674,11 @@ vector<pair<string, double>> functions::getTopN(const string& query_image, int N
             stringstream ss (line);
             string im;
             string fn;
-            double d;
-            bool name = true;
-            while(ss >> im)
+            if (ss >> im)
             {
-                if (name) {
-                    fn = im.substr(0, im.find(EXT));
-                    name = false;
-                } else {
-                    d = stod(im);
-                }
+                fn = im.substr(0, im.find(EXT));
             }
-            result.emplace_back(fn, d);
+            result.push_back(fn);
             n++;
         }
     }
@@ -839,17 +686,17 @@ vector<pair<string, double>> functions::getTopN(const string& query_image, int N
 }
 
 vector<string> functions::retrieveSimilar(const string& query_image, int max_num, double max_descriptor_dist) {
-    int N = (max_num < 20) ? 20 : max_num;
+    int N = (max_num > 20) ? 20 : max_num;
     vector<string> similar;
     ifstream file(query_image + EXT + ".1000nn.txt");
     if (file.is_open()) {
-
         string line;
         double descriptor_dist;
         string scene;
-        vector<pair<string, int>> most_common;
-        while (similar.size() < N) {
-            getline(file, line);
+        unordered_map<string, int> mc;
+        string most_common;
+        int num_most_common = 0;
+        while (similar.size() < max_num && getline(file, line)) {
             stringstream ss(line);
             string buf, fn;
             bool name = true;
@@ -866,42 +713,83 @@ vector<string> functions::retrieveSimilar(const string& query_image, int max_num
 
             if (scene.empty()) {
                 similar.push_back(fn);
-                if (similar.size() < 20) {
+                if (similar.size() <= N) {
                     string this_scene = getScene(fn);
-                    bool found = false;
-                    for (auto &p: most_common) {
-                        if (p.first == this_scene) {
-                            p.second++;
-                            found = true;
-                            break;
-                        }
+                    if (mc.find(this_scene) == mc.end()) {
+                        mc[this_scene] = 1;
+                    } else {
+                        mc[this_scene]++;
                     }
-                    if (!found) {
-                        most_common.emplace_back(this_scene, 1);
-                    }
+                    if (mc[this_scene] > num_most_common) most_common = this_scene;
                 } else {
-                    sort(most_common.begin(), most_common.end(),
-                         [](const pair<string, int> &lhs, const pair<string, int> &rhs) {
-                             return lhs.second > rhs.second;
-                         });
-                    scene = most_common[0].first;
+                    scene = most_common;
                     vector<string> filtered;
-                    for (const auto &p: similar) {
-                        string this_scene = getScene(p);
-                        if (this_scene == scene) filtered.push_back(p);
+                    for (const auto & s: similar) {
+                        if (getScene(s) == scene) filtered.push_back(s);
                     }
                     similar = filtered;
                 }
             } else {
-                string this_scene = getScene(fn);
-                if (this_scene == scene) {
-                    similar.push_back(fn);
-                }
+                if (getScene(fn) == scene) similar.push_back(fn);
             }
         }
     }
     return similar;
 }
+
+vector<string> functions::spaceWithMostMatches (const string & query_image, const double * cam_matrix, int K,
+                                                int N_thresh, double max_descriptor_dist, double separation, int min_matches,
+                                                vector<Eigen::Matrix3d> & R_k,
+                                                vector<Eigen::Vector3d> & t_k,
+                                                vector<Eigen::Matrix3d> & R_qk,
+                                                vector<Eigen::Vector3d> & t_qk) {
+
+    auto images = retrieveSimilar(query_image, N_thresh, max_descriptor_dist);
+
+    vector<string> to_return;
+    to_return.push_back(images[0]);
+
+    Eigen::Matrix3d R_1; Eigen::Vector3d t_1;
+    sevenScenes::getAbsolutePose(images[0], R_1, t_1);
+    R_k.push_back(R_1); t_k.push_back(t_1);
+
+    Eigen::Matrix3d R_q1; Eigen::Vector3d t_q1;
+    getRelativePose(images[0], query_image, cam_matrix, "SIFT", R_q1, t_q1);
+    R_qk.push_back(R_q1); t_qk.push_back(t_q1);
+
+    int i = 1;
+    while (R_k.size() < K && i < images.size()) {
+
+        Eigen::Matrix3d R_i; Eigen::Vector3d t_i;
+        sevenScenes::getAbsolutePose(images[i], R_i, t_i);
+        Eigen::Vector3d c_i = sevenScenes::getT(images[i]);
+
+        bool too_close = false;
+        for (const auto & im : to_return) {
+            Eigen::Vector3d c_j = sevenScenes::getT(im);
+            double dist = getDistBetween(c_i, c_j);
+            if (dist < separation) {
+                too_close = true;
+                break;
+            }
+        }
+
+        if (!too_close) {
+            Eigen::Matrix3d R_qi; Eigen::Vector3d t_qi;
+            int num = getRelativePose(images[i], query_image, cam_matrix, "SIFT", R_qi, t_qi);
+
+            if (num >= min_matches) {
+                to_return.push_back(images[i]);
+                R_k.push_back(R_i); t_k.push_back(t_i);
+                R_qk.push_back(R_qi); t_qk.push_back(t_qi);
+            }
+        }
+        i++;
+    }
+    return to_return;
+}
+
+
 
 
 
@@ -917,16 +805,16 @@ void functions::showTop1000(const string & query_image,  int max_num, double max
     string scene = getScene(query_image);
 
     // Get Top 1000 NetVLAD images
-    vector<pair<string, double>> topN = getTopN(query_image, 1000);
+    vector<string> topN = getTopN(query_image, 1000);
     vector<pair<Mat, string>> vecMat;
     vecMat.reserve(topN.size());
     for(const auto & p : topN) {
-        vecMat.emplace_back(imread(p.first + EXT), p.first);
+        vecMat.emplace_back(imread(p + EXT), p);
     }
 
     // Threshold, filter, and space the top 1000
-    vector<string> retrieved = retrieveSimilar(query_image, max_num, max_descriptor_dist);
-    vector<string> spaced = functions::optimizeSpacing(retrieved, inliers);
+    vector<string> retrieved = functions::retrieveSimilar(query_image, max_num, max_descriptor_dist);
+    vector<string> spaced = functions::optimizeSpacing(retrieved, inliers, false);
 
     // Do the following for images/100 windows
     int N = 100;
@@ -1014,9 +902,9 @@ void functions::showTop1000(const string & query_image,  int max_num, double max
     }
 }
 
-void functions::projectCentersTo2D(const string & query, const vector<string> & images,
-                        vector<pair<string, Scalar>> & seq_colors,
-                        const string & Title) {
+Mat functions::projectCentersTo2D(const string & query, const vector<string> & images,
+                                  unordered_map<string, cv::Scalar> & seq_colors,
+                                  const string & Title) {
 
     Eigen::Vector3d total {0, 0, 0};
     Eigen::Vector3d z {0, 0, 1};
@@ -1030,7 +918,7 @@ void functions::projectCentersTo2D(const string & query, const vector<string> & 
     auto r_q = sevenScenes::getR(query);
     Eigen::Vector3d dir_q = r_q * z;
 
-    centers.emplace_back(c_q, dir_q, Scalar(0., 0., 0.));
+    centers.emplace_back(c_q, dir_q, Scalar(0., 0., 255.));
 
     // do same for all images
     for (const auto & image : images) {
@@ -1043,49 +931,40 @@ void functions::projectCentersTo2D(const string & query, const vector<string> & 
         Eigen::Vector3d dir = r * z;
 
         // get color
-        Scalar color;
         string seq = getSequence(image);
-        bool found = false;
-        for (const auto & p : seq_colors) {
-            if (p.first == seq) {
-                color = p.second;
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            Scalar temp ((double) std::rand() / RAND_MAX * 255,
-                             (double) std::rand() / RAND_MAX * 255,
-                             (double) std::rand() / RAND_MAX * 255);
-            seq_colors.emplace_back(seq,temp);
-            color = temp;
-        }
+        Scalar color = seq_colors[seq];
+
         centers.emplace_back(c, dir, color);
     }
     Eigen::Vector3d average = total / centers.size();
 
     double farthest_x = 0.;
     double farthest_y = 0.;
-    double farthest_z = 0;
+    double max_z = 0;
+    double min_z = 0;
     for (const auto & c : centers) {
         double x_dist = abs(average[0] - get<0>(c)[0]);
         double y_dist = abs(average[2] - get<0>(c)[2]);
-        double z_dist = abs(average[1] - get<0>(c)[1]);
+        double h = get<0>(c)[1];
         if (x_dist > farthest_x) farthest_x = x_dist;
         if (y_dist > farthest_y) farthest_y = y_dist;
-        if (z_dist > farthest_z) farthest_z = z_dist;
-
+        if (h > max_z) {
+            max_z = h;
+        } else if (h < min_z) {
+            min_z = h;
+        }
     }
+    double med_z = (max_z + min_z) / 2.;
 
 
-    double height = 2500.;
-    double width = 2500.;
-    double avg_radius = 20.;
-    double radial_variance = avg_radius / 2.;
+    double height = 1900.;
+    double width = 3000.;
+    double avg_radius = 15.;
+    double radial_variance = avg_radius * .5;
     double border = 4 * avg_radius;
     double m_over_px_x = (farthest_x / (width/2. - border));
     double m_over_px_y = (farthest_y / (height/2. - border));
-    double m_over_px_z = (farthest_z / radial_variance);
+    double m_over_px_z = ((max_z - med_z) / radial_variance);
     Mat canvasImage(int (height), int (width), CV_8UC3, Scalar(255., 255., 255.));
     cout << "Window is " << m_over_px_x * width << " meters wide and " << m_over_px_y * height << " meters tall." << endl;
 
@@ -1100,7 +979,7 @@ void functions::projectCentersTo2D(const string & query, const vector<string> & 
         };
 
         // get radius
-        double radius = avg_radius + (get<0>(c)[1] - average[1]) / m_over_px_z;
+        double radius = avg_radius + (get<0>(c)[1] - med_z) / m_over_px_z;
 
         // get view point
         double x_dir = get<1>(c)[0] / m_over_px_x;
@@ -1120,8 +999,147 @@ void functions::projectCentersTo2D(const string & query, const vector<string> & 
     }
     imshow(Title, canvasImage);
     waitKey();
+    return canvasImage;
 }
 
+cv::Mat functions::showAllImages(const string & query, const vector<string> & images,
+                                 unordered_map<string, cv::Scalar> & seq_colors,
+                                 const unordered_set<string> & unincluded_all,
+                                 const unordered_set<string> & unincluded_top1000,
+                                 const string & Title) {
+
+    Eigen::Vector3d total {0, 0, 0};
+    Eigen::Vector3d z {0, 0, 1};
+    vector<tuple<Eigen::Vector3d, Eigen::Vector3d, Scalar>> centers, first_layer, second_layer;
+
+    // get query center
+    auto c_q = sevenScenes::getT(query);
+    total += c_q;
+
+    // get view direction
+    auto r_q = sevenScenes::getR(query);
+    Eigen::Vector3d dir_q = r_q * z;
+
+    centers.emplace_back(c_q, dir_q, Scalar(0., 0., 255.));
+    second_layer.emplace_back(c_q, dir_q, Scalar(0., 0., 255.));
+    // do same for all images
+    for (const auto & image : images) {
+        // get camera center
+        auto c = sevenScenes::getT(image);
+        total += c;
+
+        // get view direction
+        auto r = sevenScenes::getR(image);
+        Eigen::Vector3d dir = r * z;
+
+        // get color
+        Scalar color;
+        string seq = getSequence(image);
+        bool found = false;
+        if (unincluded_all.find(image) != unincluded_all.end()) {
+            color = cv::Scalar (200., 200., 200.);
+            first_layer.emplace_back(c, dir, color);
+        } else if (unincluded_top1000.find(image) != unincluded_top1000.end()) {
+            color = cv::Scalar (0., 0., 0.);
+            first_layer.emplace_back(c, dir, color);
+        } else {
+            color = seq_colors[seq];
+            second_layer.emplace_back(c, dir, color);
+        }
+        centers.emplace_back(c, dir, color);
+    }
+    Eigen::Vector3d average = total / centers.size();
+
+    double farthest_x = 0.;
+    double farthest_y = 0.;
+    double max_z = 0;
+    double min_z = 0;
+    for (const auto & c : centers) {
+        double x_dist = abs(average[0] - get<0>(c)[0]);
+        double y_dist = abs(average[2] - get<0>(c)[2]);
+        double h = get<0>(c)[1];
+        if (x_dist > farthest_x) farthest_x = x_dist;
+        if (y_dist > farthest_y) farthest_y = y_dist;
+        if (h > max_z) {
+            max_z = h;
+        } else if (h < min_z) {
+            min_z = h;
+        }
+    }
+    double med_z = (max_z + min_z) / 2.;
+
+
+    double height = 1900.;
+    double width = 3000.;
+    double avg_radius = 15.;
+    double radial_variance = avg_radius * .5;
+    double border = 4 * avg_radius;
+    double m_over_px_x = (farthest_x / (width/2. - border));
+    double m_over_px_y = (farthest_y / (height/2. - border));
+    double m_over_px_z = ((max_z - med_z) / radial_variance);
+    Mat canvasImage(int (height), int (width), CV_8UC3, Scalar(255., 255., 255.));
+    cout << "Window is " << m_over_px_x * width << " meters wide and " << m_over_px_y * height << " meters tall." << endl;
+
+
+    Point2d im_center {width / 2, height / 2};
+    for (const auto & f : first_layer) {
+
+        // get center point
+        Point2d c_pt {
+                im_center.x + ((get<0>(f)[0] - average[0]) / m_over_px_x),
+                im_center.y + ((get<0>(f)[2] - average[2]) / m_over_px_y)
+        };
+
+        // get radius
+        double radius = avg_radius + (get<0>(f)[1] - med_z) / m_over_px_z;
+
+        // get view point
+        double x_dir = get<1>(f)[0] / m_over_px_x;
+        double y_dir = get<1>(f)[2] / m_over_px_y;
+        double length_dir = sqrt(pow(x_dir, 2) + pow(y_dir, 2));
+        double scale =  2. * radius / length_dir;
+        x_dir = scale * x_dir;
+        y_dir = scale * y_dir;
+        Point2d dir_pt {c_pt.x + x_dir, c_pt.y + y_dir};
+
+        // get color
+        Scalar color = get<2>(f);
+
+        // draw center and direction
+        circle(canvasImage, c_pt, int (radius), color, -1);
+        line(canvasImage, c_pt, dir_pt, color, int (radius/2.));
+    }
+    for (const auto & s : second_layer) {
+
+        // get center point
+        Point2d c_pt {
+                im_center.x + ((get<0>(s)[0] - average[0]) / m_over_px_x),
+                im_center.y + ((get<0>(s)[2] - average[2]) / m_over_px_y)
+        };
+
+        // get radius
+        double radius = avg_radius + (get<0>(s)[1] - med_z) / m_over_px_z;
+
+        // get view point
+        double x_dir = get<1>(s)[0] / m_over_px_x;
+        double y_dir = get<1>(s)[2] / m_over_px_y;
+        double length_dir = sqrt(pow(x_dir, 2) + pow(y_dir, 2));
+        double scale =  2. * radius / length_dir;
+        x_dir = scale * x_dir;
+        y_dir = scale * y_dir;
+        Point2d dir_pt {c_pt.x + x_dir, c_pt.y + y_dir};
+
+        // get color
+        Scalar color = get<2>(s);
+
+        // draw center and direction
+        circle(canvasImage, c_pt, int (radius), color, -1);
+        line(canvasImage, c_pt, dir_pt, color, int (radius/2.));
+    }
+    imshow(Title, canvasImage);
+    waitKey();
+    return canvasImage;
+}
 
 
 
