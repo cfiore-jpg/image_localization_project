@@ -243,8 +243,8 @@ int main() {
         vector<Eigen::Vector3d> t_ks, t_qk_calcs;
 
         //Retrieve top K
-        auto retrieved = functions::retrieveSimilar(query, 150, 1.6);
-        auto spaced = functions::optimizeSpacing(retrieved, 15, false);
+        auto retrieved = functions::retrieveSimilar(query, 250, 1.6);
+        auto spaced = functions::optimizeSpacing(retrieved, 25, false);
 
         vector<vector<pair<cv::Point2d, cv::Point2d>>> all_GT_inliers; // q, db
         vector<vector<tuple<Point2d, Point2d, double>>> all_points;
@@ -296,9 +296,10 @@ int main() {
         // Calculate query estimates
         vector<Eigen::Matrix3d> R_ks_in = R_ks, R_qk_calcs_in = R_qk_calcs;
         vector<Eigen::Vector3d> t_ks_in = t_ks, t_qk_calcs_in = t_qk_calcs;
+        vector<vector<tuple<Point2d, Point2d, double>>> all_points_in = all_points;
 
         int s = int (R_ks_in.size());
-        Eigen::Vector3d c_q_calc = pose::hypothesizeQueryCenterRANSAC(R_ks_in, t_ks_in,R_qk_calcs_in, t_qk_calcs_in);
+        Eigen::Vector3d c_q_calc = pose::hypothesizeQueryCenterRANSAC(R_ks_in, t_ks_in,R_qk_calcs_in, t_qk_calcs_in, all_points_in);
         int f = int (R_ks_in.size());
         cout << "Inliers: " << f << "/" << s;
 
@@ -316,7 +317,7 @@ int main() {
 
         Eigen::Vector3d t_q_adjust = t_q_avg;
         Eigen::Matrix3d R_q_adjust = R_q_avg;
-        pose::adjustHypothesis(R_ks, t_ks, all_points, K, R_q_adjust, t_q_adjust);
+        pose::adjustHypothesis(R_ks_in, t_ks_in, all_points_in, K, R_q_adjust, t_q_adjust);
 
 
         // Calculate error
@@ -514,7 +515,7 @@ int main() {
 
     plt::figure_size(1000, 800);
     plt::plot(x, y_calc);
-    plt::xlim(0, 10);
+    plt::xlim(0, 5);
     plt::xlabel("Reprojection Error (px)");
     plt::ylim(0, 15);
     plt::ylabel("Percentage of Points");

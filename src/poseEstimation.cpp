@@ -208,29 +208,33 @@ Eigen::Vector3d pose::hypothesizeQueryCenter (const vector<Eigen::Matrix3d> & R_
 Eigen::Vector3d pose::hypothesizeQueryCenterRANSAC (vector<Eigen::Matrix3d> & R_k,
                                                     vector<Eigen::Vector3d> & t_k,
                                                     vector<Eigen::Matrix3d> & R_qk,
-                                                    vector<Eigen::Vector3d> & t_qk) {
+                                                    vector<Eigen::Vector3d> & t_qk,
+                                                    vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points) {
     int K = int (R_k.size());
     vector<Eigen::Matrix3d> best_R;
     vector<Eigen::Vector3d> best_t;
     vector<Eigen::Matrix3d> best_R_;
     vector<Eigen::Vector3d> best_t_;
+    vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> best_p;
     for (int i = 0; i < K - 1; i++) {
         for (int j = i + 1; j < K; j++) {
             vector<Eigen::Matrix3d> R {R_k[i], R_k[j]};
             vector<Eigen::Vector3d> t {t_k[i], t_k[j]};
             vector<Eigen::Matrix3d> R_ {R_qk[i], R_qk[j]};
             vector<Eigen::Vector3d> t_ {t_qk[i], t_qk[j]};
+            vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> p {all_points[i], all_points[j]};
             Eigen::Vector3d h = hypothesizeQueryCenter(R, t, R_, t_);
             for (int k = 0; k < K; k++) {
                 if (k != i && k != j) {
                     Eigen::Vector3d c_k = - R_k[k].transpose() * t_k[k];
                     Eigen::Vector3d v_k = -R_k[k].transpose() * R_qk[k].transpose() * t_qk[k];
                     double dist = functions::getPoint3DLineDist(h, c_k, v_k);
-                    if (dist <= 0.075) {
+                    if (dist <= 0.10) {
                         R.push_back(R_k[k]);
                         t.push_back(t_k[k]);
                         R_.push_back(R_qk[k]);
                         t_.push_back(t_qk[k]);
+                        p.push_back(all_points[k]);
                     }
                 }
             }
@@ -239,6 +243,7 @@ Eigen::Vector3d pose::hypothesizeQueryCenterRANSAC (vector<Eigen::Matrix3d> & R_
                 best_t = t;
                 best_R_ = R_;
                 best_t_ = t_;
+                best_p = p;
             }
         }
     }
@@ -247,6 +252,7 @@ Eigen::Vector3d pose::hypothesizeQueryCenterRANSAC (vector<Eigen::Matrix3d> & R_
     t_k = best_t;
     R_qk = best_R_;
     t_qk = best_t_;
+    all_points = best_p;
     return c_q;
 }
 

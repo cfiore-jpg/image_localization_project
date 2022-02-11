@@ -32,7 +32,8 @@ namespace pose {
     Eigen::Vector3d hypothesizeQueryCenterRANSAC (vector<Eigen::Matrix3d> & R_k,
                                                   vector<Eigen::Vector3d> & t_k,
                                                   vector<Eigen::Matrix3d> & R_qk,
-                                                  vector<Eigen::Vector3d> & t_qk);
+                                                  vector<Eigen::Vector3d> & t_qk,
+                                                  vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points);
 
     Eigen::Matrix3d hypothesizeQueryRotation (const Eigen::Vector3d & c_q,
                                               const Eigen::Matrix3d & R_q,
