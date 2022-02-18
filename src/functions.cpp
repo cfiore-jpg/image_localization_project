@@ -52,7 +52,13 @@ double functions::getPoint3DLineDist(const Eigen::Vector3d & h, const Eigen::Vec
 }
 
 double functions::getAngleBetween(const Eigen::Vector3d &d1, const Eigen::Vector3d &d2) {
-    return acos(d1.dot(d2) / (d1.norm() * d2.norm())) * 180.0 / PI;
+    double dot = d1.dot(d2);
+    double d1_norm = d1.norm();
+    double d2_norm = d2.norm();
+    double frac = dot / (d1_norm * d2_norm);
+    if ((frac - 1.) > 0. && (frac - 1.) < 0.0000000000000010) frac = 1.;
+    double rad = acos(frac);
+    return rad * 180.0 / PI;
 }
 
 double functions::rotationDifference(const Eigen::Matrix3d & r1, const Eigen::Matrix3d & r2) {
@@ -268,6 +274,11 @@ bool functions::getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d
                 0., 0.,   1.);
 
         Mat E_kq = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.999999, 3.0, mask);
+//        cout << E_kq << endl;
+//
+//        Mat E_kq_2 = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.999999, 3.0, mask);
+//        cout << E_kq_2 << endl;
+
 
         vector<Point2d> inlier_db_points, inlier_q_points;
         for (int i = 0; i < mask.rows; i++) {
@@ -381,8 +392,8 @@ double functions::drawLines(Mat & im1, Mat & im2,
     return total_rep_error / double (pts1.size());
 }
 
-vector<string> functions::optimizeSpacing(const vector<string> & images, int N, bool show_process) {
-    Space space (images);
+vector<string> functions::optimizeSpacing(const vector<string> & images, int N, bool show_process, const string & dataset) {
+    Space space (images, dataset);
     space.getOptimalSpacing(N, show_process);
     vector<string> names = space.getPointNames();
     return names;
@@ -814,7 +825,7 @@ void functions::showTop1000(const string & query_image,  int max_num, double max
 
     // Threshold, filter, and space the top 1000
     vector<string> retrieved = functions::retrieveSimilar(query_image, max_num, max_descriptor_dist);
-    vector<string> spaced = functions::optimizeSpacing(retrieved, inliers, false);
+    vector<string> spaced = functions::optimizeSpacing(retrieved, inliers, false, "7-Scenes");
 
     // Do the following for images/100 windows
     int N = 100;

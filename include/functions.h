@@ -48,7 +48,7 @@ namespace functions {
     int getRelativePose3D(const string &db_image, const string &query_image, const string &method,
                                     Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
-    vector<string> optimizeSpacing(const vector<string> & images, int N, bool show_process);
+    vector<string> optimizeSpacing(const vector<string> & images, int N, bool show_process, const string & dataset);
 
     void createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
     void createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);

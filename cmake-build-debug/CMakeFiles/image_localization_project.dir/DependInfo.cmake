@@ -16,6 +16,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/cameronfiore/C++/image_localization_project/src/imageMatcher_Orb.cpp" "CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o.d"
   "/Users/cameronfiore/C++/image_localization_project/src/poseEstimation.cpp" "CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o.d"
   "/Users/cameronfiore/C++/image_localization_project/src/sevenScenes.cpp" "CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o.d"
+  "/Users/cameronfiore/C++/image_localization_project/src/synthetic.cpp" "CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o.d"
   )
 
 # Targets to which this target links.

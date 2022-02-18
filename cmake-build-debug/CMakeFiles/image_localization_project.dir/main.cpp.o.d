@@ -554,6 +554,7 @@ CMakeFiles/image_localization_project.dir/main.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/defines.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/config.h \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /Users/cameronfiore/C++/image_localization_project/include/synthetic.h \
   /Users/cameronfiore/C++/image_localization_project/include/functions.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/unordered_map \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__hash_table \

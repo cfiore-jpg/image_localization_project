@@ -205,7 +205,8 @@ Eigen::Vector3d pose::hypothesizeQueryCenter (const vector<Eigen::Matrix3d> & R_
     return c_q;
 }
 
-Eigen::Vector3d pose::hypothesizeQueryCenterRANSAC (vector<Eigen::Matrix3d> & R_k,
+Eigen::Vector3d pose::hypothesizeQueryCenterRANSAC (const double & inlier_thresh,
+                                                    vector<Eigen::Matrix3d> & R_k,
                                                     vector<Eigen::Vector3d> & t_k,
                                                     vector<Eigen::Matrix3d> & R_qk,
                                                     vector<Eigen::Vector3d> & t_qk,
@@ -223,13 +224,16 @@ Eigen::Vector3d pose::hypothesizeQueryCenterRANSAC (vector<Eigen::Matrix3d> & R_
             vector<Eigen::Matrix3d> R_ {R_qk[i], R_qk[j]};
             vector<Eigen::Vector3d> t_ {t_qk[i], t_qk[j]};
             vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> p {all_points[i], all_points[j]};
+//            Eigen::Vector3d c_i = -R_k[i].transpose() * t_k[i], c_j = -R_k[j].transpose() * t_k[j];
+//            Eigen::Vector3d v_i = -R_k[i].transpose() * R_qk[i].transpose() * t_qk[i],
+//            v_j = -R_k[j].transpose() * R_qk[j].transpose() * t_qk[j];
             Eigen::Vector3d h = hypothesizeQueryCenter(R, t, R_, t_);
             for (int k = 0; k < K; k++) {
                 if (k != i && k != j) {
                     Eigen::Vector3d c_k = - R_k[k].transpose() * t_k[k];
                     Eigen::Vector3d v_k = -R_k[k].transpose() * R_qk[k].transpose() * t_qk[k];
                     double dist = functions::getPoint3DLineDist(h, c_k, v_k);
-                    if (dist <= 0.10) {
+                    if (dist <= inlier_thresh) {
                         R.push_back(R_k[k]);
                         t.push_back(t_k[k]);
                         R_.push_back(R_qk[k]);
@@ -264,8 +268,23 @@ Eigen::Matrix3d pose::hypothesizeQueryRotation(const Eigen::Vector3d & c_q,
                                                const vector<Eigen::Vector3d> & t_qk) {
 
     Eigen::Quaterniond q (R_q);
-    q = q.normalized();
-    double R [3] = {q.x(), q.y(), q.z()};
+
+    double theta = 2. * acos(q.w());
+    Eigen::Vector3d w_hat {q.x(), q.y(), q.z()};
+    w_hat = w_hat * (1./ sin(theta/2.));
+    Eigen::Vector3d r = tan(theta/2.) * w_hat;
+
+    double R [3] = {r(0), r(1), r(2)};
+
+    double x_test = R[0];
+    double y_test = R[1];
+    double z_test = R[2];
+    double Z_test = 1. + x_test*x_test + y_test*y_test + z_test*z_test;
+    Eigen::Matrix3d R_q_new_test {{(1. + x_test*x_test - y_test*y_test - z_test*z_test) / Z_test, (2.*x_test*y_test - 2.*z_test) / Z_test, (2.*x_test*z_test + 2.*y_test) / Z_test},
+                             {(2.*x_test*y_test + 2.*z_test) / Z_test, (1. + y_test*y_test - x_test*x_test - z_test*z_test) / Z_test, (2.*y_test*z_test - 2.*x_test) / Z_test},
+                             {(2.*x_test*z_test - 2.*y_test) / Z_test, (2.*y_test*z_test + 2.*x_test) / Z_test, (1. + z_test*z_test - x_test*x_test - y_test*y_test) / Z_test}};
+
+    double a = functions::rotationDifference(R_q_new_test, R_q);
 
     int K = int (R_k.size());
     ceres::Problem problem;
@@ -300,6 +319,7 @@ Eigen::Matrix3d pose::hypothesizeQueryRotation(const Eigen::Vector3d & c_q,
 void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
                              const vector<Eigen::Vector3d> & T_k,
                              const vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points,
+                             const double & error_thresh,
                              const double * K,
                              Eigen::Matrix3d & R_q,
                              Eigen::Vector3d & T_q) {
@@ -340,7 +360,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
             double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
                     sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
 
-            if (error <= 10.) {
+            if (error <= error_thresh) {
 
                 ceres::CostFunction *cost_function = ReprojectionError::Create(R_k[i], T_k[i], K_eig,
                                                                                get<1>(match),

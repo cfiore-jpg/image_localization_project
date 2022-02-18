@@ -1,0 +1,370 @@
+% AUTHORS
+%   Ricardo Fabbri  rfabbri@gmail.com - initial author
+%
+% Trifocal point-tangent
+%    - point-tangent ids 689 2086 4968
+%    - views 3 11 17
+%
+% Implements exactly the point and tangent equations for 3 views, with the 1st
+% view as the reference/world coordinates 
+%
+% Point equations (matlab notation):
+%    a(2,p)*x_2(:,p) - a(1,p)*R_2*x_1(:,p) - t_2 // (*)  views 2,1 ptfn2p*
+%    a(3,p)*x_3(:,p) - a(1,p)*R_3*x_1(:,p) - t_3 // (**) views 3,1 ptfn3p*
+%
+% Crosstalk equations (matlab notation):
+%    Here we use 1 crosstalk eq per point to include scale ratio as unknown.
+%    This equations makes sure the two epipolar constraints per point in two
+%    views are consistent with each other and is more than using an epipolar
+%    equation between views 2 and 3, which we not only don't need, but would
+%    lack the proper constraint
+%
+% Tangent equations
+%    e_2*x_2(:,p) + m_2*d_2(:,p) - R_2*(e_1*x_1(:,p) + m_1*d_1(:,p)) // (***)  views 2,1 tgfn2p*
+%    e_3*x_3(:,p) + m_3*d_3(:,p) - R_3*(e_1*x_1(:,p) + m_1*d_1(:,p)) // (****) views 3,1 tgfn3p*
+%    where e_v = e_v(p), and also m_v
+% 
+%
+% See synthdata_trifocal_simpler_notation.sce for a test of the equations with
+% numeric synthetic data
+%
+% TODO: make pre-tests to make sure these points are far from degenerate
+% Indexing is eg x{view}{point}{coordinate}
+
+%------------------------------
+% Uncomment for evaluating on ground truth points to test if 0
+% Call as:  bertini <this_file.bertini> <this_file.groundtruth>
+% Shortcut  bertini this_file*
+% CONFIG
+%   TrackType:-4;
+%   MPType:1;
+%   Precision:128;
+% END;
+%------------------------------
+
+INPUT 
+%data: 3 points and tangents vs 3 views
+constant d111, d112, d113, d121, d122, d123, d131, d132, d133, d211, d212, d213, d221, d222, d223, d231, d232, d233, d311, d312, d313, d321, d322, d323, d331, d332, d333;
+
+constant x111, x112, x113, x121, x122, x123, x131, x132, x133, x211, x212, x213, x221, x222, x223, x231, x232, x233, x311, x312, x313, x321, x322, x323, x331, x332, x333;
+
+% Set these inputs: 
+% scilab: x1(:,selected_point_ids) and so on
+
+% 2D points
+x111 = -0.01609589159371727;
+x112 = 0.0861548623366261;
+x113 = 1;
+
+x121 = -0.01421529931862033;
+x122 = 0.15164819506961155;
+x123 = 1;
+
+x131 = 0.0155829286858466;
+x132 = 0.12352302780175817;
+x133 = 1;
+
+x211 = 0.01389192462875502;
+x212 = 0.08595606183440178;
+x213 = 1;
+
+x221 = 0.0137394337121674;
+x222 = 0.1515915437407269;
+x223 = 1;
+
+x231 = 0.02520938938602093;
+x232 = 0.12793300445393241;
+x233 = 1;
+
+x311 = 0.03177299989757976;
+x312 = 0.08899413323286663;
+x313 = 1;
+
+x321 = 0.03004852302129869;
+x322 = 0.15543598064788686;
+x323 = 1;
+
+x331 = 0.02150970592535596;
+x332 = 0.13169055919273559;
+x333 = 1;
+
+% 2D tangents
+d111 = -0.99976604030148530;
+d112 =  0.02163017937717566;
+d113 = 0;
+
+d121 = -0.50501558422258452;
+d122 = 0.86311022453237207;
+d123 = 0;
+
+d131 = 0.84527432543442571;
+d132 = 0.53433258815215101;
+d133 = 0;
+
+d211 = -0.98403013199840228;
+d212 = -0.17800196436895521;
+d213 = 0;
+
+d221 = -0.66441382731888809;
+d222 = 0.74736488147856317;
+d223 = 0;
+
+d231 = 0.12983973507180230;
+d232 = 0.9915349934301281;
+d233 = 0;
+
+d311 = -0.76441102950503936;
+d312 = -0.64472922841379376;
+d313 = 0;
+
+d321 = -0.60850011628612388;
+d322 = 0.79355378423883394;
+d323 = 0;
+
+d331 = -0.6885391914692284;
+d332 = 0.72519913252216561;
+d333 = 0;
+
+
+% Variables
+% Translation and depths are a homogeneous group in each eq
+%
+% -------------------
+% Point Equations
+hom_variable_group 
+t21,
+t22,
+t23,
+
+t31,
+t32,
+t33;
+
+% Rotations
+% try different parametrizations for rotations. Lets try standard
+
+variable_group 
+r211, r212, r213,
+r221, r222, r223,
+r231, r232, r233,
+
+r311, r312, r313,
+r321, r322, r323,
+r331, r332, r333;
+
+% ---------------------------------------------------------------------
+% Point constraints
+
+% -------- View 2
+% Point 1
+R2x111 = r211*x111 + r212*x112 + r213*x113;
+R2x112 = r221*x111 + r222*x112 + r223*x113;
+R2x113 = r231*x111 + r232*x112 + r233*x113;
+function ptfn21;
+% view v, point p epipolar constraint
+ptfn21 = x211*(t22*R2x113 - t23*R2x112) + x212*(-t21*R2x113 + t23*R2x111) + x213*(-t22*R2x111 + t21*R2x112);
+
+% Point 2
+R2x121 = r211*x121 + r212*x122 + r213*x123;
+R2x122 = r221*x121 + r222*x122 + r223*x123;
+R2x123 = r231*x121 + r232*x122 + r233*x123;
+function ptfn22;
+% view v \in {2,3}, point p epipolar constraint
+ptfn22 = x221*(t22*R2x123 - t23*R2x122) + x222*(-t21*R2x123 + t23*R2x121) + x223*(-t22*R2x121 + t21*R2x122);
+
+% Point 3
+R2x131 = r211*x131 + r212*x132 + r213*x133;
+R2x132 = r221*x131 + r222*x132 + r223*x133;
+R2x133 = r231*x131 + r232*x132 + r233*x133;
+function ptfn23;
+% view v \in {2,3}, point p epipolar constraint
+ptfn23 = x231*(t22*R2x133 - t23*R2x132) + x232*(-t21*R2x133 + t23*R2x131) + x233*(-t22*R2x131 + t21*R2x132);
+
+% -------- View 3
+% Point 1
+R3x111 = r311*x111 + r312*x112 + r313*x113;
+R3x112 = r321*x111 + r322*x112 + r323*x113;
+R3x113 = r331*x111 + r332*x112 + r333*x113;
+
+function ptfn31;
+% view v \in {2,3}, point p epipolar constraint
+ptfn31 = x311*(t32*R3x113 - t33*R3x112) + x312*(-t31*R3x113 + t33*R3x111) + x313*(-t32*R3x111 + t31*R3x112);
+
+% Point 2
+R3x121 = r311*x121 + r312*x122 + r313*x123;
+R3x122 = r321*x121 + r322*x122 + r323*x123;
+R3x123 = r331*x121 + r332*x122 + r333*x123;
+
+function ptfn32;
+% view v \in {2,3}, point p epipolar constraint
+ptfn32 = x321*(t32*R3x123 - t33*R3x122) + x322*(-t31*R3x123 + t33*R3x121) + x323*(-t32*R3x121 + t31*R3x122);
+
+% Point 3
+R3x131 = r311*x131 + r312*x132 + r313*x133;
+R3x132 = r321*x131 + r322*x132 + r323*x133;
+R3x133 = r331*x131 + r332*x132 + r333*x133;
+
+function ptfn33;
+% view v \in {2,3}, point p epipolar constraint
+ptfn33 = x331*(t32*R3x133 - t33*R3x132) + x332*(-t31*R3x133 + t33*R3x131) + x333*(-t32*R3x131 + t31*R3x132);
+
+% ---------------------------------------------------------------------
+% 2 Crosstalk constraints
+% - we keep the crosstalk equations one per point without eliminating scale ratio
+% - eliminating scale ratio would give us one less equation in one less
+% variable. We have to insert sine and cosine at this point TODO: test
+
+%function marker;
+%marker = 777767776;
+
+% Point 1 (scale ratio included - so 1 eq per point here
+function csfn1, csfn2, csfn3;
+
+%csfn12 = ( (R3x113 + t33)*x311 - R3x111 ) * ( (R2x123 + t23)*x221 - R2x121 ) - 
+%         ( (R2x113 + t23)*x211 - R2x111 ) * ( (R3x123 + t33)*x321 - R3x121 );
+
+csfn1_rotfactor2 = R2x113*x211 - R2x111;
+csfn1_rotfactor3 = R3x113*x311 - R3x111;
+csfn1_tfactor3 = t31 - t33*x311;
+csfn1_tfactor2 = t21 - t23*x211;
+csfn1 = csfn1_rotfactor2*csfn1_tfactor3 - csfn1_rotfactor3*csfn1_tfactor2;
+
+csfn2_rotfactor2 = R2x123*x221 - R2x121;
+csfn2_rotfactor3 = R3x123*x321 - R3x121;
+csfn2_tfactor3 = t31 - t33*x321;
+csfn2_tfactor2 = t21 - t23*x221;
+csfn2 = csfn2_rotfactor2*csfn2_tfactor3 - csfn2_rotfactor3*csfn2_tfactor2;
+
+csfn3_rotfactor2 = R2x133*x231 - R2x131;
+csfn3_rotfactor3 = R3x133*x331 - R3x131;
+csfn3_tfactor3 = t31 - t33*x331;
+csfn3_tfactor2 = t21 - t23*x231;
+csfn3 = csfn3_rotfactor2*csfn3_tfactor3 - csfn3_rotfactor3*csfn3_tfactor2;
+
+
+% ---------------------------------------------------------------------
+% Tangent constraints
+
+% Aux variables: R3*R2'
+rr11 = r311*r211 + r312*r212 + r313*r213;
+rr12 = r311*r221 + r312*r222 + r313*r223;
+rr13 = r311*r231 + r312*r232 + r313*r233;
+
+rr21 = r321*r211 + r322*r212 + r323*r213;
+rr22 = r321*r221 + r322*r222 + r323*r223;
+rr23 = r321*r231 + r322*r232 + r323*r233;
+
+rr31 = r331*r211 + r332*r212 + r333*r213;
+rr32 = r331*r221 + r332*r222 + r333*r223;
+rr33 = r331*r231 + r332*r232 + r333*r233;
+
+% R*(xvp x dvp)
+%  Rxdvp1=-r11*dvp2 + r12*dvp1 + r13*xvp1*dvp2 - r13*xvp2*dvp1;
+%  Rxdvp2=-r21*dvp2 + r22*dvp1 + r23*xvp1*dvp2 - r23*xvp2*dvp1;
+%  Rxdvp3=-r31*dvp2 + r32*dvp1 + r33*xvp1*dvp2 - r33*xvp2*dvp1;
+
+% -------- Point-tangent triplet track 1
+% det [n1 | n2 | n3] = 0  for normals n1, n2 and n3
+% rrik = r3i1*r2k1 + r3i2*r2k2 + r3i3*r2k3;
+
+n111 =-r311*d112 + r312*d111 + r313*x111*d112 - r313*x112*d111;
+n121 =-r321*d112 + r322*d111 + r323*x111*d112 - r323*x112*d111;
+n131 =-r331*d112 + r332*d111 + r333*x111*d112 - r333*x112*d111;
+
+% R*(xvp x dvp)
+n112 =-rr11*d212 + rr12*d211 + rr13*x211*d212 - rr13*x212*d211;
+n122 =-rr21*d212 + rr22*d211 + rr23*x211*d212 - rr23*x212*d211;
+n132 =-rr31*d212 + rr32*d211 + rr33*x211*d212 - rr33*x212*d211;
+
+n113 = -d312;
+n123 = d311;
+n133 = x311*d312 - x312*d311;
+
+function tgfn1;
+
+tgfn1 = n111*n122*n133 - n111*n123*n132 + n112*n123*n131 - n112*n121*n133 + n113*n121*n132 - n113*n122*n131;
+
+
+% -------- Point-tangent triplet track 2
+% det [n1 | n2 | n3] = 0  for normals n1, n2 and n3
+% rrik = r3i1*r2k1 + r3i2*r2k2 + r3i3*r2k3;
+
+n211 =-r311*d122 + r312*d121 + r313*x121*d122 - r313*x122*d121;
+n221 =-r321*d122 + r322*d121 + r323*x121*d122 - r323*x122*d121;
+n231 =-r331*d122 + r332*d121 + r333*x121*d122 - r333*x122*d121;
+
+% R*(xvp x dvp)
+n212 =-rr11*d222 + rr12*d221 + rr13*x221*d222 - rr13*x222*d221;
+n222 =-rr21*d222 + rr22*d221 + rr23*x221*d222 - rr23*x222*d221;
+n232 =-rr31*d222 + rr32*d221 + rr33*x221*d222 - rr33*x222*d221;
+
+n213 = -d322;
+n223 = d321;
+n233 = x321*d322 - x322*d321;
+
+function tgfn2;
+
+tgfn2 = n211*n222*n233 - n211*n223*n232 + n212*n223*n231 - n212*n221*n233 + n213*n221*n232 - n213*n222*n231;
+
+% -------- Point-tangent triplet track 3
+% det [n1 | n2 | n3] = 0  for normals n1, n2 and n3
+% rrik = r3i1*r2k1 + r3i2*r2k2 + r3i3*r2k3;
+
+%% n311 =-r311*d132 + r312*d131 + r313*x131*d132 - r313*x132*d131;
+%% n321 =-r321*d132 + r322*d131 + r323*x131*d132 - r323*x132*d131;
+%% n331 =-r331*d132 + r332*d131 + r333*x131*d132 - r333*x132*d131;
+%% 
+%% % R*(xvp x dvp)
+%% n312 =-rr11*d232 + rr12*d231 + rr13*x231*d232 - rr13*x232*d231;
+%% n322 =-rr21*d232 + rr22*d231 + rr23*x231*d232 - rr23*x232*d231;
+%% n332 =-rr31*d232 + rr32*d231 + rr33*x231*d232 - rr33*x232*d231;
+%% 
+%% n313 = -d332;
+%% n323 = d331;
+%% n333 = x331*d332 - x332*d331;
+
+%function tgfn3;
+
+%tgfn3 = n311*n322*n333 - n311*n323*n332 + n312*n323*n331 - n312*n321*n333 + n313*n321*n332 - n313*n322*n331;
+
+
+% ---------------------------------------------------------------------
+% Rotation constraints
+function
+rfn21,
+rfn22,
+rfn23,
+
+rfn24,
+rfn25,
+rfn26,
+
+%rfn27,
+
+rfn31,
+rfn32,
+rfn33,
+
+rfn34,
+rfn35,
+rfn36;
+
+%rfn37;
+
+% rfn{view id}{constraint id}
+rfn21 = r211^2 + r221^2 + r231^2 - 1;
+rfn22 = r212^2 + r222^2 + r232^2 - 1;
+rfn23 = r213^2 + r223^2 + r233^2 - 1; %----
+rfn24 = r211*r212 + r221*r222 + r231*r232;
+rfn25 = r211*r213 + r221*r223 + r231*r233;
+rfn26 = r212*r213 + r222*r223 + r232*r233; %----
+%rfn27 = r211*r222*r233 - r211*r223*r232 + r212*r223*r231 - r212*r221*r233 + r213*r221*r232 - r213*r231*r222 - 1;
+rfn31 = r311^2 + r321^2 + r331^2 - 1; %----
+rfn32 = r312^2 + r322^2 + r332^2 - 1;
+rfn33 = r313^2 + r323^2 + r333^2 - 1; %----
+rfn34 = r311*r312 + r321*r322 + r331*r332;
+rfn35 = r311*r313 + r321*r323 + r331*r333;
+rfn36 = r312*r313 + r322*r323 + r332*r333; %----
+%rfn37 = r311*r322*r333 - r311*r323*r332 + r312*r323*r331 - r312*r321*r333 + r313*r321*r332 - r313*r331*r322 - 1;
+
+END;

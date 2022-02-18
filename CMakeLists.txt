@@ -21,8 +21,10 @@ include_directories(/Users/cameronfiore/C++/DBoW3/src)
 
 add_executable(image_localization_project
         main.cpp
-        src/calibrate.cpp src/imageMatcher_Orb.cpp
+        src/calibrate.cpp
+        src/imageMatcher_Orb.cpp
         src/sevenScenes.cpp
+        src/synthetic.cpp
         src/Space.cpp
         src/imageMatcher.cpp
         src/functions.cpp

@@ -4,6 +4,7 @@
 
 #include "../include/Space.h"
 #include "../include/sevenScenes.h"
+#include "../include/synthetic.h"
 #include <iostream>
 #include <string>
 #include <Eigen/Dense>
@@ -42,14 +43,25 @@ void newEnergy(Point * a, Point * b) {
 //Graph functions
 Space::Space() = default;
 
-Space::Space(const vector<string> & images) {
-    for (int i = 0; i < images.size(); i++) {
-        auto point_to_add = newPoint(images[i], i, int (images.size()), sevenScenes::getT(images[i]));
-        for (const auto point : points) {
-            newEnergy(point, point_to_add);
+Space::Space(const vector<string> & images, const string & dataset) {
+    if (dataset == "7-Scenes") {
+        for (int i = 0; i < images.size(); i++) {
+            auto point_to_add = newPoint(images[i], i, int(images.size()), sevenScenes::getT(images[i]));
+            for (const auto point: points) {
+                newEnergy(point, point_to_add);
+            }
+            points.push_back(point_to_add);
         }
-        points.push_back(point_to_add);
+    } else {
+        for (int i = 0; i < images.size(); i++) {
+            auto point_to_add = newPoint(images[i], i, int(images.size()), synthetic::getC(images[i]));
+            for (const auto point: points) {
+                newEnergy(point, point_to_add);
+            }
+            points.push_back(point_to_add);
+        }
     }
+
 }
 
 void Space::removeHighestEnergyPoint() {
@@ -113,8 +125,8 @@ void Space::projectPointsTo2D () {
     double med_z = (max_z + min_z) / 2.;
 
 
-    double height = 1964.; //3.85
-    double width = 3024.; //2.39
+    double height = 2000.; //3.85
+    double width = 2000.; //2.39
     double avg_radius = 15.;
     double radial_variance = avg_radius * .5;
     double border = 4 * avg_radius;

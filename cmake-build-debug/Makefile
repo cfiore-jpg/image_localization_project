@@ -321,6 +321,30 @@ src/sevenScenes.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.s
 .PHONY : src/sevenScenes.cpp.s
 
+src/synthetic.o: src/synthetic.cpp.o
+.PHONY : src/synthetic.o
+
+# target to build an object file
+src/synthetic.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o
+.PHONY : src/synthetic.cpp.o
+
+src/synthetic.i: src/synthetic.cpp.i
+.PHONY : src/synthetic.i
+
+# target to preprocess a source file
+src/synthetic.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/synthetic.cpp.i
+.PHONY : src/synthetic.cpp.i
+
+src/synthetic.s: src/synthetic.cpp.s
+.PHONY : src/synthetic.s
+
+# target to generate assembly for a file
+src/synthetic.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/synthetic.cpp.s
+.PHONY : src/synthetic.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -354,6 +378,9 @@ help:
 	@echo "... src/sevenScenes.o"
 	@echo "... src/sevenScenes.i"
 	@echo "... src/sevenScenes.s"
+	@echo "... src/synthetic.o"
+	@echo "... src/synthetic.i"
+	@echo "... src/synthetic.s"
 .PHONY : help
 
 

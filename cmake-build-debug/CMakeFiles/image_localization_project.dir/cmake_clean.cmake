@@ -15,6 +15,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o.d"
   "CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o"
   "CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o.d"
+  "CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o"
+  "CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o.d"
   "image_localization_project"
   "image_localization_project.pdb"
 )

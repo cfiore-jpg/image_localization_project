@@ -1,0 +1,9 @@
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
+PROJECT(chicago_dataj)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++17 -msse4 -pthread")
+
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} /usr/include /usr/include/eigen3)
+SET(CODEFILE main.cpp)
+ADD_EXECUTABLE(test ${CODEFILE})
+

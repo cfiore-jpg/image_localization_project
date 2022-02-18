@@ -29,7 +29,8 @@ namespace pose {
                                            const vector<Eigen::Matrix3d> &R_qk,
                                            const vector<Eigen::Vector3d> &t_qk);
 
-    Eigen::Vector3d hypothesizeQueryCenterRANSAC (vector<Eigen::Matrix3d> & R_k,
+    Eigen::Vector3d hypothesizeQueryCenterRANSAC (const double & inlier_thresh,
+                                                  vector<Eigen::Matrix3d> & R_k,
                                                   vector<Eigen::Vector3d> & t_k,
                                                   vector<Eigen::Matrix3d> & R_qk,
                                                   vector<Eigen::Vector3d> & t_qk,
@@ -43,11 +44,12 @@ namespace pose {
                                               const vector<Eigen::Vector3d> &t_qk);
 
     void adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
-                                      const vector<Eigen::Vector3d> & T_k,
-                                      const vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points,
-                                      const double * K,
-                                      Eigen::Matrix3d & R_q,
-                                      Eigen::Vector3d & T_q);
+                           const vector<Eigen::Vector3d> & T_k,
+                           const vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points,
+                           const double & error_thresh,
+                           const double * K,
+                           Eigen::Matrix3d & R_q,
+                           Eigen::Vector3d & T_q);
 
     template<typename DataType, typename ForwardIterator>
     Eigen::Quaternion<DataType> averageQuaternions(ForwardIterator const &begin, ForwardIterator const &end);

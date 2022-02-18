@@ -234,6 +234,9 @@
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/sevenScenes.cpp">
 			<Option target="image_localization_project"/>
 		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/synthetic.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

@@ -38,7 +38,7 @@ class Space
     vector<Point*> points;
 public:
     Space ();
-    explicit Space (const vector<string> & images);
+    explicit Space (const vector<string> & images, const string & dataset);
     void removeHighestEnergyPoint();
     void getOptimalSpacing(int N, bool show_process);
     vector<string> getPointNames();
