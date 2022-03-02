@@ -230,10 +230,10 @@ Eigen::Vector3d pose::hypothesizeQueryCenterRANSAC (const double & inlier_thresh
             Eigen::Vector3d h = hypothesizeQueryCenter(R, t, R_, t_);
             for (int k = 0; k < K; k++) {
                 if (k != i && k != j) {
-                    Eigen::Vector3d c_k = - R_k[k].transpose() * t_k[k];
-                    Eigen::Vector3d v_k = -R_k[k].transpose() * R_qk[k].transpose() * t_qk[k];
-                    double dist = functions::getPoint3DLineDist(h, c_k, v_k);
-                    if (dist <= inlier_thresh) {
+                    Eigen::Vector3d t_qk_real = -R_qk[k] * (R_k[k] * h + t_k[k]);
+                    double angle = functions::getAngleBetween(t_qk_real, t_qk[k]);
+
+                    if (angle <= inlier_thresh) {
                         R.push_back(R_k[k]);
                         t.push_back(t_k[k]);
                         R_.push_back(R_qk[k]);
@@ -295,7 +295,7 @@ Eigen::Matrix3d pose::hypothesizeQueryRotation(const Eigen::Vector3d & c_q,
         Eigen::Vector3d t_ = -R_qk[i] * (R_k[i] * c_q + t_k[i]);
         t_.normalize();
 
-        ceres::CostFunction * cost_function = RotationError::Create(c_k, c_q,t_);
+        ceres::CostFunction * cost_function = RotationError::Create(c_k, c_q, t_);
         double lambda[1] = {(c_k - c_q).transpose() * R_q.transpose() * t_};
         problem.AddResidualBlock(cost_function, loss_function, R, lambda);
     }
@@ -314,6 +314,102 @@ Eigen::Matrix3d pose::hypothesizeQueryRotation(const Eigen::Vector3d & c_q,
                          {(2.*x*y + 2.*z) / Z, (1. + y*y - x*x - z*z) / Z, (2.*y*z - 2.*x) / Z},
                          {(2.*x*z - 2.*y) / Z, (2.*y*z + 2.*x) / Z, (1. + z*z - x*x - y*y) / Z}};
     return R_q_new;
+}
+
+tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Matrix3d, int, double, double, Eigen::Vector3d, Eigen::Matrix3d> pose::hypothesizeRANSAC (
+        const double & t_thresh,
+        const double & r_thresh,
+        const vector<int> & mask,
+        const vector<Eigen::Matrix3d> & R_k,
+        const vector<Eigen::Vector3d> & t_k,
+        const vector<Eigen::Matrix3d> & R_qk,
+        const vector<Eigen::Vector3d> & t_qk,
+        const Eigen::Vector3d & c_q,
+        const Eigen::Matrix3d & R_q) {
+
+    int K = int(R_k.size());
+    vector<Eigen::Matrix3d> best_R;
+    vector<Eigen::Vector3d> best_t;
+    vector<Eigen::Matrix3d> best_R_;
+    vector<Eigen::Vector3d> best_t_;
+    Eigen::Vector3d best_T_q;
+    Eigen::Matrix3d best_R_q;
+    double best_total_spread = 0;
+    vector<int> best_indices;
+
+    for (int i = 0; i < K - 1; i++) {
+        for (int j = i + 1; j < K; j++) {
+            vector<Eigen::Matrix3d> R {R_k[i], R_k[j]};
+            vector<Eigen::Vector3d> t {t_k[i], t_k[j]};
+            vector<Eigen::Matrix3d> R_ {R_qk[i], R_qk[j]};
+            vector<Eigen::Vector3d> t_ {t_qk[i], t_qk[j]};
+            vector<int> indices {i, j};
+            double total_spread = 0;
+
+            Eigen::Matrix3d R_hyp = pose::rotationAverage(vector<Eigen::Matrix3d> {R_qk[i] * R_k[i], R_qk[j] * R_k[j]});
+
+            Eigen::Vector3d c_hyp = hypothesizeQueryCenter(R, t, R_, t_);
+
+//            Eigen::Matrix3d R_hyp = pose::hypothesizeQueryRotation(c_hyp, R_avg, R, t, R_, t_);
+
+            for (int k = 0; k < K; k++) {
+                if (k != i && k != j) {
+
+                    Eigen::Matrix3d R_qk_real = R_hyp * R_k[k].transpose();
+                    Eigen::Vector3d t_qk_real = -R_qk_real * (R_k[k] * c_hyp + t_k[k]);
+
+                    double r_dist = functions::rotationDifference(R_qk_real, R_qk[k]);
+                    double t_dist = functions::getAngleBetween(t_qk_real, t_qk[k]);
+
+                    if (t_dist <= t_thresh && r_dist <= r_thresh) {
+                        R.push_back(R_k[k]);
+                        t.push_back(t_k[k]);
+                        R_.push_back(R_qk[k]);
+                        t_.push_back(t_qk[k]);
+                        indices.push_back(k);
+                        total_spread += t_dist + r_dist;
+                    }
+                }
+            }
+            if (R.size() > best_R.size() || (R.size() == best_R.size() && total_spread < best_total_spread)) {
+                best_R = R;
+                best_t = t;
+                best_R_ = R_;
+                best_t_ = t_;
+                best_indices = indices;
+                best_total_spread = total_spread;
+                best_R_q = R_hyp;
+                best_T_q = - R_hyp * c_hyp;
+            }
+        }
+    }
+
+    double tp = 0, fp = 0;
+//    if (best_R.size() > 2) {
+//        for (const auto &i: best_indices) {
+//            if (mask[i]) {
+//                tp++;
+//            } else {
+//                fp++;
+//            }
+//        }
+//    }
+
+    Eigen::Vector3d c_q_calc = hypothesizeQueryCenter(best_R, best_t, best_R_, best_t_);
+
+    vector<Eigen::Matrix3d> rotations;
+    rotations.reserve(best_R.size());
+    for(int i = 0; i < best_R.size(); i++) {
+        rotations.emplace_back(best_R_[i] * best_R[i]);
+    }
+
+    Eigen::Matrix3d R_q_avg = pose::rotationAverage(rotations);
+
+    Eigen::Matrix3d R_q_calc = hypothesizeQueryRotation(c_q_calc, R_q_avg, best_R, best_t, best_R_, best_t_);
+
+    Eigen::Vector3d t_q_calc = -R_q_calc * c_q_calc;
+
+    return {t_q_calc, R_q_calc, R_q_avg, int (best_R.size()), tp, fp, best_T_q, best_R_q};
 }
 
 void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,

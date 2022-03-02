@@ -177,14 +177,17 @@ void synthetic::findSyntheticMatches(const string & db_im, const string & query,
 void synthetic::addGaussianNoise(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, double std_dev) {
 
     assert(pts_db.size() == pts_q.size());
-    random_device generator;
+//    random_device generator;
     normal_distribution<double> gaussian(0., std_dev);
     uniform_real_distribution<double> uniform(0., 2.*PI);
     for (int i = 0; i < pts_db.size(); i++) {
-        double mag_db = abs(gaussian(generator));
-        double mag_q = abs(gaussian(generator));
-        double theta_db = uniform(generator);
-        double theta_q = uniform(generator);
+        default_random_engine engine_db, engine_q;
+        engine_db.seed(i);
+        engine_q.seed(i * 1000);
+        double mag_db = abs(gaussian(engine_db));
+        double mag_q = abs(gaussian(engine_q));
+        double theta_db = uniform(engine_db);
+        double theta_q = uniform(engine_q);
 
         double x_db = mag_db * cos(theta_db);
         double y_db = mag_db * sin(theta_db);
@@ -199,33 +202,40 @@ void synthetic::addGaussianNoise(vector<cv::Point2d> & pts_db, vector<cv::Point2
 }
 
 void synthetic::addOcclusion(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, int n) {
-    random_device generator;
+//    random_device generator;
     while (int (pts_db.size()) > n) {
+        default_random_engine engine;
+        engine.seed(int (pts_db.size()));
         uniform_int_distribution<int> distribution(0,int(pts_db.size())-1);
-        int i = distribution(generator);
+        int i = distribution(engine);
         pts_db.erase(pts_db.begin() + i);
         pts_q.erase(pts_q.begin() + i);
     }
 }
 
 void synthetic::addMismatches(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, double percentage) {
-    random_device generator;
+//    random_device generator;
     int n = int( double (pts_db.size()) * percentage);
     uniform_real_distribution<double> x_random(0., 400.);
     uniform_real_distribution<double> y_random(0., 500.);
-    uniform_int_distribution<int> distribution(0,int(pts_db.size())-1);
-    vector<int> already_mofified;
+    uniform_int_distribution<int> index(0,int(pts_db.size())-1);
+    vector<int> already_modified;
     while (n > 0) {
-        int i = distribution(generator);
-        if (std::count(already_mofified.begin(), already_mofified.end(), i)) {
+        default_random_engine engine_i, engine_x, engine_y;
+        engine_i.seed(n);
+        engine_x.seed(n * 100);
+        engine_y.seed(n * 200);
+        int i = index (engine_i);
+        if (std::count(already_modified.begin(), already_modified.end(), i)) {
             continue;
         }
-        already_mofified.push_back(i);
-        pts_db[i].x = x_random(generator);
-        pts_db[i].y = y_random(generator);
+        already_modified.push_back(i);
+        pts_db[i].x = x_random(engine_x);
+        pts_db[i].y = y_random(engine_y);
         n--;
     }
 }
+
 
 
 

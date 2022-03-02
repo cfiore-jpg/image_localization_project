@@ -43,6 +43,17 @@ namespace pose {
                                               const vector<Eigen::Matrix3d> & R_qk,
                                               const vector<Eigen::Vector3d> &t_qk);
 
+    tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Matrix3d, int, double, double, Eigen::Vector3d, Eigen::Matrix3d> hypothesizeRANSAC (
+            const double & t_thresh,
+            const double & r_thresh,
+            const vector<int> & mask,
+            const vector<Eigen::Matrix3d> & R_k,
+            const vector<Eigen::Vector3d> & t_k,
+            const vector<Eigen::Matrix3d> & R_qk,
+            const vector<Eigen::Vector3d> & t_qk,
+            const Eigen::Vector3d & c_q,
+            const Eigen::Matrix3d & R_q);
+
     void adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
                            const vector<Eigen::Vector3d> & T_k,
                            const vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points,
