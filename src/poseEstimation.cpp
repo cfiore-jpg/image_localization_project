@@ -316,7 +316,7 @@ Eigen::Matrix3d pose::hypothesizeQueryRotation(const Eigen::Vector3d & c_q,
     return R_q_new;
 }
 
-tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Matrix3d, int, double, double, Eigen::Vector3d, Eigen::Matrix3d> pose::hypothesizeRANSAC (
+tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, int, double, double> pose::hypothesizeRANSAC (
         const double & t_thresh,
         const double & r_thresh,
         const vector<int> & mask,
@@ -405,11 +405,13 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Matrix3d, int, double, double, Ei
 
     Eigen::Matrix3d R_q_avg = pose::rotationAverage(rotations);
 
+    Eigen::Vector3d t_q_avg = -R_q_avg * c_q_calc;
+
     Eigen::Matrix3d R_q_calc = hypothesizeQueryRotation(c_q_calc, R_q_avg, best_R, best_t, best_R_, best_t_);
 
     Eigen::Vector3d t_q_calc = -R_q_calc * c_q_calc;
 
-    return {t_q_calc, R_q_calc, R_q_avg, int (best_R.size()), tp, fp, best_T_q, best_R_q};
+    return {best_T_q, best_R_q, t_q_avg, R_q_avg, t_q_calc, R_q_calc, int (best_R.size()), tp, fp};
 }
 
 void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
@@ -469,8 +471,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
     options.linear_solver_type = ceres::DENSE_SCHUR;
 //    options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
-    if (problem.NumResidualBlocks() != 10) {
-        cout << ", Adjusting";
+    if (problem.NumResidualBlocks() > 0) {
         ceres::Solve(options, &problem, &summary);
     } else {
         cout << ", Can't Adjust";

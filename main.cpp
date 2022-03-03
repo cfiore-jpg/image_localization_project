@@ -239,15 +239,20 @@ int main() {
 
     cout << "Running queries..." << endl;
     int startIdx = 0;
-    vector<double> c_error; c_error.reserve(listQuery.size());
-    vector<double> t_calc_error; t_calc_error.reserve(listQuery.size());
-    vector<double> r_calc_error; r_calc_error.reserve(listQuery.size());
-    vector<double> t_adjust_error; t_adjust_error.reserve(listQuery.size());
-    vector<double> r_adjust_error; r_adjust_error.reserve(listQuery.size());
+    vector<double> t_alone_error; t_alone_error.reserve(listQuery.size());
+    vector<double> r_alone_error; r_alone_error.reserve(listQuery.size());
+    vector<double> t_alone_ad_error; t_alone_ad_error.reserve(listQuery.size());
+    vector<double> r_alone_ad_error; r_alone_ad_error.reserve(listQuery.size());
+
     vector<double> t_avg_error; t_avg_error.reserve(listQuery.size());
     vector<double> r_avg_error; r_avg_error.reserve(listQuery.size());
-    vector<double> t_alone_error; t_avg_error.reserve(listQuery.size());
-    vector<double> r_alone_error; r_avg_error.reserve(listQuery.size());
+    vector<double> t_avg_ad_error; t_avg_ad_error.reserve(listQuery.size());
+    vector<double> r_avg_ad_error; r_avg_ad_error.reserve(listQuery.size());
+
+    vector<double> t_calc_error; t_calc_error.reserve(listQuery.size());
+    vector<double> r_calc_error; r_calc_error.reserve(listQuery.size());
+    vector<double> t_calc_ad_error; t_calc_ad_error.reserve(listQuery.size());
+    vector<double> r_calc_ad_error; r_calc_ad_error.reserve(listQuery.size());
 
     vector<double> x (51);
     for (int i = 0; i < 51; i++) {
@@ -267,7 +272,7 @@ int main() {
     int total_points = 0;
     for (int q = startIdx; q < listQuery.size(); q++) {
 
-        cout << q + 1 << "/" << listQuery.size() << "  ";
+        cout << q + 1 << "/" << listQuery.size() << ": " << endl;
 
         // Query Image
         string query = listQuery[q];
@@ -282,7 +287,7 @@ int main() {
 
         //Retrieve top K
 //        auto retrieved = synthetic::omitQuery(q, listQuery);
-        auto retrieved = functions::retrieveSimilar(query, 250, 1.6);
+        auto retrieved = functions::retrieveSimilar(query, 150, 1.6);
         int num_spaced = int(double(retrieved.size()) * .1);
         auto spaced = functions::optimizeSpacing(retrieved, num_spaced, false, "7-Scenes");
 
@@ -405,7 +410,7 @@ int main() {
         // Calculate query estimates
 
         auto calc = pose::hypothesizeRANSAC(5., 5., inliers, R_ks, t_ks, R_qk_calcs, t_qk_calcs, c_q, R_q);
-        cout << "Inliers: " << get<3>(calc) << "/" << R_ks.size();
+//        cout << "Inliers: " << get<3>(calc) << "/" << R_ks.size();
 
 //        vector<Eigen::Matrix3d> rotations;
 //        rotations.reserve(R_ks.size());
@@ -414,44 +419,54 @@ int main() {
 //        }
 //        Eigen::Matrix3d R_q_avg = pose::rotationAverage(rotations);
 
-        Eigen::Matrix3d R_q_avg = get<2>(calc);
+        Eigen::Vector3d t_q_alone = get<0>(calc);
+        Eigen::Matrix3d R_q_alone = get<1>(calc);
+        Eigen::Vector3d t_q_alone_ad = t_q_alone;
+        Eigen::Matrix3d R_q_alone_ad = R_q_alone;
+        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_alone_ad, t_q_alone_ad);
 
-        Eigen::Matrix3d R_q_calc = get<1>(calc);
-        Eigen::Vector3d t_q_calc = get<0>(calc);
+        Eigen::Vector3d t_q_avg = get<2>(calc);
+        Eigen::Matrix3d R_q_avg = get<3>(calc);
+        Eigen::Vector3d t_q_avg_ad = t_q_avg;
+        Eigen::Matrix3d R_q_avg_ad = R_q_avg;
+        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_avg_ad, t_q_avg_ad);
 
-        Eigen::Vector3d t_q_adjust = t_q_calc;
-        Eigen::Matrix3d R_q_adjust = R_q_calc;
-        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_adjust, t_q_adjust);
-
-        Eigen::Vector3d t_q_alone = get<6>(calc);
-        Eigen::Matrix3d R_q_alone = get<7>(calc);
-
+        Eigen::Vector3d t_q_calc = get<4>(calc);
+        Eigen::Matrix3d R_q_calc = get<5>(calc);
+        Eigen::Vector3d t_q_calc_ad = t_q_calc;
+        Eigen::Matrix3d R_q_calc_ad = R_q_calc;
+        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_calc_ad, t_q_calc_ad);
 
         // Calculate error
 
-//        double t_dist_avg = functions::getDistBetween(t_q, t_q_avg);
-//        t_avg_error.push_back(t_dist_avg); sort(t_avg_error.begin(), t_avg_error.end());
+        double t_alone_dist = functions::getDistBetween(t_q, t_q_alone);
+        t_alone_error.push_back(t_alone_dist); sort(t_alone_error.begin(), t_alone_error.end());
+        double r_alone_dist = functions::rotationDifference(R_q, R_q_alone);
+        r_alone_error.push_back(r_alone_dist); sort(r_alone_error.begin(), r_alone_error.end());
+        double t_alone_ad_dist = functions::getDistBetween(t_q, t_q_alone_ad);
+        t_alone_ad_error.push_back(t_alone_ad_dist); sort(t_alone_ad_error.begin(), t_alone_ad_error.end());
+        double r_alone_ad_dist = functions::rotationDifference(R_q, R_q_alone_ad);
+        r_alone_ad_error.push_back(r_alone_ad_dist); sort(r_alone_ad_error.begin(), r_alone_ad_error.end());
 
-        double r_dist_avg = functions::rotationDifference(R_q, R_q_avg);
-        r_avg_error.push_back(r_dist_avg); sort(r_avg_error.begin(), r_avg_error.end());
+        double t_avg_dist = functions::getDistBetween(t_q, t_q_avg);
+        t_avg_error.push_back(t_avg_dist); sort(t_avg_error.begin(), t_avg_error.end());
+        double r_avg_dist = functions::rotationDifference(R_q, R_q_avg);
+        r_avg_error.push_back(r_avg_dist); sort(r_avg_error.begin(), r_avg_error.end());
+        double t_avg_ad_dist = functions::getDistBetween(t_q, t_q_avg_ad);
+        t_avg_ad_error.push_back(t_avg_ad_dist); sort(t_avg_ad_error.begin(), t_avg_ad_error.end());
+        double r_avg_ad_dist = functions::rotationDifference(R_q, R_q_avg_ad);
+        r_avg_ad_error.push_back(r_avg_ad_dist); sort(r_avg_ad_error.begin(), r_avg_ad_error.end());
 
-        double t_dist_alone = functions::getDistBetween(t_q, t_q_alone);
-        t_alone_error.push_back(t_dist_alone); sort(t_alone_error.begin(), t_alone_error.end());
+        double t_calc_dist = functions::getDistBetween(t_q, t_q_calc);
+        t_calc_error.push_back(t_calc_dist); sort(t_calc_error.begin(), t_calc_error.end());
+        double r_calc_dist = functions::rotationDifference(R_q, R_q_calc);
+        r_calc_error.push_back(r_calc_dist); sort(r_calc_error.begin(), r_calc_error.end());
+        double t_calc_ad_dist = functions::getDistBetween(t_q, t_q_calc_ad);
+        t_calc_ad_error.push_back(t_calc_ad_dist); sort(t_calc_ad_error.begin(), t_calc_ad_error.end());
+        double r_calc_ad_dist = functions::rotationDifference(R_q, R_q_calc_ad);
+        r_calc_ad_error.push_back(r_calc_ad_dist); sort(r_calc_ad_error.begin(), r_calc_ad_error.end());
 
-        double r_dist_alone = functions::rotationDifference(R_q, R_q_alone);
-        r_alone_error.push_back(r_dist_alone); sort(r_alone_error.begin(), r_alone_error.end());
 
-        double t_dist_calc = functions::getDistBetween(t_q, t_q_calc);
-        t_calc_error.push_back(t_dist_calc); sort(t_calc_error.begin(), t_calc_error.end());
-
-        double r_dist_calc = functions::rotationDifference(R_q, R_q_calc);
-        r_calc_error.push_back(r_dist_calc); sort(r_calc_error.begin(), r_calc_error.end());
-
-        double t_dist_adjust = functions::getDistBetween(t_q, t_q_adjust);
-        t_adjust_error.push_back(t_dist_adjust); sort(t_adjust_error.begin(), t_adjust_error.end());
-
-        double r_dist_adjust = functions::rotationDifference(R_q, R_q_adjust);
-        r_adjust_error.push_back(r_dist_adjust); sort(r_adjust_error.begin(), r_adjust_error.end());
 
         // Reprojection metrics
 //        for (int i = 0; i < int (R_ks.size()); i++) {
@@ -593,27 +608,37 @@ int main() {
         int n = int(double(t_calc_error.size()) / 2.);
         if (t_calc_error.size() % 2 == 1) {
             cout <<
-//            ", C: " << c_error[n] <<
-            ", T_calc: " << t_calc_error[n] <<
-            ", R_calc: " << r_calc_error[n] <<
-            ", T_adjust: " << t_adjust_error[n] <<
-            ", R_adjust: " << r_adjust_error[n] <<
-            ", T_alone: " << t_alone_error[n] <<
+            "T_alone: " << t_alone_error[n] <<
             ", R_alone: " << r_alone_error[n] <<
-//            ", T_avg: " << t_avg_error[n] <<
+            ", T_alone_ad: " << t_alone_ad_error[n] <<
+            ", R_alone_ad: " << r_alone_ad_error[n] << endl <<
+
+            "T_avg: " << t_avg_error[n] <<
             ", R_avg: " << r_avg_error[n] <<
+            ", T_avg_ad: " << t_avg_ad_error[n] <<
+            ", R_avg_ad: " << r_avg_ad_error[n] << endl <<
+
+            "T_calc: " << t_calc_error[n] <<
+            ", R_calc: " << r_calc_error[n] <<
+            ", T_calc_ad: " << t_calc_ad_error[n] <<
+            ", R_calc_ad: " << r_calc_ad_error[n] <<
             endl;
         } else {
             cout <<
-//            ", C: " << (c_error[n] + c_error[n - 1]) / 2. <<
-            ", T_calc: " << (t_calc_error[n] + t_calc_error[n - 1]) / 2. <<
-            ", R_calc: " << (r_calc_error[n] + r_calc_error[n - 1]) / 2. <<
-            ", T_adjust: " << (t_adjust_error[n] + t_adjust_error[n - 1]) / 2. <<
-            ", R_adjust: " << (r_adjust_error[n] + r_adjust_error[n - 1]) / 2.<<
-            ", T_alone: " << t_alone_error[n] <<
-            ", R_alone: " << r_alone_error[n] <<
-//            ", T_avg: " << (t_avg_error[n] + t_avg_error[n - 1]) / 2. <<
+            "T_alone: " << (t_alone_error[n] + t_alone_error[n - 1]) / 2. <<
+            ", R_alone: " << (r_alone_error[n] + r_alone_error[n - 1]) / 2. <<
+            ", T_alone_ad: " << (t_alone_ad_error[n] + t_alone_ad_error[n - 1]) / 2. <<
+            ", R_alone_ad: " << (r_alone_ad_error[n] + r_alone_ad_error[n - 1]) / 2. << endl <<
+
+            "T_avg: " << (t_avg_error[n] + t_avg_error[n - 1]) / 2. <<
             ", R_avg: " << (r_avg_error[n] + r_avg_error[n - 1]) / 2. <<
+            ", T_avg_ad: " << (t_avg_ad_error[n] + t_avg_ad_error[n - 1]) / 2. <<
+            ", R_avg_ad: " << (r_avg_ad_error[n] + r_avg_ad_error[n - 1]) / 2. << endl <<
+
+            "T_calc: " << (t_calc_error[n] + t_calc_error[n - 1]) / 2. <<
+            ", R_calc: " << (r_calc_error[n] + r_calc_error[n - 1]) / 2. <<
+            ", T_calc_ad: " << (t_calc_ad_error[n] + t_calc_ad_error[n - 1]) / 2. <<
+            ", R_calc_ad: " << (r_calc_ad_error[n] + r_calc_ad_error[n - 1]) / 2. <<
             endl;
         }
     }
