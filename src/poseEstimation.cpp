@@ -316,7 +316,7 @@ Eigen::Matrix3d pose::hypothesizeQueryRotation(const Eigen::Vector3d & c_q,
     return R_q_new;
 }
 
-tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, int, double, double> pose::hypothesizeRANSAC (
+tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, int, double, double> pose::hypothesizeRANSAC (
         const double & t_thresh,
         const double & r_thresh,
         const vector<int> & mask,
@@ -411,7 +411,9 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
 
     Eigen::Vector3d t_q_calc = -R_q_calc * c_q_calc;
 
-    return {best_T_q, best_R_q, t_q_avg, R_q_avg, t_q_calc, R_q_calc, int (best_R.size()), tp, fp};
+    Eigen::Vector3d t_q_gov = pose::GovinduTranslationAveraging(best_t, best_R_, best_t_);
+
+    return {best_T_q, best_R_q, t_q_avg, R_q_avg, t_q_calc, R_q_calc, t_q_gov, int (best_R.size()), tp, fp};
 }
 
 void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
@@ -531,4 +533,76 @@ Eigen::Matrix3d pose::rotationAverage(const vector<Eigen::Matrix3d> & rotations)
     Eigen::Matrix3d avg_M = avg_Q.toRotationMatrix();
     return avg_M;
 
+}
+
+//The implementation of Govindu's Translation solving scheme
+//Listed in the paper: Combining Two-view Constraints For Motion Estimation  (2011)
+//Their method uses the data:
+//R1: Absolute Rotation of Query
+//R2: Absolute Rotation of Database images; We can have multiple R2s
+//T1: Our unknown.
+//T2: Absolute Translation of Database images;
+//R12: Relative Rotation Between Query and Database images, defined as R2 * R1^T
+//T12: Relative Translation Between Query and Database images, defined as T2 - R12 * T1
+Eigen::Vector3d pose::GovinduTranslationAveraging(const vector<Eigen::Vector3d> & t_k,
+                                                  const vector<Eigen::Matrix3d> & R_qk,
+                                                  const vector<Eigen::Vector3d> & t_qk)
+{
+    int nImgs = int(t_k.size());
+
+    //Intermediate arrays
+    Eigen::MatrixXd A(nImgs*3,3);
+    Eigen::MatrixXd b(nImgs*3,1);
+
+    //Info of our query
+
+    //Weights:
+    double lambda[nImgs];
+    for (int i = 0; i < nImgs; i++)
+        lambda[i] = 1.0;
+
+    //Result container
+    Eigen::MatrixXd results_prev(3,1);
+    results_prev << 100,100,100;
+    Eigen::MatrixXd results_curr(3,1);
+    results_curr << 0,0,0;
+    double dist_prev = 1e8;
+
+    //Iterative method shown in the paper
+    while((results_prev - results_curr).norm() > 1e-8 && dist_prev > (results_prev - results_curr).norm())
+    {
+        dist_prev = (results_prev - results_curr).norm();
+        results_prev = results_curr;
+        //Build Linear systems
+        for (int i = 0; i < nImgs; i++)
+        {
+
+            Eigen::Matrix<double,3,3> R12 = R_qk[i];
+            Eigen::Matrix<double,3,1> T2 = t_k[i];
+            Eigen::Matrix<double,3,1> T12 = t_qk[i];
+
+            Eigen::MatrixXd t_ij_x(3,3);
+            t_ij_x.setZero();
+            t_ij_x(0,1) = -T12(2,0); t_ij_x(1,0) = T12(2,0);
+            t_ij_x(0,2) = T12(1,0); t_ij_x(2,0) = -T12(1,0);
+            t_ij_x(1,2) = -T12(0,0); t_ij_x(2,1) = T12(0,0);
+
+            A.block(i*3,0,3,3) = lambda[i] * t_ij_x * R12;
+            b.block(i*3,0,3,1) = lambda[i] * t_ij_x * T2;
+        }
+        //Solve linear system
+        results_curr = A.colPivHouseholderQr().solve(b);
+
+        //Update weights
+        for (int i = 0; i < nImgs; i++)
+        {
+            Eigen::Matrix<double,3,3> R12 = R_qk[i];
+            Eigen::Matrix<double,3,1> T2 = t_k[i];
+
+            lambda[i] = 1 / ((T2 - R12 * results_curr).norm());
+
+        }
+
+    }
+    return results_curr;
 }

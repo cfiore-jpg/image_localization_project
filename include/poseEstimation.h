@@ -43,7 +43,7 @@ namespace pose {
                                               const vector<Eigen::Matrix3d> & R_qk,
                                               const vector<Eigen::Vector3d> &t_qk);
 
-    tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, int, double, double> hypothesizeRANSAC (
+    tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, int, double, double> hypothesizeRANSAC (
             const double & t_thresh,
             const double & r_thresh,
             const vector<int> & mask,
@@ -66,4 +66,8 @@ namespace pose {
     Eigen::Quaternion<DataType> averageQuaternions(ForwardIterator const &begin, ForwardIterator const &end);
 
     Eigen::Matrix3d rotationAverage(const vector<Eigen::Matrix3d> &rotations);
+
+    Eigen::Vector3d GovinduTranslationAveraging(const vector<Eigen::Vector3d> & t_k,
+                                                const vector<Eigen::Matrix3d> & R_qk,
+                                                const vector<Eigen::Vector3d> & t_qk);
 }
