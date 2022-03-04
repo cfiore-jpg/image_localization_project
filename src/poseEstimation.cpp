@@ -473,6 +473,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
     options.linear_solver_type = ceres::DENSE_SCHUR;
 //    options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
+    int num = problem.NumResidualBlocks();
     if (problem.NumResidualBlocks() > 0) {
         ceres::Solve(options, &problem, &summary);
     } else {
@@ -569,17 +570,17 @@ Eigen::Vector3d pose::GovinduTranslationAveraging(const vector<Eigen::Vector3d> 
     double dist_prev = 1e8;
 
     //Iterative method shown in the paper
-    while((results_prev - results_curr).norm() > 1e-8 && dist_prev > (results_prev - results_curr).norm())
-    {
+//    while((results_prev - results_curr).norm() > 1e-8 && dist_prev > (results_prev - results_curr).norm())
+//    {
         dist_prev = (results_prev - results_curr).norm();
         results_prev = results_curr;
         //Build Linear systems
         for (int i = 0; i < nImgs; i++)
         {
 
-            Eigen::Matrix<double,3,3> R12 = R_qk[i];
+            Eigen::Matrix<double,3,3> R12 = R_qk[i].transpose();
             Eigen::Matrix<double,3,1> T2 = t_k[i];
-            Eigen::Matrix<double,3,1> T12 = t_qk[i];
+            Eigen::Matrix<double,3,1> T12 = - R12 * t_qk[i];
 
             Eigen::MatrixXd t_ij_x(3,3);
             t_ij_x.setZero();
@@ -594,15 +595,15 @@ Eigen::Vector3d pose::GovinduTranslationAveraging(const vector<Eigen::Vector3d> 
         results_curr = A.colPivHouseholderQr().solve(b);
 
         //Update weights
-        for (int i = 0; i < nImgs; i++)
-        {
-            Eigen::Matrix<double,3,3> R12 = R_qk[i];
-            Eigen::Matrix<double,3,1> T2 = t_k[i];
-
-            lambda[i] = 1 / ((T2 - R12 * results_curr).norm());
-
-        }
-
-    }
+//        for (int i = 0; i < nImgs; i++)
+//        {
+//            Eigen::Matrix<double,3,3> R12 = R_qk[i].transpose();
+//            Eigen::Matrix<double,3,1> T2 = t_k[i];
+//
+//            lambda[i] = 1 / ((T2 - R12 * results_curr).norm());
+//
+//        }
+//
+//    }
     return results_curr;
 }

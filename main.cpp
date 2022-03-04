@@ -238,7 +238,7 @@ int main() {
     functions::createQueryVector(listQuery, info, SCENE);
 
     cout << "Running queries..." << endl;
-    int startIdx = 0;
+    int startIdx = 1995;
     vector<double> t_alone_error; t_alone_error.reserve(listQuery.size());
     vector<double> r_alone_error; r_alone_error.reserve(listQuery.size());
     vector<double> t_alone_ad_error; t_alone_ad_error.reserve(listQuery.size());
@@ -424,17 +424,17 @@ int main() {
 //        }
 //        Eigen::Matrix3d R_q_avg = pose::rotationAverage(rotations);
 
-//        Eigen::Vector3d t_q_alone = get<0>(calc);
-//        Eigen::Matrix3d R_q_alone = get<1>(calc);
-//        Eigen::Vector3d t_q_alone_ad = t_q_alone;
-//        Eigen::Matrix3d R_q_alone_ad = R_q_alone;
-//        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_alone_ad, t_q_alone_ad);
-//
-//        Eigen::Vector3d t_q_avg = get<2>(calc);
-//        Eigen::Matrix3d R_q_avg = get<3>(calc);
-//        Eigen::Vector3d t_q_avg_ad = t_q_avg;
-//        Eigen::Matrix3d R_q_avg_ad = R_q_avg;
-//        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_avg_ad, t_q_avg_ad);
+        Eigen::Vector3d t_q_alone = get<0>(calc);
+        Eigen::Matrix3d R_q_alone = get<1>(calc);
+        Eigen::Vector3d t_q_alone_ad = t_q_alone;
+        Eigen::Matrix3d R_q_alone_ad = R_q_alone;
+        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_alone_ad, t_q_alone_ad);
+
+        Eigen::Vector3d t_q_avg = get<2>(calc);
+        Eigen::Matrix3d R_q_avg = get<3>(calc);
+        Eigen::Vector3d t_q_avg_ad = t_q_avg;
+        Eigen::Matrix3d R_q_avg_ad = R_q_avg;
+        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_avg_ad, t_q_avg_ad);
 
         Eigen::Vector3d t_q_gov = get<6>(calc);
         Eigen::Matrix3d R_q_gov = get<3>(calc);
@@ -442,31 +442,31 @@ int main() {
         Eigen::Matrix3d R_q_gov_ad = R_q_gov;
         pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_gov_ad, t_q_gov_ad);
 
-//        Eigen::Vector3d t_q_calc = get<4>(calc);
-//        Eigen::Matrix3d R_q_calc = get<5>(calc);
-//        Eigen::Vector3d t_q_calc_ad = t_q_calc;
-//        Eigen::Matrix3d R_q_calc_ad = R_q_calc;
-//        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_calc_ad, t_q_calc_ad);
+        Eigen::Vector3d t_q_calc = get<4>(calc);
+        Eigen::Matrix3d R_q_calc = get<5>(calc);
+        Eigen::Vector3d t_q_calc_ad = t_q_calc;
+        Eigen::Matrix3d R_q_calc_ad = R_q_calc;
+        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_calc_ad, t_q_calc_ad);
 
         // Calculate error
 
-//        double t_alone_dist = functions::getDistBetween(t_q, t_q_alone);
-//        t_alone_error.push_back(t_alone_dist); sort(t_alone_error.begin(), t_alone_error.end());
-//        double r_alone_dist = functions::rotationDifference(R_q, R_q_alone);
-//        r_alone_error.push_back(r_alone_dist); sort(r_alone_error.begin(), r_alone_error.end());
-//        double t_alone_ad_dist = functions::getDistBetween(t_q, t_q_alone_ad);
-//        t_alone_ad_error.push_back(t_alone_ad_dist); sort(t_alone_ad_error.begin(), t_alone_ad_error.end());
-//        double r_alone_ad_dist = functions::rotationDifference(R_q, R_q_alone_ad);
-//        r_alone_ad_error.push_back(r_alone_ad_dist); sort(r_alone_ad_error.begin(), r_alone_ad_error.end());
+        double t_alone_dist = functions::getDistBetween(t_q, t_q_alone);
+        t_alone_error.push_back(t_alone_dist); sort(t_alone_error.begin(), t_alone_error.end());
+        double r_alone_dist = functions::rotationDifference(R_q, R_q_alone);
+        r_alone_error.push_back(r_alone_dist); sort(r_alone_error.begin(), r_alone_error.end());
+        double t_alone_ad_dist = functions::getDistBetween(t_q, t_q_alone_ad);
+        t_alone_ad_error.push_back(t_alone_ad_dist); sort(t_alone_ad_error.begin(), t_alone_ad_error.end());
+        double r_alone_ad_dist = functions::rotationDifference(R_q, R_q_alone_ad);
+        r_alone_ad_error.push_back(r_alone_ad_dist); sort(r_alone_ad_error.begin(), r_alone_ad_error.end());
 
-//        double t_avg_dist = functions::getDistBetween(t_q, t_q_avg);
-//        t_avg_error.push_back(t_avg_dist); sort(t_avg_error.begin(), t_avg_error.end());
-//        double r_avg_dist = functions::rotationDifference(R_q, R_q_avg);
-//        r_avg_error.push_back(r_avg_dist); sort(r_avg_error.begin(), r_avg_error.end());
-//        double t_avg_ad_dist = functions::getDistBetween(t_q, t_q_avg_ad);
-//        t_avg_ad_error.push_back(t_avg_ad_dist); sort(t_avg_ad_error.begin(), t_avg_ad_error.end());
-//        double r_avg_ad_dist = functions::rotationDifference(R_q, R_q_avg_ad);
-//        r_avg_ad_error.push_back(r_avg_ad_dist); sort(r_avg_ad_error.begin(), r_avg_ad_error.end());
+        double t_avg_dist = functions::getDistBetween(t_q, t_q_avg);
+        t_avg_error.push_back(t_avg_dist); sort(t_avg_error.begin(), t_avg_error.end());
+        double r_avg_dist = functions::rotationDifference(R_q, R_q_avg);
+        r_avg_error.push_back(r_avg_dist); sort(r_avg_error.begin(), r_avg_error.end());
+        double t_avg_ad_dist = functions::getDistBetween(t_q, t_q_avg_ad);
+        t_avg_ad_error.push_back(t_avg_ad_dist); sort(t_avg_ad_error.begin(), t_avg_ad_error.end());
+        double r_avg_ad_dist = functions::rotationDifference(R_q, R_q_avg_ad);
+        r_avg_ad_error.push_back(r_avg_ad_dist); sort(r_avg_ad_error.begin(), r_avg_ad_error.end());
 
         double t_gov_dist = functions::getDistBetween(t_q, t_q_gov);
         t_gov_error.push_back(t_gov_dist); sort(t_gov_error.begin(), t_gov_error.end());
@@ -477,14 +477,14 @@ int main() {
         double r_gov_ad_dist = functions::rotationDifference(R_q, R_q_gov_ad);
         r_gov_ad_error.push_back(r_gov_ad_dist); sort(r_gov_ad_error.begin(), r_gov_ad_error.end());
 
-//        double t_calc_dist = functions::getDistBetween(t_q, t_q_calc);
-//        t_calc_error.push_back(t_calc_dist); sort(t_calc_error.begin(), t_calc_error.end());
-//        double r_calc_dist = functions::rotationDifference(R_q, R_q_calc);
-//        r_calc_error.push_back(r_calc_dist); sort(r_calc_error.begin(), r_calc_error.end());
-//        double t_calc_ad_dist = functions::getDistBetween(t_q, t_q_calc_ad);
-//        t_calc_ad_error.push_back(t_calc_ad_dist); sort(t_calc_ad_error.begin(), t_calc_ad_error.end());
-//        double r_calc_ad_dist = functions::rotationDifference(R_q, R_q_calc_ad);
-//        r_calc_ad_error.push_back(r_calc_ad_dist); sort(r_calc_ad_error.begin(), r_calc_ad_error.end());
+        double t_calc_dist = functions::getDistBetween(t_q, t_q_calc);
+        t_calc_error.push_back(t_calc_dist); sort(t_calc_error.begin(), t_calc_error.end());
+        double r_calc_dist = functions::rotationDifference(R_q, R_q_calc);
+        r_calc_error.push_back(r_calc_dist); sort(r_calc_error.begin(), r_calc_error.end());
+        double t_calc_ad_dist = functions::getDistBetween(t_q, t_q_calc_ad);
+        t_calc_ad_error.push_back(t_calc_ad_dist); sort(t_calc_ad_error.begin(), t_calc_ad_error.end());
+        double r_calc_ad_dist = functions::rotationDifference(R_q, R_q_calc_ad);
+        r_calc_ad_error.push_back(r_calc_ad_dist); sort(r_calc_ad_error.begin(), r_calc_ad_error.end());
 
 
 
@@ -625,53 +625,70 @@ int main() {
 //        ", R_avg: " << r_dist_avg <<
 //        endl;
 
-        int n = int(double(t_calc_error.size()) / 2.);
-        if (t_calc_error.size() % 2 == 1) {
+        int n = int(double(t_gov_error.size()) / 2.);
+        if (t_gov_error.size() % 2 == 1) {
             cout <<
-//            "T_alone: " << t_alone_error[n] <<
-//            ", R_alone: " << r_alone_error[n] <<
-//            ", T_alone_ad: " << t_alone_ad_error[n] <<
-//            ", R_alone_ad: " << r_alone_ad_error[n] << endl <<
-//
-//            "T_avg: " << t_avg_error[n] <<
-//            ", R_avg: " << r_avg_error[n] <<
-//            ", T_avg_ad: " << t_avg_ad_error[n] <<
-//            ", R_avg_ad: " << r_avg_ad_error[n] << endl <<
+            "T_alone: " << t_alone_error[n] <<
+            ", R_alone: " << r_alone_error[n] <<
+            ", T_alone_ad: " << t_alone_ad_error[n] <<
+            ", R_alone_ad: " << r_alone_ad_error[n] << endl <<
+
+            "T_avg: " << t_avg_error[n] <<
+            ", R_avg: " << r_avg_error[n] <<
+            ", T_avg_ad: " << t_avg_ad_error[n] <<
+            ", R_avg_ad: " << r_avg_ad_error[n] << endl <<
 
             "T_gov: " << t_gov_error[n] <<
             ", R_gov: " << r_gov_error[n] <<
             ", T_gov_ad: " << t_gov_ad_error[n] <<
             ", R_gov_ad: " << r_gov_ad_error[n] << endl <<
 
-//            "T_calc: " << t_calc_error[n] <<
-//            ", R_calc: " << r_calc_error[n] <<
-//            ", T_calc_ad: " << t_calc_ad_error[n] <<
-//            ", R_calc_ad: " << r_calc_ad_error[n] <<
+            "T_calc: " << t_calc_error[n] <<
+            ", R_calc: " << r_calc_error[n] <<
+            ", T_calc_ad: " << t_calc_ad_error[n] <<
+            ", R_calc_ad: " << r_calc_ad_error[n] <<
             endl;
         } else {
             cout <<
-//            "T_alone: " << (t_alone_error[n] + t_alone_error[n - 1]) / 2. <<
-//            ", R_alone: " << (r_alone_error[n] + r_alone_error[n - 1]) / 2. <<
-//            ", T_alone_ad: " << (t_alone_ad_error[n] + t_alone_ad_error[n - 1]) / 2. <<
-//            ", R_alone_ad: " << (r_alone_ad_error[n] + r_alone_ad_error[n - 1]) / 2. << endl <<
-//
-//            "T_avg: " << (t_avg_error[n] + t_avg_error[n - 1]) / 2. <<
-//            ", R_avg: " << (r_avg_error[n] + r_avg_error[n - 1]) / 2. <<
-//            ", T_avg_ad: " << (t_avg_ad_error[n] + t_avg_ad_error[n - 1]) / 2. <<
-//            ", R_avg_ad: " << (r_avg_ad_error[n] + r_avg_ad_error[n - 1]) / 2. << endl <<
+            "T_alone: " << (t_alone_error[n] + t_alone_error[n - 1]) / 2. <<
+            ", R_alone: " << (r_alone_error[n] + r_alone_error[n - 1]) / 2. <<
+            ", T_alone_ad: " << (t_alone_ad_error[n] + t_alone_ad_error[n - 1]) / 2. <<
+            ", R_alone_ad: " << (r_alone_ad_error[n] + r_alone_ad_error[n - 1]) / 2. << endl <<
+
+            "T_avg: " << (t_avg_error[n] + t_avg_error[n - 1]) / 2. <<
+            ", R_avg: " << (r_avg_error[n] + r_avg_error[n - 1]) / 2. <<
+            ", T_avg_ad: " << (t_avg_ad_error[n] + t_avg_ad_error[n - 1]) / 2. <<
+            ", R_avg_ad: " << (r_avg_ad_error[n] + r_avg_ad_error[n - 1]) / 2. << endl <<
 
             "T_gov: " << (t_gov_error[n] + t_gov_error[n - 1]) / 2. <<
             ", R_gov: " << (r_gov_error[n] + r_gov_error[n - 1]) / 2. <<
             ", T_gov_ad: " << (t_gov_ad_error[n] + t_gov_ad_error[n - 1]) / 2. <<
             ", R_gov_ad: " << (r_gov_ad_error[n] + r_gov_ad_error[n - 1]) / 2. << endl <<
 
-//            "T_calc: " << (t_calc_error[n] + t_calc_error[n - 1]) / 2. <<
-//            ", R_calc: " << (r_calc_error[n] + r_calc_error[n - 1]) / 2. <<
-//            ", T_calc_ad: " << (t_calc_ad_error[n] + t_calc_ad_error[n - 1]) / 2. <<
-//            ", R_calc_ad: " << (r_calc_ad_error[n] + r_calc_ad_error[n - 1]) / 2. <<
+            "T_calc: " << (t_calc_error[n] + t_calc_error[n - 1]) / 2. <<
+            ", R_calc: " << (r_calc_error[n] + r_calc_error[n - 1]) / 2. <<
+            ", T_calc_ad: " << (t_calc_ad_error[n] + t_calc_ad_error[n - 1]) / 2. <<
+            ", R_calc_ad: " << (r_calc_ad_error[n] + r_calc_ad_error[n - 1]) / 2. <<
             endl;
         }
     }
+    ofstream alone, avg, gov, calc;
+    alone.open ("/Users/cameronfiore/C++/image_localization_project/data/alone.txt");
+    avg.open ("/Users/cameronfiore/C++/image_localization_project/data/avg.txt");
+    gov.open ("/Users/cameronfiore/C++/image_localization_project/data/gov.txt");
+    calc.open ("/Users/cameronfiore/C++/image_localization_project/data/calc.txt");
+    for (int i = 0; i < t_alone_error.size(); i++) {
+        alone << t_alone_error[i] << "   " << r_alone_error[i] << "   " << t_alone_ad_error[i] << "   " << r_alone_ad_error[i] << endl;
+        avg << t_avg_error[i] << "   " << r_avg_error[i] << "   " << t_avg_ad_error[i] << "   " << r_avg_ad_error[i] << endl;
+        gov << t_gov_error[i] << "   " << r_gov_error[i] << "   " << t_gov_ad_error[i] << "   " << r_gov_ad_error[i] << endl;
+        calc << t_calc_error[i] << "   " << r_calc_error[i] << "   " << t_calc_ad_error[i] << "   " << r_calc_ad_error[i] << endl;
+    }
+    alone.close();
+    avg.close();
+    gov.close();
+    calc.close();
+
+
 //    for (int i = 0; i < y_real.size(); i++) {
 //        y_real[i] *= 100./total_points;
 //        y_calc[i] *= 100./total_points;
