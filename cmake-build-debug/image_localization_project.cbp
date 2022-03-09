@@ -213,6 +213,9 @@
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/main.cpp">
 			<Option target="image_localization_project"/>
 		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/OptimalRotationSolver.cpp">
+			<Option target="image_localization_project"/>
+		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/Space.cpp">
 			<Option target="image_localization_project"/>
 		</Unit>

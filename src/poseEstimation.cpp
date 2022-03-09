@@ -10,10 +10,14 @@
 #include <opencv2/imgcodecs.hpp>
 #include <utility>
 #include "ceres/ceres.h"
+#include "ceres/rotation.h"
 #include "glog/logging.h"
 #include "../include/sevenScenes.h"
 #include "../include/functions.h"
 #include "../include/calibrate.h"
+#include "../include/OptimalRotationSolver.h"
+
+#define EXT ".color.png"
 
 struct ReprojectionError{
     ReprojectionError(Eigen::Matrix3d R_k,
@@ -169,6 +173,132 @@ struct RotationError {
     Eigen::Vector3d t_qk;
 };
 
+struct SnavelyReprojectionError {
+    SnavelyReprojectionError(double observed_x, double observed_y)
+            : observed_x(observed_x), observed_y(observed_y) {}
+
+    template <typename T>
+    bool operator()(const T* const camera,
+                    const T* const point,
+                    T* residuals) const {
+        // camera[0,1,2] are the angle-axis rotation.
+        T p[3];
+        ceres::AngleAxisRotatePoint(camera, point, p);
+        // camera[3,4,5] are the translation.
+        p[0] += camera[3]; p[1] += camera[4]; p[2] += camera[5];
+
+        // Compute the center of distortion. The sign change comes from
+        // the camera model that Noah Snavely's Bundler assumes, whereby
+        // the camera coordinate system has a negative z axis.
+        T xp = p[0] / p[2];
+        T yp = p[1] / p[2];
+
+        // Compute final projected point position.
+        const T& focal = camera[6];
+        T predicted_x = xp * focal + camera[7];
+        T predicted_y = yp * focal + camera[8];
+
+        // The error is the difference between the predicted and observed position.
+        residuals[0] = predicted_x - T(observed_x);
+        residuals[1] = predicted_y - T(observed_y);
+        return true;
+    }
+
+    // Factory to hide the construction of the CostFunction object from
+    // the client code.
+    static ceres::CostFunction* Create(const double observed_x,
+                                       const double observed_y) {
+        return (new ceres::AutoDiffCostFunction<SnavelyReprojectionError, 2, 9, 3>(
+                new SnavelyReprojectionError(observed_x, observed_y)));
+    }
+
+    double observed_x;
+    double observed_y;
+};
+
+pair<Eigen::Matrix3d, Eigen::Vector3d> pose::bundleAdjust (const string & image) {
+
+    vector<cv::KeyPoint> kp_vec;
+    cv::Mat desc;
+    cv::Ptr<cv::SIFT> sift = cv::SIFT::create();
+
+    cv::Mat image_mat = cv::imread(image + EXT, 0);
+    sift->detectAndCompute(image_mat, cv::Mat(), kp_vec, desc);
+
+    Eigen::Matrix3d R;
+    Eigen::Vector3d T;
+    sevenScenes::getAbsolutePose(image, R, T);
+
+    const double R_arr[9] = {R(0,0), R(1,0), R(2,0), R(0,1), R(1,1), R(2,1), R(0,2), R(1,2), R(2,2) };
+    double AA_arr[3];
+    ceres::RotationMatrixToAngleAxis(R_arr, AA_arr);
+
+    double camera[9] = {
+            AA_arr[0],
+            AA_arr[1],
+            AA_arr[2],
+            T(0),
+            T(1),
+            T(2),
+            525.,
+            320.,
+            240.
+    };
+
+    const string depth = image + ".depth.png";
+    cv::Mat depth_mat = cv::imread(depth, 0);
+
+    ceres::Problem problem;
+    ceres::LossFunction * loss_function = new ceres::HuberLoss(1.0);
+
+    for (const auto & kp : kp_vec) {
+
+        cv::Point2d pt2d = kp.pt;
+        cv::Point3d pt3d;
+
+        double pt[3] {pt3d.x, pt3d.y, pt3d.z};
+
+        if (!sevenScenes::get3dfrom2d(pt2d, depth_mat, pt3d)) continue;
+
+        double xp = pt3d.x / pt3d.z;
+        double yp = pt3d.y / pt3d.z;
+
+        // Compute final projected point position.
+        double predicted_x = xp * 525. + 320.;
+        double predicted_y = yp * 525. + 240.;
+
+        // The error is the difference between the predicted and observed position.
+        double dist = sqrt(pow((predicted_x - pt2d.x), 2) + pow((predicted_y - pt2d.y), 2));
+
+        if (dist < 40) {
+            ceres::CostFunction * cost_function = SnavelyReprojectionError::Create(pt2d.x, pt2d.y);
+            problem.AddResidualBlock(cost_function, loss_function, camera, pt);
+        }
+    }
+
+    ceres::Solver::Options options;
+    options.linear_solver_type = ceres::DENSE_SCHUR;
+//    options.minimizer_progress_to_stdout = true;
+    ceres::Solver::Summary summary;
+    ceres::Solve(options, &problem, &summary);
+
+    double new_R[9];
+    const double AA_adj_arr[3] = {camera[0], camera[1], camera[2]};
+    ceres::AngleAxisToRotationMatrix(AA_adj_arr, new_R);
+
+    Eigen::Matrix3d R_adj {
+            {new_R[0], new_R[3], new_R[6]},
+            {new_R[1], new_R[4], new_R[7]},
+            {new_R[2], new_R[5], new_R[8]},
+    };
+
+    Eigen::Vector3d T_adj {camera[4], camera[5], camera[6]};
+
+    int stop = 0;
+
+    return {R_adj, T_adj};
+}
+
 Eigen::Vector3d pose::hypothesizeQueryCenter (const vector<Eigen::Matrix3d> & R_k,
                                               const vector<Eigen::Vector3d> & t_k,
                                               const vector<Eigen::Matrix3d> & R_qk,
@@ -293,6 +423,7 @@ Eigen::Matrix3d pose::hypothesizeQueryRotation(const Eigen::Vector3d & c_q,
     for (int i = 0; i < K; i++) {
         Eigen::Vector3d c_k = - R_k[i].transpose() * t_k[i];
         Eigen::Vector3d t_ = -R_qk[i] * (R_k[i] * c_q + t_k[i]);
+//        Eigen::Vector3d t_ = t_qk[i];
         t_.normalize();
 
         ceres::CostFunction * cost_function = RotationError::Create(c_k, c_q, t_);
@@ -407,7 +538,10 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
 
     Eigen::Vector3d t_q_avg = -R_q_avg * c_q_calc;
 
-    Eigen::Matrix3d R_q_calc = hypothesizeQueryRotation(c_q_calc, R_q_avg, best_R, best_t, best_R_, best_t_);
+    Eigen::Matrix3d start = R_q_avg; //* functions::smallRandomRotationMatrix();
+    double d = functions::rotationDifference(R_q_avg, start);
+    //    Eigen::Matrix3d R_q_calc = rotation::solve_rotation(c_q, best_R, best_t, best_R_, best_t_);
+    Eigen::Matrix3d R_q_calc = hypothesizeQueryRotation(c_q, start, best_R, best_t, best_R_, best_t_);
 
     Eigen::Vector3d t_q_calc = -R_q_calc * c_q_calc;
 

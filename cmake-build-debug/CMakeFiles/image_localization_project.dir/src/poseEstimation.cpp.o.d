@@ -727,4 +727,6 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /opt/homebrew/include/ceres/problem.h \
   /opt/homebrew/include/ceres/solver.h \
   /opt/homebrew/include/ceres/version.h \
-  /Users/cameronfiore/C++/image_localization_project/src/../include/calibrate.h
+  /opt/homebrew/include/ceres/rotation.h \
+  /Users/cameronfiore/C++/image_localization_project/src/../include/calibrate.h \
+  /Users/cameronfiore/C++/image_localization_project/src/../include/OptimalRotationSolver.h

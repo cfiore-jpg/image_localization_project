@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/cameronfiore/C++/image_localization_project/main.cpp" "CMakeFiles/image_localization_project.dir/main.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/main.cpp.o.d"
+  "/Users/cameronfiore/C++/image_localization_project/src/OptimalRotationSolver.cpp" "CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o.d"
   "/Users/cameronfiore/C++/image_localization_project/src/Space.cpp" "CMakeFiles/image_localization_project.dir/src/Space.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/Space.cpp.o.d"
   "/Users/cameronfiore/C++/image_localization_project/src/calibrate.cpp" "CMakeFiles/image_localization_project.dir/src/calibrate.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/calibrate.cpp.o.d"
   "/Users/cameronfiore/C++/image_localization_project/src/functions.cpp" "CMakeFiles/image_localization_project.dir/src/functions.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/functions.cpp.o.d"

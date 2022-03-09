@@ -28,7 +28,8 @@ add_executable(image_localization_project
         src/Space.cpp
         src/imageMatcher.cpp
         src/functions.cpp
-        src/poseEstimation.cpp)
+        src/poseEstimation.cpp
+        src/OptimalRotationSolver.cpp)
 
 target_link_libraries(image_localization_project ${OpenCV_LIBS})
 target_link_libraries(image_localization_project /Users/cameronfiore/C++/DBoW2/build/libDBoW2.dylib)

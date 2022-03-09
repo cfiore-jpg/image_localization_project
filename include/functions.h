@@ -19,6 +19,9 @@
 using namespace std;
 
 namespace functions {
+
+    Eigen::Matrix3d smallRandomRotationMatrix();
+
     double triangulateRays(const Eigen::Vector3d &ci, const Eigen::Vector3d &di, const Eigen::Vector3d &cj,
                            const Eigen::Vector3d &dj, Eigen::Vector3d &intersect);
 

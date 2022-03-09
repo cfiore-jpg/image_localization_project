@@ -127,9 +127,9 @@ void Space::projectPointsTo2D () {
 
     double height = 2000.; //3.85
     double width = 2000.; //2.39
-    double avg_radius = 15.;
+    double avg_radius = 75.;
     double radial_variance = avg_radius * .5;
-    double border = 4 * avg_radius;
+    double border = avg_radius;
     double m_over_px_x = (farthest_x / (width/2. - border));
     double m_over_px_y = (farthest_y / (height/2. - border));
     double m_over_px_z = ((max_z - med_z) / radial_variance);

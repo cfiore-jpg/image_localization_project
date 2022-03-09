@@ -17,12 +17,42 @@
 #include <opencv2/calib3d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 
-#define PI 3.14159265
+#define PI 3.1415926536
 #define FOLDER "/Users/cameronfiore/C++/image_localization_project/data/"
 #define EXT ".color.png"
 
 using namespace std;
 using namespace cv;
+
+Eigen::Matrix3d functions::smallRandomRotationMatrix() {
+
+        random_device generator;
+        uniform_real_distribution<double> uniform (0., 2*PI);
+        normal_distribution<double> gaussian (0., PI/4.);
+
+        double alpha = uniform(generator);
+        double beta = uniform(generator);
+        double gamma = gaussian(generator);
+
+        double z = sin(alpha);
+        double h = abs(cos(alpha));
+
+        double x = h * cos(beta);
+        double y = h * sin(beta);
+
+        Eigen::Vector3d vec {x, y, z};
+        vec.normalize();
+
+        double n = vec.norm();
+
+        Eigen::AngleAxis<double> aa (gamma, vec);
+
+        Eigen::Matrix3d r = aa.toRotationMatrix();
+
+        double d = r.determinant();
+
+        return r;
+}
 
 double functions::triangulateRays(const Eigen::Vector3d &ci, const Eigen::Vector3d &di, const Eigen::Vector3d &cj,
                                    const Eigen::Vector3d &dj, Eigen::Vector3d &intersect) {
@@ -98,10 +128,20 @@ bool functions::findMatches(const string &db_image, const string &query_image, c
     } else if (method == "SIFT") {
         Ptr<SIFT> sift = SIFT::create();
 
-        Mat image1 = imread(query_image + EXT, 0);
-        Mat image2 = imread(db_image + EXT, 0);
+        Mat image1 = imread(query_image + EXT);
+        Mat image2 = imread(db_image + EXT);
         sift->detectAndCompute(image1, Mat(), kp_vec1, desc1);
         sift->detectAndCompute(image2, Mat(), kp_vec2, desc2);
+
+//        cv::Mat kp_im1;
+//        cv::drawKeypoints(image1, kp_vec1, kp_im1);
+//        cv::imshow("Query Keypoints", kp_im1);
+//        cv::waitKey(0);
+//
+//        cv::Mat kp_im2;
+//        cv::drawKeypoints(image2, kp_vec2, kp_im2);
+//        cv::imshow("Database Keypoints", kp_im2);
+//        cv::waitKey(0);
     } else {
         cout << "Not a valid method for feature matching..." << endl;
         exit(1);
@@ -127,6 +167,18 @@ bool functions::findMatches(const string &db_image, const string &query_image, c
             }
         }
     }
+
+//    cv::Mat src;
+//    Mat image1 = imread(query_image + EXT);
+//    Mat image2 = imread(db_image + EXT);
+//    cv::hconcat(image1, image2, src);
+//    for(int i = 0; i < selected_points1.size(); i++) {
+//        cv::line( src, selected_points1[i],
+//                  cv::Point2d(selected_points2[i].x + image1.cols, selected_points2[i].y),
+//                  1, 1, 0 );
+//    }
+//    cv::imshow("Match Results", src);
+//    cv::waitKey(0);
 
     pts_query = selected_points1;
     pts_db = selected_points2;
@@ -164,8 +216,8 @@ bool functions::findMatchesSorted(const string &db_image, const string &query_im
         surf->detectAndCompute(image2, Mat(), kp_vec2, desc2);
     } else if (method == "SIFT") {
         Ptr<SIFT> sift = SIFT::create();
-        Mat image1 = imread(query_image + EXT, 0);
-        Mat image2 = imread(db_image + EXT, 0);
+        Mat image1 = imread(query_image + EXT);
+        Mat image2 = imread(db_image + EXT);
         sift->detectAndCompute(image1, Mat(), kp_vec1, desc1);
         sift->detectAndCompute(image2, Mat(), kp_vec2, desc2);
     } else {
@@ -273,7 +325,7 @@ bool functions::getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d
                 0., K[1], K[3],
                 0., 0.,   1.);
 
-        Mat E_kq = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.999999, 3.0, mask);
+        Mat E_kq = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.999999999999, 3.0, mask);
 
         vector<Point2d> inlier_db_points, inlier_q_points;
         for (int i = 0; i < mask.rows; i++) {

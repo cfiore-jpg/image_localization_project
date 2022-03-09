@@ -153,6 +153,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/OptimalRotationSolver.o: src/OptimalRotationSolver.cpp.o
+.PHONY : src/OptimalRotationSolver.o
+
+# target to build an object file
+src/OptimalRotationSolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o
+.PHONY : src/OptimalRotationSolver.cpp.o
+
+src/OptimalRotationSolver.i: src/OptimalRotationSolver.cpp.i
+.PHONY : src/OptimalRotationSolver.i
+
+# target to preprocess a source file
+src/OptimalRotationSolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.i
+.PHONY : src/OptimalRotationSolver.cpp.i
+
+src/OptimalRotationSolver.s: src/OptimalRotationSolver.cpp.s
+.PHONY : src/OptimalRotationSolver.s
+
+# target to generate assembly for a file
+src/OptimalRotationSolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s
+.PHONY : src/OptimalRotationSolver.cpp.s
+
 src/Space.o: src/Space.cpp.o
 .PHONY : src/Space.o
 
@@ -357,6 +381,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/OptimalRotationSolver.o"
+	@echo "... src/OptimalRotationSolver.i"
+	@echo "... src/OptimalRotationSolver.s"
 	@echo "... src/Space.o"
 	@echo "... src/Space.i"
 	@echo "... src/Space.s"

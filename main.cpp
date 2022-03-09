@@ -206,7 +206,7 @@ int main() {
 //        }
 //    }
 //
-////    functions::showTop1000(query, 200, 1.6, 20);
+//    functions::showTop1000(query, 100, 1.6, 10);
 //
 //    functions::projectCentersTo2D(query, all, seq_colors, query + " All");
 //
@@ -238,7 +238,7 @@ int main() {
     functions::createQueryVector(listQuery, info, SCENE);
 
     cout << "Running queries..." << endl;
-    int startIdx = 1995;
+    int startIdx = 0;
     vector<double> t_alone_error; t_alone_error.reserve(listQuery.size());
     vector<double> r_alone_error; r_alone_error.reserve(listQuery.size());
     vector<double> t_alone_ad_error; t_alone_ad_error.reserve(listQuery.size());
@@ -275,9 +275,11 @@ int main() {
     vector<double> y_adjust (51);
     vector<double> y_avg (51);
     int total_points = 0;
+//    ofstream distribution;
+//    distribution.open ("/Users/cameronfiore/C++/image_localization_project/data/distribution.txt");
     for (int q = startIdx; q < listQuery.size(); q++) {
 
-        cout << q + 1 << "/" << listQuery.size() << ": " << endl;
+        cout << q + 1 << "/" << listQuery.size() << ": ";
 
         // Query Image
         string query = listQuery[q];
@@ -288,15 +290,32 @@ int main() {
         Eigen::Matrix3d R_q;
         Eigen::Vector3d t_q;
         sevenScenes::getAbsolutePose(query, R_q, t_q);
-        double K[4] = {523.538, 529.669, 314.245, 237.595};
+        double K[4] = {525., 525., 320., 240.};
 
         //Retrieve top K
 //        auto retrieved = synthetic::omitQuery(q, listQuery);
-        auto retrieved = functions::retrieveSimilar(query, 150, 1.6);
-        int num_spaced = int(double(retrieved.size()) * .1);
-        auto spaced = functions::optimizeSpacing(retrieved, num_spaced, false, "7-Scenes");
+        auto retrieved = functions::retrieveSimilar(query, 150, 1.35);
+//        int num_spaced = int(double(retrieved.size()) * .1);
+        auto spaced = functions::optimizeSpacing(retrieved, 15, false, "7-Scenes");
 
-        // Get relative poses and filter bad images
+
+//        for (int i = 0; i < spaced.size() - 1; i++) {
+//            for (int j = i + 1; j < spaced.size(); j++) {
+//                Eigen::Matrix3d R_i = sevenScenes::getR(spaced[i]);
+//                Eigen::Matrix3d R_j = sevenScenes::getR(spaced[j]);
+//
+//                Eigen::Vector3d z {0, 0, 1};
+//
+//                Eigen::Vector3d dir_i = R_i * z;
+//                Eigen::Vector3d dir_j = R_j * z;
+//
+//                double dist = functions::getAngleBetween(dir_i, dir_j);
+//
+//                distribution << dist << endl;
+//
+//            }
+//        }
+//         Get relative poses and filter bad images
         vector<Eigen::Matrix3d> R_ks, R_qk_calcs;
         vector<Eigen::Vector3d> t_ks, t_qk_calcs;
         vector<int> inliers;
@@ -371,6 +390,7 @@ int main() {
             continue;
         }
 
+
 //        int num_inliers = 0;
 //        for(const auto & i : inliers) {
 //            if (i) {
@@ -414,8 +434,25 @@ int main() {
 
         // Calculate query estimates
 
+        for (int i = 0; i < 25; i++) {
+
+            auto calc = pose::hypothesizeRANSAC(5., 5., inliers, R_ks, t_ks, R_qk_calcs, t_qk_calcs, c_q, R_q);
+            int in = get<7>(calc);
+            Eigen::Matrix3d R_q_avg = get<3>(calc);
+            Eigen::Matrix3d R_q_calc = get<5>(calc);
+
+            double r_avg_dist = functions::rotationDifference(R_q, R_q_avg);
+            double r_calc_dist = functions::rotationDifference(R_q, R_q_calc);
+
+            int check = 0;
+
+        }
+
+
+
+
         auto calc = pose::hypothesizeRANSAC(5., 5., inliers, R_ks, t_ks, R_qk_calcs, t_qk_calcs, c_q, R_q);
-//        cout << "Inliers: " << get<3>(calc) << "/" << R_ks.size();
+        cout << "Inliers: " << get<7>(calc) << "/" << R_ks.size() << endl;
 
 //        vector<Eigen::Matrix3d> rotations;
 //        rotations.reserve(R_ks.size());
@@ -672,21 +709,22 @@ int main() {
             endl;
         }
     }
-    ofstream alone, avg, gov, calc;
-    alone.open ("/Users/cameronfiore/C++/image_localization_project/data/alone.txt");
-    avg.open ("/Users/cameronfiore/C++/image_localization_project/data/avg.txt");
-    gov.open ("/Users/cameronfiore/C++/image_localization_project/data/gov.txt");
-    calc.open ("/Users/cameronfiore/C++/image_localization_project/data/calc.txt");
-    for (int i = 0; i < t_alone_error.size(); i++) {
-        alone << t_alone_error[i] << "   " << r_alone_error[i] << "   " << t_alone_ad_error[i] << "   " << r_alone_ad_error[i] << endl;
-        avg << t_avg_error[i] << "   " << r_avg_error[i] << "   " << t_avg_ad_error[i] << "   " << r_avg_ad_error[i] << endl;
-        gov << t_gov_error[i] << "   " << r_gov_error[i] << "   " << t_gov_ad_error[i] << "   " << r_gov_ad_error[i] << endl;
-        calc << t_calc_error[i] << "   " << r_calc_error[i] << "   " << t_calc_ad_error[i] << "   " << r_calc_ad_error[i] << endl;
-    }
-    alone.close();
-    avg.close();
-    gov.close();
-    calc.close();
+//    distribution.close();
+//    ofstream alone, avg, gov, calc;
+//    alone.open ("/Users/cameronfiore/C++/image_localization_project/data/redkitchen/alone.txt");
+//    avg.open ("/Users/cameronfiore/C++/image_localization_project/data/redkitchen/avg.txt");
+//    gov.open ("/Users/cameronfiore/C++/image_localization_project/data/redkitchen/gov.txt");
+//    calc.open ("/Users/cameronfiore/C++/image_localization_project/data/redkitchen/calc.txt");
+//    for (int i = 0; i < t_alone_error.size(); i++) {
+//        alone << t_alone_error[i] << "   " << r_alone_error[i] << "   " << t_alone_ad_error[i] << "   " << r_alone_ad_error[i] << endl;
+//        avg << t_avg_error[i] << "   " << r_avg_error[i] << "   " << t_avg_ad_error[i] << "   " << r_avg_ad_error[i] << endl;
+//        gov << t_gov_error[i] << "   " << r_gov_error[i] << "   " << t_gov_ad_error[i] << "   " << r_gov_ad_error[i] << endl;
+//        calc << t_calc_error[i] << "   " << r_calc_error[i] << "   " << t_calc_ad_error[i] << "   " << r_calc_ad_error[i] << endl;
+//    }
+//    alone.close();
+//    avg.close();
+//    gov.close();
+//    calc.close();
 
 
 //    for (int i = 0; i < y_real.size(); i++) {
