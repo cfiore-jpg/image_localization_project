@@ -325,7 +325,7 @@ bool functions::getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d
                 0., K[1], K[3],
                 0., 0.,   1.);
 
-        Mat E_kq = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.999999999999, 3.0, mask);
+        Mat E_kq = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.99999999999, 3.0, mask);
 
         vector<Point2d> inlier_db_points, inlier_q_points;
         for (int i = 0; i < mask.rows; i++) {

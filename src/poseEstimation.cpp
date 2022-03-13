@@ -117,6 +117,76 @@ struct ReprojectionError{
     cv::Point2d pt_q;
 };
 
+struct ReprojectionErrorBA{
+    ReprojectionErrorBA(cv::Point2d pt_1, cv::Point2d pt_2)
+                        : pt_1(pt_1), pt_2(pt_2) {}
+
+    template<typename T>
+    bool operator()(const T * const R_1, const T * const T_1, const T * const R_2, const T * const T_2, const T * const K, T * residuals) const {
+
+        T px2point[3];
+        px2point[0] = (T(pt_1.x) - K[2]) / K[0];
+        px2point[1] = (T(pt_1.y) - K[3]) / K[1];
+        px2point[2] = T(1.);
+
+        T R_1_m [9], R_2_m [9];
+        ceres::AngleAxisToRotationMatrix(R_1, R_1_m);
+        ceres::AngleAxisToRotationMatrix(R_2, R_2_m);
+
+        T R_21 [9];
+        R_21[0] = R_2_m[0] * R_1_m[0] + R_2_m[3] * R_1_m[3] + R_2_m[6] * R_1_m[6];
+        R_21[1] = R_2_m[1] * R_1_m[0] + R_2_m[4] * R_1_m[3] + R_2_m[7] * R_1_m[6];
+        R_21[2] = R_2_m[2] * R_1_m[0] + R_2_m[5] * R_1_m[3] + R_2_m[8] * R_1_m[6];
+        R_21[3] = R_2_m[0] * R_1_m[1] + R_2_m[3] * R_1_m[4] + R_2_m[6] * R_1_m[7];
+        R_21[4] = R_2_m[1] * R_1_m[1] + R_2_m[4] * R_1_m[4] + R_2_m[7] * R_1_m[7];
+        R_21[5] = R_2_m[2] * R_1_m[1] + R_2_m[5] * R_1_m[4] + R_2_m[8] * R_1_m[7];
+        R_21[6] = R_2_m[0] * R_1_m[2] + R_2_m[3] * R_1_m[5] + R_2_m[6] * R_1_m[8];
+        R_21[7] = R_2_m[1] * R_1_m[2] + R_2_m[4] * R_1_m[5] + R_2_m[7] * R_1_m[8];
+        R_21[8] = R_2_m[2] * R_1_m[2] + R_2_m[5] * R_1_m[5] + R_2_m[8] * R_1_m[8];
+
+        T T_21 [3];
+        T_21[0] = T_2[0] - (R_21[0] * T_1[0] + R_21[3] * T_1[1] + R_21[6] * T_1[2]);
+        T_21[1] = T_2[1] - (R_21[1] * T_1[0] + R_21[4] * T_1[1] + R_21[7] * T_1[2]);
+        T_21[2] = T_2[2] - (R_21[2] * T_1[0] + R_21[5] * T_1[1] + R_21[8] * T_1[2]);
+
+        T E_21 [9];
+        E_21[0] = -T_21[2] * R_21[1] + T_21[1] * R_21[2];
+        E_21[1] = T_21[2] * R_21[0] - T_21[0] * R_21[2];
+        E_21[2] = -T_21[1] * R_21[0] + T_21[0] * R_21[1];
+        E_21[3] = -T_21[2] * R_21[4] + T_21[1] * R_21[5];
+        E_21[4] = T_21[2] * R_21[3] - T_21[0] * R_21[5];
+        E_21[5] = -T_21[1] * R_21[3] + T_21[0] * R_21[4];
+        E_21[6] = -T_21[2] * R_21[7] + T_21[1] * R_21[8];
+        E_21[7] = T_21[2] * R_21[6] - T_21[0] * R_21[8];
+        E_21[8] = -T_21[1] * R_21[6] + T_21[0] * R_21[7];
+
+        T point2point[3];
+        point2point[0] = E_21[0] * px2point[0] + E_21[3] * px2point[1] + E_21[6] * px2point[2];
+        point2point[1] = E_21[1] * px2point[0] + E_21[4] * px2point[1] + E_21[7] * px2point[2];
+        point2point[2] = E_21[2] * px2point[0] + E_21[5] * px2point[1] + E_21[8] * px2point[2];
+
+        T epiline[3];
+        epiline[0] = (T(1.) /  K[0]) * point2point[0];
+        epiline[1] = (T(1.) /  K[1]) * point2point[1];
+        epiline[2] = -(K[2] /  K[0]) * point2point[0] - (K[3] /  K[1]) * point2point[1] + point2point[2];
+
+        T error = ceres::abs(epiline[0] * T(pt_2.x) + epiline[1] * T(pt_2.y) + epiline[2]) /
+                  ceres::sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+
+        residuals[0] = error;
+
+        return true;
+    }
+
+    static ceres::CostFunction *Create(const cv::Point2d & pt_1, const cv::Point2d & pt_2) {
+        return (new ceres::AutoDiffCostFunction<ReprojectionErrorBA, 1, 3, 3, 3, 3, 4>(
+                new ReprojectionErrorBA(pt_1, pt_2)));
+    }
+
+    cv::Point2d pt_1;
+    cv::Point2d pt_2;
+};
+
 struct RotationError {
     RotationError(Eigen::Vector3d c_k,
                   Eigen::Vector3d c_q,
@@ -173,106 +243,64 @@ struct RotationError {
     Eigen::Vector3d t_qk;
 };
 
-struct SnavelyReprojectionError {
-    SnavelyReprojectionError(double observed_x, double observed_y)
-            : observed_x(observed_x), observed_y(observed_y) {}
+pair<vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>> pose::bundleAdjust(double K[4], const vector<string> & anchors) {
 
-    template <typename T>
-    bool operator()(const T* const camera,
-                    const T* const point,
-                    T* residuals) const {
-        // camera[0,1,2] are the angle-axis rotation.
-        T p[3];
-        ceres::AngleAxisRotatePoint(camera, point, p);
-        // camera[3,4,5] are the translation.
-        p[0] += camera[3]; p[1] += camera[4]; p[2] += camera[5];
-
-        // Compute the center of distortion. The sign change comes from
-        // the camera model that Noah Snavely's Bundler assumes, whereby
-        // the camera coordinate system has a negative z axis.
-        T xp = p[0] / p[2];
-        T yp = p[1] / p[2];
-
-        // Compute final projected point position.
-        const T& focal = camera[6];
-        T predicted_x = xp * focal + camera[7];
-        T predicted_y = yp * focal + camera[8];
-
-        // The error is the difference between the predicted and observed position.
-        residuals[0] = predicted_x - T(observed_x);
-        residuals[1] = predicted_y - T(observed_y);
-        return true;
-    }
-
-    // Factory to hide the construction of the CostFunction object from
-    // the client code.
-    static ceres::CostFunction* Create(const double observed_x,
-                                       const double observed_y) {
-        return (new ceres::AutoDiffCostFunction<SnavelyReprojectionError, 2, 9, 3>(
-                new SnavelyReprojectionError(observed_x, observed_y)));
-    }
-
-    double observed_x;
-    double observed_y;
-};
-
-pair<Eigen::Matrix3d, Eigen::Vector3d> pose::bundleAdjust (const string & image) {
-
-    vector<cv::KeyPoint> kp_vec;
-    cv::Mat desc;
-    cv::Ptr<cv::SIFT> sift = cv::SIFT::create();
-
-    cv::Mat image_mat = cv::imread(image + EXT, 0);
-    sift->detectAndCompute(image_mat, cv::Mat(), kp_vec, desc);
-
-    Eigen::Matrix3d R;
-    Eigen::Vector3d T;
-    sevenScenes::getAbsolutePose(image, R, T);
-
-    const double R_arr[9] = {R(0,0), R(1,0), R(2,0), R(0,1), R(1,1), R(2,1), R(0,2), R(1,2), R(2,2) };
-    double AA_arr[3];
-    ceres::RotationMatrixToAngleAxis(R_arr, AA_arr);
-
-    double camera[9] = {
-            AA_arr[0],
-            AA_arr[1],
-            AA_arr[2],
-            T(0),
-            T(1),
-            T(2),
-            525.,
-            320.,
-            240.
-    };
-
-    const string depth = image + ".depth.png";
-    cv::Mat depth_mat = cv::imread(depth, 0);
+    Eigen::Matrix3d K_eig{{K[0], 0.,   K[2]},
+                          {0.,   K[1], K[3]},
+                          {0.,   0.,     1.}};
+    double aa_arrs [30][3];
+    double T_arrs [30][3];
+    vector<Eigen::Matrix3d> R_ks;
+    vector<Eigen::Vector3d> T_ks;
 
     ceres::Problem problem;
     ceres::LossFunction * loss_function = new ceres::HuberLoss(1.0);
+    for (int i = 0; i < anchors.size(); i++) {
+        string im = anchors[i];
+        Eigen::Matrix3d R;
+        Eigen::Vector3d T;
+        sevenScenes::getAbsolutePose(im, R, T);
+        const double R_arr[9] {R(0,0), R(1,0), R(2,0),
+                                 R(0,1), R(1,1), R(2,1),
+                                 R(0,2), R(1,2), R(2,2)};
+        double aa_arr[3];
+        ceres::RotationMatrixToAngleAxis(R_arr, aa_arr);
+        double T_arr[3] {T[0], T[1], T[2]};
+        aa_arrs[i][0] = aa_arr[0];
+        aa_arrs[i][1] = aa_arr[1];
+        aa_arrs[i][2] = aa_arr[2];
+        T_arrs[i][0] = T_arr[0];
+        T_arrs[i][1] = T_arr[1];
+        T_arrs[i][2] = T_arr[2];
+        R_ks.push_back(R);
+        T_ks.push_back(T);
+    }
 
-    for (const auto & kp : kp_vec) {
+    for (int i = 0; i < anchors.size() - 1; i++) {
+        for (int j = i + 1; j < anchors.size(); j++) {
+            string im_1 = anchors[i];
+            string im_2 = anchors[j];
+            vector<cv::Point2d> pts_1, pts_2;
+            functions::findMatches(im_1, im_2, "SIFT", 0.8, pts_1, pts_2);
+            for (int k = 0; k < pts_1.size(); k++) {
+                Eigen::Vector3d pt1 {pts_1[k].x, pts_1[k].y, 1.};
+                Eigen::Vector3d pt2 {pts_2[k].x, pts_2[k].y, 1.};
+                Eigen::Matrix3d R_21_real = R_ks[j] * R_ks[i].transpose();
+                Eigen::Vector3d T_21_real = T_ks[j] - R_21_real * T_ks[i];
+                Eigen::Matrix3d t_21_cross {{0,               -T_21_real(2), T_21_real(1)},
+                                            {T_21_real(2),  0,              -T_21_real(0)},
+                                            {-T_21_real(1), T_21_real(0),               0}};
+                Eigen::Matrix3d E_real = t_21_cross * R_21_real;
+                Eigen::Matrix3d F = K_eig.inverse().transpose() * E_real * K_eig.inverse();
+                Eigen::Vector3d epiline_real = F * pt1;
+                double error_real = abs(epiline_real[0] * pt2[0] + epiline_real[1] * pt2[1] + epiline_real[2]) /
+                               sqrt(epiline_real[0] * epiline_real[0] + epiline_real[1] * epiline_real[1]);
 
-        cv::Point2d pt2d = kp.pt;
-        cv::Point3d pt3d;
-
-        double pt[3] {pt3d.x, pt3d.y, pt3d.z};
-
-        if (!sevenScenes::get3dfrom2d(pt2d, depth_mat, pt3d)) continue;
-
-        double xp = pt3d.x / pt3d.z;
-        double yp = pt3d.y / pt3d.z;
-
-        // Compute final projected point position.
-        double predicted_x = xp * 525. + 320.;
-        double predicted_y = yp * 525. + 240.;
-
-        // The error is the difference between the predicted and observed position.
-        double dist = sqrt(pow((predicted_x - pt2d.x), 2) + pow((predicted_y - pt2d.y), 2));
-
-        if (dist < 40) {
-            ceres::CostFunction * cost_function = SnavelyReprojectionError::Create(pt2d.x, pt2d.y);
-            problem.AddResidualBlock(cost_function, loss_function, camera, pt);
+                if (error_real <= 10.) {
+                    ceres::CostFunction *cost_function = ReprojectionErrorBA::Create(pts_1[k], pts_2[k]);
+                    problem.AddResidualBlock(cost_function, loss_function, aa_arrs[i], T_arrs[i], aa_arrs[j], T_arrs[j], K);
+                }
+            }
         }
     }
 
@@ -280,23 +308,27 @@ pair<Eigen::Matrix3d, Eigen::Vector3d> pose::bundleAdjust (const string & image)
     options.linear_solver_type = ceres::DENSE_SCHUR;
 //    options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
-    ceres::Solve(options, &problem, &summary);
+    int num = problem.NumResidualBlocks();
+    if (problem.NumResidualBlocks() > 0) {
+        ceres::Solve(options, &problem, &summary);
+    } else {
+        cout << ", Can't Adjust";
+    }
+//    std::cout << summary.FullReport() << "\n";
 
-    double new_R[9];
-    const double AA_adj_arr[3] = {camera[0], camera[1], camera[2]};
-    ceres::AngleAxisToRotationMatrix(AA_adj_arr, new_R);
-
-    Eigen::Matrix3d R_adj {
-            {new_R[0], new_R[3], new_R[6]},
-            {new_R[1], new_R[4], new_R[7]},
-            {new_R[2], new_R[5], new_R[8]},
-    };
-
-    Eigen::Vector3d T_adj {camera[4], camera[5], camera[6]};
-
-    int stop = 0;
-
-    return {R_adj, T_adj};
+    R_ks.clear();
+    T_ks.clear();
+    for (int i = 0; i < anchors.size(); i++) {
+        double R_arr[9];
+        ceres::AngleAxisToRotationMatrix(aa_arrs[i], R_arr);
+        Eigen::Matrix3d R {{R_arr[0], R_arr[3], R_arr[6]},
+                           {R_arr[1], R_arr[4], R_arr[7]},
+                           {R_arr[2], R_arr[5], R_arr[8]}};
+        Eigen::Vector3d T {T_arrs[i][0], T_arrs[i][1], T_arrs[i][2]};
+        R_ks.push_back(R);
+        T_ks.push_back(T);
+    }
+    return {R_ks, T_ks};
 }
 
 Eigen::Vector3d pose::hypothesizeQueryCenter (const vector<Eigen::Matrix3d> & R_k,
@@ -470,14 +502,14 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
 
     for (int i = 0; i < K - 1; i++) {
         for (int j = i + 1; j < K; j++) {
-            vector<Eigen::Matrix3d> R {R_k[i], R_k[j]};
-            vector<Eigen::Vector3d> t {t_k[i], t_k[j]};
-            vector<Eigen::Matrix3d> R_ {R_qk[i], R_qk[j]};
-            vector<Eigen::Vector3d> t_ {t_qk[i], t_qk[j]};
-            vector<int> indices {i, j};
+            vector<Eigen::Matrix3d> R{R_k[i], R_k[j]};
+            vector<Eigen::Vector3d> t{t_k[i], t_k[j]};
+            vector<Eigen::Matrix3d> R_{R_qk[i], R_qk[j]};
+            vector<Eigen::Vector3d> t_{t_qk[i], t_qk[j]};
+            vector<int> indices{i, j};
             double total_spread = 0;
 
-            Eigen::Matrix3d R_hyp = pose::rotationAverage(vector<Eigen::Matrix3d> {R_qk[i] * R_k[i], R_qk[j] * R_k[j]});
+            Eigen::Matrix3d R_hyp = pose::rotationAverage(vector<Eigen::Matrix3d>{R_qk[i] * R_k[i], R_qk[j] * R_k[j]});
 
             Eigen::Vector3d c_hyp = hypothesizeQueryCenter(R, t, R_, t_);
 
@@ -510,7 +542,7 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
                 best_indices = indices;
                 best_total_spread = total_spread;
                 best_R_q = R_hyp;
-                best_T_q = - R_hyp * c_hyp;
+                best_T_q = -R_hyp * c_hyp;
             }
         }
     }
@@ -528,26 +560,67 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
 
     Eigen::Vector3d c_q_calc = hypothesizeQueryCenter(best_R, best_t, best_R_, best_t_);
 
+    Eigen::Vector3d c = c_q_calc;
+
     vector<Eigen::Matrix3d> rotations;
     rotations.reserve(best_R.size());
-    for(int i = 0; i < best_R.size(); i++) {
+    for (int i = 0; i < best_R.size(); i++) {
         rotations.emplace_back(best_R_[i] * best_R[i]);
     }
 
     Eigen::Matrix3d R_q_avg = pose::rotationAverage(rotations);
 
-    Eigen::Vector3d t_q_avg = -R_q_avg * c_q_calc;
+    Eigen::Vector3d t_q_avg = -R_q_avg * c;
 
     Eigen::Matrix3d start = R_q_avg; //* functions::smallRandomRotationMatrix();
-    double d = functions::rotationDifference(R_q_avg, start);
-    //    Eigen::Matrix3d R_q_calc = rotation::solve_rotation(c_q, best_R, best_t, best_R_, best_t_);
-    Eigen::Matrix3d R_q_calc = hypothesizeQueryRotation(c_q, start, best_R, best_t, best_R_, best_t_);
+    Eigen::Matrix3d R_q_cf = rotation::solve_rotation(c, best_R, best_t, best_R_, best_t_);
+    Eigen::Matrix3d R_q_num = hypothesizeQueryRotation(c, start, best_R, best_t, best_R_, best_t_);
 
-    Eigen::Vector3d t_q_calc = -R_q_calc * c_q_calc;
+
+    double geom_error_cf = 0., geom_error_num = 0., geom_error_avg = 0., geom_error_gt = 0.;
+    double alg_error_cf = 0., alg_error_num = 0., alg_error_avg = 0., alg_error_gt = 0.;
+
+    for (int k = 0; k < best_R.size(); k++) {
+        Eigen::Vector3d c_k = -best_R[k].transpose() * best_t[k];
+
+        Eigen::Matrix3d R_qk_real = R_q * best_R[k].transpose();
+
+        Eigen::Vector3d t_ = -best_R_[k] * (best_R[k] * c + best_t[k]);
+        double lambda_cf = (c_k - c).transpose() * R_q_cf.transpose() * t_;
+        double lambda_num = (c_k - c).transpose() * R_q_num.transpose() * t_;
+        double lambda_avg = (c_k - c).transpose() * R_q_avg.transpose() * t_;
+        double lambda_gt = (c_k - c).transpose() * R_q.transpose() * t_;
+        geom_error_cf += pow((c_k - (c + lambda_cf * R_q_cf.transpose() * t_)).norm(), 2.);
+        geom_error_num += pow((c_k - (c + lambda_num * R_q_num.transpose() * t_)).norm(), 2.);
+        geom_error_avg += pow((c_k - (c + lambda_avg * R_q_avg.transpose() * t_)).norm(), 2.);
+        geom_error_gt += pow((c_k - (c + lambda_gt * R_q.transpose() * t_)).norm(), 2.);
+
+        alg_error_cf += pow((functions::rotationDifference(R_q_cf, best_R_[k] * best_R[k])), 2.);
+        alg_error_num += pow((functions::rotationDifference(R_q_num, best_R_[k] * best_R[k])), 2.);
+        alg_error_avg += pow((functions::rotationDifference(R_q_avg, best_R_[k] * best_R[k])), 2.);
+        alg_error_gt += pow((functions::rotationDifference(R_q, best_R_[k] * best_R[k])), 2.);
+
+    }
+
+    double d_num_cf = functions::rotationDifference(R_q_num, R_q_cf);
+    double d_avg_cf = functions::rotationDifference(R_q_cf, R_q_avg);
+
+
+    Eigen::Vector3d t_q_calc = -R_q_cf * c;
 
     Eigen::Vector3d t_q_gov = pose::GovinduTranslationAveraging(best_t, best_R_, best_t_);
 
-    return {best_T_q, best_R_q, t_q_avg, R_q_avg, t_q_calc, R_q_calc, t_q_gov, int (best_R.size()), tp, fp};
+    Eigen::Vector3d c_q_gov = -R_q_avg.transpose() * t_q_gov;
+
+    double n = c_q.norm();
+
+    double c_dist_calc = functions::getDistBetween(c_q_calc, c_q);
+    double c_dist_gov = functions::getDistBetween(c_q_gov, c_q);
+
+    cout << "C Dist Calc: " << c_dist_calc << ", C Dist Govindu: " << c_dist_gov << endl;
+
+    int stop = 0;
+    return {best_T_q, best_R_q, t_q_avg, R_q_avg, t_q_calc, R_q_cf, t_q_gov, int(best_R.size()), tp, fp};
 }
 
 void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,

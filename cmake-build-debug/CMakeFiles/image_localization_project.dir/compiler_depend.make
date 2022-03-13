@@ -793,7 +793,8 @@ CMakeFiles/image_localization_project.dir/main.cpp.o: ../main.cpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/setjmp.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/signal.h \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/ocl.hpp \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/typeindex
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/typeindex \
+  ../include/OptimalRotationSolver.h
 
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../src/OptimalRotationSolver.cpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/iostream \
@@ -6155,8 +6156,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 ../src/calibrate.cpp:
 
-../include/OptimalRotationSolver.h:
-
 /opt/homebrew/include/ceres/rotation.h:
 
 /opt/homebrew/include/ceres/version.h:
@@ -6773,10 +6772,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/types.hpp:
 
-/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/sys/_types/_ssize_t.h:
-
-/opt/homebrew/include/ceres/types.h:
-
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/mutex:
 
 /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/fast_math.hpp:
@@ -7130,6 +7125,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /opt/homebrew/include/eigen3/Eigen/src/Core/arch/Default/TypeCasting.h:
 
 /opt/homebrew/include/eigen3/Eigen/src/Core/arch/Default/Half.h:
+
+../include/OptimalRotationSolver.h:
 
 /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/vsx_utils.hpp:
 
@@ -7838,5 +7835,9 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/unordered_set:
 
 /opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/include/python3.9/genericaliasobject.h:
+
+/opt/homebrew/include/ceres/types.h:
+
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/usr/include/sys/_types/_ssize_t.h:
 
 ../main.cpp:

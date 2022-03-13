@@ -11,6 +11,8 @@ find_package(DBoW3 REQUIRED)
 find_package(OpenMP REQUIRED)
 find_package(Ceres REQUIRED)
 set(CMAKE_CXX_STANDARD 14)
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(/opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/include/python3.9)

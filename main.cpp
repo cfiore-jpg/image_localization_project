@@ -11,6 +11,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/ocl.hpp"
 #include <opencv2/xfeatures2d.hpp>
+#include "include/OptimalRotationSolver.h"
 
 
 
@@ -26,6 +27,73 @@ using namespace chrono;
 namespace plt = matplotlibcpp;
 
 int main() {
+
+//    vector<Eigen::Matrix3d> R_k;
+//    vector<Eigen::Vector3d> t_k;
+//    vector<Eigen::Matrix3d> R_qk;
+//    vector<Eigen::Vector3d> t_qk;
+//
+//    Eigen::Matrix3d R_q {{0.93118482425723736462, 0.36262296659846848801, -0.037408650982680001496},
+//                           {0.33249792459696492219, -0.8027621803172360071, 0.49499294135475135903},
+//                           {0.14946555861377897045, -0.47336821391771044532, -0.86809134360424744514}};
+//    Eigen::Vector3d c_q {-157.37370535944677385, 551.2138747105557286, 985.10057207662759993};
+//    Eigen::Vector3d t_q = -R_q * c_q;
+//
+//
+//    Eigen::Matrix3d R_1 {{0.55072336929004850337, -0.82712030047107198971, 0.11214178109188482901},
+//                         {-0.11722689697755828142, 0.056375599209274707135, 0.99150372991674018408},
+//                         {-0.8264149231123731898, -0.5591903078223356971, -0.065913386309092270032}};
+//    Eigen::Vector3d c_1 {938.1809157763350413, 613.74851039172017408, 55.011595897134093036};
+//    Eigen::Vector3d t_1 = -R_1 * c_1;
+//    Eigen::Matrix3d R_q1 = R_q * R_1.transpose();
+//    Eigen::Vector3d t_q1 = t_q - R_q1 * t_1;
+//    t_q1.normalize();
+//    R_k.push_back(R_1);
+//    t_k.push_back(t_1);
+//    R_qk.push_back(R_q1);
+//    t_qk.push_back(t_q1);
+//
+//    Eigen::Matrix3d R_2 {{0.088461304994031042526, 0.033230569322564879053, 0.99552515125497997861},
+//                         {-0.22987060353240071353, -0.9717843825228138499, 0.052864160982681845935},
+//                         {0.9691925005644660418, -0.2335184000186093789, -0.078326583624883427959}};
+//    Eigen::Vector3d c_2 {-1091.5951653892184368, 272.98698735737838206, 107.90863343431843191};
+//    Eigen::Vector3d t_2 = -R_2 * c_2;
+//    Eigen::Matrix3d R_q2 = R_q * R_2.transpose();
+//    Eigen::Vector3d t_q2 = t_q - R_q2 * t_2;
+//    t_q2.normalize();
+//    R_k.push_back(R_2);
+//    t_k.push_back(t_2);
+//    R_qk.push_back(R_q2);
+//    t_qk.push_back(t_q2);
+//
+//    Eigen::Matrix3d R_3 {{-0.10387879175474701299, 0.8104268925167098514, 0.5765565440694283561},
+//                         {-0.9498195017811733587, 0.091132400555301251721, -0.29922867443677803045},
+//                         {-0.29504594669260764128, -0.57870816259556667749, 0.76029254362089171426}};
+//    Eigen::Vector3d c_3 {346.58158737322162324, 638.29359688719728183, -848.51081310189067608};
+//    Eigen::Vector3d t_3 = -R_3 * c_3;
+//    Eigen::Matrix3d R_q3 = R_q * R_3.transpose();
+//    Eigen::Vector3d t_q3 = t_q - R_q3 * t_3;
+//    t_q3.normalize();
+//    R_k.push_back(R_3);
+//    t_k.push_back(t_3);
+//    R_qk.push_back(R_q3);
+//    t_qk.push_back(t_q3);
+//
+//    auto start = high_resolution_clock::now();
+//    Eigen::Matrix3d R_hyp = rotation::solve_rotation(c_q, R_k, t_k, R_qk, t_qk);
+//    auto stop = high_resolution_clock::now();
+//    auto duration = duration_cast<microseconds>(stop - start);
+//    cout << duration.count() << "microseconds"  << endl;
+//    double r_dist = functions::rotationDifference(R_q, R_hyp);
+//    cout << r_dist << endl;
+//
+//    int done = 0;
+
+
+
+
+
+
 //
 //    vector<string> images = synthetic::getAll();
 //    vector<Point2d> pts_0, pts_1;
@@ -233,9 +301,9 @@ int main() {
 
 
 //// Testing Whole Dataset
-    vector<string> listQuery; //= synthetic::getAll();
-    vector<tuple<string, string, vector<string>, vector<string>>> info = sevenScenes::createInfoVector();
-    functions::createQueryVector(listQuery, info, SCENE);
+    vector<string> listQuery = synthetic::getAll();
+//    vector<tuple<string, string, vector<string>, vector<string>>> info = sevenScenes::createInfoVector();
+//    functions::createQueryVector(listQuery, info, SCENE);
 
     cout << "Running queries..." << endl;
     int startIdx = 0;
@@ -285,18 +353,24 @@ int main() {
         string query = listQuery[q];
 
         // Get query absolute pose and camera intrinsics
-//        Eigen::Vector3d c_q = synthetic::getC(query);
-        Eigen::Vector3d c_q = sevenScenes::getT(query);
+        Eigen::Vector3d c_q = synthetic::getC(query);
+//        Eigen::Vector3d c_q = sevenScenes::getT(query);
         Eigen::Matrix3d R_q;
         Eigen::Vector3d t_q;
-        sevenScenes::getAbsolutePose(query, R_q, t_q);
-        double K[4] = {525., 525., 320., 240.};
+//        sevenScenes::getAbsolutePose(query, R_q, t_q);
+        synthetic::getAbsolutePose(query, R_q, t_q);
+
+//        double K[4] = {523.538, 529.669, 314.245, 237.595};
+        double K[4] = {2584.9325098195013197, 2584.7918606057692159, 249.77137587221417903, 278.31267937919352562};
+
 
         //Retrieve top K
-//        auto retrieved = synthetic::omitQuery(q, listQuery);
-        auto retrieved = functions::retrieveSimilar(query, 150, 1.35);
+        auto retrieved = synthetic::omitQuery(q, listQuery);
+//        auto retrieved = functions::retrieveSimilar(query, 150, 1.35);
 //        int num_spaced = int(double(retrieved.size()) * .1);
-        auto spaced = functions::optimizeSpacing(retrieved, 15, false, "7-Scenes");
+//        auto spaced = functions::optimizeSpacing(retrieved, 15, false, "7-Scenes");
+        auto spaced = functions::optimizeSpacing(retrieved, 10, false, "synthetic");
+
 
 
 //        for (int i = 0; i < spaced.size() - 1; i++) {
@@ -319,37 +393,39 @@ int main() {
         vector<Eigen::Matrix3d> R_ks, R_qk_calcs;
         vector<Eigen::Vector3d> t_ks, t_qk_calcs;
         vector<int> inliers;
-
         vector<vector<pair<cv::Point2d, cv::Point2d>>> all_GT_inliers; // q, db
         vector<vector<tuple<Point2d, Point2d, double>>> all_points;
+        vector<string> anchors;
         for (const auto & im : spaced) {
             Eigen::Matrix3d R_k, R_qk_calc, R_qk_real;
             Eigen::Vector3d t_k, t_qk_calc, t_qk_real;
-            sevenScenes::getAbsolutePose(im, R_k, t_k);
-
-            vector<tuple<Point2d, Point2d, double>> points;
-            functions::findMatchesSorted(im, query, "SIFT", 0.8, points);
-
-            if (points.size() < 5) continue;
-
-            vector<cv::Point2d> pts_db, pts_q;
-//            synthetic::findSyntheticMatches(im, query, pts_db, pts_q);
-//
-//
-//            synthetic::addGaussianNoise(pts_db, pts_q, .5);
-//            synthetic::addOcclusion(pts_db, pts_q, 500);
-//            synthetic::addMismatches(pts_db, pts_q, .10);
+//            sevenScenes::getAbsolutePose(im, R_k, t_k);
+            synthetic::getAbsolutePose(im, R_k, t_k);
 
 
 //            vector<tuple<Point2d, Point2d, double>> points;
-//            points.reserve(pts_db.size());
-//            for(int i = 0; i < pts_db.size(); i++) {
-//                points.emplace_back(pts_q[i], pts_db[i], 0.);
-//            }
-            for (const auto & tup : points) {
-                pts_q.push_back(get<0>(tup));
-                pts_db.push_back(get<1>(tup));
+//            functions::findMatchesSorted(im, query, "SIFT", 0.8, points);
+//
+//            if (points.size() < 5) continue;
+
+            vector<cv::Point2d> pts_db, pts_q;
+            synthetic::findSyntheticMatches(im, query, pts_db, pts_q);
+
+
+            synthetic::addGaussianNoise(pts_db, pts_q, .1);
+            synthetic::addOcclusion(pts_db, pts_q, 1000);
+            synthetic::addMismatches(pts_db, pts_q, .10);
+
+
+            vector<tuple<Point2d, Point2d, double>> points;
+            points.reserve(pts_db.size());
+            for(int i = 0; i < pts_db.size(); i++) {
+                points.emplace_back(pts_q[i], pts_db[i], 0.);
             }
+//            for (const auto & tup : points) {
+//                pts_q.push_back(get<0>(tup));
+//                pts_db.push_back(get<1>(tup));
+//            }
 
             if(!functions::getRelativePose(pts_db, pts_q, K, R_qk_calc, t_qk_calc)) continue;
 
@@ -377,6 +453,7 @@ int main() {
             Eigen::Matrix3d F = K_eig.inverse().transpose() * E_real * K_eig.inverse();
             vector<pair<cv::Point2d, cv::Point2d>> GT_inliers = functions::findInliersForFundamental(F, 5., points);
 
+            anchors.push_back(im);
             all_GT_inliers.push_back(GT_inliers);
             all_points.push_back(points);
             R_ks.push_back(R_k);
@@ -385,12 +462,31 @@ int main() {
             t_qk_calcs.push_back(t_qk_calc);
         }
 
-        if (R_ks.size() < 2) {
+        if (anchors.size() < 2) {
             cout << "Bad query" << endl;
             continue;
         }
 
+//        anchors.push_back(query);
+//        auto BA_result = pose::bundleAdjust(K, anchors);
+//        for(int i = 0; i < anchors.size() - 1; i++) {
+//            double angle_change = functions::rotationDifference(R_ks[i], BA_result.first[i]);
+//            double dist_change = functions::getDistBetween(t_ks[i], BA_result.second[i]);
+//            int stop = 0;
+//        }
+//        double query_angle_change = functions::rotationDifference(R_q, BA_result.first[anchors.size()-1]);
+//        double query_dist_change = functions::getDistBetween(t_q, BA_result.second[anchors.size()-1]);
+//        R_ks.clear();
+//        t_ks.clear();
+//        for (int i = 0; i < anchors.size() - 1; i++) {
+//            R_ks.push_back(BA_result.first[i]);
+//            t_ks.push_back(BA_result.second[i]);
+//        }
+//        R_q = BA_result.first[anchors.size()-1];
+//        t_q = BA_result.second[anchors.size()-1];
+//        c_q = -R_q.transpose() * t_q;
 
+//
 //        int num_inliers = 0;
 //        for(const auto & i : inliers) {
 //            if (i) {
@@ -434,21 +530,19 @@ int main() {
 
         // Calculate query estimates
 
-        for (int i = 0; i < 25; i++) {
-
-            auto calc = pose::hypothesizeRANSAC(5., 5., inliers, R_ks, t_ks, R_qk_calcs, t_qk_calcs, c_q, R_q);
-            int in = get<7>(calc);
-            Eigen::Matrix3d R_q_avg = get<3>(calc);
-            Eigen::Matrix3d R_q_calc = get<5>(calc);
-
-            double r_avg_dist = functions::rotationDifference(R_q, R_q_avg);
-            double r_calc_dist = functions::rotationDifference(R_q, R_q_calc);
-
-            int check = 0;
-
-        }
-
-
+//        for (int i = 0; i < 25; i++) {
+//
+//            auto calc = pose::hypothesizeRANSAC(5., 5., inliers, R_ks, t_ks, R_qk_calcs, t_qk_calcs, c_q, R_q);
+//            int in = get<7>(calc);
+//            Eigen::Matrix3d R_q_avg = get<3>(calc);
+//            Eigen::Matrix3d R_q_calc = get<5>(calc);
+//
+//            double r_avg_dist = functions::rotationDifference(R_q, R_q_avg);
+//            double r_calc_dist = functions::rotationDifference(R_q, R_q_calc);
+//
+//            int check = 0;
+//
+//        }
 
 
         auto calc = pose::hypothesizeRANSAC(5., 5., inliers, R_ks, t_ks, R_qk_calcs, t_qk_calcs, c_q, R_q);
@@ -465,25 +559,25 @@ int main() {
         Eigen::Matrix3d R_q_alone = get<1>(calc);
         Eigen::Vector3d t_q_alone_ad = t_q_alone;
         Eigen::Matrix3d R_q_alone_ad = R_q_alone;
-        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_alone_ad, t_q_alone_ad);
+//        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_alone_ad, t_q_alone_ad);
 
         Eigen::Vector3d t_q_avg = get<2>(calc);
         Eigen::Matrix3d R_q_avg = get<3>(calc);
         Eigen::Vector3d t_q_avg_ad = t_q_avg;
         Eigen::Matrix3d R_q_avg_ad = R_q_avg;
-        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_avg_ad, t_q_avg_ad);
+//        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_avg_ad, t_q_avg_ad);
 
         Eigen::Vector3d t_q_gov = get<6>(calc);
         Eigen::Matrix3d R_q_gov = get<3>(calc);
         Eigen::Vector3d t_q_gov_ad = t_q_gov;
         Eigen::Matrix3d R_q_gov_ad = R_q_gov;
-        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_gov_ad, t_q_gov_ad);
+//        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_gov_ad, t_q_gov_ad);
 
         Eigen::Vector3d t_q_calc = get<4>(calc);
         Eigen::Matrix3d R_q_calc = get<5>(calc);
         Eigen::Vector3d t_q_calc_ad = t_q_calc;
         Eigen::Matrix3d R_q_calc_ad = R_q_calc;
-        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_calc_ad, t_q_calc_ad);
+//        pose::adjustHypothesis(R_ks, t_ks, all_points, 10., K, R_q_calc_ad, t_q_calc_ad);
 
         // Calculate error
 

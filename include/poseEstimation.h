@@ -24,7 +24,7 @@
 
 namespace pose {
 
-    pair<Eigen::Matrix3d, Eigen::Vector3d> bundleAdjust (const string & image);
+    pair<vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>> bundleAdjust (double K[4], const vector<string> & anchors);
 
     Eigen::Vector3d hypothesizeQueryCenter (const vector<Eigen::Matrix3d> &R_k,
                                            const vector<Eigen::Vector3d> &t_k,

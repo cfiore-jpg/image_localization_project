@@ -37,12 +37,6 @@
 //c_1 = [938.1809157763350413 613.74851039172017408 55.011595897134093036]';
 
 
-//R_2 = [0.8119703254041538143 0.2795045936221566274 -0.51242694387315923521;
-//0.45740107966306420284 -0.85006224357008008941 0.26111000436533438052;
-//-0.36261335191376498077 -0.44639821258682799154 -0.81807101941894344588];
-
-//c_2 = [409.19114269725866961 493.48104427498702762 934.78658555996162249]';
-
 
 //R_2 = [0.088461304994031042526 0.033230569322564879053 0.99552515125497997861
 //-0.22987060353240071353 -0.9717843825228138499 0.052864160982681845935
@@ -102,7 +96,7 @@
 using namespace Eigen;
 using namespace std;
 
-Eigen::MatrixXcd rotation::solve_rotation(const Eigen::Vector3d & c_q,
+Eigen::Matrix3d rotation::solve_rotation(const Eigen::Vector3d & c_q,
                                const vector<Eigen::Matrix3d> & R_k,
                                const vector<Eigen::Vector3d> & t_k,
                                const vector<Eigen::Matrix3d> & R_qk,
@@ -126,19 +120,23 @@ Eigen::MatrixXcd rotation::solve_rotation(const Eigen::Vector3d & c_q,
 
         Vector3d diff = c_k - c_q;
 
-        Vector3d t_ = t_qk[k];
+//        Vector3d t_ = t_qk[k];
+        Vector3d t_ = -R_qk[k] * (R_k[k] * c_q + t_k[k]);
+        t_.normalize();
 
         Matrix<double, 9, 1> star {t_[0]*diff[0], t_[0]*diff[1], t_[0]*diff[2],
-                                t_[1]*diff[0], t_[1]*diff[1], t_[2]*diff[2],
+                                t_[1]*diff[0], t_[1]*diff[1], t_[1]*diff[2],
                                 t_[2]*diff[0], t_[2]*diff[1], t_[2]*diff[2]};
 
         M += star * star.transpose();
 
     }
 
-    M /= 1e5;
+//    M /= 1e5;
 
-    VectorXd data;
+//    cout << M << endl;
+
+    Matrix<double, 45, 1> data;
     int idx = 0;
     for (int i = 0; i < 9; i++) {
         for (int j = i; j < 9; j++) {
@@ -147,9 +145,44 @@ Eigen::MatrixXcd rotation::solve_rotation(const Eigen::Vector3d & c_q,
         }
     }
 
-    MatrixXcd sol = rotation::solver_problem_averageRQuatMetric_red(data);
+    MatrixXcd sols = rotation::solver_problem_averageRQuatMetric_red(data);
 
-    return sol;
+    Matrix3d best_R;
+    double best_error = 0.;
+    for (int i = 0; i < 40; i++) {
+        Eigen::Quaterniond q;
+
+        if (abs(sols(0, i).imag()) > 1e-6) continue;
+        q.w() = sols(0, i).real();
+        if (abs(sols(1, i).imag()) > 1e-6) continue;
+        q.x() = sols(1, i).real();
+        if (abs(sols(2, i).imag()) > 1e-6) continue;
+        q.y() = sols(2, i).real();
+        if (abs(sols(3, i).imag()) > 1e-6) continue;
+        q.z() = sols(3, i).real();
+        Eigen::Matrix3d R = q.normalized().toRotationMatrix();
+
+//        if (i == 39) {
+//            cout << R << endl;
+//        }
+
+        double error = 0.;
+        for (int k = 0; k < K; k++) {
+            Vector3d c_k = -R_k[k].transpose() * t_k[k];
+            Vector3d t_ = -R_qk[k] * (R_k[k] * c_q + t_k[k]);
+            t_.normalize();
+//            Vector3d t_test = t_qk[k];
+            double lambda = (c_k - c_q).transpose() * R.transpose() * t_;
+            error += pow((c_k - (c_q + lambda * R.transpose() * t_)).norm(), 2.);
+        }
+
+        if (best_error == 0. || error < best_error) {
+            best_error = error;
+            best_R = R;
+        }
+    }
+
+    return best_R;
 
 }
  

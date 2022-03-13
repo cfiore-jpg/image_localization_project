@@ -227,20 +227,8 @@ DBoW2_INCLUDE_DIR:PATH=DBoW2_INCLUDE_DIR-NOTFOUND
 //Path to a library.
 DBoW2_LIBRARY:FILEPATH=DBoW2_LIBRARY-NOTFOUND
 
-//The directory containing a CMake configuration file for DBoW3.
-DBoW3_DIR:PATH=DBoW3_DIR-NOTFOUND
-
 //The directory containing a CMake configuration file for Eigen3.
 Eigen3_DIR:PATH=/opt/homebrew/share/eigen3/cmake
-
-//The directory containing a CMake configuration file for Ma.
-Ma_DIR:PATH=Ma_DIR-NOTFOUND
-
-//The directory containing a CMake configuration file for MatPlotLib.
-MatPlotLib_DIR:PATH=MatPlotLib_DIR-NOTFOUND
-
-//The directory containing a CMake configuration file for OpenCV.
-OpenCV_DIR:PATH=OpenCV_DIR-NOTFOUND
 
 //CXX compiler flags for OpenMP parallelization
 OpenMP_CXX_FLAGS:STRING=-Xclang -fopenmp
@@ -266,18 +254,6 @@ OpenMP_libomp_LIBRARY:FILEPATH=/opt/homebrew/lib/libomp.dylib
 //Path to a program.
 ProcessorCount_cmd_sysctl:FILEPATH=/usr/sbin/sysctl
 
-//The directory containing a CMake configuration file for Python3.9.
-Python3.9_DIR:PATH=Python3.9_DIR-NOTFOUND
-
-//The directory containing a CMake configuration file for Python3..
-Python3._DIR:PATH=Python3._DIR-NOTFOUND
-
-//The directory containing a CMake configuration file for Python4.
-Python4_DIR:PATH=Python4_DIR-NOTFOUND
-
-//The directory containing a CMake configuration file for Pythonw.
-Pythonw_DIR:PATH=Pythonw_DIR-NOTFOUND
-
 //The directory containing a CMake configuration file for gflags.
 gflags_DIR:PATH=/opt/homebrew/lib/cmake/gflags
 
@@ -292,12 +268,6 @@ image_localization_project_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 image_localization_project_SOURCE_DIR:STATIC=/Users/cameronfiore/C++/image_localization_project
-
-//The directory containing a CMake configuration file for matplotlib.
-matplotlib_DIR:PATH=matplotlib_DIR-NOTFOUND
-
-//The directory containing a CMake configuration file for matplotlib_cpp.
-matplotlib_cpp_DIR:PATH=matplotlib_cpp_DIR-NOTFOUND
 
 
 ########################
@@ -459,12 +429,6 @@ FIND_PACKAGE_MESSAGE_DETAILS_OpenMP:INTERNAL=[TRUE][TRUE][c ][v5.0()]
 FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_C:INTERNAL=[-Xclang -fopenmp][/opt/homebrew/lib/libomp.dylib][v5.0()]
 //Details about finding OpenMP_CXX
 FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-Xclang -fopenmp][/opt/homebrew/lib/libomp.dylib][v5.0()]
-//Details about finding Python
-FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/opt/homebrew/bin/python3.9][cfound components: Interpreter ][v3.9.9()]
-//Details about finding Python2
-FIND_PACKAGE_MESSAGE_DETAILS_Python2:INTERNAL=[/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7][cfound components: Interpreter ][v2.7.18()]
-//Details about finding Python3
-FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/include/python3.9][/opt/homebrew/lib/python3.9/site-packages/numpy/core/include][cfound components: NumPy Interpreter Development.Module ][v3.9.9()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 //Result of TRY_COMPILE
@@ -495,26 +459,4 @@ OpenMP_SPECTEST_C_:INTERNAL=TRUE
 OpenMP_libomp_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: ProcessorCount_cmd_sysctl
 ProcessorCount_cmd_sysctl-ADVANCED:INTERNAL=1
-//Path to a program.
-_Python2_EXECUTABLE:INTERNAL=/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7
-//Python2 Properties
-_Python2_INTERPRETER_PROPERTIES:INTERNAL=Python;2;7;18;64;;;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7;/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7;/Library/Python/2.7/site-packages;/Library/Python/2.7/site-packages
-_Python2_INTERPRETER_SIGNATURE:INTERNAL=90de8541d02ca01333f82ccbb0263907
-_Python3_DEVELOPMENT_MODULE_SIGNATURE:INTERNAL=07a8001826f515aa7895a1c455b9500f
-_Python3_EXECUTABLE:INTERNAL=/opt/homebrew/bin/python3.9
-//Path to a file.
-_Python3_INCLUDE_DIR:INTERNAL=/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/include/python3.9
-//Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;9;9;64;;cpython-39-darwin;/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9;/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9;/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages;/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages
-_Python3_INTERPRETER_SIGNATURE:INTERNAL=e0996b5bb4224435b936237941312af9
-//Path to a library.
-_Python3_LIBRARY_RELEASE:INTERNAL=/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/libpython3.9.dylib
-_Python3_NUMPY_SIGNATURE:INTERNAL=c0b37735475c57e1c6f2ea0f846b4010
-//Path to a file.
-_Python3_NumPy_INCLUDE_DIR:INTERNAL=/opt/homebrew/lib/python3.9/site-packages/numpy/core/include
-//Path to a program.
-_Python_EXECUTABLE:INTERNAL=/opt/homebrew/bin/python3.9
-//Python Properties
-_Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;9;9;64;;cpython-39-darwin;/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9;/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9;/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages;/opt/homebrew/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages
-_Python_INTERPRETER_SIGNATURE:INTERNAL=e0996b5bb4224435b936237941312af9
 
