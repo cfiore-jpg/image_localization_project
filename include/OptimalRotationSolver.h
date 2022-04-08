@@ -28,6 +28,12 @@ namespace rotation {
                                    const vector<Eigen::Matrix3d> & R_qk,
                                    const vector<Eigen::Vector3d> & t_qk);
 
+    Eigen::Matrix3d solve_rotation_with_norm(const Eigen::Vector3d & c_q,
+                                                       const vector<Eigen::Matrix3d> & R_k,
+                                                       const vector<Eigen::Vector3d> & t_k,
+                                                       const vector<Eigen::Matrix3d> & R_qk,
+                                                       const vector<Eigen::Vector3d> & t_qk);
+
     Eigen::MatrixXcd solver_problem_averageRQuatMetric_red(const Eigen::VectorXd& data);
 
 }

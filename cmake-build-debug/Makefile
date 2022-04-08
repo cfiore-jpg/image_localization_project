@@ -129,6 +129,126 @@ image_localization_project/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/build
 .PHONY : image_localization_project/fast
 
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.o: Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.o
+
+# target to build an object file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.i: Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.i
+
+# target to preprocess a source file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.i
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.s: Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.s
+
+# target to generate assembly for a file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.s
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.o: Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.o
+
+# target to build an object file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.i: Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.i
+
+# target to preprocess a source file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.i
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.s: Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.s
+
+# target to generate assembly for a file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.s
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.o: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.o
+
+# target to build an object file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.i: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.i
+
+# target to preprocess a source file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.i
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.s: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.s
+
+# target to generate assembly for a file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.s
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.o: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.o
+
+# target to build an object file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.i: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.i
+
+# target to preprocess a source file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.i
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.s: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.s
+
+# target to generate assembly for a file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.s
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.o: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.o
+
+# target to build an object file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.i: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.i
+
+# target to preprocess a source file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.i
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.i
+
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.s: Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.s
+
+# target to generate assembly for a file
+Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.s
+.PHONY : Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -152,6 +272,30 @@ main.s: main.cpp.s
 main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+src/CambridgeLandmarks.o: src/CambridgeLandmarks.cpp.o
+.PHONY : src/CambridgeLandmarks.o
+
+# target to build an object file
+src/CambridgeLandmarks.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o
+.PHONY : src/CambridgeLandmarks.cpp.o
+
+src/CambridgeLandmarks.i: src/CambridgeLandmarks.cpp.i
+.PHONY : src/CambridgeLandmarks.i
+
+# target to preprocess a source file
+src/CambridgeLandmarks.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i
+.PHONY : src/CambridgeLandmarks.cpp.i
+
+src/CambridgeLandmarks.s: src/CambridgeLandmarks.cpp.s
+.PHONY : src/CambridgeLandmarks.s
+
+# target to generate assembly for a file
+src/CambridgeLandmarks.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s
+.PHONY : src/CambridgeLandmarks.cpp.s
 
 src/OptimalRotationSolver.o: src/OptimalRotationSolver.cpp.o
 .PHONY : src/OptimalRotationSolver.o
@@ -378,9 +522,27 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... image_localization_project"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.o"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.i"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.s"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.o"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.i"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.s"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.o"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.i"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.s"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.o"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.i"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.s"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.o"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.i"
+	@echo "... Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/CambridgeLandmarks.o"
+	@echo "... src/CambridgeLandmarks.i"
+	@echo "... src/CambridgeLandmarks.s"
 	@echo "... src/OptimalRotationSolver.o"
 	@echo "... src/OptimalRotationSolver.i"
 	@echo "... src/OptimalRotationSolver.s"

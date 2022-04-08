@@ -209,6 +209,90 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s: cmake
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/image_localization_project/src/OptimalRotationSolver.cpp -o CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s
 
+CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
+CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: ../src/CambridgeLandmarks.cpp
+CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o -MF CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/CambridgeLandmarks.cpp
+
+CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cameronfiore/C++/image_localization_project/src/CambridgeLandmarks.cpp > CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i
+
+CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/image_localization_project/src/CambridgeLandmarks.cpp -o CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o: CMakeFiles/image_localization_project.dir/flags.make
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o: /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o -MF CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o.d -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o -c /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c > CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.i
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.s
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o: CMakeFiles/image_localization_project.dir/flags.make
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o: /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o -MF CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o.d -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o -c /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c > CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.i
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.s
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o: CMakeFiles/image_localization_project.dir/flags.make
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o: /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o -MF CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o.d -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o -c /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c > CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.i
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.s
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o: CMakeFiles/image_localization_project.dir/flags.make
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o: /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o -MF CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o.d -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o -c /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c > CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.i
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.s
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o: CMakeFiles/image_localization_project.dir/flags.make
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o: /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o -MF CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o.d -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o -c /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c > CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.i
+
+CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c -o CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.s
+
 # Object files for target image_localization_project
 image_localization_project_OBJECTS = \
 "CMakeFiles/image_localization_project.dir/main.cpp.o" \
@@ -220,7 +304,13 @@ image_localization_project_OBJECTS = \
 "CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/functions.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o" \
-"CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o"
+"CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o" \
+"CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o" \
+"CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o" \
+"CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o" \
+"CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o" \
+"CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o" \
+"CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o"
 
 # External object files for target image_localization_project
 image_localization_project_EXTERNAL_OBJECTS =
@@ -235,6 +325,12 @@ image_localization_project: CMakeFiles/image_localization_project.dir/src/imageM
 image_localization_project: CMakeFiles/image_localization_project.dir/src/functions.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o
+image_localization_project: CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o
+image_localization_project: CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o
+image_localization_project: CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o
+image_localization_project: CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o
+image_localization_project: CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o
+image_localization_project: CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o
 image_localization_project: CMakeFiles/image_localization_project.dir/build.make
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_gapi.4.5.5.dylib
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_stitching.4.5.5.dylib
@@ -274,6 +370,11 @@ image_localization_project: /Users/cameronfiore/C++/DBoW2/build/libDBoW2.dylib
 image_localization_project: /Users/cameronfiore/C++/DBow3/build/src/libDBoW3.dylib
 image_localization_project: /opt/homebrew/lib/libceres.2.0.0.dylib
 image_localization_project: /opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/lib/libpython3.9.dylib
+image_localization_project: /Users/cameronfiore/C++/bundler-v0.4-source/lib/libimage.a
+image_localization_project: /Users/cameronfiore/C++/bundler-v0.4-source/lib/libminpack.a
+image_localization_project: /Users/cameronfiore/C++/bundler-v0.4-source/lib/libcblas.a
+image_localization_project: /Users/cameronfiore/C++/bundler-v0.4-source/lib/libf2c.a
+image_localization_project: /Users/cameronfiore/C++/bundler-v0.4-source/lib/lib5point.a
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_shape.4.5.5.dylib
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_highgui.4.5.5.dylib
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_datasets.4.5.5.dylib
@@ -297,7 +398,7 @@ image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_c
 image_localization_project: /opt/homebrew/lib/libglog.0.5.0.dylib
 image_localization_project: /opt/homebrew/lib/libgflags.2.2.2.dylib
 image_localization_project: CMakeFiles/image_localization_project.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable image_localization_project"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX executable image_localization_project"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/image_localization_project.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

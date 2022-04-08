@@ -8,7 +8,13 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o" "gcc" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o.d"
+  "/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o" "gcc" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o.d"
+  "/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o" "gcc" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o.d"
+  "/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o" "gcc" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o.d"
+  "/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o" "gcc" "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o.d"
   "/Users/cameronfiore/C++/image_localization_project/main.cpp" "CMakeFiles/image_localization_project.dir/main.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/main.cpp.o.d"
+  "/Users/cameronfiore/C++/image_localization_project/src/CambridgeLandmarks.cpp" "CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o.d"
   "/Users/cameronfiore/C++/image_localization_project/src/OptimalRotationSolver.cpp" "CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o.d"
   "/Users/cameronfiore/C++/image_localization_project/src/Space.cpp" "CMakeFiles/image_localization_project.dir/src/Space.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/Space.cpp.o.d"
   "/Users/cameronfiore/C++/image_localization_project/src/calibrate.cpp" "CMakeFiles/image_localization_project.dir/src/calibrate.cpp.o" "gcc" "CMakeFiles/image_localization_project.dir/src/calibrate.cpp.o.d"

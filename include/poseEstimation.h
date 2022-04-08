@@ -26,10 +26,26 @@ namespace pose {
 
     pair<vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>> bundleAdjust (double K[4], const vector<string> & anchors);
 
+    Eigen::Vector3d hypothesizeQueryCenterOld (const vector<Eigen::Matrix3d> & R_k,
+                                                     const vector<Eigen::Vector3d> & t_k,
+                                                     const vector<Eigen::Matrix3d> & R_qk,
+                                                     const vector<Eigen::Vector3d> & t_qk);
+
     Eigen::Vector3d hypothesizeQueryCenter (const vector<Eigen::Matrix3d> &R_k,
                                            const vector<Eigen::Vector3d> &t_k,
                                            const vector<Eigen::Matrix3d> &R_qk,
                                            const vector<Eigen::Vector3d> &t_qk);
+
+    Eigen::Vector3d hypothesizeQueryTranslation (const vector<Eigen::Matrix3d> & R_k,
+                                                       const vector<Eigen::Vector3d> & t_k,
+                                                       const vector<Eigen::Matrix3d> & R_qk,
+                                                       const vector<Eigen::Vector3d> & t_qk);
+
+    Eigen::Vector3d hypothesizeQueryCenter_GOV (const Eigen::Matrix3d & R_q,
+                                                const vector<Eigen::Matrix3d> & R_k,
+                                                      const vector<Eigen::Vector3d> & t_k,
+                                                      const vector<Eigen::Matrix3d> & R_qk,
+                                                      const vector<Eigen::Vector3d> & t_qk);
 
     Eigen::Vector3d hypothesizeQueryCenterRANSAC (const double & inlier_thresh,
                                                   vector<Eigen::Matrix3d> & R_k,
@@ -53,6 +69,8 @@ namespace pose {
             const vector<Eigen::Vector3d> & t_k,
             const vector<Eigen::Matrix3d> & R_qk,
             const vector<Eigen::Vector3d> & t_qk,
+            const vector<Eigen::Matrix3d> & R_kq,
+            const vector<Eigen::Vector3d> & t_kq,
             const Eigen::Vector3d & c_q,
             const Eigen::Matrix3d & R_q);
 

@@ -22,6 +22,15 @@ namespace functions {
 
     Eigen::Matrix3d smallRandomRotationMatrix();
 
+    void compute_pose_from_points (const vector<cv::Point2d> & pts_l, const vector<cv::Point2d> & pts_r,
+                                   const Eigen::Matrix3d & K, Eigen::Matrix3d & R, Eigen::Vector3d & T);
+
+    pair<vector<cv::Point2d>, vector<cv::Point2d>> same_inliers(
+            const vector<cv::Point2d> & pts_q, const vector<cv::Point2d> & pts_db,
+            const Eigen::Matrix3d & R_qk, const Eigen::Vector3d & T_qk,
+            const Eigen::Matrix3d & R_kq, const Eigen::Vector3d & T_kq,
+            const Eigen::Matrix3d & K);
+
     double triangulateRays(const Eigen::Vector3d &ci, const Eigen::Vector3d &di, const Eigen::Vector3d &cj,
                            const Eigen::Vector3d &dj, Eigen::Vector3d &intersect);
 
@@ -33,22 +42,25 @@ namespace functions {
 
     double rotationDifference(const Eigen::Matrix3d &r1, const Eigen::Matrix3d &r2);
 
-    bool findMatches(const string &db_image, const string &query_image, const string &method, double ratio,
+    vector<double> getReprojectionErrors(const vector<cv::Point2d> & pts_to, const vector<cv::Point2d> & pts_from,
+                                         const Eigen::Matrix3d & K, const Eigen::Matrix3d & R, const Eigen::Vector3d & T);
+
+    bool findMatches(const string &db_image, const string & ext, const string &query_image, const string &method, double ratio,
                      vector<cv::Point2d> &pts_db, vector<cv::Point2d> &pts_query);
 
-    bool findMatchesSorted(const string &db_image, const string &query_image, const string &method, double ratio,
+    bool findMatchesSorted(const string &db_image, const string & ext, const string &query_image, const string &method, double ratio,
                            vector<tuple<cv::Point2d, cv::Point2d, double>> & points);
 
     vector<pair<cv::Point2d, cv::Point2d>> findInliersForFundamental(const Eigen::Matrix3d & F, double threshold,
                                                                      const vector<tuple<cv::Point2d, cv::Point2d, double>> & points);
 
-    int getRelativePose(const string & db_image, const string & query_image, const double * K, const string & method,
+    int getRelativePose(const string & db_image, const string & ext, const string & query_image, const double * K, const string & method,
                         Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
     bool getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, const double * K,
                         Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
-    int getRelativePose3D(const string &db_image, const string &query_image, const string &method,
+    int getRelativePose3D(const string &db_image, const string & ext, const string &query_image, const string &method,
                                     Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
     vector<string> optimizeSpacing(const vector<string> & images, int N, bool show_process, const string & dataset);
@@ -71,9 +83,9 @@ namespace functions {
     vector<pair<int, float>> getResultVector(const string& query_image, const string& method, const string & num);
     string getScene(const string & image);
     string getSequence(const string & image);
-    vector<string> getTopN(const string& query_image, int N);
-    vector<string> retrieveSimilar(const string& query_image, int max_num, double max_descriptor_dist);
-    vector<string> spaceWithMostMatches(const string & query_image, const double * cam_matrix, int K,
+    vector<string> getTopN(const string& query_image, const string & ext, int N);
+    vector<string> retrieveSimilar(const string& query_image, const string & ext, int max_num, double max_descriptor_dist);
+    vector<string> spaceWithMostMatches(const string & query_image, const string & ext, const double * cam_matrix, int K,
                                         int N_thresh, double max_descriptor_dist, double separation, int min_matches,
                                         vector<Eigen::Matrix3d> & R_k,
                                         vector<Eigen::Vector3d> & t_k,
@@ -81,7 +93,7 @@ namespace functions {
                                         vector<Eigen::Vector3d> & t_qk);
 
 //// Visualization
-    void showTop1000(const string & query_image, int max_num, double max_descriptor_dist, int inliers);
+    void showTop1000(const string & query_image, const string & ext, int max_num, double max_descriptor_dist, int inliers);
     cv::Mat projectCentersTo2D(const string & query, const vector<string> & images,
                                unordered_map<string, cv::Scalar> & seq_colors,
                                const string & Title);

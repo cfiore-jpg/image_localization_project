@@ -5,6 +5,7 @@
 #include "../include/Space.h"
 #include "../include/sevenScenes.h"
 #include "../include/synthetic.h"
+#include "../include/CambridgeLandmarks.h"
 #include <iostream>
 #include <string>
 #include <Eigen/Dense>
@@ -52,7 +53,16 @@ Space::Space(const vector<string> & images, const string & dataset) {
             }
             points.push_back(point_to_add);
         }
-    } else {
+    } else if (dataset == "Cambridge") {
+        for (int i = 0; i < images.size(); i++) {
+            Eigen::Vector3d c = - cambridge::getR(images[i]).transpose() * cambridge::getT(images[i]);
+            auto point_to_add = newPoint(images[i], i, int(images.size()), c);
+            for (const auto point: points) {
+                newEnergy(point, point_to_add);
+            }
+            points.push_back(point_to_add);
+        }
+    } else if (dataset == "synthetic") {
         for (int i = 0; i < images.size(); i++) {
             auto point_to_add = newPoint(images[i], i, int(images.size()), synthetic::getC(images[i]));
             for (const auto point: points) {
@@ -60,6 +70,9 @@ Space::Space(const vector<string> & images, const string & dataset) {
             }
             points.push_back(point_to_add);
         }
+    } else {
+        cout << "Unknown Dataset for image retrieval." << endl;
+        exit(1);
     }
 
 }

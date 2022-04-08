@@ -130,7 +130,7 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
     for (int q = 0; q < listQuery.size(); q++) {
 
         string query = listQuery[q];
-        vector<string> topN = functions::retrieveSimilar(query, 20, 1.6);
+        vector<string> topN = functions::retrieveSimilar(query, ".pose.png", 20, 1.6);
         vector<string> top2 = functions::optimizeSpacing(topN, 2, false, "7-Scenes");
         if (top2.size() < 2) continue;
         string im_1 = top2[0];
@@ -138,8 +138,8 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
 
         // Get point correspondences for this triplet
         vector<cv::Point2d> pts_1, pts_2, pts_q1, pts_q2;
-        functions::findMatches(im_1, query, "ORB", 0.8, pts_1, pts_q1);
-        functions::findMatches(im_2, query, "ORB", 0.8, pts_2, pts_q2);
+        functions::findMatches(im_1, ".pose.png",query, "ORB", 0.8, pts_1, pts_q1);
+        functions::findMatches(im_2, ".pose.png",query, "ORB", 0.8, pts_2, pts_q2);
 
         if (pts_1.size() >= 24 && pts_2.size() >= 24) {
 
@@ -412,7 +412,7 @@ void calibrate::run() {
 
     //// 5-point GEOMETRY -------------------------------------------------------------------------------
     vector<cv::Point2d> pts1, pts2;
-    functions::findMatches(im1, im2, "SIFT", 0.8, pts1, pts2);
+    functions::findMatches(im1, ".pose.png",im2, "SIFT", 0.8, pts1, pts2);
 
     cv::Mat mask1;
     cv::Mat E = cv::findEssentialMat(pts1, pts2, K_rgb,

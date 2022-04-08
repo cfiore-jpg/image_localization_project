@@ -281,7 +281,7 @@ pair<vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>> pose::bundleAdjust(double
             string im_1 = anchors[i];
             string im_2 = anchors[j];
             vector<cv::Point2d> pts_1, pts_2;
-            functions::findMatches(im_1, im_2, "SIFT", 0.8, pts_1, pts_2);
+            functions::findMatches(im_1, ".pose.png",im_2, "SIFT", 0.8, pts_1, pts_2);
             for (int k = 0; k < pts_1.size(); k++) {
                 Eigen::Vector3d pt1 {pts_1[k].x, pts_1[k].y, 1.};
                 Eigen::Vector3d pt2 {pts_2[k].x, pts_2[k].y, 1.};
@@ -331,20 +331,172 @@ pair<vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>> pose::bundleAdjust(double
     return {R_ks, T_ks};
 }
 
+Eigen::Vector3d pose::hypothesizeQueryCenterOld (const vector<Eigen::Matrix3d> & R_k,
+                                              const vector<Eigen::Vector3d> & t_k,
+                                              const vector<Eigen::Matrix3d> & R_qk,
+                                              const vector<Eigen::Vector3d> & t_qk) {
+
+    size_t K = R_k.size();
+    int num_rows = 3 * int(K);
+
+    Eigen::Matrix3d I {{1, 0, 0},
+                       {0, 1, 0},
+                       {0, 0, 1}};
+
+    Eigen::MatrixXd A (num_rows, 3);
+    Eigen::MatrixXd b (num_rows, 1);
+
+    for (int i = 0; i < K; i++) {
+
+        Eigen::Matrix3d R = R_k[i];
+        Eigen::Vector3d t = t_k[i];
+        Eigen::Matrix3d R_ = R_qk[i];
+        Eigen::Vector3d t_ = t_qk[i];
+
+        Eigen::Vector3d c_k = -R.transpose() * t;
+        Eigen::Vector3d t_kq = -R_.transpose() * t_;
+//        Eigen::Vector3d t_kq = t_;
+
+        Eigen::Matrix3d M_kq = I - R.transpose() * t_kq * t_kq.transpose() * R;
+
+        Eigen::MatrixXd for_b = M_kq * c_k;
+
+        A(i*3, 0) = M_kq(0, 0);
+        A(i*3, 1) = M_kq(0, 1);
+        A(i*3, 2) = M_kq(0, 2);
+        A(i*3+1, 0) = M_kq(1, 0);
+        A(i*3+1, 1) = M_kq(1, 1);
+        A(i*3+1, 2) = M_kq(1, 2);
+        A(i*3+2, 0) = M_kq(2, 0);
+        A(i*3+2, 1) = M_kq(2, 1);
+        A(i*3+2, 2) = M_kq(2, 2);
+
+        b(i*3, 0) = for_b(0, 0);
+        b(i*3+1, 0) = for_b(1, 0);
+        b(i*3+2, 0) = for_b(2, 0);
+    }
+
+    Eigen::Vector3d c_q = A.colPivHouseholderQr().solve(b);
+
+    return c_q;
+}
+
 Eigen::Vector3d pose::hypothesizeQueryCenter (const vector<Eigen::Matrix3d> & R_k,
                                               const vector<Eigen::Vector3d> & t_k,
                                               const vector<Eigen::Matrix3d> & R_qk,
                                               const vector<Eigen::Vector3d> & t_qk) {
 
     size_t K = R_k.size();
+    int num_rows = 3 * int(K);
 
     Eigen::Matrix3d I {{1, 0, 0},
                        {0, 1, 0},
                        {0, 0, 1}};
-    Eigen::Matrix3d A {{0, 0, 0},
-                       {0, 0, 0},
-                       {0, 0, 0}};
-    Eigen::Vector3d b {0, 0, 0};
+
+    Eigen::MatrixXd A (num_rows, 3);
+    Eigen::MatrixXd b (num_rows, 1);
+
+    for (int i = 0; i < K; i++) {
+
+        Eigen::Matrix3d R = R_k[i];
+        Eigen::Vector3d t = t_k[i];
+        Eigen::Matrix3d R_ = R_qk[i];
+        Eigen::Vector3d t_ = t_qk[i];
+
+        Eigen::Vector3d c_k = -R.transpose() * t;
+//        Eigen::Vector3d t_kq = -R_.transpose() * t_;
+        Eigen::Vector3d t_kq = t_;
+
+        Eigen::Matrix3d M_kq = I - R.transpose() * t_kq * t_kq.transpose() * R;
+
+        Eigen::MatrixXd for_b = M_kq * c_k;
+
+        A(i*3, 0) = M_kq(0, 0);
+        A(i*3, 1) = M_kq(0, 1);
+        A(i*3, 2) = M_kq(0, 2);
+        A(i*3+1, 0) = M_kq(1, 0);
+        A(i*3+1, 1) = M_kq(1, 1);
+        A(i*3+1, 2) = M_kq(1, 2);
+        A(i*3+2, 0) = M_kq(2, 0);
+        A(i*3+2, 1) = M_kq(2, 1);
+        A(i*3+2, 2) = M_kq(2, 2);
+
+        b(i*3, 0) = for_b(0, 0);
+        b(i*3+1, 0) = for_b(1, 0);
+        b(i*3+2, 0) = for_b(2, 0);
+    }
+
+    Eigen::Vector3d c_q = A.colPivHouseholderQr().solve(b);
+
+    return c_q;
+}
+
+Eigen::Vector3d pose::hypothesizeQueryTranslation (const vector<Eigen::Matrix3d> & R_k,
+                                              const vector<Eigen::Vector3d> & t_k,
+                                              const vector<Eigen::Matrix3d> & R_qk,
+                                              const vector<Eigen::Vector3d> & t_qk) {
+
+    size_t K = R_k.size();
+    int num_rows = 3 * int(K);
+
+    Eigen::Matrix3d I {{1, 0, 0},
+                       {0, 1, 0},
+                       {0, 0, 1}};
+
+    Eigen::MatrixXd A (num_rows, 3);
+    Eigen::MatrixXd b (num_rows, 1);
+
+    for (int i = 0; i < K; i++) {
+
+        Eigen::Matrix3d R = R_k[i];
+        Eigen::Vector3d t = t_k[i];
+        Eigen::Matrix3d R_ = R_qk[i];
+        Eigen::Vector3d t_ = t_qk[i];
+
+        Eigen::Vector3d c_k = -R.transpose() * t;
+
+        Eigen::Matrix3d M_kq = I - t_ * t_.transpose();
+
+        Eigen::MatrixXd for_b = M_kq * R_ * t;
+
+        A(i*3, 0) = M_kq(0, 0);
+        A(i*3, 1) = M_kq(0, 1);
+        A(i*3, 2) = M_kq(0, 2);
+        A(i*3+1, 0) = M_kq(1, 0);
+        A(i*3+1, 1) = M_kq(1, 1);
+        A(i*3+1, 2) = M_kq(1, 2);
+        A(i*3+2, 0) = M_kq(2, 0);
+        A(i*3+2, 1) = M_kq(2, 1);
+        A(i*3+2, 2) = M_kq(2, 2);
+
+        b(i*3, 0) = for_b(0, 0);
+        b(i*3+1, 0) = for_b(1, 0);
+        b(i*3+2, 0) = for_b(2, 0);
+    }
+
+    Eigen::Vector3d t_q = A.colPivHouseholderQr().solve(b);
+
+    return t_q;
+}
+
+Eigen::Vector3d pose::hypothesizeQueryCenter_GOV (const Eigen::Matrix3d & R_q,
+        const vector<Eigen::Matrix3d> & R_k,
+                                              const vector<Eigen::Vector3d> & t_k,
+                                              const vector<Eigen::Matrix3d> & R_qk,
+                                              const vector<Eigen::Vector3d> & t_qk) {
+
+    size_t K = R_k.size();
+    int num_rows = 3 * int(K);
+
+    Eigen::Matrix3d I {{1, 0, 0},
+                       {0, 1, 0},
+                       {0, 0, 1}};
+
+    Eigen::MatrixXd A (num_rows, 3);
+    Eigen::MatrixXd b (num_rows, 1);
+
+    Eigen::MatrixXd C (num_rows, 3);
+    Eigen::MatrixXd d (num_rows, 1);
 
 
     for (int i = 0; i < K; i++) {
@@ -359,12 +511,61 @@ Eigen::Vector3d pose::hypothesizeQueryCenter (const vector<Eigen::Matrix3d> & R_
 
         Eigen::Matrix3d M_kq = I - R.transpose() * t_kq * t_kq.transpose() * R;
 
-        A += M_kq;
-        b += M_kq * c_k;
+        Eigen::MatrixXd for_b = M_kq * c_k;
+
+        Eigen::Matrix3d t_cross {{0,               -t_kq(2), t_kq(1)},
+                                 {t_kq(2),  0,              -t_kq(0)},
+                                 {-t_kq(1), t_kq(0),               0}};
+        Eigen::Matrix3d N_kq = t_cross * R;
+
+        Eigen::Matrix<double,3,3> R12 = R_qk[i].transpose();
+        Eigen::Matrix<double,3,1> T12 = - R12 * t_qk[i];
+
+        Eigen::MatrixXd t_ij_x(3,3);
+        t_ij_x.setZero();
+        t_ij_x(0,1) = -T12(2,0); t_ij_x(1,0) = T12(2,0);
+        t_ij_x(0,2) = T12(1,0); t_ij_x(2,0) = -T12(1,0);
+        t_ij_x(1,2) = -T12(0,0); t_ij_x(2,1) = T12(0,0);
+//        Eigen::Matrix3d N_kq = R.transpose() * t_cross.transpose() * t_cross * R;
+
+
+        Eigen::MatrixXd for_d = N_kq * c_k;
+
+//        Eigen::Matrix3d squared = N_kq * N_kq.transpose();
+
+        C(i*3, 0) = N_kq(0, 0);
+        C(i*3, 1) = N_kq(0, 1);
+        C(i*3, 2) = N_kq(0, 2);
+        C(i*3+1, 0) = N_kq(1, 0);
+        C(i*3+1, 1) = N_kq(1, 1);
+        C(i*3+1, 2) = N_kq(1, 2);
+        C(i*3+2, 0) = N_kq(2, 0);
+        C(i*3+2, 1) = N_kq(2, 1);
+        C(i*3+2, 2) = N_kq(2, 2);
+
+        d(i*3, 0) = for_d(0, 0);
+        d(i*3+1, 0) = for_d(1, 0);
+        d(i*3+2, 0) = for_d(2, 0);
+
+//        A(i*3, 0) = M_kq(0, 0);
+//        A(i*3, 1) = M_kq(0, 1);
+//        A(i*3, 2) = M_kq(0, 2);
+//        A(i*3+1, 0) = M_kq(1, 0);
+//        A(i*3+1, 1) = M_kq(1, 1);
+//        A(i*3+1, 2) = M_kq(1, 2);
+//        A(i*3+2, 0) = M_kq(2, 0);
+//        A(i*3+2, 1) = M_kq(2, 1);
+//        A(i*3+2, 2) = M_kq(2, 2);
+//
+//        b(i*3, 0) = for_b(0, 0);
+//        b(i*3+1, 0) = for_b(1, 0);
+//        b(i*3+2, 0) = for_b(2, 0);
     }
 
-    Eigen::Vector3d c_q = A.colPivHouseholderQr().solve(b);
-    return c_q;
+//    Eigen::Vector3d c_q = A.colPivHouseholderQr().solve(b);
+    Eigen::Vector3d c_q_gov = C.colPivHouseholderQr().solve(d);
+
+    return c_q_gov;
 }
 
 Eigen::Vector3d pose::hypothesizeQueryCenterRANSAC (const double & inlier_thresh,
@@ -487,6 +688,8 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
         const vector<Eigen::Vector3d> & t_k,
         const vector<Eigen::Matrix3d> & R_qk,
         const vector<Eigen::Vector3d> & t_qk,
+        const vector<Eigen::Matrix3d> & R_kq,
+        const vector<Eigen::Vector3d> & t_kq,
         const Eigen::Vector3d & c_q,
         const Eigen::Matrix3d & R_q) {
 
@@ -495,6 +698,8 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
     vector<Eigen::Vector3d> best_t;
     vector<Eigen::Matrix3d> best_R_;
     vector<Eigen::Vector3d> best_t_;
+    vector<Eigen::Matrix3d> best_R_kq;
+    vector<Eigen::Vector3d> best_t_kq;
     Eigen::Vector3d best_T_q;
     Eigen::Matrix3d best_R_q;
     double best_total_spread = 0;
@@ -506,29 +711,31 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
             vector<Eigen::Vector3d> t{t_k[i], t_k[j]};
             vector<Eigen::Matrix3d> R_{R_qk[i], R_qk[j]};
             vector<Eigen::Vector3d> t_{t_qk[i], t_qk[j]};
+            vector<Eigen::Matrix3d> R_kq_{R_kq[i], R_kq[j]};
+            vector<Eigen::Vector3d> t_kq_{t_kq[i], t_kq[j]};
             vector<int> indices{i, j};
             double total_spread = 0;
 
             Eigen::Matrix3d R_hyp = pose::rotationAverage(vector<Eigen::Matrix3d>{R_qk[i] * R_k[i], R_qk[j] * R_k[j]});
 
-            Eigen::Vector3d c_hyp = hypothesizeQueryCenter(R, t, R_, t_);
-
-//            Eigen::Matrix3d R_hyp = pose::hypothesizeQueryRotation(c_hyp, R_avg, R, t, R_, t_);
+            Eigen::Vector3d c_hyp = hypothesizeQueryCenter(R, t, R_, t_kq_);
 
             for (int k = 0; k < K; k++) {
                 if (k != i && k != j) {
 
-                    Eigen::Matrix3d R_qk_real = R_hyp * R_k[k].transpose();
+                    Eigen::Matrix3d R_qk_real =  R_hyp * R_k[k].transpose();
                     Eigen::Vector3d t_qk_real = -R_qk_real * (R_k[k] * c_hyp + t_k[k]);
 
                     double r_dist = functions::rotationDifference(R_qk_real, R_qk[k]);
                     double t_dist = functions::getAngleBetween(t_qk_real, t_qk[k]);
 
-                    if (t_dist <= t_thresh && r_dist <= r_thresh) {
+                    if (t_dist <= t_thresh) {
                         R.push_back(R_k[k]);
                         t.push_back(t_k[k]);
                         R_.push_back(R_qk[k]);
                         t_.push_back(t_qk[k]);
+                        R_kq_.push_back(R_kq[k]);
+                        t_kq_.push_back(t_kq[k]);
                         indices.push_back(k);
                         total_spread += t_dist + r_dist;
                     }
@@ -539,6 +746,8 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
                 best_t = t;
                 best_R_ = R_;
                 best_t_ = t_;
+                best_R_kq = R_kq_;
+                best_t_kq = t_kq_;
                 best_indices = indices;
                 best_total_spread = total_spread;
                 best_R_q = R_hyp;
@@ -558,7 +767,9 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
 //        }
 //    }
 
-    Eigen::Vector3d c_q_calc = hypothesizeQueryCenter(best_R, best_t, best_R_, best_t_);
+    Eigen::Vector3d c_q_calc = hypothesizeQueryCenter(best_R, best_t, best_R_, best_t_kq);
+
+    Eigen::Vector3d c_q_calc_old = hypothesizeQueryCenterOld(best_R, best_t, best_R_, best_t_);
 
     Eigen::Vector3d c = c_q_calc;
 
@@ -567,57 +778,66 @@ tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen:
     for (int i = 0; i < best_R.size(); i++) {
         rotations.emplace_back(best_R_[i] * best_R[i]);
     }
-
     Eigen::Matrix3d R_q_avg = pose::rotationAverage(rotations);
-
-    Eigen::Vector3d t_q_avg = -R_q_avg * c;
 
     Eigen::Matrix3d start = R_q_avg; //* functions::smallRandomRotationMatrix();
     Eigen::Matrix3d R_q_cf = rotation::solve_rotation(c, best_R, best_t, best_R_, best_t_);
+    Eigen::Matrix3d R_q_cf_norm = rotation::solve_rotation_with_norm(c, best_R, best_t, best_R_, best_t_);
     Eigen::Matrix3d R_q_num = hypothesizeQueryRotation(c, start, best_R, best_t, best_R_, best_t_);
-
-
-    double geom_error_cf = 0., geom_error_num = 0., geom_error_avg = 0., geom_error_gt = 0.;
-    double alg_error_cf = 0., alg_error_num = 0., alg_error_avg = 0., alg_error_gt = 0.;
-
-    for (int k = 0; k < best_R.size(); k++) {
-        Eigen::Vector3d c_k = -best_R[k].transpose() * best_t[k];
-
-        Eigen::Matrix3d R_qk_real = R_q * best_R[k].transpose();
-
-        Eigen::Vector3d t_ = -best_R_[k] * (best_R[k] * c + best_t[k]);
-        double lambda_cf = (c_k - c).transpose() * R_q_cf.transpose() * t_;
-        double lambda_num = (c_k - c).transpose() * R_q_num.transpose() * t_;
-        double lambda_avg = (c_k - c).transpose() * R_q_avg.transpose() * t_;
-        double lambda_gt = (c_k - c).transpose() * R_q.transpose() * t_;
-        geom_error_cf += pow((c_k - (c + lambda_cf * R_q_cf.transpose() * t_)).norm(), 2.);
-        geom_error_num += pow((c_k - (c + lambda_num * R_q_num.transpose() * t_)).norm(), 2.);
-        geom_error_avg += pow((c_k - (c + lambda_avg * R_q_avg.transpose() * t_)).norm(), 2.);
-        geom_error_gt += pow((c_k - (c + lambda_gt * R_q.transpose() * t_)).norm(), 2.);
-
-        alg_error_cf += pow((functions::rotationDifference(R_q_cf, best_R_[k] * best_R[k])), 2.);
-        alg_error_num += pow((functions::rotationDifference(R_q_num, best_R_[k] * best_R[k])), 2.);
-        alg_error_avg += pow((functions::rotationDifference(R_q_avg, best_R_[k] * best_R[k])), 2.);
-        alg_error_gt += pow((functions::rotationDifference(R_q, best_R_[k] * best_R[k])), 2.);
-
-    }
-
-    double d_num_cf = functions::rotationDifference(R_q_num, R_q_cf);
-    double d_avg_cf = functions::rotationDifference(R_q_cf, R_q_avg);
-
 
     Eigen::Vector3d t_q_calc = -R_q_cf * c;
 
-    Eigen::Vector3d t_q_gov = pose::GovinduTranslationAveraging(best_t, best_R_, best_t_);
+    Eigen::Vector3d t_q_avg = -R_q_avg * c;
 
-    Eigen::Vector3d c_q_gov = -R_q_avg.transpose() * t_q_gov;
+    Eigen::Vector3d t_real = -R_q * c_q;
 
-    double n = c_q.norm();
+    Eigen::Vector3d t_q_cf = pose::hypothesizeQueryTranslation(best_R, best_t, best_R_, best_t_);
 
-    double c_dist_calc = functions::getDistBetween(c_q_calc, c_q);
-    double c_dist_gov = functions::getDistBetween(c_q_gov, c_q);
+    Eigen::Vector3d t_q_gov = pose::GovinduTranslationAveraging(best_t, best_R_kq, best_t_kq);
 
-    cout << "C Dist Calc: " << c_dist_calc << ", C Dist Govindu: " << c_dist_gov << endl;
+
+//    double geom_error_cf = 0., geom_error_num = 0., geom_error_avg = 0., geom_error_gt = 0.;
+//    double alg_error_cf = 0., alg_error_num = 0., alg_error_avg = 0., alg_error_gt = 0.;
+
+//    for (int k = 0; k < best_R.size(); k++) {
+//        Eigen::Vector3d c_k = -best_R[k].transpose() * best_t[k];
+//
+//        Eigen::Matrix3d R_qk_real = R_q * best_R[k].transpose();
+//
+//        Eigen::Vector3d t_ = -best_R_[k] * (best_R[k] * c + best_t[k]);
+//        double lambda_cf = (c_k - c).transpose() * R_q_cf.transpose() * t_;
+//        double lambda_num = (c_k - c).transpose() * R_q_num.transpose() * t_;
+//        double lambda_avg = (c_k - c).transpose() * R_q_avg.transpose() * t_;
+//        double lambda_gt = (c_k - c).transpose() * R_q.transpose() * t_;
+//        geom_error_cf += pow((c_k - (c + lambda_cf * R_q_cf.transpose() * t_)).norm(), 2.);
+//        geom_error_num += pow((c_k - (c + lambda_num * R_q_num.transpose() * t_)).norm(), 2.);
+//        geom_error_avg += pow((c_k - (c + lambda_avg * R_q_avg.transpose() * t_)).norm(), 2.);
+//        geom_error_gt += pow((c_k - (c + lambda_gt * R_q.transpose() * t_)).norm(), 2.);
+//
+//        alg_error_cf += pow((functions::rotationDifference(R_q_cf, best_R_[k] * best_R[k])), 2.);
+//        alg_error_num += pow((functions::rotationDifference(R_q_num, best_R_[k] * best_R[k])), 2.);
+//        alg_error_avg += pow((functions::rotationDifference(R_q_avg, best_R_[k] * best_R[k])), 2.);
+//        alg_error_gt += pow((functions::rotationDifference(R_q, best_R_[k] * best_R[k])), 2.);
+//
+//    }
+
+    double rot_diff_cf = functions::rotationDifference(R_q, R_q_cf);
+    double rot_diff_cf_norm = functions::rotationDifference(R_q, R_q_cf_norm);
+    double rot_diff_avg = functions::rotationDifference(R_q, R_q_avg);
+
+    double dist_C_cf = functions::getDistBetween(c_q_calc, c_q);
+    double dist_C_old = functions::getDistBetween(c_q_calc_old, c_q);
+    double dist_T_cf = functions::getDistBetween(t_q_cf, t_real);
+    double dist_T_gov = functions::getDistBetween(t_q_gov, t_real);
+
+    cout
+    << "Rotation Error Closed Form: " << rot_diff_cf << endl
+    << "Rotation Error Closed Form with Normalization: " << rot_diff_cf_norm << endl
+    << "Rotation Error Averaging: " << rot_diff_avg << endl
+    << "Center Error Closed Form (kq order): " << dist_C_cf << endl
+    << "Center Error Closed Form (qk order):  " << dist_C_old << endl
+    << "Translation Error Closed Form: " << dist_T_cf << endl
+    << "Translation Error Govindu: " << dist_T_gov << endl;
 
     int stop = 0;
     return {best_T_q, best_R_q, t_q_avg, R_q_avg, t_q_calc, R_q_cf, t_q_gov, int(best_R.size()), tp, fp};
@@ -777,17 +997,17 @@ Eigen::Vector3d pose::GovinduTranslationAveraging(const vector<Eigen::Vector3d> 
     double dist_prev = 1e8;
 
     //Iterative method shown in the paper
-//    while((results_prev - results_curr).norm() > 1e-8 && dist_prev > (results_prev - results_curr).norm())
-//    {
+    while((results_prev - results_curr).norm() > 1e-8 && dist_prev > (results_prev - results_curr).norm())
+    {
         dist_prev = (results_prev - results_curr).norm();
         results_prev = results_curr;
         //Build Linear systems
         for (int i = 0; i < nImgs; i++)
         {
 
-            Eigen::Matrix<double,3,3> R12 = R_qk[i].transpose();
+            Eigen::Matrix<double,3,3> R12 = R_qk[i];
             Eigen::Matrix<double,3,1> T2 = t_k[i];
-            Eigen::Matrix<double,3,1> T12 = - R12 * t_qk[i];
+            Eigen::Matrix<double,3,1> T12 = t_qk[i];
 
             Eigen::MatrixXd t_ij_x(3,3);
             t_ij_x.setZero();
@@ -802,15 +1022,15 @@ Eigen::Vector3d pose::GovinduTranslationAveraging(const vector<Eigen::Vector3d> 
         results_curr = A.colPivHouseholderQr().solve(b);
 
         //Update weights
-//        for (int i = 0; i < nImgs; i++)
-//        {
-//            Eigen::Matrix<double,3,3> R12 = R_qk[i].transpose();
-//            Eigen::Matrix<double,3,1> T2 = t_k[i];
-//
-//            lambda[i] = 1 / ((T2 - R12 * results_curr).norm());
-//
-//        }
-//
-//    }
+        for (int i = 0; i < nImgs; i++)
+        {
+            Eigen::Matrix<double,3,3> R12 = R_qk[i];
+            Eigen::Matrix<double,3,1> T2 = t_k[i];
+
+            lambda[i] = 1 / ((T2 - R12 * results_curr).norm());
+
+        }
+
+    }
     return results_curr;
 }
