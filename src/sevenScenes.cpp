@@ -166,6 +166,76 @@ Eigen::Vector3d sevenScenes::getT(const string& image)
     }
 }
 
+Eigen::Matrix3d sevenScenes::getR_BA(const string & image) {
+
+    Eigen::Matrix3d R;
+
+    string poseFile = image + ".bundle_adjusted.pose.txt";
+    ifstream im_pose(poseFile);
+    if (im_pose.is_open()) {
+        string line;
+        int row = 0;
+        while (row < 3) {
+            getline(im_pose, line);
+            stringstream ss(line);
+            string num;
+            int col = 0;
+            while (ss >> num) {
+                if (col < 3) {
+                    R(row, col) = stod(num);
+                }
+                ++col;
+            }
+            ++row;
+        }
+        im_pose.close();
+
+        double det = R.determinant();
+        if(abs(det - 1.) > 0.00000000001) {
+            Eigen::JacobiSVD<Eigen::Matrix3d> svd (R, Eigen::ComputeFullU | Eigen::ComputeFullV);
+            R = svd.matrixU() * svd.matrixV().transpose();
+        }
+        return R;
+    } else {
+        cout << "Pose file does not exist for: " << image << endl;
+        Eigen::Matrix3d l;
+        return l;
+    }
+
+}
+
+Eigen::Vector3d sevenScenes::getT_BA(const string & image) {
+
+    Eigen::Vector3d T;
+
+    string poseFile = image + ".bundle_adjusted.pose.txt";
+    ifstream im_pose(poseFile);
+    if (im_pose.is_open()) {
+        string line;
+        int row = 0;
+        while (row < 3) {
+            getline(im_pose, line);
+            stringstream ss(line);
+            string num;
+            int col = 0;
+            while (ss >> num) {
+                if (col == 3) {
+                    T(row) = stod(num);
+                }
+                ++col;
+            }
+            ++row;
+        }
+        im_pose.close();
+        return T;
+    } else {
+        cout << "Pose file does not exist for: " << image << endl;
+        Eigen::Vector3d l;
+        return l;
+    }
+
+}
+
 bool sevenScenes::get3dfrom2d(const cv::Point2d & point_2d, const cv::Mat & depth, cv::Point3d & point_3d) {
 
     double d = depth.at<unsigned short>(point_2d);
@@ -188,11 +258,16 @@ bool sevenScenes::get3dfrom2d(const cv::Point2d & point_2d, const cv::Mat & dept
     }
 }
 
-void sevenScenes::getAbsolutePose(const string& image, Eigen::Matrix3d &R_wi, Eigen::Vector3d &t_wi) {
-    Eigen::Matrix3d R_iw = sevenScenes::getR(image);
-    Eigen::Vector3d t_iw = sevenScenes::getT(image);
-    R_wi = R_iw.transpose();
-    t_wi = -R_wi * t_iw;
+void sevenScenes::getAbsolutePose(const string& image, Eigen::Matrix3d &R_iw, Eigen::Vector3d & T_iw) {
+    Eigen::Matrix3d R_wi = sevenScenes::getR(image);
+    Eigen::Vector3d T_wi = sevenScenes::getT(image);
+    R_iw = R_wi.transpose();
+    T_iw = -R_iw * T_wi;
+}
+
+void sevenScenes::getAbsolutePose_BA(const string& image, Eigen::Matrix3d & R_iw, Eigen::Vector3d & T_iw) {
+    R_iw = sevenScenes::getR_BA(image);
+    T_iw = sevenScenes::getT_BA(image);
 }
 
 

@@ -843,18 +843,4 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
   /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video.hpp \
   /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/5point/5point.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/defines.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/image.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/bmp.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/color.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/transform.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/5point/poly1.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/5point/poly3.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/qsort.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.h \
-  /Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.h
+  /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video/background_segm.hpp

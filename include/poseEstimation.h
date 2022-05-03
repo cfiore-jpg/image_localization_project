@@ -24,70 +24,68 @@
 
 namespace pose {
 
-    pair<vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>> bundleAdjust (double K[4], const vector<string> & anchors);
+    /// BUNDLE ADJUSTMENT
+    void sceneBundleAdjust(int num_ims, const double K[4],
+                           const string &folder, const string &scene, const string &sequence, const string &frame,
+                           const string &pose_ext, const string &rgb_ext);
 
-    Eigen::Vector3d hypothesizeQueryCenterOld (const vector<Eigen::Matrix3d> & R_k,
-                                                     const vector<Eigen::Vector3d> & t_k,
-                                                     const vector<Eigen::Matrix3d> & R_qk,
-                                                     const vector<Eigen::Vector3d> & t_qk);
 
-    Eigen::Vector3d hypothesizeQueryCenter (const vector<Eigen::Matrix3d> &R_k,
-                                           const vector<Eigen::Vector3d> &t_k,
-                                           const vector<Eigen::Matrix3d> &R_qk,
-                                           const vector<Eigen::Vector3d> &t_qk);
+    /// PERFORMANCE TESTING
+    double averageReprojectionError(const double K[4], const string &query, const Eigen::Matrix3d &R_q,
+                                    const Eigen::Vector3d &T_q,
+                                    const vector<string> &anchors, const vector<Eigen::Matrix3d> &R_ks,
+                                    const vector<Eigen::Vector3d> &T_ks);
 
-    Eigen::Vector3d hypothesizeQueryTranslation (const vector<Eigen::Matrix3d> & R_k,
-                                                       const vector<Eigen::Vector3d> & t_k,
-                                                       const vector<Eigen::Matrix3d> & R_qk,
-                                                       const vector<Eigen::Vector3d> & t_qk);
+    double tripletCircles(const double K[4], const vector<pair<cv::Mat, vector<cv::KeyPoint>>> & desc_kp_anchors);
 
-    Eigen::Vector3d hypothesizeQueryCenter_GOV (const Eigen::Matrix3d & R_q,
-                                                const vector<Eigen::Matrix3d> & R_k,
-                                                      const vector<Eigen::Vector3d> & t_k,
-                                                      const vector<Eigen::Matrix3d> & R_qk,
-                                                      const vector<Eigen::Vector3d> & t_qk);
 
-    Eigen::Vector3d hypothesizeQueryCenterRANSAC (const double & inlier_thresh,
-                                                  vector<Eigen::Matrix3d> & R_k,
-                                                  vector<Eigen::Vector3d> & t_k,
-                                                  vector<Eigen::Matrix3d> & R_qk,
-                                                  vector<Eigen::Vector3d> & t_qk,
-                                                  vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points);
+    /// CENTER HYPOTHESIS
+    Eigen::Vector3d c_q_closed_form(const vector<Eigen::Matrix3d> &R_ks,
+                                    const vector<Eigen::Vector3d> &T_ks,
+                                    const vector<Eigen::Matrix3d> &R_qks,
+                                    const vector<Eigen::Vector3d> &T_qks);
 
-    Eigen::Matrix3d hypothesizeQueryRotation (const Eigen::Vector3d & c_q,
-                                              const Eigen::Matrix3d & R_q,
-                                              const vector<Eigen::Matrix3d> & R_k,
-                                              const vector<Eigen::Vector3d> & t_k,
-                                              const vector<Eigen::Matrix3d> & R_qk,
-                                              const vector<Eigen::Vector3d> &t_qk);
 
-    tuple<Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d, int, double, double> hypothesizeRANSAC (
-            const double & t_thresh,
-            const double & r_thresh,
-            const vector<int> & mask,
-            const vector<Eigen::Matrix3d> & R_k,
-            const vector<Eigen::Vector3d> & t_k,
-            const vector<Eigen::Matrix3d> & R_qk,
-            const vector<Eigen::Vector3d> & t_qk,
-            const vector<Eigen::Matrix3d> & R_kq,
-            const vector<Eigen::Vector3d> & t_kq,
-            const Eigen::Vector3d & c_q,
-            const Eigen::Matrix3d & R_q);
+    //// TRANSLATION HYPOTHESIS
+    Eigen::Vector3d T_q_govindu(const vector<Eigen::Vector3d> &T_ks,
+                                const vector<Eigen::Matrix3d> &R_qks,
+                                const vector<Eigen::Vector3d> &T_qks);
 
-    void adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
-                           const vector<Eigen::Vector3d> & T_k,
-                           const vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points,
-                           const double & error_thresh,
-                           const double * K,
-                           Eigen::Matrix3d & R_q,
-                           Eigen::Vector3d & T_q);
+    Eigen::Vector3d T_q_closed_form(const vector<Eigen::Matrix3d> &R_ks,
+                                    const vector<Eigen::Vector3d> &T_ks,
+                                    const vector<Eigen::Matrix3d> &R_qks,
+                                    const vector<Eigen::Vector3d> &T_qks);
 
+
+    //// ROTATION HYPOTHESIS
     template<typename DataType, typename ForwardIterator>
     Eigen::Quaternion<DataType> averageQuaternions(ForwardIterator const &begin, ForwardIterator const &end);
 
-    Eigen::Matrix3d rotationAverage(const vector<Eigen::Matrix3d> &rotations);
+    Eigen::Matrix3d R_q_average(const vector<Eigen::Matrix3d> &rotations);
 
-    Eigen::Vector3d GovinduTranslationAveraging(const vector<Eigen::Vector3d> & t_k,
-                                                const vector<Eigen::Matrix3d> & R_qk,
-                                                const vector<Eigen::Vector3d> & t_qk);
+    Eigen::Matrix3d R_q_closed_form(bool use_Rqk, bool normalize,
+                                    const Eigen::Vector3d &c_q,
+                                    const vector<Eigen::Matrix3d> &R_ks,
+                                    const vector<Eigen::Vector3d> &T_ks,
+                                    const vector<Eigen::Matrix3d> &R_qks,
+                                    const vector<Eigen::Vector3d> &T_qks);
+
+
+    //// RANSAC
+    tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, vector<int>>
+    hypothesizeRANSAC(double threshold,
+                      const vector<Eigen::Matrix3d> & R_ks,
+                      const vector<Eigen::Vector3d> & T_ks,
+                      const vector<Eigen::Matrix3d> & R_qks,
+                      const vector<Eigen::Vector3d> & T_qks);
+
+
+    //// FINAL POSE ADJUSTMENT
+    void adjustHypothesis(const vector<Eigen::Matrix3d> &R_k,
+                          const vector<Eigen::Vector3d> &T_k,
+                          const vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> &all_points,
+                          const double &error_thresh,
+                          const double *K,
+                          Eigen::Matrix3d &R_q,
+                          Eigen::Vector3d &T_q);
 }

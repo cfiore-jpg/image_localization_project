@@ -22,18 +22,30 @@ using namespace std;
 
 namespace rotation {
 
-    Eigen::Matrix3d solve_rotation(const Eigen::Vector3d & c_q,
-                                   const vector<Eigen::Matrix3d> & R_k,
-                                   const vector<Eigen::Vector3d> & t_k,
-                                   const vector<Eigen::Matrix3d> & R_qk,
-                                   const vector<Eigen::Vector3d> & t_qk);
+    Eigen::Matrix3d optimal_rotation_using_R_qks(const Eigen::Vector3d &c_q,
+                                                 const vector<Eigen::Matrix3d> &R_ks,
+                                                 const vector<Eigen::Vector3d> &T_ks,
+                                                 const vector<Eigen::Matrix3d> &R_qks,
+                                                 const vector<Eigen::Vector3d> &T_qks);
 
-    Eigen::Matrix3d solve_rotation_with_norm(const Eigen::Vector3d & c_q,
-                                                       const vector<Eigen::Matrix3d> & R_k,
-                                                       const vector<Eigen::Vector3d> & t_k,
-                                                       const vector<Eigen::Matrix3d> & R_qk,
-                                                       const vector<Eigen::Vector3d> & t_qk);
+    Eigen::Matrix3d optimal_rotation_using_T_qks(const Eigen::Vector3d &c_q,
+                                                 const vector<Eigen::Matrix3d> &R_ks,
+                                                 const vector<Eigen::Vector3d> &T_ks,
+                                                 const vector<Eigen::Matrix3d> &R_qks,
+                                                 const vector<Eigen::Vector3d> &T_qks);
 
-    Eigen::MatrixXcd solver_problem_averageRQuatMetric_red(const Eigen::VectorXd& data);
+    Eigen::Matrix3d NORM_optimal_rotation_using_R_qks(const Eigen::Vector3d &c_q,
+                                                      const vector<Eigen::Matrix3d> &R_ks,
+                                                      const vector<Eigen::Vector3d> &T_ks,
+                                                      const vector<Eigen::Matrix3d> &R_qks,
+                                                      const vector<Eigen::Vector3d> &T_qks);
+
+    Eigen::Matrix3d NORM_optimal_rotation_using_T_qks(const Eigen::Vector3d &c_q,
+                                                      const vector<Eigen::Matrix3d> &R_ks,
+                                                      const vector<Eigen::Vector3d> &T_ks,
+                                                      const vector<Eigen::Matrix3d> &R_qks,
+                                                      const vector<Eigen::Vector3d> &T_qks);
+
+    Eigen::MatrixXcd solver_problem_averageRQuatMetric_red(const Eigen::VectorXd &data);
 
 }

@@ -17,16 +17,15 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/calib3d.hpp>
 #include <opencv2/xfeatures2d.hpp>
-#include "5point.h"
-#include "defines.h"
-#include "fmatrix.h"
-#include "poly1.h"
-#include "poly3.h"
-#include "matrix.h"
-#include "qsort.h"
-#include "svd.h"
-#include "triangulate.h"
-#include "vector.h"
+//#include "defines.h"
+//#include "fmatrix.h"
+//#include "poly1.h"
+//#include "poly3.h"
+//#include "matrix.h"
+//#include "qsort.h"
+//#include "svd.h"
+//#include "triangulate.h"
+//#include "vector.h"
 
 #define PI 3.1415926536
 #define FOLDER "/Users/cameronfiore/C++/image_localization_project/data/"
@@ -34,15 +33,21 @@
 using namespace std;
 using namespace cv;
 
-Eigen::Matrix3d functions::smallRandomRotationMatrix() {
+Eigen::Matrix3d functions::smallRandomRotationMatrix(double s) {
 
         random_device generator;
+//        default_random_engine engine;
+//        engine.seed(1);
         uniform_real_distribution<double> uniform (0., 2*PI);
-        normal_distribution<double> gaussian (0., PI/4.);
+        normal_distribution<double> gaussian (0., s);
 
         double alpha = uniform(generator);
         double beta = uniform(generator);
         double gamma = gaussian(generator);
+//
+//        double alpha = uniform(engine);
+//        double beta = uniform(engine);
+//        double gamma = gaussian(engine);
 
         double z = sin(alpha);
         double h = abs(cos(alpha));
@@ -62,182 +67,6 @@ Eigen::Matrix3d functions::smallRandomRotationMatrix() {
         double d = r.determinant();
 
         return r;
-}
-
-void functions::compute_pose_from_points(const vector<cv::Point2d> & pts_l, const vector<cv::Point2d> & pts_r,
-                                         const Eigen::Matrix3d & K, Eigen::Matrix3d & R, Eigen::Vector3d & T) {
-
-    v2_t pts1[pts_l.size()];
-    v2_t pts2[pts_r.size()];
-
-    //Transfer types for bundler
-    for (int i = 0; i < pts_l.size(); i++)
-    {
-        v2_t p1;
-        p1.p[0] = pts_r[i].x;
-        p1.p[1] = pts_r[i].y;
-        pts1[i] = p1;
-
-        v2_t p2;
-        p2.p[0] = pts_l[i].x;
-        p2.p[1] = pts_l[i].y;
-        pts2[i] = p2;
-    }
-
-    double Rout_qk[9];
-    double Rout_kq[9];
-    double Tout_qk[3];
-    double Tout_kq[3];
-
-    double bundler_K[9] = {K(0,0), 0., K(0,2),
-                           0., K(1,1), K(1,2),
-                           0., 0., 1.};
-
-    int numInliers_qk = compute_pose_ransac(int (pts_l.size()),pts1,pts2,bundler_K,bundler_K,3.,5000,Rout_qk,Tout_qk);
-    int numInliers_kq = compute_pose_ransac(int (pts_l.size()),pts2,pts1,bundler_K,bundler_K,3.,5000,Rout_kq,Tout_kq);
-
-    Eigen::Matrix3d R_qk_calc_bun, R_kq_calc_bun;
-    Eigen::Vector3d t_qk_calc_bun, t_kq_calc_bun;
-
-    R_qk_calc_bun(0,0) = Rout_qk[0];
-    R_qk_calc_bun(0,1) = Rout_qk[1];
-    R_qk_calc_bun(0,2) = -Rout_qk[2];
-    R_qk_calc_bun(1,0) = Rout_qk[3];
-    R_qk_calc_bun(1,1) = Rout_qk[4];
-    R_qk_calc_bun(1,2) = -Rout_qk[5];
-    R_qk_calc_bun(2,0) = -Rout_qk[6];
-    R_qk_calc_bun(2,1) = -Rout_qk[7];
-    R_qk_calc_bun(2,2) = Rout_qk[8];
-
-    t_qk_calc_bun(0) = Tout_qk[0];
-    t_qk_calc_bun(1) = Tout_qk[1];
-    t_qk_calc_bun(2) = -Tout_qk[2];
-
-    R_kq_calc_bun(0,0) = Rout_kq[0];
-    R_kq_calc_bun(0,1) = Rout_kq[1];
-    R_kq_calc_bun(0,2) = -Rout_kq[2];
-    R_kq_calc_bun(1,0) = Rout_kq[3];
-    R_kq_calc_bun(1,1) = Rout_kq[4];
-    R_kq_calc_bun(1,2) = -Rout_kq[5];
-    R_kq_calc_bun(2,0) = -Rout_kq[6];
-    R_kq_calc_bun(2,1) = -Rout_kq[7];
-    R_kq_calc_bun(2,2) = Rout_kq[8];
-
-    t_kq_calc_bun(0) = Tout_kq[0];
-    t_kq_calc_bun(1) = Tout_kq[1];
-    t_kq_calc_bun(2) = -Tout_kq[2];
-
-    auto inlier_pts = functions::same_inliers(pts_l, pts_r, R_qk_calc_bun, t_qk_calc_bun, R_kq_calc_bun, t_kq_calc_bun, K);
-
-
-
-    int n = int (inlier_pts.first.size());
-    v2_t inlier_pts_r[inlier_pts.first.size()], inlier_pts_l[inlier_pts.first.size()];
-
-    //Transfer types for bundler
-    for (int i = 0; i < n; i++)
-    {
-        v2_t pr;
-        pr.p[0] = inlier_pts.second[i].x;
-        pr.p[1] = inlier_pts.second[i].y;
-        inlier_pts_r[i] = pr;
-
-        v2_t pl;
-        pl.p[0] = inlier_pts.first[i].x;
-        pl.p[1] = inlier_pts.first[i].y;
-        inlier_pts_l[i] = pl;
-    }
-
-    v2_t r_pts_norm[inlier_pts.first.size()], l_pts_norm[inlier_pts.first.size()];
-
-    double K_inv[9];
-    matrix_invert(3, bundler_K, K_inv);
-
-    for (int i = 0; i < n; i++) {
-        double r[3] = { Vx(inlier_pts_r[i]), Vy(inlier_pts_r[i]), 1.0 };
-        double l[3] = { Vx(inlier_pts_l[i]), Vy(inlier_pts_l[i]), 1.0 };
-
-        double r_norm[3], l_norm[3];
-
-        matrix_product331(K_inv, r, r_norm);
-        matrix_product331(K_inv, l, l_norm);
-
-        r_pts_norm[i] = v2_new(-r_norm[0], -r_norm[1]);
-        l_pts_norm[i] = v2_new(-l_norm[0], -l_norm[1]);
-
-        cout << "(" << r_pts_norm[i].p[0] << ", " << r_pts_norm[i].p[1] << "), (" << l_pts_norm[i].p[0] << ", " << l_pts_norm[i].p[1] << ")" << endl;
-    }
-
-    int num_hyp;
-    double E[90];
-    generate_Ematrix_hypotheses(n, r_pts_norm, l_pts_norm, &num_hyp, E);
-
-//    for (int i = 0; i < num_hyp; i++) {
-//        for (int j = 0; j < 3; j++) {
-//                cout << E[9*i+3*j] << ", " << E[9*i+3*j+1] << ", " << E[9*i+3*j+2] << endl;
-//        }
-//        cout << endl;
-//    }
-
-    int max_inliers = 0;
-    double min_score = DBL_MAX;
-    double E_best[9];
-    for (int i = 0; i < num_hyp; i++) {
-        int best_inlier;
-        double score = 0.0;
-
-        double E2[9], tmp[9], F[9];
-        memcpy(E2, E + 9 * i, 9 * sizeof(double));
-        E2[0] = -E2[0];
-        E2[1] = -E2[1];
-        E2[3] = -E2[3];
-        E2[4] = -E2[4];
-        E2[8] = -E2[8];
-
-        matrix_transpose_product(3, 3, 3, 3, K_inv, E2, tmp);
-        matrix_product(3, 3, 3, 3, tmp, K_inv, F);
-
-        int inliers = evaluate_Ematrix(n, inlier_pts_r, inlier_pts_l, // r_pts_norm, l_pts_norm,
-                                   9.0, F, // E + 9 * i,
-                                   &best_inlier, &score);
-
-        if (inliers > max_inliers ||
-            (inliers == max_inliers && score < min_score)) {
-            max_inliers = inliers;
-            min_score = score;
-            memcpy(E_best, E + 9 * i, sizeof(double) * 9);
-        }
-    }
-
-    if (max_inliers > 0) {
-        int best_inlier;
-        double score;
-        // find_extrinsics_essential(E_best, r_best, l_best, R_out, t_out);
-        double Rout[9];
-        double Tout[3];
-        int success = find_extrinsics_essential_multipt(E_best, n,
-                                                  r_pts_norm, l_pts_norm,
-                                                  Rout, Tout);
-        R(0,0) = Rout[0];
-        R(0,1) = Rout[1];
-        R(0,2) = -Rout[2];
-        R(1,0) = Rout[3];
-        R(1,1) = Rout[4];
-        R(1,2) = -Rout[5];
-        R(2,0) = -Rout[6];
-        R(2,1) = -Rout[7];
-        R(2,2) = Rout[8];
-
-        T(0) = Tout[0];
-        T(1) = Tout[1];
-        T(2) = -Tout[2];
-
-    }
-
-
-    int x = 0;
-
-
 }
 
 pair<vector<cv::Point2d>, vector<cv::Point2d>> functions::same_inliers(
@@ -268,7 +97,7 @@ pair<vector<cv::Point2d>, vector<cv::Point2d>> functions::same_inliers(
         double dist = abs(epiline(0) * pt_q(0) + epiline(1) * pt_q(1) + epiline(2)) /
                       sqrt(epiline(0) * epiline(0) + epiline(1) * epiline(1));
 
-        if (dist <= 3.0) {
+        if (dist <= .1) {
             pts_q_inliers_qk.push_back(pts_q[i]);
             pts_db_inliers_qk.push_back(pts_db[i]);
         }
@@ -294,7 +123,7 @@ pair<vector<cv::Point2d>, vector<cv::Point2d>> functions::same_inliers(
         double dist = abs(epiline(0) * pt_db(0) + epiline(1) * pt_db(1) + epiline(2)) /
                       sqrt(epiline(0) * epiline(0) + epiline(1) * epiline(1));
 
-        if (dist <= 3.0) {
+        if (dist <= .1) {
             pts_q_inliers_kq.push_back(pts_q[i]);
             pts_db_inliers_kq.push_back(pts_db[i]);
         }
@@ -375,7 +204,7 @@ double functions::getAngleBetween(const Eigen::Vector3d &d1, const Eigen::Vector
     double d1_norm = d1.norm();
     double d2_norm = d2.norm();
     double frac = dot / (d1_norm * d2_norm);
-    if ((frac - 1.) > 0. && (frac - 1.) < 0.0000000000000010) frac = 1.;
+    if (abs(frac) > 1. && abs(frac) < 1.0000000001) frac = round(frac);
     double rad = acos(frac);
     return rad * 180.0 / PI;
 }
@@ -384,7 +213,7 @@ double functions::rotationDifference(const Eigen::Matrix3d & r1, const Eigen::Ma
 
     Eigen::Matrix3d R12 = r1 * r2.transpose();
     double trace = R12.trace();
-    if (trace > 3.) trace = 3.;
+    if (trace > 3. && trace < 3.0000000001) trace = 3.;
     double theta = acos((trace-1.)/2.);
     theta = theta * 180. / PI;
     return theta;
@@ -418,7 +247,66 @@ vector<double> functions::getReprojectionErrors(const vector<cv::Point2d> & pts_
     return to_return;
 }
 
-bool functions::findMatches(const string &db_image, const string & ext, const string &query_image, const string &method, double ratio,
+pair<cv::Mat, vector<cv::KeyPoint>> functions::getDescriptors(const string & image, const string & ext, const string & method) {
+
+    vector<KeyPoint> kp_vec;
+    Mat desc;
+    if (method == "ORB") {
+        Ptr<ORB> orb = ORB::create();
+        cv::UMat image_U, gray;
+        imread(image + ext, IMREAD_COLOR).copyTo(image_U);
+        cvtColor(image_U, gray, COLOR_RGB2GRAY);
+        orb->detectAndCompute(gray, Mat(), kp_vec, desc);
+    } else if (method == "SURF") {
+        Ptr<xfeatures2d::SURF> surf = xfeatures2d::SURF::create(400, 4, 2, false);
+        cv::UMat image_U, gray;
+        imread(image + ext, IMREAD_COLOR).copyTo(image_U);
+        cvtColor(image_U, gray, COLOR_RGB2GRAY);
+        surf->detectAndCompute(gray, Mat(), kp_vec, desc);
+    } else if (method == "SIFT") {
+        Ptr<SIFT> sift = SIFT::create();
+        Mat image_m = imread(image + ext);
+        sift->detectAndCompute(image_m, Mat(), kp_vec, desc);
+    } else {
+        cout << "Not a valid method for feature matching..." << endl;
+        exit(1);
+    }
+
+    return {desc, kp_vec};
+}
+
+bool functions::findMatches(double ratio,
+                 const cv::Mat & desc_i, const vector<cv::KeyPoint> & kp_i,
+                 const cv::Mat & desc_q, const vector<cv::KeyPoint> & kp_q,
+                 vector<cv::Point2d> & pts_i, vector<cv::Point2d> & pts_q) {
+
+    auto matcher = BFMatcher::create(NORM_L2, false);
+    vector< vector<DMatch> > matches_2nn_qi, matches_2nn_iq;
+    matcher->knnMatch(desc_q, desc_i, matches_2nn_qi, 2);
+    matcher->knnMatch(desc_i, desc_q, matches_2nn_iq, 2);
+
+    vector<Point2d> selected_points_q, selected_points_i;
+    for (const auto & match_qi : matches_2nn_qi) {
+        if(match_qi[0].distance/match_qi[1].distance < ratio and
+        matches_2nn_iq[match_qi[0].trainIdx][0].distance / matches_2nn_iq[match_qi[0].trainIdx][1].distance < ratio) {
+            if(matches_2nn_iq[match_qi[0].trainIdx][0].trainIdx == match_qi[0].queryIdx) {
+                selected_points_q.push_back(kp_q[match_qi[0].queryIdx].pt);
+                selected_points_i.push_back(kp_i[matches_2nn_iq[match_qi[0].trainIdx][0].queryIdx].pt);
+            }
+        }
+    }
+
+    pts_i = selected_points_i;
+    pts_q = selected_points_q;
+
+    if (pts_i.empty()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool functions::findMatches(const string &db_image, const string &query_image, const string & ext, const string &method, double ratio,
                              vector<Point2d> &pts_db, vector<Point2d> &pts_query) {
 
 
@@ -485,26 +373,14 @@ bool functions::findMatches(const string &db_image, const string & ext, const st
         }
     }
 
-//    cv::Mat src;
-//    Mat image1 = imread(query_image + ext);
-//    Mat image2 = imread(db_image + ext);
-//    cv::hconcat(image1, image2, src);
-//    for(int i = 0; i < selected_points1.size(); i++) {
-//        cv::line( src, selected_points1[i],
-//                  cv::Point2d(selected_points2[i].x + image1.cols, selected_points2[i].y),
-//                  1, 1, 0 );
-//    }
-//    cv::imshow("Match Results", src);
-//    cv::waitKey(0);
-
     pts_query = selected_points1;
     pts_db = selected_points2;
 
     if (pts_db.empty()) {
         return false;
-    } else {
-        return true;
     }
+
+    return true;
 }
 
 bool functions::findMatchesSorted(const string &db_image, const string & ext, const string &query_image, const string &method, double ratio,
@@ -635,74 +511,49 @@ int functions::getRelativePose(const string & db_image, const string & ext, cons
 
 bool functions::getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, const double * K,
                                Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq) {
-    Mat mask;
-    Mat K_mat = (Mat_<double>(3, 3) <<
-                                    K[0], 0., K[2],
-            0., K[1], K[3],
-            0., 0., 1.);
+    try {
+        Mat mask;
+        Mat K_mat = (Mat_<double>(3, 3) << K[0], 0., K[2], 0., K[1], K[3], 0., 0., 1.);
 
-    Mat E_qk_sols = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.9999999999999, 3.0, mask);
+        Mat E_qk_sols = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.99999999, 3.0, mask);
+        Mat E_qk = E_qk_sols(cv::Range(0, 3), cv::Range(0, 3));
 
-    Mat E_qk = E_qk_sols(cv::Range(0, 3), cv::Range(0, 3));
-
-    vector<Point2d> inlier_db_points, inlier_q_points;
-    for (int i = 0; i < mask.rows; i++) {
-        if (mask.at<unsigned char>(i)) {
-            inlier_db_points.push_back(pts_db[i]);
-            inlier_q_points.push_back(pts_q[i]);
+        vector<Point2d> inlier_db_points, inlier_q_points;
+        for (int i = 0; i < mask.rows; i++) {
+            if (mask.at<unsigned char>(i)) {
+                inlier_db_points.push_back(pts_db[i]);
+                inlier_q_points.push_back(pts_q[i]);
+            }
         }
-    }
 
+        mask.release();
+        Mat R, t;
+        recoverPose(E_qk, inlier_db_points, inlier_q_points, K_mat, R, t, mask);
 
-    Eigen::Matrix3d K_eig{{K[0], 0.,   K[2]},
-                          {0.,   K[1], K[3]},
-                          {0.,   0.,   1.}};
-
-//    Eigen::Matrix3d E_eig;
-//    cv::cv2eigen(E_qk, E_eig);
-//
-//    int num_points = 0;
-//
-//    for (int i = 0; i < inlier_db_points.size(); i++) {
-//
-//        Eigen::Vector3d pt_db{inlier_db_points[i].x, inlier_db_points[i].y, 1.};
-//        Eigen::Vector3d pt_q{inlier_q_points[i].x, inlier_q_points[i].y, 1.};
-//
-//        double d = pt_q.transpose() * K_eig.inverse().transpose() * E_eig * K_eig.inverse() * pt_db;
-//
-//        if (abs(d) <= 0.00000000001) {
-//            num_points++;
-//        }
-//    }
-
-    mask.release();
-    Mat R, t;
-    recoverPose(E_qk, inlier_db_points, inlier_q_points, K_mat, R, t, mask);
-
-    vector<Point2d> recover_db_points, recover_q_points;
-    for (int i = 0; i < mask.rows; i++) {
-        if (mask.at<unsigned char>(i)) {
-            recover_db_points.push_back(inlier_db_points[i]);
-            recover_q_points.push_back(inlier_q_points[i]);
+        vector<Point2d> recover_db_points, recover_q_points;
+        for (int i = 0; i < mask.rows; i++) {
+            if (mask.at<unsigned char>(i)) {
+                recover_db_points.push_back(inlier_db_points[i]);
+                recover_q_points.push_back(inlier_q_points[i]);
+            }
         }
+
+        cv2eigen(R, R_kq);
+        cv2eigen(t, t_kq);
+
+        pts_db = recover_db_points;
+        pts_q = recover_q_points;
+        return true;
+    } catch (...) {
+        return false;
     }
-
-    cv2eigen(R, R_kq);
-    cv2eigen(t, t_kq);
-
-    pts_db = recover_db_points;
-    pts_q = recover_q_points;
-    return true;
-//    } catch (...) {
-//        return false;
-//    }
 }
 
 int functions::getRelativePose3D(const string &db_image, const string & ext, const string &query_image, const string &method,
                                 Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq) {
 //    try {
     vector<Point2d> pts_db, pts_q;
-    if (!findMatches(db_image, ext, query_image, method, 0.8, pts_db, pts_q)) { return 0; }
+    if (!findMatches(db_image, ext, query_image, method, 0.7, pts_db, pts_q)) { return 0; }
 
     vector<Point3d> pts_db_3d;
     vector<Point2d> pts_q_2d;

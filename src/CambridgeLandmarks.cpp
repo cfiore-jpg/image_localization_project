@@ -20,9 +20,9 @@ using namespace std;
 
 void cambridge::createPoseFiles() {
 
-    string folder = "/Users/cameronfiore/C++/image_localization_project/KingsCollege/";
+    string folder = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/";
 
-    string test_file = "/Users/cameronfiore/C++/image_localization_project/KingsCollege/dataset_test.txt";
+    string test_file = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/dataset_test.txt";
     ifstream tf(test_file);
     if (tf.is_open()) {
         string line;
@@ -63,7 +63,7 @@ void cambridge::createPoseFiles() {
         tf.close();
     }
 
-    string train_file = "/Users/cameronfiore/C++/image_localization_project/KingsCollege/dataset_train.txt";
+    string train_file = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/dataset_train.txt";
     ifstream trf(train_file);
     if (trf.is_open()) {
         string line;
@@ -108,8 +108,8 @@ void cambridge::createPoseFiles() {
 vector<string> cambridge::getTestImages() {
 
     vector<string> ims;
-    string folder = "/Users/cameronfiore/C++/image_localization_project/KingsCollege/";
-    string test_file = "/Users/cameronfiore/C++/image_localization_project/KingsCollege/dataset_test.txt";
+    string folder = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/";
+    string test_file = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/dataset_test.txt";
 
     ifstream tf(test_file);
     if (tf.is_open()) {

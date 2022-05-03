@@ -1,14 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c.o.d"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c.o.d"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c.o.d"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c.o.d"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o"
-  "CMakeFiles/image_localization_project.dir/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c.o.d"
   "CMakeFiles/image_localization_project.dir/main.cpp.o"
   "CMakeFiles/image_localization_project.dir/main.cpp.o.d"
   "CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o"
@@ -36,6 +26,6 @@ file(REMOVE_RECURSE
 )
 
 # Per-language clean rules from dependency scanning.
-foreach(lang C CXX)
+foreach(lang CXX)
   include(CMakeFiles/image_localization_project.dir/cmake_clean_${lang}.cmake OPTIONAL)
 endforeach()

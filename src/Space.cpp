@@ -33,7 +33,12 @@ Point * newPoint(const string & name, int num, int num_energies, const Eigen::Ve
 // Energy Functions
 void newEnergy(Point * a, Point * b) {
     auto * temp = new Energy;
-    temp->magnitude = 1. / pow((a->position - b->position).norm(), 2);
+    double n = (a->position - b->position).norm();
+    if(n == 0) {
+        temp->magnitude = DBL_MAX;
+    } else {
+        temp->magnitude = 1. / pow(n, 2);
+    }
 
     a->energies[b->number] = temp;
     b->energies[a->number] = temp;

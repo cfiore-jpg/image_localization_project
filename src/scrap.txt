@@ -1,0 +1,580 @@
+//    vector<Eigen::Matrix3d> Rs;
+//    ifstream Rs_fs ("/Users/cameronfiore/Desktop/Rs.txt");
+//    if (Rs_fs.is_open())
+//    {
+//        string line;
+//        int row = 0;
+//        Eigen::Matrix3d R;
+//        while (getline(Rs_fs, line))
+//        {
+//            if (line.empty()) {
+//                Rs.push_back(R);
+//                row = 0;
+//                continue;
+//            }
+//            if (row < 3)
+//            {
+//                stringstream ss(line);
+//                string num;
+//                int col = 0;
+//                while (ss >> num) {
+//                    if (col < 3)
+//                    {
+//                        R(row, col) = stod(num);
+//                    }
+//                    ++col;
+//                }
+//                ++row;
+//            }
+//        }
+//        Rs_fs.close();
+//    }
+//
+//    vector<Eigen::Matrix3d> R_s;
+//    ifstream R_s_fs ("/Users/cameronfiore/Desktop/R_s.txt");
+//    if (R_s_fs.is_open())
+//    {
+//        string line;
+//        int row = 0;
+//        Eigen::Matrix3d R;
+//        while (getline(R_s_fs, line))
+//        {
+//            if (line.empty()) {
+//                R_s.push_back(R);
+//                row = 0;
+//                continue;
+//            }
+//            if (row < 3)
+//            {
+//                stringstream ss(line);
+//                string num;
+//                int col = 0;
+//                while (ss >> num) {
+//                    if (col < 3)
+//                    {
+//                        R(row, col) = stod(num);
+//                    }
+//                    ++col;
+//                }
+//                ++row;
+//            }
+//        }
+//        R_s_fs.close();
+//    }
+//
+//    vector<Eigen::Vector3d> Ts;
+//    ifstream Ts_fs ("/Users/cameronfiore/Desktop/Ts.txt");
+//    if (Ts_fs.is_open())
+//    {
+//        string line;
+//        int row = 0;
+//        Eigen::Vector3d T;
+//        while (getline(Ts_fs, line))
+//        {
+//            if (line.empty()) {
+//                Ts.push_back(T);
+//                row = 0;
+//                continue;
+//            }
+//            if (row < 3)
+//            {
+//                stringstream ss(line);
+//                string num;
+//                int col = 0;
+//                while (ss >> num) {
+//                    T(row) = stod(num);
+//                }
+//                ++row;
+//            }
+//        }
+//        Ts_fs.close();
+//    }
+//
+//    vector<Eigen::Vector3d> T_s;
+//    ifstream T_s_fs ("/Users/cameronfiore/Desktop/T_s.txt");
+//    if (T_s_fs.is_open())
+//    {
+//        string line;
+//        int row = 0;
+//        Eigen::Vector3d T;
+//        while (getline(T_s_fs, line))
+//        {
+//            if (line.empty()) {
+//                T_s.push_back(T);
+//                row = 0;
+//                continue;
+//            }
+//            if (row < 3)
+//            {
+//                stringstream ss(line);
+//                string num;
+//                int col = 0;
+//                while (ss >> num) {
+//                    T(row) = stod(num);
+//                }
+//                ++row;
+//            }
+//        }
+//        T_s_fs.close();
+//    }
+//
+//    Eigen::Vector3d c = pose::hypothesizeQueryCenterOld(Rs, Ts, R_s, T_s);
+//    Eigen::Matrix3d R = rotation::solve_rotation(c, Rs, Ts, R_s, T_s);
+//
+//    cout << R << endl;
+//
+//
+//    Eigen::Matrix3d R_gt = sevenScenes::getR("/Users/cameronfiore/C++/image_localization_project/data/chess/seq-03/frame-000893");
+//
+//
+////0.118881
+////0.219878
+//
+//    double error = 0.;
+//    for (int k = 0; k < Rs.size(); k++) {
+//        Eigen::Vector3d c_k = -Rs[k].transpose() * Ts[k];
+//        Eigen::Vector3d t_ = -R_s[k] * (Rs[k] * c + Ts[k]);
+//        t_.normalize();
+////            Vector3d t_test = t_qk[k];
+//        double lambda = (c_k - c).transpose() * R_gt.transpose() * t_;
+////            cout << "LAMBDA = " << lambda << endl;
+//        error += pow((c_k - (c + lambda * R_gt.transpose() * t_)).norm(), 2.);
+//    }
+//
+//    cout << error << endl;
+//
+//    for (int k = 0; k < Rs.size(); k++) {
+//        Eigen::Vector3d c_k = -Rs[k].transpose() * Ts[k];
+////        Eigen::Vector3d t_ = -R_s[k] * (Rs[k] * c + Ts[k]);
+////        t_.normalize();
+//            Eigen::Vector3d t_ = T_s[k];
+//        double lambda = (c_k - c).transpose() * R_gt.transpose() * t_;
+////            cout << "LAMBDA = " << lambda << endl;
+//        error += pow((c_k - (c + lambda * R_gt.transpose() * t_)).norm(), 2.);
+//    }
+//
+//    cout << error << endl;
+//
+//
+//
+//
+////    cout << R << endl;
+//    int alpha = 0;
+
+
+//    vector<Eigen::Matrix3d> R_k;
+//    vector<Eigen::Vector3d> t_k;
+//    vector<Eigen::Matrix3d> R_qk;
+//    vector<Eigen::Vector3d> t_qk;
+////
+//    Eigen::Matrix3d R_q {{0.93118482425723736462, 0.36262296659846848801, -0.037408650982680001496},
+//                           {0.33249792459696492219, -0.8027621803172360071, 0.49499294135475135903},
+//                           {0.14946555861377897045, -0.47336821391771044532, -0.86809134360424744514}};
+//    Eigen::Vector3d c_q {-157.37370535944677385, 551.2138747105557286, 985.10057207662759993};
+//    Eigen::Vector3d t_q = -R_q * c_q;
+////
+////
+//    Eigen::Matrix3d R_1 {{0.55072336929004850337, -0.82712030047107198971, 0.11214178109188482901},
+//                         {-0.11722689697755828142, 0.056375599209274707135, 0.99150372991674018408},
+//                         {-0.8264149231123731898, -0.5591903078223356971, -0.065913386309092270032}};
+//    Eigen::Vector3d c_1 {938.1809157763350413, 613.74851039172017408, 55.011595897134093036};
+//    Eigen::Vector3d t_1 = -R_1 * c_1;
+//    Eigen::Matrix3d R_q1 = R_q * R_1.transpose();
+//    Eigen::Vector3d t_q1 = t_q - R_q1 * t_1;
+//    t_q1.normalize();
+//    R_k.push_back(R_1);
+//    t_k.push_back(t_1);
+//    R_qk.push_back(R_q1);
+//    t_qk.push_back(t_q1);
+//
+//    Eigen::Matrix3d R_2 {{0.088461304994031042526, 0.033230569322564879053, 0.99552515125497997861},
+//                         {-0.22987060353240071353, -0.9717843825228138499, 0.052864160982681845935},
+//                         {0.9691925005644660418, -0.2335184000186093789, -0.078326583624883427959}};
+//    Eigen::Vector3d c_2 {-1091.5951653892184368, 272.98698735737838206, 107.90863343431843191};
+//    Eigen::Vector3d t_2 = -R_2 * c_2;
+//    Eigen::Matrix3d R_q2 = R_q * R_2.transpose();
+//    Eigen::Vector3d t_q2 = t_q - R_q2 * t_2;
+//    t_q2.normalize();
+//    R_k.push_back(R_2);
+//    t_k.push_back(t_2);
+//    R_qk.push_back(R_q2);
+//    t_qk.push_back(t_q2);
+//
+//    Eigen::Matrix3d R_3 {{-0.10387879175474701299, 0.8104268925167098514, 0.5765565440694283561},
+//                         {-0.9498195017811733587, 0.091132400555301251721, -0.29922867443677803045},
+//                         {-0.29504594669260764128, -0.57870816259556667749, 0.76029254362089171426}};
+//    Eigen::Vector3d c_3 {346.58158737322162324, 638.29359688719728183, -848.51081310189067608};
+//    Eigen::Vector3d t_3 = -R_3 * c_3;
+//    Eigen::Matrix3d R_q3 = R_q * R_3.transpose();
+//    Eigen::Vector3d t_q3 = t_q - R_q3 * t_3;
+//    t_q3.normalize();
+//    R_k.push_back(R_3);
+//    t_k.push_back(t_3);
+//    R_qk.push_back(R_q3);
+//    t_qk.push_back(t_q3);
+//
+//    Eigen::Vector3d c_hyp = pose::hypothesizeQueryCenter(R_k, t_k, R_qk, t_qk);
+////
+//    double dist = functions::getDistBetween(c_q, c_hyp);
+//
+////
+////    auto start = high_resolution_clock::now();
+////    Eigen::Matrix3d R_hyp = rotation::solve_rotation(c_q, R_k, t_k, R_qk, t_qk);
+////    auto stop = high_resolution_clock::now();
+////    auto duration = duration_cast<microseconds>(stop - start);
+////    cout << duration.count() << "microseconds"  << endl;
+////    double r_dist = functions::rotationDifference(R_q, R_hyp);
+////    cout << r_dist << endl;
+////
+//    int done = 0;
+
+
+
+
+
+
+//
+//    vector<string> images = synthetic::getAll();
+//    vector<Point2d> pts_0, pts_1;
+//
+//    synthetic::findSyntheticMatches(images[0], images[1], pts_0, pts_1);
+//
+//    synthetic::addMismatches(pts_0, pts_1, .10);
+//
+//
+//
+//    vector<Eigen::Vector3d> points3d = synthetic::get3DPoints();
+//    Eigen::Matrix3d K_eig{{2584.9325098195013197, 0.,                    249.77137587221417903},
+//                          {0.,                    2584.7918606057692159, 278.31267937919352562},
+//                          {0.,                    0.,                                       1.}};
+//    Eigen::Matrix3d R;
+//    Eigen::Vector3d T;
+//    synthetic::getAbsolutePose(images[0], R, T);
+//    for(int i = 0; i < points3d.size(); i++) {
+//        Eigen::Vector3d point2d {pts_0[i].x, pts_0[i].y, 1.};
+//        Eigen::Vector3d proj2d = R * points3d[i] + T;
+//        proj2d = proj2d / proj2d[2];
+//        proj2d = K_eig * proj2d;
+//
+//        double dist = sqrt(pow((point2d[0] - proj2d[0]), 2.) + pow((point2d[1] - proj2d[1]), 2.));
+//
+//        cout << dist << endl;
+//
+//
+//    }
+//
+//
+//    exit(0);
+
+//      string query = "/Users/cameronfiore/C++/image_localization_project/data/chess/seq-03/frame-000000";
+
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/chess/seq-03/frame-000400";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/fire/seq-03/frame-000300";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/heads/seq-01/frame-000495";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/office/seq-06/frame-000160";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/pumpkin/seq-07/frame-000490";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/redkitchen/seq-06/frame-000490";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/stairs/seq-01/frame-000260";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/heads/seq-01/frame-000654";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/office/seq-06/frame-000058";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/pumpkin/seq-07/frame-000647";
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/redkitchen/seq-04/frame-000373";
+
+
+//// Testing Rotation
+
+//    auto retrieved = functions::retrieveSimilar(query, 200, 1.6);
+//    auto spaced = functions::optimizeSpacing(retrieved, 10, false);
+//
+//    Eigen::Vector3d c_q = sevenScenes::getT(query);
+//    Eigen::Matrix3d R_q_real;
+//    Eigen::Vector3d t_q_real;
+//    sevenScenes::getAbsolutePose(query, R_q_real, t_q_real);
+//    const double K[4] = {523.538, 529.669, 314.245, 237.595};
+//
+//    vector<Eigen::Matrix3d> R_k;
+//    vector<Eigen::Vector3d> t_k;
+//    vector<Eigen::Matrix3d> R_qk;
+//    vector<Eigen::Vector3d> t_qk;
+//
+//    for (const auto & im: spaced) {
+//        Eigen::Matrix3d R;
+//        Eigen::Vector3d t;
+//        Eigen::Matrix3d R_;
+//        Eigen::Vector3d t_;
+//        sevenScenes::getAbsolutePose(im, R, t);
+//        int num = functions::getRelativePose(im, query, K, "SIFT", R_, t_);
+////        R_ = R_q_real * R.transpose();
+////        t_ = t_q_real - R_ * t;
+////        t_.normalize();
+//        R_k.push_back(R); t_k.push_back(t); R_qk.push_back(R_); t_qk.push_back(t_);
+//    }
+//
+//    Eigen::Vector3d c_q_guess = pose::hypothesizeQueryCenter(R_k, t_k, R_qk, t_qk);
+//    Eigen::Matrix3d R_q_guess = pose::hypothesizeQueryRotation(c_q, R_k, t_k, t_qk);
+//
+//    double c_error = functions::getDistBetween(c_q, c_q_guess);
+//    double r_error = functions::rotationDifference(R_q_real, R_q_guess);
+//
+//    cout << "done." << endl;
+
+
+
+
+
+//// Testing Anchor Image Performance
+//    vector<string> all;
+//    auto info = sevenScenes::createInfoVector();
+//    functions::createQueryVector(all, info, 0);
+//
+//    int max_num = 0;
+//    int min_num = 20;
+//    int total_recall = 0;
+//    int total_images = 0;
+//    for (const auto & query : all) {
+//
+//        string scene = functions::getScene(query);
+//
+//        auto retrieved = functions::retrieveSimilar(query, 200, 1.6);
+//        auto spaced = functions::optimizeSpacing(retrieved, 20, false);
+//
+//        if (spaced.size() > max_num) max_num = int (spaced.size());
+//        if (spaced.size() < min_num) min_num = int (spaced.size());
+//
+//        total_images += int (spaced.size());
+//        for (const auto & s : spaced) {
+//            if (functions::getScene(s) == scene) {
+//                total_recall++;
+//            }
+//        }
+//    }
+//
+//    cout << "Max Returned: " << max_num << "/" << "20" << endl;
+//    cout << "Min Returned: " << min_num << "/" << "20" << endl;
+//    cout << "Recall: " << double (total_recall) / double (total_images) << endl;
+//
+//
+//
+//    vector<int> x (20);
+//    for (int i = 1; i <= 20; i++) {
+//        x[i] = i;
+//    }
+//    vector<double> max (20);
+//    vector<double> min (20);
+//    int upper = 0;
+//    auto retrieved = functions::retrieveSimilar(query, 200, 1.6);
+//    for (int i = 1; i <= 20; i++) {
+//        auto spaced = functions::optimizeSpacing(retrieved, i, false);
+//        int most = 0;
+//        int least = 1000;
+//        for (const auto & s : spaced) {
+//            vector<cv::Point2d> pts_i, pts_q;
+//            functions::findMatches(s, query, "SIFT", 0.8, pts_i, pts_q);
+//            if (pts_i.size() > most) most = int (pts_i.size());
+//            if (pts_i.size() < least) least = int (pts_i.size());
+//        }
+//        if (most > upper) upper = most;
+//        max[i-1] = most;
+//        min[i-1] = least;
+//    }
+//
+//    plt::plot(x, max);
+//    plt::plot(x, min);
+//    plt::ylim(0, upper + 50);
+//    plt::title(query);
+//    plt::show();
+
+
+
+
+
+//// Calibration
+//    calibrate::run();
+
+
+
+
+
+
+
+////// Dataset Visualization
+//    vector<string> all;
+//    auto info = sevenScenes::createInfoVector();
+//    functions::createImageVector(all, info, 0);
+//    unordered_map<string, cv::Scalar> seq_colors;
+//    random_device generator;
+//    uniform_int_distribution<int> distribution(1,255);
+//    for (int i = 1; i < 15; i++) {
+//        Scalar color = Scalar(distribution(generator), distribution(generator), distribution(generator));
+//        if (i < 10) {
+//            seq_colors["0" + to_string(i)] = color;
+//        } else {
+//            seq_colors[to_string(i)] = color;
+//        }
+//    }
+//
+//    functions::showTop1000(query, 100, 1.6, 10);
+//
+//    functions::projectCentersTo2D(query, all, seq_colors, query + " All");
+//
+//    auto top1000 = functions::getTopN(query, 1000);
+//    unordered_set<string> unincluded_all (all.begin(), all.end());
+//    for (const auto & t : top1000) {
+//        unincluded_all.erase(t);
+//    }
+//    functions::projectCentersTo2D(query, top1000, seq_colors, query + " top 1000");
+//
+//    auto retrieved = functions::retrieveSimilar(query, 1000, 1.6);
+//    unordered_set<string> unincluded_top1000 (top1000.begin(), top1000.end());
+//    for (const auto & r : retrieved) {
+//        unincluded_top1000.erase(r);
+//    }
+//    functions::projectCentersTo2D(query, retrieved, seq_colors, query + " Retrieved");
+//
+//    functions::showAllImages(query, all, seq_colors, unincluded_all, unincluded_top1000, "All Images");
+//
+//    auto spaced = functions::optimizeSpacing(retrieved, 20, false);
+//    functions::projectCentersTo2D(query, spaced, seq_colors, query + " Spaced");
+
+
+
+
+
+
+
+
+
+
+//            cv::Mat mask_qk, mask_kq, mask_both;
+//            cv::Mat E_qk_sols = findEssentialMat(pts_db, pts_q, K_mat, cv::RANSAC, 0.99999999, 3.0, mask_qk);
+//            cv::Mat E_kq_sols = findEssentialMat(pts_q, pts_db, K_mat, cv::RANSAC, 0.99999999, 3.0, mask_kq);
+//            cv::Mat E_qk = E_qk_sols(cv::Range(0, 3), cv::Range(0, 3));
+//            cv::Mat E_kq = E_kq_sols(cv::Range(0, 3), cv::Range(0, 3));
+//
+//            vector<cv::Point2d> qk4_inlier_db_points, qk4_inlier_q_points, kq4_inlier_db_points, kq4_inlier_q_points;
+//            mask_both = mask_qk;
+//            int num_both_inliers = 0;
+//            for (int i = 0; i < mask_qk.rows; i++) {
+//                if (mask_qk.at<unsigned char>(i)) {
+//                    qk4_inlier_db_points.push_back(pts_db[i]);
+//                    qk4_inlier_q_points.push_back(pts_q[i]);
+//                }
+//                if (mask_kq.at<unsigned char>(i)) {
+//                    kq4_inlier_db_points.push_back(pts_db[i]);
+//                    kq4_inlier_q_points.push_back(pts_q[i]);
+//                }
+//                if (mask_qk.at<unsigned char>(i) && mask_kq.at<unsigned char>(i)) {
+//                    mask_both.at<unsigned char>(i) = 1.;
+//                    num_both_inliers++;
+//                } else {
+//                    mask_both.at<unsigned char>(i) = 0.;
+//                }
+//            }
+//
+//            cv::Mat mask;
+//            cv::Mat R, t;
+//            recoverPose(E_qk, qk4_inlier_db_points, qk4_inlier_q_points, K_mat, R, t, mask);
+//            cv2eigen(R, R_qk_calc_4);
+//            cv2eigen(t, t_qk_calc_4);
+//
+//            mask.release();
+//            R.release();
+//            t.release();
+//            recoverPose(E_kq, kq4_inlier_q_points, kq4_inlier_db_points, K_mat, R, t, mask);
+//            cv2eigen(R, R_kq_calc_4);
+//            cv2eigen(t, t_kq_calc_4);
+//
+//            // WITH STEP 5
+//            int size = 2 * num_both_inliers;
+//            double pts_db_arr[size];
+//            double pts_q_arr[size];
+//            int idx = 0;
+//            for (int i = 0; i < mask_both.rows; i++) {
+//                if (mask_both.at<unsigned char>(i)) {
+//                    Eigen::Vector3d pt_db {pts_db[i].x, pts_db[i].y, 1.};
+//                    Eigen::Vector3d pt_q {pts_q[i].x, pts_q[i].y, 1.};
+//                    Eigen::Vector3d pt_db_vec = K_eig.inverse() * pt_db;
+//                    Eigen::Vector3d pt_q_vec = K_eig.inverse() * pt_q;
+//                    pts_db_arr[2*idx] = pt_db_vec[0];
+//                    pts_db_arr[2*idx + 1] = pt_db_vec[1];
+//                    pts_q_arr[2*idx] = pt_q_vec[0];
+//                    pts_q_arr[2*idx + 1] = pt_q_vec[1];
+//                    idx++;
+//                }
+//            }
+//
+//            std::vector<EMatrix> E; // essential matrix
+//            std::vector<PMatrix> P; // 3x4 projection matrix
+//            std::vector<int> inli;
+//            bool ret;
+//            ret = Solve5PointEssential(pts_db_arr, pts_q_arr, num_both_inliers, E, P, inli);
+//
+//            if(ret) {
+//                int best_i = 0;
+//                int best_inliers = 0;
+//                vector<cv::Point2d> best_decomp_db, best_decomp_q;
+//                Eigen::Matrix3d E_calc;
+//                for (int i = 0; i < E.size(); i++) {
+//                    E_calc(0, 0) = E[i](0, 0);
+//                    E_calc(0, 1) = E[i](0, 1);
+//                    E_calc(0, 2) = E[i](0, 2);
+//                    E_calc(1, 0) = E[i](1, 0);
+//                    E_calc(1, 1) = E[i](1, 1);
+//                    E_calc(1, 2) = E[i](1, 2);
+//                    E_calc(2, 0) = E[i](2, 0);
+//                    E_calc(2, 1) = E[i](2, 1);
+//                    E_calc(2, 2) = E[i](2, 2);
+//
+//                    int in = 0;
+//                    vector<cv::Point2d> decomp_db, decomp_q;
+//                    for (int j = 0; j < mask_both.rows; j++) {
+//                        if (mask_both.at<unsigned char>(j)) {
+//                            Eigen::Vector3d pt_db {pts_db[j].x, pts_db[j].y, 1.};
+//                            Eigen::Vector3d pt_q {pts_q[j].x, pts_q[j].y, 1.};
+//                            Eigen::Vector3d epiline = K_eig.inverse().transpose() * E_calc * K_eig.inverse() * pt_db;
+//                            double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
+//                                                sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+//                            if (error <= 3.) {
+//                                in++;
+//                                decomp_db.push_back(pts_db[j]);
+//                                decomp_q.push_back(pts_q[j]);
+//                            }
+//                        }
+//                    }
+//                    if (in > best_inliers) {
+//                        best_inliers = in;
+//                        best_i = i;
+//                        best_decomp_db = decomp_db;
+//                        best_decomp_q = decomp_q;
+//                    }
+//                }
+//
+//                if (best_inliers == 0) continue;
+//
+//                E_calc(0, 0) = E[best_i](0, 0);
+//                E_calc(0, 1) = E[best_i](0, 1);
+//                E_calc(0, 2) = E[best_i](0, 2);
+//                E_calc(1, 0) = E[best_i](1, 0);
+//                E_calc(1, 1) = E[best_i](1, 1);
+//                E_calc(1, 2) = E[best_i](1, 2);
+//                E_calc(2, 0) = E[best_i](2, 0);
+//                E_calc(2, 1) = E[best_i](2, 1);
+//                E_calc(2, 2) = E[best_i](2, 2);
+//
+//                cv::Mat E_mat;
+//                cv::eigen2cv(E_calc, E_mat);
+//
+//                cv::Mat mask_decomp;
+//                cv::Mat R_decomp, t_decomp;
+//                cv::recoverPose(E_mat, best_decomp_db, best_decomp_q, K_mat, R_decomp, t_decomp, mask_decomp);
+//
+//                cv::cv2eigen(R_decomp, R_qk_calc_5);
+//                cv::cv2eigen(t_decomp, t_qk_calc_5);
+//            } else {
+//                continue;
+//            }
+//
+//            Eigen::Matrix3d R_qk_from_kq = R_kq_calc_4.transpose();
+//            Eigen::Vector3d t_qk_from_kq = - R_kq_calc_4.transpose() * t_kq_calc_4;
+//            double r_consistency = functions::rotationDifference(R_qk_from_kq, R_qk_calc_4);
+//            double t_consistency = functions::getAngleBetween(t_qk_from_kq, t_qk_calc_4);

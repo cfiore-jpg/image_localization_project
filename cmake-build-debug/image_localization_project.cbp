@@ -48,15 +48,8 @@
 					<Add directory="/usr/local/include"/>
 					<Add directory="/opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/include/python3.9"/>
 					<Add directory="/opt/homebrew/lib/python3.9/site-packages/numpy/core/include/numpy"/>
-					<Add directory="/Users/cameronfiore/C++/matplotlib-cpp"/>
 					<Add directory="/Users/cameronfiore/C++/DBoW2/include/DBoW2"/>
 					<Add directory="/Users/cameronfiore/C++/DBoW3/src"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/5point"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/include"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/cblas"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/minpack"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/build"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/core/include"/>
@@ -140,15 +133,8 @@
 					<Add directory="/usr/local/include"/>
 					<Add directory="/opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/include/python3.9"/>
 					<Add directory="/opt/homebrew/lib/python3.9/site-packages/numpy/core/include/numpy"/>
-					<Add directory="/Users/cameronfiore/C++/matplotlib-cpp"/>
 					<Add directory="/Users/cameronfiore/C++/DBoW2/include/DBoW2"/>
 					<Add directory="/Users/cameronfiore/C++/DBoW3/src"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/5point"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/include"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/cblas"/>
-					<Add directory="/Users/cameronfiore/C++/bundler-v0.4-source/lib/minpack"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/build"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/core/include"/>
@@ -222,36 +208,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.c">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/fmatrix.h">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.c">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/imagelib/triangulate.h">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.c">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/matrix.h">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.c">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/svd.h">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.c">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/bundler-v0.4-source/lib/matrix/vector.h">
-			<Option target="image_localization_project"/>
-		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/main.cpp">
 			<Option target="image_localization_project"/>
 		</Unit>

@@ -20,10 +20,7 @@ using namespace std;
 
 namespace functions {
 
-    Eigen::Matrix3d smallRandomRotationMatrix();
-
-    void compute_pose_from_points (const vector<cv::Point2d> & pts_l, const vector<cv::Point2d> & pts_r,
-                                   const Eigen::Matrix3d & K, Eigen::Matrix3d & R, Eigen::Vector3d & T);
+    Eigen::Matrix3d smallRandomRotationMatrix(double s);
 
     pair<vector<cv::Point2d>, vector<cv::Point2d>> same_inliers(
             const vector<cv::Point2d> & pts_q, const vector<cv::Point2d> & pts_db,
@@ -45,7 +42,14 @@ namespace functions {
     vector<double> getReprojectionErrors(const vector<cv::Point2d> & pts_to, const vector<cv::Point2d> & pts_from,
                                          const Eigen::Matrix3d & K, const Eigen::Matrix3d & R, const Eigen::Vector3d & T);
 
-    bool findMatches(const string &db_image, const string & ext, const string &query_image, const string &method, double ratio,
+    pair<cv::Mat, vector<cv::KeyPoint>> getDescriptors(const string & image, const string & ext, const string & method);
+
+    bool findMatches(double ratio,
+                     const cv::Mat & desc_i, const vector<cv::KeyPoint> & kp_i,
+                     const cv::Mat & desc_q, const vector<cv::KeyPoint> & kp_q,
+                     vector<cv::Point2d> & pts_i, vector<cv::Point2d> & pts_q);
+
+    bool findMatches(const string &db_image, const string &query_image, const string & ext, const string &method, double ratio,
                      vector<cv::Point2d> &pts_db, vector<cv::Point2d> &pts_query);
 
     bool findMatchesSorted(const string &db_image, const string & ext, const string &query_image, const string &method, double ratio,
