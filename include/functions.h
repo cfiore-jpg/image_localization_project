@@ -61,8 +61,10 @@ namespace functions {
     int getRelativePose(const string & db_image, const string & ext, const string & query_image, const double * K, const string & method,
                         Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
-    bool getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, const double * K,
-                        Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
+    bool getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q,
+                         const double * K,
+                         double match_thresh,
+                         Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
     int getRelativePose3D(const string &db_image, const string & ext, const string &query_image, const string &method,
                                     Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);

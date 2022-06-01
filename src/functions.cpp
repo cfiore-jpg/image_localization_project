@@ -509,13 +509,15 @@ int functions::getRelativePose(const string & db_image, const string & ext, cons
     }
 }
 
-bool functions::getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q, const double * K,
-                               Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq) {
+bool functions::getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d> & pts_q,
+                                const double * K,
+                                double match_thresh,
+                                Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq) {
     try {
         Mat mask;
         Mat K_mat = (Mat_<double>(3, 3) << K[0], 0., K[2], 0., K[1], K[3], 0., 0., 1.);
 
-        Mat E_qk_sols = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.99999999, 3.0, mask);
+        Mat E_qk_sols = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.9999999999, 3.0, mask);
         Mat E_qk = E_qk_sols(cv::Range(0, 3), cv::Range(0, 3));
 
         vector<Point2d> inlier_db_points, inlier_q_points;

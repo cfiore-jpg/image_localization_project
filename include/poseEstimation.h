@@ -63,7 +63,7 @@ namespace pose {
 
     Eigen::Matrix3d R_q_average(const vector<Eigen::Matrix3d> &rotations);
 
-    Eigen::Matrix3d R_q_closed_form(bool use_Rqk, bool normalize,
+    Eigen::Matrix3d R_q_closed_form(bool use_Rqk, bool normalize, bool version,
                                     const Eigen::Vector3d &c_q,
                                     const vector<Eigen::Matrix3d> &R_ks,
                                     const vector<Eigen::Vector3d> &T_ks,
@@ -72,8 +72,18 @@ namespace pose {
 
 
     //// RANSAC
-    tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, vector<int>>
-    hypothesizeRANSAC(double threshold,
+    tuple<Eigen::Vector3d,
+//            Eigen::Vector3d,
+//            Eigen::Vector3d,
+            Eigen::Matrix3d,
+//            Eigen::Matrix3d,
+//            Eigen::Matrix3d,
+//            Eigen::Matrix3d,
+//            Eigen::Matrix3d,
+//            Eigen::Matrix3d,
+//            Eigen::Matrix3d,
+            vector<int>>
+            hypothesizeRANSAC(double threshold,
                       const vector<Eigen::Matrix3d> & R_ks,
                       const vector<Eigen::Vector3d> & T_ks,
                       const vector<Eigen::Matrix3d> & R_qks,
@@ -83,7 +93,7 @@ namespace pose {
     //// FINAL POSE ADJUSTMENT
     void adjustHypothesis(const vector<Eigen::Matrix3d> &R_k,
                           const vector<Eigen::Vector3d> &T_k,
-                          const vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> &all_points,
+                          const vector<vector<pair<cv::Point2d, cv::Point2d>>> & all_points,
                           const double &error_thresh,
                           const double *K,
                           Eigen::Matrix3d &R_q,

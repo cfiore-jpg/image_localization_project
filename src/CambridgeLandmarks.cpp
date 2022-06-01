@@ -18,11 +18,9 @@
 
 using namespace std;
 
-void cambridge::createPoseFiles() {
+void cambridge::createPoseFiles(const string & folder) {
 
-    string folder = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/";
-
-    string test_file = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/dataset_test.txt";
+    string test_file = folder + "dataset_test.txt";
     ifstream tf(test_file);
     if (tf.is_open()) {
         string line;
@@ -47,23 +45,25 @@ void cambridge::createPoseFiles() {
                 count++;
             }
 
-            Eigen::Vector3d c{nums[0], nums[1], nums[2]};
-            Eigen::Quaternion<double> q(nums[3], nums[4], nums[5], nums[6]);
+            Eigen::Vector3d c {nums[0], nums[1], nums[2]};
+            Eigen::Quaternion<double> q (nums[3], nums[4], nums[5], nums[6]);
             q.normalize();
+
+
             Eigen::Matrix3d R = q.toRotationMatrix();
 
             Eigen::Vector3d T = -R * c;
 
             ofstream pf;
             pf.open(fn + ".pose.txt");
-            pf << R << endl;
-            pf << T.transpose() << endl;
+            pf << setprecision(16) << R << endl;
+            pf << setprecision(16) << T.transpose() << endl;
             pf.close();
         }
         tf.close();
     }
 
-    string train_file = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/dataset_train.txt";
+    string train_file = folder + "dataset_train.txt";
     ifstream trf(train_file);
     if (trf.is_open()) {
         string line;
@@ -91,24 +91,24 @@ void cambridge::createPoseFiles() {
             Eigen::Vector3d c{nums[0], nums[1], nums[2]};
             Eigen::Quaternion<double> q(nums[3], nums[4], nums[5], nums[6]);
             q.normalize();
-            Eigen::Matrix3d R = q.toRotationMatrix();
 
+
+            Eigen::Matrix3d R = q.toRotationMatrix();
             Eigen::Vector3d T = -R * c;
 
             ofstream pf;
             pf.open(fn + ".pose.txt");
-            pf << R << endl;
-            pf << T.transpose() << endl;
+            pf << setprecision(16) << R << endl;
+            pf << setprecision(16) << T.transpose() << endl;
             pf.close();
         }
         trf.close();
     }
 }
 
-vector<string> cambridge::getTestImages() {
+vector<string> cambridge::getTestImages(const string & folder) {
 
     vector<string> ims;
-    string folder = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/";
     string test_file = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/dataset_test.txt";
 
     ifstream tf(test_file);
@@ -162,9 +162,9 @@ Eigen::Matrix3d cambridge::getR(const string& image) {
             }
         }
         im_pose.close();
-        Eigen::JacobiSVD<Eigen::Matrix3d> svd (R, Eigen::ComputeFullU | Eigen::ComputeFullV);
-        Eigen::Matrix3d new_R = svd.matrixU() * svd.matrixV().transpose();
-        return new_R;
+//        Eigen::JacobiSVD<Eigen::Matrix3d> svd (R, Eigen::ComputeFullU | Eigen::ComputeFullV);
+//        Eigen::Matrix3d new_R = svd.matrixU() * svd.matrixV().transpose();
+        return R;
     } else
     {
         cout << "Pose file does not exist for: " << image << endl;

@@ -18,9 +18,9 @@ using namespace std;
 
 namespace cambridge
 {
-    void createPoseFiles();
+    void createPoseFiles(const string & folder);
 
-    vector<string> getTestImages();
+    vector<string> getTestImages(const string & folder);
 
     Eigen::Matrix3d getR(const string& image);
 

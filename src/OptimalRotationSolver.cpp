@@ -3517,3 +3517,401 @@ MatrixXcd rotation::solver_problem_averageRQuatMetric_red(const VectorXd &data) 
 
     return sols;
 }
+
+Eigen::Matrix3d rotation::optimal_rotation_using_R_qks_NEW(const Eigen::Vector3d &c_q,
+                                                           const vector<Eigen::Matrix3d> &R_ks,
+                                                           const vector<Eigen::Vector3d> &T_ks,
+                                                           const vector<Eigen::Matrix3d> &R_qks,
+                                                           const vector<Eigen::Vector3d> &T_qks) {
+
+    int K = int(R_ks.size());
+
+    double overall_best_error = DBL_MAX;
+    Eigen::Matrix3d overall_best_R;
+
+    for(int b = 0; b < pow(2, K); b++) {
+
+        vector<int> betas (K);
+        Eigen::Vector<double, 9> M{0,0,0,0,0,0,0,0,0};
+
+        for(int k = 0; k < K; k++) {
+
+            betas[k] = (b & int(pow(2, k))) ? 1 : -1;
+
+            Vector3d c_k = -R_ks[k].transpose() * T_ks[k];
+            Vector3d diff = c_k - c_q;
+            diff.normalize();
+
+            Vector3d T_qk = -R_qks[k] * (R_ks[k] * c_q + T_ks[k]);
+            T_qk.normalize();
+
+            Eigen::Vector<double, 9> star{T_qk[0] * diff[0], T_qk[0] * diff[1], T_qk[0] * diff[2],
+                                          T_qk[1] * diff[0], T_qk[1] * diff[1], T_qk[1] * diff[2],
+                                          T_qk[2] * diff[0], T_qk[2] * diff[1], T_qk[2] * diff[2]};
+
+            M = M + betas[k] * star;
+        }
+
+        MatrixXcd sols = rotation::solver_problem_averageRQuatMetricAlter_red_new(M);
+
+
+        Matrix3d best_R;
+        double best_error = DBL_MAX;
+        for (int i = 0; i < 4; i++) {
+
+            Eigen::Quaterniond q;
+            if (abs(sols(0, i).imag()) > 1e-6) continue;
+            q.w() = sols(0, i).real();
+            if (abs(sols(1, i).imag()) > 1e-6) continue;
+            q.x() = sols(1, i).real();
+            if (abs(sols(2, i).imag()) > 1e-6) continue;
+            q.y() = sols(2, i).real();
+            if (abs(sols(3, i).imag()) > 1e-6) continue;
+            q.z() = sols(3, i).real();
+
+            Eigen::Matrix3d R = q.normalized().toRotationMatrix();
+
+            double error = 0;
+            for (int k = 0; k < K; k++) {
+                Vector3d c_k = -R_ks[k].transpose() * T_ks[k];
+
+                Vector3d T_qk = -R_qks[k] * (R_ks[k] * c_q + T_ks[k]);
+                T_qk.normalize();
+
+                error += pow((R.transpose() * T_qk - betas[k] * (c_k - c_q).normalized()).norm(), 2.);
+            }
+
+            if (error < best_error) {
+                best_error = error;
+                best_R = R;
+            }
+        }
+
+        if (best_error < overall_best_error) {
+            overall_best_error = best_error;
+            overall_best_R = best_R;
+        }
+    }
+
+    return overall_best_R;
+}
+
+Eigen::Matrix3d rotation::optimal_rotation_using_T_qks_NEW(const Eigen::Vector3d &c_q,
+                                                                const vector<Eigen::Matrix3d> &R_ks,
+                                                                const vector<Eigen::Vector3d> &T_ks,
+                                                                const vector<Eigen::Matrix3d> &R_qks,
+                                                                const vector<Eigen::Vector3d> &T_qks) {
+
+    int K = int(R_ks.size());
+
+    double overall_best_error = DBL_MAX;
+    Eigen::Matrix3d overall_best_R;
+
+    for(int b = 0; b < pow(2, K); b++) {
+
+        vector<int> betas (K);
+        Eigen::Vector<double, 9> M{0,0,0,0,0,0,0,0,0};
+
+        for(int k = 0; k < K; k++) {
+
+            betas[k] = (b & int(pow(2, k))) ? 1 : -1;
+
+            Vector3d c_k = -R_ks[k].transpose() * T_ks[k];
+            Vector3d diff = c_k - c_q;
+            diff.normalize();
+
+            Vector3d T_qk = T_qks[k];
+            Eigen::Vector<double, 9> star{T_qk[0] * diff[0], T_qk[0] * diff[1], T_qk[0] * diff[2],
+                                          T_qk[1] * diff[0], T_qk[1] * diff[1], T_qk[1] * diff[2],
+                                          T_qk[2] * diff[0], T_qk[2] * diff[1], T_qk[2] * diff[2]};
+
+            M = M + betas[k] * star;
+        }
+
+        MatrixXcd sols = rotation::solver_problem_averageRQuatMetricAlter_red_new(M);
+
+
+        Matrix3d best_R;
+        double best_error = DBL_MAX;
+        for (int i = 0; i < 4; i++) {
+
+            Eigen::Quaterniond q;
+            if (abs(sols(0, i).imag()) > 1e-6) continue;
+            q.w() = sols(0, i).real();
+            if (abs(sols(1, i).imag()) > 1e-6) continue;
+            q.x() = sols(1, i).real();
+            if (abs(sols(2, i).imag()) > 1e-6) continue;
+            q.y() = sols(2, i).real();
+            if (abs(sols(3, i).imag()) > 1e-6) continue;
+            q.z() = sols(3, i).real();
+
+            Eigen::Matrix3d R = q.normalized().toRotationMatrix();
+
+            double error = 0;
+            for (int k = 0; k < K; k++) {
+                Vector3d c_k = -R_ks[k].transpose() * T_ks[k];
+                Vector3d T_qk = T_qks[k];
+
+                error += pow((R.transpose() * T_qk - betas[k] * (c_k - c_q).normalized()).norm(), 2.);
+            }
+
+            if (error < best_error) {
+                best_error = error;
+                best_R = R;
+            }
+        }
+
+        if (best_error < overall_best_error) {
+            overall_best_error = best_error;
+            overall_best_R = best_R;
+        }
+    }
+
+    return overall_best_R;
+}
+
+Eigen::Matrix3d rotation::optimal_rotation_using_R_qks_NEW_2(const Eigen::Vector3d &c_q,
+                                                           const vector<Eigen::Matrix3d> &R_ks,
+                                                           const vector<Eigen::Vector3d> &T_ks,
+                                                           const vector<Eigen::Matrix3d> &R_qks,
+                                                           const vector<Eigen::Vector3d> &T_qks) {
+
+    int K = int(R_ks.size());
+
+    double overall_best_error = DBL_MAX;
+    Eigen::Matrix3d overall_best_R;
+
+    for(int b = 0; b < pow(2, K); b++) {
+
+        vector<int> betas (K);
+        Eigen::Vector<double, 9> M{0,0,0,0,0,0,0,0,0};
+
+        for(int k = 0; k < K; k++) {
+
+            betas[k] = (b & int(pow(2, k))) ? 1 : -1;
+
+            Vector3d c_k = -R_ks[k].transpose() * T_ks[k];
+            Vector3d diff = c_k - c_q;
+            diff = diff.norm() * diff;
+
+            Vector3d T_qk = -R_qks[k] * (R_ks[k] * c_q + T_ks[k]);
+            T_qk.normalize();
+
+            Eigen::Vector<double, 9> star{T_qk[0] * diff[0], T_qk[0] * diff[1], T_qk[0] * diff[2],
+                                          T_qk[1] * diff[0], T_qk[1] * diff[1], T_qk[1] * diff[2],
+                                          T_qk[2] * diff[0], T_qk[2] * diff[1], T_qk[2] * diff[2]};
+
+            M = M + betas[k] * star;
+        }
+
+        MatrixXcd sols = rotation::solver_problem_averageRQuatMetricAlter_red_new(M);
+
+
+        Matrix3d best_R;
+        double best_error = DBL_MAX;
+        for (int i = 0; i < 4; i++) {
+
+            Eigen::Quaterniond q;
+            if (abs(sols(0, i).imag()) > 1e-6) continue;
+            q.w() = sols(0, i).real();
+            if (abs(sols(1, i).imag()) > 1e-6) continue;
+            q.x() = sols(1, i).real();
+            if (abs(sols(2, i).imag()) > 1e-6) continue;
+            q.y() = sols(2, i).real();
+            if (abs(sols(3, i).imag()) > 1e-6) continue;
+            q.z() = sols(3, i).real();
+
+            Eigen::Matrix3d R = q.normalized().toRotationMatrix();
+
+            double error = 0;
+            for (int k = 0; k < K; k++) {
+                Vector3d c_k = -R_ks[k].transpose() * T_ks[k];
+                Vector3d diff = c_k - c_q;
+
+                Vector3d T_qk = -R_qks[k] * (R_ks[k] * c_q + T_ks[k]);
+                T_qk.normalize();
+
+                error += pow((diff.norm() * R.transpose() * T_qk - betas[k] * diff).norm(), 2.);
+            }
+
+            if (error < best_error) {
+                best_error = error;
+                best_R = R;
+            }
+        }
+
+        if (best_error < overall_best_error) {
+            overall_best_error = best_error;
+            overall_best_R = best_R;
+        }
+    }
+
+    return overall_best_R;
+}
+
+Eigen::Matrix3d rotation::optimal_rotation_using_T_qks_NEW_2(const Eigen::Vector3d &c_q,
+                                                           const vector<Eigen::Matrix3d> &R_ks,
+                                                           const vector<Eigen::Vector3d> &T_ks,
+                                                           const vector<Eigen::Matrix3d> &R_qks,
+                                                           const vector<Eigen::Vector3d> &T_qks) {
+
+    int K = int(R_ks.size());
+
+    double overall_best_error = DBL_MAX;
+    Eigen::Matrix3d overall_best_R;
+
+    for(int b = 0; b < pow(2, K); b++) {
+
+        vector<int> betas (K);
+        Eigen::Vector<double, 9> M{0,0,0,0,0,0,0,0,0};
+
+        for(int k = 0; k < K; k++) {
+
+            betas[k] = (b & int(pow(2, k))) ? 1 : -1;
+
+            Vector3d c_k = -R_ks[k].transpose() * T_ks[k];
+            Vector3d diff = c_k - c_q;
+            diff = diff.norm() * diff;
+
+            Vector3d T_qk = T_qks[k];
+
+            Eigen::Vector<double, 9> star{T_qk[0] * diff[0], T_qk[0] * diff[1], T_qk[0] * diff[2],
+                                          T_qk[1] * diff[0], T_qk[1] * diff[1], T_qk[1] * diff[2],
+                                          T_qk[2] * diff[0], T_qk[2] * diff[1], T_qk[2] * diff[2]};
+
+            M = M + betas[k] * star;
+        }
+
+        MatrixXcd sols = rotation::solver_problem_averageRQuatMetricAlter_red_new(M);
+
+
+        Matrix3d best_R;
+        double best_error = DBL_MAX;
+        for (int i = 0; i < 4; i++) {
+
+            Eigen::Quaterniond q;
+            if (abs(sols(0, i).imag()) > 1e-6) continue;
+            q.w() = sols(0, i).real();
+            if (abs(sols(1, i).imag()) > 1e-6) continue;
+            q.x() = sols(1, i).real();
+            if (abs(sols(2, i).imag()) > 1e-6) continue;
+            q.y() = sols(2, i).real();
+            if (abs(sols(3, i).imag()) > 1e-6) continue;
+            q.z() = sols(3, i).real();
+
+            Eigen::Matrix3d R = q.normalized().toRotationMatrix();
+
+            double error = 0;
+            for (int k = 0; k < K; k++) {
+                Vector3d c_k = -R_ks[k].transpose() * T_ks[k];
+                Vector3d diff = c_k - c_q;
+
+                Vector3d T_qk = T_qks[k];
+
+                error += pow((diff.norm() * R.transpose() * T_qk - betas[k] * diff).norm(), 2.);
+            }
+
+            if (error < best_error) {
+                best_error = error;
+                best_R = R;
+            }
+        }
+
+        if (best_error < overall_best_error) {
+            overall_best_error = best_error;
+            overall_best_R = best_R;
+        }
+    }
+
+    return overall_best_R;
+}
+
+MatrixXcd rotation::solver_problem_averageRQuatMetricAlter_red_new(const VectorXd& data)
+{
+    // Compute coefficients
+    const double* d = data.data();
+    VectorXd coeffs(32);
+    coeffs[0] = 2*d[5] - 2*d[7];
+    coeffs[1] = 4*d[4] + 4*d[8];
+    coeffs[2] = -2*d[5] + 2*d[7];
+    coeffs[3] = -2*d[2] + 2*d[6];
+    coeffs[4] = -4*d[1] - 4*d[3];
+    coeffs[5] = 2*d[2] - 2*d[6];
+    coeffs[6] = 4*d[0] + 4*d[8];
+    coeffs[7] = 2*d[1] - 2*d[3];
+    coeffs[8] = -4*d[2] - 4*d[6];
+    coeffs[9] = -2*d[1] + 2*d[3];
+    coeffs[10] = -4*d[5] - 4*d[7];
+    coeffs[11] = 4*d[0] + 4*d[4];
+    coeffs[12] = -4*d[4] - 4*d[8];
+    coeffs[13] = 2*d[1] + 2*d[3];
+    coeffs[14] = -4*d[2] + 4*d[6];
+    coeffs[15] = -2*d[1] - 2*d[3];
+    coeffs[16] = 4*d[0] - 4*d[4];
+    coeffs[17] = 2*d[2] + 2*d[6];
+    coeffs[18] = 4*d[1] - 4*d[3];
+    coeffs[19] = -2*d[2] - 2*d[6];
+    coeffs[20] = 4*d[0] - 4*d[8];
+    coeffs[21] = -4*d[0] - 4*d[8];
+    coeffs[22] = 4*d[5] - 4*d[7];
+    coeffs[23] = -4*d[0] + 4*d[4];
+    coeffs[24] = 2*d[5] + 2*d[7];
+    coeffs[25] = -2*d[5] - 2*d[7];
+    coeffs[26] = 4*d[4] - 4*d[8];
+    coeffs[27] = -4*d[0] - 4*d[4];
+    coeffs[28] = -4*d[0] + 4*d[8];
+    coeffs[29] = -4*d[4] + 4*d[8];
+    coeffs[30] = 1;
+    coeffs[31] = -1;
+
+
+
+    // Setup elimination template
+    static const int coeffs0_ind[] = { 2,5,9,30,12,5,13,9,17,30,0,13,0,5,17,9,30,30,5,1,13,9,17,30,13,21,2,9,24,30,14,21,3,22,12,0,17,24,30,15,22,4,23,0,1,9,24,30,23,5,2,17,24,30,2,3,13,3,24,9,30,30,5,9,2,30,13,5,9,17,12,30,5,13,0,17,9,0,30,30,13,5,1,9,17,30,17,24,27,21,9,2,5,24,13,30,18,24,7,27,22,22,21,3,24,17,0,12,13,14,30,19,8,24,22,28,23,22,4,9,1,0,5,24,15,30,24,9,28,23,5,24,17,2,13,30,18,17,7,27,14,3,24,3,13,21,9,2,30,30,10,18,10,8,18,8,22,14,4,15,3,6,9,4,14,22,17,16,30,24,27,17,5,2,30,24,7,27,22,18,13,0,12,30,24,8,22,28,19,5,1,0,30,24,9,28,13,2,30,2,5,7,18,27,7,17,24,14,21,3,13,30,30,20,5,11,13,7,19,8,18,10,14,22,8,18,4,10,22,4,14,30,5,7,2,24,7,17,30,30,5,9,30,13,17,30,23,24,30,31,15,17,30,31,31,24,30,24,27,30,31,22,31,24,28,30,31,8,4,31,31,25,29,30,5,7,31,30,13,19,30,31,31,26,25,30,31,24,30,21,24,30,31,22,31,3,9,30,31,18,14,31 };
+    static const int coeffs1_ind[] = { 31,31,31,31 };
+    static const int C0_ind[] = { 0,3,8,43,44,45,47,51,52,85,88,89,90,91,95,96,123,131,133,134,135,139,140,173,176,179,180,182,184,215,220,221,222,223,224,225,226,227,252,264,265,266,267,268,269,270,272,303,309,310,313,314,315,340,352,355,356,357,358,360,376,395,405,413,414,438,449,450,452,457,458,480,493,494,495,496,501,502,517,526,537,538,539,540,545,568,572,575,580,581,585,587,588,589,590,610,616,617,618,623,624,625,626,627,628,629,630,631,632,634,650,660,662,663,667,668,669,670,671,673,674,675,676,677,678,698,705,706,711,714,715,716,717,718,720,738,751,752,753,754,756,757,761,762,763,764,765,766,770,790,792,793,794,795,796,797,798,799,800,801,802,803,804,806,807,808,809,810,832,845,853,854,855,857,872,890,891,892,897,898,899,900,901,910,933,935,936,941,942,943,944,945,960,978,979,980,987,988,998,1012,1015,1020,1021,1025,1026,1027,1028,1029,1031,1032,1033,1035,1055,1056,1057,1058,1059,1063,1064,1065,1066,1067,1068,1069,1070,1071,1073,1074,1075,1076,1077,1097,1109,1117,1118,1119,1120,1121,1125,1142,1170,1171,1181,1214,1215,1217,1258,1259,1260,1267,1302,1303,1305,1308,1344,1347,1348,1390,1391,1395,1406,1435,1448,1478,1479,1483,1485,1522,1523,1530,1562,1566,1567,1571,1610,1611,1620,1621,1654,1655,1657,1658,1695,1698,1699,1700,1741,1742,1747,1786,1787,1788,1803,1830,1845,1874,1875,1885,1887,1918,1919,1930 } ;
+    static const int C1_ind[] = { 37,73,116,163 };
+
+    Matrix<double,44,44> C0; C0.setZero();
+    Matrix<double,44,4> C1; C1.setZero();
+    for (int i = 0; i < 302; i++) { C0(C0_ind[i]) = coeffs(coeffs0_ind[i]); }
+    for (int i = 0; i < 4; i++) { C1(C1_ind[i]) = coeffs(coeffs1_ind[i]); }
+
+    Matrix<double,44,4> C12 = C0.partialPivLu().solve(C1);
+
+
+
+
+    // Setup action matrix
+    Matrix<double,8, 4> RR;
+    RR << -C12.bottomRows(4), Matrix<double,4,4>::Identity(4, 4);
+
+    static const int AM_ind[] = { 0,1,2,3 };
+    Matrix<double, 4, 4> AM;
+    for (int i = 0; i < 4; i++) {
+        AM.row(i) = RR.row(AM_ind[i]);
+    }
+
+    Matrix<std::complex<double>, 4, 4> sols;
+    sols.setZero();
+
+    // Solve eigenvalue problem
+    EigenSolver<Matrix<double, 4, 4> > es(AM);
+    ArrayXcd D = es.eigenvalues();
+    ArrayXXcd V = es.eigenvectors();
+    ArrayXXcd scale = (D.transpose() / (V.row(0).array()*V.row(2).array())).sqrt();
+    V = (V * scale.replicate(4, 1)).eval();
+
+
+    sols.row(0) = V.row(0).array();
+    sols.row(1) = V.row(1).array();
+    sols.row(2) = V.row(2).array();
+    sols.row(3) = V.row(3).array();
+
+
+
+
+
+
+    return sols;
+}

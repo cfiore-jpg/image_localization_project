@@ -28,29 +28,15 @@ struct ReprojectionError{
     ReprojectionError(Eigen::Matrix3d R_k,
                       Eigen::Vector3d T_k,
                       Eigen::Matrix3d K,
-                      cv::Point2d pt_db,
-                      cv::Point2d pt_q)
+                      cv::Point2d pt_q,
+                      cv::Point2d pt_db)
                       : R_k(move(R_k)), T_k(move(T_k)), K(move(K)), pt_db(pt_db), pt_q(pt_q) {}
 
     template<typename T>
     bool operator()(const T * const R, const T * const T_q, T * residuals) const {
 
-        T x = R[0];
-        T y = R[1];
-        T z = R[2];
-
-        T Z = T(1) + x*x + y*y + z*z;
-
         T R_q [9];
-        R_q[0] = (T(1) + x*x - y*y - z*z) / Z;
-        R_q[1] = (T(2)*x*y - T(2)*z) / Z;
-        R_q[2] = (T(2)*x*z + T(2)*y) / Z;
-        R_q[3] = (T(2)*x*y + T(2)*z) / Z;
-        R_q[4] = (T(1) + y*y - x*x - z*z) / Z;
-        R_q[5] = (T(2)*y*z - T(2)*x) / Z;
-        R_q[6] = (T(2)*x*z - T(2)*y) / Z;
-        R_q[7] = (T(2)*y*z + T(2)*x) / Z;
-        R_q[8] = (T(1) + z*z - x*x - y*y) / Z;
+        ceres::AngleAxisToRotationMatrix(R, R_q);
 
         T px2point_1[3];
         px2point_1[0] = (T(pt_db.x) - K(0,2)) / K(0,0);
@@ -58,37 +44,36 @@ struct ReprojectionError{
         px2point_1[2] = T(1.);
 
         T R_qk [9];
-        R_qk[0] = R_q[0] * T(R_k(0,0)) + R_q[1] * T(R_k(0,1)) + R_q[2] * T(R_k(0,2));
-        R_qk[1] = R_q[0] * T(R_k(1,0)) + R_q[1] * T(R_k(1,1)) + R_q[2] * T(R_k(1,2));
-        R_qk[2] = R_q[0] * T(R_k(2,0)) + R_q[1] * T(R_k(2,1)) + R_q[2] * T(R_k(2,2));
-        R_qk[3] = R_q[3] * T(R_k(0,0)) + R_q[4] * T(R_k(0,1)) + R_q[5] * T(R_k(0,2));
-        R_qk[4] = R_q[3] * T(R_k(1,0)) + R_q[4] * T(R_k(1,1)) + R_q[5] * T(R_k(1,2));
-        R_qk[5] = R_q[3] * T(R_k(2,0)) + R_q[4] * T(R_k(2,1)) + R_q[5] * T(R_k(2,2));
-        R_qk[6] = R_q[6] * T(R_k(0,0)) + R_q[7] * T(R_k(0,1)) + R_q[8] * T(R_k(0,2));
-        R_qk[7] = R_q[6] * T(R_k(1,0)) + R_q[7] * T(R_k(1,1)) + R_q[8] * T(R_k(1,2));
-        R_qk[8] = R_q[6] * T(R_k(2,0)) + R_q[7] * T(R_k(2,1)) + R_q[8] * T(R_k(2,2));
+        R_qk[0] = R_q[0] * T(R_k(0,0)) + R_q[3] * T(R_k(0,1)) + R_q[6] * T(R_k(0,2));
+        R_qk[1] = R_q[1] * T(R_k(0,0)) + R_q[4] * T(R_k(0,1)) + R_q[7] * T(R_k(0,2));
+        R_qk[2] = R_q[2] * T(R_k(0,0)) + R_q[5] * T(R_k(0,1)) + R_q[8] * T(R_k(0,2));
+        R_qk[3] = R_q[0] * T(R_k(1,0)) + R_q[3] * T(R_k(1,1)) + R_q[6] * T(R_k(1,2));
+        R_qk[4] = R_q[1] * T(R_k(1,0)) + R_q[4] * T(R_k(1,1)) + R_q[7] * T(R_k(1,2));
+        R_qk[5] = R_q[2] * T(R_k(1,0)) + R_q[5] * T(R_k(1,1)) + R_q[8] * T(R_k(1,2));
+        R_qk[6] = R_q[0] * T(R_k(2,0)) + R_q[3] * T(R_k(2,1)) + R_q[6] * T(R_k(2,2));
+        R_qk[7] = R_q[1] * T(R_k(2,0)) + R_q[4] * T(R_k(2,1)) + R_q[7] * T(R_k(2,2));
+        R_qk[8] = R_q[2] * T(R_k(2,0)) + R_q[5] * T(R_k(2,1)) + R_q[8] * T(R_k(2,2));
 
         T T_qk [3];
-        T_qk[0] = T_q[0] - (R_qk[0] * T_k[0] + R_qk[1] * T_k[1] + R_qk[2] * T_k[2]);
-        T_qk[1] = T_q[1] - (R_qk[3] * T_k[0] + R_qk[4] * T_k[1] + R_qk[5] * T_k[2]);
-        T_qk[2] = T_q[2] - (R_qk[6] * T_k[0] + R_qk[7] * T_k[1] + R_qk[8] * T_k[2]);
+        T_qk[0] = T_q[0] - (R_qk[0] * T_k[0] + R_qk[3] * T_k[1] + R_qk[6] * T_k[2]);
+        T_qk[1] = T_q[1] - (R_qk[1] * T_k[0] + R_qk[4] * T_k[1] + R_qk[7] * T_k[2]);
+        T_qk[2] = T_q[2] - (R_qk[2] * T_k[0] + R_qk[5] * T_k[1] + R_qk[8] * T_k[2]);
 
         T E_qk [9];
-        E_qk[0] = -T_qk[2] * R_qk[3] + T_qk[1] * R_qk[6];
-        E_qk[1] = -T_qk[2] * R_qk[4] + T_qk[1] * R_qk[7];
-        E_qk[2] = -T_qk[2] * R_qk[5] + T_qk[1] * R_qk[8];
-        E_qk[3] = T_qk[2] * R_qk[0] - T_qk[0] * R_qk[6];
-        E_qk[4] = T_qk[2] * R_qk[1] - T_qk[0] * R_qk[7];
-        E_qk[5] = T_qk[2] * R_qk[2] - T_qk[0] * R_qk[8];
-        E_qk[6] = -T_qk[1] * R_qk[0] + T_qk[0] * R_qk[3];
-        E_qk[7] = -T_qk[1] * R_qk[1] + T_qk[0] * R_qk[4];
-        E_qk[8] = -T_qk[1] * R_qk[2] + T_qk[0] * R_qk[5];
-
+        E_qk[0] = -T_qk[2] * R_qk[1] + T_qk[1] * R_qk[2];
+        E_qk[1] = T_qk[2] * R_qk[0] - T_qk[0] * R_qk[2];
+        E_qk[2] = -T_qk[1] * R_qk[0] + T_qk[0] * R_qk[1];
+        E_qk[3] = -T_qk[2] * R_qk[4] + T_qk[1] * R_qk[5];
+        E_qk[4] = T_qk[2] * R_qk[3] - T_qk[0] * R_qk[5];
+        E_qk[5] = -T_qk[1] * R_qk[3] + T_qk[0] * R_qk[4];
+        E_qk[6] = -T_qk[2] * R_qk[7] + T_qk[1] * R_qk[8];
+        E_qk[7] = T_qk[2] * R_qk[6] - T_qk[0] * R_qk[8];
+        E_qk[8] = -T_qk[1] * R_qk[6] + T_qk[0] * R_qk[7];
 
         T point2point_1[3];
-        point2point_1[0] = E_qk[0] * px2point_1[0] + E_qk[1] * px2point_1[1] + E_qk[2] * px2point_1[2];
-        point2point_1[1] = E_qk[3] * px2point_1[0] + E_qk[4] * px2point_1[1] + E_qk[5] * px2point_1[2];
-        point2point_1[2] = E_qk[6] * px2point_1[0] + E_qk[7] * px2point_1[1] + E_qk[8] * px2point_1[2];
+        point2point_1[0] = E_qk[0] * px2point_1[0] + E_qk[3] * px2point_1[1] + E_qk[6] * px2point_1[2];
+        point2point_1[1] = E_qk[1] * px2point_1[0] + E_qk[4] * px2point_1[1] + E_qk[7] * px2point_1[2];
+        point2point_1[2] = E_qk[2] * px2point_1[0] + E_qk[5] * px2point_1[1] + E_qk[8] * px2point_1[2];
 
         T epiline[3];
         epiline[0] = (T(1.) /  K(0,0)) * point2point_1[0];
@@ -108,43 +93,48 @@ struct ReprojectionError{
     static ceres::CostFunction *Create(const Eigen::Matrix3d & R_k,
                                        const Eigen::Vector3d & T_k,
                                        const Eigen::Matrix3d & K,
-                                       const cv::Point2d & pt_db,
-                                       const cv::Point2d & pt_q) {
+                                       const cv::Point2d & pt_q,
+                                       const cv::Point2d & pt_db) {
         return (new ceres::AutoDiffCostFunction<ReprojectionError, 1, 3, 3>(
-                new ReprojectionError(R_k, T_k, K, pt_db, pt_q)));
+                new ReprojectionError(R_k, T_k, K, pt_q, pt_db)));
     }
 
 
     Eigen::Matrix3d R_k;
     Eigen::Vector3d T_k;
     Eigen::Matrix3d K;
-    cv::Point2d pt_db;
     cv::Point2d pt_q;
+    cv::Point2d pt_db;
 };
 
 struct ReprojectionErrorBA{
-    ReprojectionErrorBA(cv::Point2d pt_1, cv::Point2d pt_2, Eigen::Matrix3d K_eig)
-                        : pt_1(pt_1), pt_2(pt_2), K_eig(move(K_eig)) {}
+    ReprojectionErrorBA(cv::Point2d pt_1, cv::Point2d pt_2)
+                        : pt_1(pt_1), pt_2(pt_2) {}
 
     template<typename T>
     bool operator()(const T * const camera_1, const T * const camera_2, T * residuals) const {
 
-        T K[4];
-        K[0] = T (K_eig(0, 0));
-        K[1] = T (K_eig(1, 1));
-        K[2] = T (K_eig(0, 2));
-        K[3] = T (K_eig(1, 2));
-
-
         T R_1[3], R_2[3], T_1[3], T_2[3];
         R_1[0] = camera_1[0]; R_1[1] = camera_1[1]; R_1[2] = camera_1[2];
         T_1[0] = camera_1[3]; T_1[1] = camera_1[4]; T_1[2] = camera_1[5];
+
         R_2[0] = camera_2[0]; R_2[1] = camera_2[1]; R_2[2] = camera_2[2];
         T_2[0] = camera_2[3]; T_2[1] = camera_2[4]; T_2[2] = camera_2[5];
 
+        T K_1[4], K_2[4];
+        K_1[0] = camera_1[6];
+        K_1[1] = camera_1[7];
+        K_1[2] = camera_1[8];
+        K_1[3] = camera_1[9];
+
+        K_2[0] = camera_2[6];
+        K_2[1] = camera_2[7];
+        K_2[2] = camera_2[8];
+        K_2[3] = camera_2[9];
+
         T px2point[3];
-        px2point[0] = (T(pt_1.x) - K[2]) / K[0];
-        px2point[1] = (T(pt_1.y) - K[3]) / K[1];
+        px2point[0] = (T(pt_1.x) - K_1[2]) / K_1[0];
+        px2point[1] = (T(pt_1.y) - K_1[3]) / K_1[1];
         px2point[2] = T(1.);
 
         T R_1_m [9], R_2_m [9];
@@ -171,9 +161,11 @@ struct ReprojectionErrorBA{
         E_21[0] = -T_21[2] * R_21[1] + T_21[1] * R_21[2];
         E_21[1] = T_21[2] * R_21[0] - T_21[0] * R_21[2];
         E_21[2] = -T_21[1] * R_21[0] + T_21[0] * R_21[1];
+
         E_21[3] = -T_21[2] * R_21[4] + T_21[1] * R_21[5];
         E_21[4] = T_21[2] * R_21[3] - T_21[0] * R_21[5];
         E_21[5] = -T_21[1] * R_21[3] + T_21[0] * R_21[4];
+
         E_21[6] = -T_21[2] * R_21[7] + T_21[1] * R_21[8];
         E_21[7] = T_21[2] * R_21[6] - T_21[0] * R_21[8];
         E_21[8] = -T_21[1] * R_21[6] + T_21[0] * R_21[7];
@@ -184,9 +176,9 @@ struct ReprojectionErrorBA{
         point2point[2] = E_21[2] * px2point[0] + E_21[5] * px2point[1] + E_21[8] * px2point[2];
 
         T epiline[3];
-        epiline[0] = (T(1.) /  K[0]) * point2point[0];
-        epiline[1] = (T(1.) /  K[1]) * point2point[1];
-        epiline[2] = -(K[2] /  K[0]) * point2point[0] - (K[3] /  K[1]) * point2point[1] + point2point[2];
+        epiline[0] = (T(1.) /  K_2[0]) * point2point[0];
+        epiline[1] = (T(1.) /  K_2[1]) * point2point[1];
+        epiline[2] = -(K_2[2] /  K_2[0]) * point2point[0] - (K_2[3] /  K_2[1]) * point2point[1] + point2point[2];
 
         T error = ceres::abs(epiline[0] * T(pt_2.x) + epiline[1] * T(pt_2.y) + epiline[2]) /
                   ceres::sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
@@ -196,14 +188,12 @@ struct ReprojectionErrorBA{
         return true;
     }
 
-    static ceres::CostFunction *Create(const cv::Point2d & pt_1, const cv::Point2d & pt_2, const Eigen::Matrix3d & K_eig) {
-        return (new ceres::AutoDiffCostFunction<ReprojectionErrorBA, 1, 6, 6>(
-                new ReprojectionErrorBA(pt_1, pt_2, K_eig)));
+    static ceres::CostFunction *Create(const cv::Point2d & pt_1, const cv::Point2d & pt_2) {
+        return (new ceres::AutoDiffCostFunction<ReprojectionErrorBA, 1, 10, 10> (new ReprojectionErrorBA(pt_1, pt_2)));
     }
 
     cv::Point2d pt_1;
     cv::Point2d pt_2;
-    Eigen::Matrix3d K_eig;
 };
 
 struct TripletErrorBA{
@@ -432,245 +422,158 @@ void percentageBar(double fraction_done) {
 
 }
 
-//void pose::sceneBundleAdjust(const int num_ims, const double K[4],
-//                             const string & folder, const string & scene, const string & sequence, const string & frame,
-//                             const string & pose_ext, const string & rgb_ext) {
-//
-//    //Make sure that array sizes and pose acquisition functions are appropriate for dataset
-//    cout << "Bundle adjustment for " << scene << " scene, sequence " << sequence << "." << endl;
-//
-//    string base = folder + "/" + scene + "/" + sequence + "/" + frame;
-//    Eigen::Matrix3d K_eig {{K[0], 0.,   K[2]},
-//                           {0.,   K[1], K[3]},
-//                           {0.,   0.,     1.}};
-//    double cameras [1000][6];
-//    int bit_arr [1000];
-//    vector<Eigen::Matrix3d> R_ks;
-//    vector<Eigen::Vector3d> T_ks;
-//    for (int i = 0; i < num_ims; i++) {
-//        bit_arr[i] = 0;
-//
-//        string im = base + formatNum(i, 6);
-//        Eigen::Matrix3d R;
-//        Eigen::Vector3d T;
-//        sevenScenes::getAbsolutePose(im, R, T);
-//        R_ks.push_back(R);
-//        T_ks.push_back(T);
-//
-//        double AA_arr[3];
-//        double T_arr[3] {T[0], T[1], T[2]};
-//        double R_arr[9]{R(0, 0), R(1, 0), R(2, 0),
-//                        R(0, 1), R(1, 1), R(2, 1),
-//                        R(0, 2), R(1, 2), R(2, 2)};
-//        ceres::RotationMatrixToAngleAxis(R_arr, AA_arr);
+void pose::sceneBundleAdjust(const int num_ims, const double K[4],
+                             const string & folder, const string & scene, const string & sequence, const string & frame,
+                             const string & pose_ext, const string & rgb_ext) {
 
-//???????? Give each camera its own calibration matrix and average at the end
-//        cameras[i][0] = AA_arr[0]; cameras[i][1] = AA_arr[1]; cameras[i][2] = AA_arr[2];
-//        cameras[i][3] = T_arr[0]; cameras[i][4] = T_arr[1]; cameras[i][5] = T_arr[2];
-//    }
-//
-//    double match_theshold = 1.;
-//    int min_good_matches = 5;
-//    int max_jumps = 30;
-//    ceres::Problem problem;
-//    ceres::LossFunction * loss_function = new ceres::HuberLoss(1.0);
-//    cout << "Adding residuals..." << endl;
-//
-//    for(int c = 1; c < num_ims - 1; c++) {
-//        string im_c = base;
-//        im_c += formatNum(c, 6);
-//
-//        int l = c;
-//        int jumps_left = 0;
-//        int success = 0;
-//        while (true) {
-//            if ((l - 1) < 0) break;
-//            if (jumps_left > max_jumps) break;
-//            l -= 1;
-//
-//            string im_l = base; im_l += formatNum(l, 6);
-//
-//            Eigen::Matrix3d R_cl = R_ks[c] * R_ks[l].transpose();
-//            Eigen::Vector3d T_cl = T_ks[c] - R_cl * T_ks[l];
-//
-//            if (T_cl.norm() == 0) continue;
-//
-//            T_cl.normalize();
-//            Eigen::Matrix3d T_cl_cross{{0,        -T_cl(2), T_cl(1)},
-//                                       {T_cl(2),  0,        -T_cl(0)},
-//                                       {-T_cl(1), T_cl(0),  0}};
-//            Eigen::Matrix3d E_cl = T_cl_cross * R_cl;
-//            Eigen::Matrix3d F_cl = K_eig.inverse().transpose() * E_cl * K_eig.inverse();
-//
-//            vector<cv::Point2d> pts_cl, pts_l;
-//            functions::findMatches(im_c, im_l, rgb_ext, "SIFT", 0.8, pts_cl, pts_l);
-//
-//            int r = c;
-//            int jumps_right = 0;
-//            while (true) {
-//                if ((r + 1) >= num_ims) break;
-//                if (jumps_right > max_jumps) break;
-//                r += 1;
-//
-//                string im_r = base; im_r += formatNum(r, 6);
-//
-//                Eigen::Matrix3d R_cr = R_ks[c] * R_ks[r].transpose();
-//                Eigen::Vector3d T_cr = T_ks[c] - R_cr * T_ks[r];
-//
-//                if (T_cr.norm() == 0) continue;
-//
-//                T_cr.normalize();
-//                Eigen::Matrix3d T_cr_cross{{0,        -T_cr(2), T_cr(1)},
-//                                           {T_cr(2),  0,       -T_cr(0)},
-//                                           {-T_cr(1), T_cr(0), 0}};
-//                Eigen::Matrix3d E_cr = T_cr_cross * R_cr;
-//                Eigen::Matrix3d F_cr = K_eig.inverse().transpose() * E_cr * K_eig.inverse();
-//
-//                vector<cv::Point2d> pts_cr, pts_r;
-//                functions::findMatches(im_c, im_r, rgb_ext, "SIFT", 0.8, pts_cr, pts_r);
-//
-//                vector<cv::Point2d> triplet_l, triplet_c, triplet_r, pts_cr_temp = pts_cr, pts_r_temp = pts_r;
-//                for (int i = 0; i < pts_cl.size(); i++) {
-//                    cv::Point2d pt_cl = pts_cl[i];
-//
-//                    for (int j = 0; j < pts_cr_temp.size(); j++) {
-//                        cv::Point2d pt_cr = pts_cr_temp[j];
-//
-//                        double dist = sqrt(pow(pt_cl.x - pt_cr.x, 2) + pow(pt_cl.y - pt_cr.y, 2));
-//
-//                        if (dist <= 1.) {
-//                            triplet_l.push_back(pts_l[i]);
-//                            cv::Point2d pt_c {(pt_cl.x + pts_cr_temp[j].x)/2, (pt_cl.y + pts_cr_temp[j].y)/2};
-//                            triplet_c.push_back(pt_c);
-//                            triplet_r.push_back(pts_r_temp[j]);
-//
-//                            pts_cr_temp.erase(pts_cr_temp.begin() + j);
-//                            pts_r_temp.erase(pts_r_temp.begin() + j);
-//
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                vector<int> good_indices;
-//                if (!triplet_c.empty()) {
-//                    for (int i = 0; i < triplet_c.size(); i++) {
-//
-//                        Eigen::Vector3d pt_l {triplet_l[i].x, triplet_l[i].y, 1.};
-//                        Eigen::Vector3d pt_c {triplet_c[i].x, triplet_c[i].y, 1.};
-//                        Eigen::Vector3d pt_r {triplet_r[i].x, triplet_r[i].y, 1.};
-//
-//                        Eigen::Vector3d epiline_cl = F_cl * pt_l;
-//                        Eigen::Vector3d epiline_cr = F_cr * pt_r;
-//
-//                        double x_pred = (epiline_cl[1] * epiline_cr[2] - epiline_cr[1] * epiline_cl[2]) /
-//                                        (epiline_cl[0] * epiline_cr[1] - epiline_cr[0] * epiline_cl[1]);
-//                        double y_pred = (epiline_cl[2] * epiline_cr[0] - epiline_cr[2] * epiline_cl[0]) /
-//                                        (epiline_cl[0] * epiline_cr[1] - epiline_cr[0] * epiline_cl[1]);
-//
-//                        double dist = sqrt(pow(x_pred - pt_c[0], 2) + pow(y_pred - pt_c[1], 2));
-//
-//                        if (dist <= match_theshold) {
-//                            good_indices.push_back(i);
-//                        }
-//                    }
-//
-//                }
-//
-//                if (good_indices.size() >= min_good_matches) {
-//                    bit_arr[c] = 1;
-//                    bit_arr[l] = 1;
-//                    bit_arr[r] = 1;
-//
-//                    if (l == c - 1) cout << l << " -------> ";
-//                    else cout << l << " |||||||> ";
-//                    cout << c;
-//                    if (r == c + 1) cout << " <------- " << r;
-//                    else cout << " <||||||| " << r;
-//
-//                    for (const auto & i: good_indices) {
-//                        ceres::CostFunction *cost_function = TripletErrorBA::Create(triplet_c[i], triplet_l[i],
-//                                                                                    triplet_r[i], K_eig);
-//                        problem.AddResidualBlock(cost_function, loss_function, cameras[c], cameras[l], cameras[r]);
-//                    }
-//
-//                    success = 1;
-//                    break;
-//                } else {
-//                    jumps_right++;
-//                }
-//            }
-//
-//            if (success) break;
-//            else jumps_left++;
-//        }
-//
-//        if (!success) {
-//            cout << "XXXXXXX " << c << " XXXXXXX     ";
-//        }
-//
-//        int trailer = max(0, c - 1 - max_jumps);
-//        if (bit_arr[trailer] == 0) {
-//            cout << " frame " << trailer << " EXCLUDED";
-//        }
-//        cout << endl;
-//
-////        percentageBar(double(c+1)/num_ims);
-//    }
-//
-//    cout << endl << "Bundle Adjusting..." << endl;
-//    ceres::Solver::Options options;
-//    options.linear_solver_type = ceres::ITERATIVE_SCHUR;
-//    options.preconditioner_type = ceres::SCHUR_JACOBI;
-//    options.max_num_iterations = 1000;
-//    options.minimizer_progress_to_stdout = true;
-//    ceres::Solver::Summary summary;
-//    ceres::Solve(options, &problem, &summary);
-//    std::cout << summary.FullReport() << "\n";
-//
-//    cout << endl << "Writing Bundle Adjusted Pose Files..." << endl;
-//    for (int i = 0; i < num_ims; i++) {
-//        double AA_arr [3] = {cameras[i][0], cameras[i][1], cameras[i][2]};
-//        double T_arr [3] = {cameras[i][3], cameras[i][4], cameras[i][5]};
-//        double R_arr[9];
-//        ceres::AngleAxisToRotationMatrix(AA_arr, R_arr);
-//        Eigen::Matrix3d R {{R_arr[0], R_arr[3], R_arr[6]},
-//                           {R_arr[1], R_arr[4], R_arr[7]},
-//                           {R_arr[2], R_arr[5], R_arr[8]}};
-//        Eigen::Vector3d T {T_arr[0], T_arr[1], T_arr[2]};
-//
-//        string fn = base; fn += formatNum(i, 6); fn += ".bundle_adjusted"; fn += pose_ext;
-//        ofstream BA_pose;
-//        BA_pose.open(fn);
-//        for(int row = 0; row < 4; row++) {
-//            if (row < 3) {
-//                for (int col = 0; col < 4; col++) {
-//                    if (col < 3) {
-//                        double num = R(row, col);
-//                        if (num < 0) BA_pose << setprecision(16) << num << " ";
-//                        else BA_pose << " " << setprecision(16) << num << " ";
-//                    } else {
-//                        double num = T(row);
-//                        if (num < 0) BA_pose << setprecision(16) << num << " ";
-//                        else BA_pose << " " << setprecision(16) << num << " ";
-//                    }
-//                }
-//            } else {
-//                for (int col = 0; col < 4; col++) {
-//                    if (col < 3) {
-//                        BA_pose << " " << 0 << "                  ";
-//                    } else {
-//                        BA_pose << " " << 1 << "                  ";
-//                    }
-//                }
-//            }
-//            BA_pose << endl;
-//        }
-//        BA_pose << "Transformation matrix from world to camera coordinates.";
-//        BA_pose.close();
-//    }
-//    cout << "Done." << endl;
-//}
+    //Make sure that array sizes and pose acquisition functions are appropriate for dataset
+    cout << "Bundle adjustment for " << scene << " scene, sequence " << sequence << "." << endl;
+
+    string base = folder + "/" + scene + "/" + sequence + "/" + frame;
+    Eigen::Matrix3d K_eig {{K[0], 0.,   K[2]},
+                           {0.,   K[1], K[3]},
+                           {0.,   0.,     1.}};
+    double cameras [1000][10];
+    int bit_arr [1000];
+    vector<Eigen::Matrix3d> R_ks;
+    vector<Eigen::Vector3d> T_ks;
+    vector<pair<cv::Mat, vector<cv::KeyPoint>>> d_kps;
+
+    for (int i = 0; i < num_ims; i++) {
+
+        string im = base + formatNum(i, 6);
+
+        bit_arr[i] = 0;
+
+        d_kps.push_back(functions::getDescriptors(im, rgb_ext, "SIFT"));
+
+        Eigen::Matrix3d R;
+        Eigen::Vector3d T;
+        sevenScenes::getAbsolutePose(im, R, T);
+        R_ks.push_back(R);
+        T_ks.push_back(T);
+
+        double AA_arr[3];
+        double T_arr[3] {T[0], T[1], T[2]};
+        double R_arr[9]{R(0, 0), R(1, 0), R(2, 0),
+                        R(0, 1), R(1, 1), R(2, 1),
+                        R(0, 2), R(1, 2), R(2, 2)};
+        ceres::RotationMatrixToAngleAxis(R_arr, AA_arr);
+
+        cameras[i][0] = AA_arr[0];
+        cameras[i][1] = AA_arr[1];
+        cameras[i][2] = AA_arr[2];
+
+        cameras[i][3] = T_arr[0];
+        cameras[i][4] = T_arr[1];
+        cameras[i][5] = T_arr[2];
+
+        cameras[i][6] = K[0];
+        cameras[i][7] = K[1];
+        cameras[i][8] = K[2];
+        cameras[i][9] = K[3];
+        cout << "Descriptor " << i << endl;
+    }
+
+    double match_theshold = 2.;
+    int min_good_matches = 50;
+    ceres::Problem problem;
+    ceres::LossFunction * loss_function = new ceres::HuberLoss(1.0);
+    cout << "Adding residuals..." << endl;
+    for(int i = 0; i < num_ims - 1; i++) {
+        for(int j = i + 1; j < num_ims; j++) {
+
+            Eigen::Matrix3d R_ji = R_ks[j] * R_ks[i].transpose();
+            Eigen::Vector3d T_ji = T_ks[j] - R_ji * T_ks[i];
+            if (T_ji.norm() == 0) continue;
+            T_ji.normalize();
+            Eigen::Matrix3d T_ji_cross{{0,        -T_ji(2), T_ji(1)},
+                                       {T_ji(2),  0,        -T_ji(0)},
+                                       {-T_ji(1), T_ji(0),  0}};
+            Eigen::Matrix3d E_ji = T_ji_cross * R_ji;
+            Eigen::Matrix3d F_ji = K_eig.inverse().transpose() * E_ji * K_eig.inverse();
+
+            vector<cv::Point2d> pts_i, pts_j;
+            functions::findMatches(0.8, d_kps[i].first, d_kps[i].second, d_kps[j].first, d_kps[j].second, pts_i, pts_j);
+            cout << "Matching " << i << " with " << j << endl;
+
+            vector<int> indices;
+            for(int k = 0; k < pts_i.size(); k++) {
+                Eigen::Vector3d pt_i {pts_i[k].x, pts_i[k].y, 1.};
+                Eigen::Vector3d pt_j {pts_j[k].x, pts_j[k].y, 1.};
+
+                Eigen::Vector3d epiline = F_ji * pt_i;
+
+                double error = abs(epiline[0] * pt_j[0] + epiline[1] * pt_j[1] + epiline[2]) /
+                               sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+
+                if(error <= match_theshold) {
+                    indices.push_back(k);
+                }
+            }
+
+            if(indices.size() >= min_good_matches) {
+                for(const auto & idx : indices) {
+                    ceres::CostFunction *cost_function = ReprojectionErrorBA::Create(pts_i[idx], pts_j[idx]);
+                    problem.AddResidualBlock(cost_function, loss_function, cameras[i], cameras[j]);
+                }
+            }
+        }
+    }
+
+    cout << endl << "Bundle Adjusting..." << endl;
+    ceres::Solver::Options options;
+    options.linear_solver_type = ceres::ITERATIVE_SCHUR;
+    options.preconditioner_type = ceres::SCHUR_JACOBI;
+    options.max_num_iterations = 1000;
+    options.minimizer_progress_to_stdout = true;
+    ceres::Solver::Summary summary;
+    ceres::Solve(options, &problem, &summary);
+    std::cout << summary.FullReport() << "\n";
+
+    cout << endl << "Writing Bundle Adjusted Pose Files..." << endl;
+    for (int i = 0; i < num_ims; i++) {
+        double AA_arr [3] = {cameras[i][0], cameras[i][1], cameras[i][2]};
+        double T_arr [3] = {cameras[i][3], cameras[i][4], cameras[i][5]};
+        double R_arr[9];
+        ceres::AngleAxisToRotationMatrix(AA_arr, R_arr);
+        Eigen::Matrix3d R {{R_arr[0], R_arr[3], R_arr[6]},
+                           {R_arr[1], R_arr[4], R_arr[7]},
+                           {R_arr[2], R_arr[5], R_arr[8]}};
+        Eigen::Vector3d T {T_arr[0], T_arr[1], T_arr[2]};
+
+        string fn = base; fn += formatNum(i, 6); fn += ".bundle_adjusted"; fn += pose_ext;
+        ofstream BA_pose;
+        BA_pose.open(fn);
+        for(int row = 0; row < 4; row++) {
+            if (row < 3) {
+                for (int col = 0; col < 4; col++) {
+                    if (col < 3) {
+                        double num = R(row, col);
+                        if (num < 0) BA_pose << setprecision(16) << num << " ";
+                        else BA_pose << " " << setprecision(16) << num << " ";
+                    } else {
+                        double num = T(row);
+                        if (num < 0) BA_pose << setprecision(16) << num << " ";
+                        else BA_pose << " " << setprecision(16) << num << " ";
+                    }
+                }
+            } else {
+                for (int col = 0; col < 4; col++) {
+                    if (col < 3) {
+                        BA_pose << " " << 0 << "                  ";
+                    } else {
+                        BA_pose << " " << 1 << "                  ";
+                    }
+                }
+            }
+            BA_pose << endl;
+        }
+        BA_pose << "Transformation matrix from world to camera coordinates.";
+        BA_pose.close();
+    }
+    cout << "Done." << endl;
+}
 
 
 
@@ -745,7 +648,7 @@ double pose::tripletCircles (const double K[4], const vector<pair<cv::Mat, vecto
         if (pts_i_j.size() < 5) continue;
         Eigen::Matrix3d R_ji;
         Eigen::Vector3d T_ji;
-        if(!functions::getRelativePose(pts_i_j, pts_j_i, K, R_ji, T_ji)) continue;
+        if(!functions::getRelativePose(pts_i_j, pts_j_i, K, 1.0, R_ji, T_ji)) continue;
 
 
         vector<cv::Point2d> pts_j_k, pts_k_j;
@@ -753,7 +656,7 @@ double pose::tripletCircles (const double K[4], const vector<pair<cv::Mat, vecto
         if (pts_j_k.size() < 5) continue;
         Eigen::Matrix3d R_kj;
         Eigen::Vector3d T_kj;
-        if(!functions::getRelativePose(pts_j_k, pts_k_j, K, R_kj, T_kj)) continue;
+        if(!functions::getRelativePose(pts_j_k, pts_k_j, K, 1.0, R_kj, T_kj)) continue;
 
 
         vector<cv::Point2d> pts_i_k, pts_k_i;
@@ -761,7 +664,7 @@ double pose::tripletCircles (const double K[4], const vector<pair<cv::Mat, vecto
         if (pts_i_k.size() < 5) continue;
         Eigen::Matrix3d R_ki;
         Eigen::Vector3d T_ki;
-        if(!functions::getRelativePose(pts_i_k, pts_k_i, K, R_ki, T_ki)) continue;
+        if(!functions::getRelativePose(pts_i_k, pts_k_i, K, 1.0, R_ki, T_ki)) continue;
 
         Eigen::Matrix3d R_ki_composed = R_kj * R_ji;
 
@@ -957,7 +860,7 @@ Eigen::Matrix3d pose::R_q_average (const vector<Eigen::Matrix3d> & rotations) {
 
 }
 
-Eigen::Matrix3d pose::R_q_closed_form (bool use_Rqk, bool normalize,
+Eigen::Matrix3d pose::R_q_closed_form (bool use_Rqk, bool normalize, bool version,
                                        const Eigen::Vector3d & c_q,
                                        const vector<Eigen::Matrix3d> & R_ks,
                                        const vector<Eigen::Vector3d> & T_ks,
@@ -965,17 +868,28 @@ Eigen::Matrix3d pose::R_q_closed_form (bool use_Rqk, bool normalize,
                                        const vector<Eigen::Vector3d> & T_qks) {
 
     Eigen::Matrix3d R_q;
+
+    if (version) {
+        if (use_Rqk) {
+            R_q = rotation::optimal_rotation_using_R_qks_NEW(c_q, R_ks, T_ks, R_qks, T_qks);
+        } else {
+            R_q = rotation::optimal_rotation_using_T_qks_NEW(c_q, R_ks, T_ks, R_qks, T_qks);
+        }
+        return R_q;
+    }
+
+
     if (use_Rqk) {
         if (normalize) {
             R_q = rotation::NORM_optimal_rotation_using_R_qks(c_q, R_ks, T_ks, R_qks, T_qks);
         } else {
-            R_q = rotation::optimal_rotation_using_R_qks(c_q, R_ks, T_ks, R_qks, T_qks);
+            R_q = rotation::optimal_rotation_using_R_qks_NEW_2(c_q, R_ks, T_ks, R_qks, T_qks);
         }
     } else {
         if (normalize) {
             R_q = rotation::NORM_optimal_rotation_using_T_qks(c_q, R_ks, T_ks, R_qks, T_qks);
         } else {
-            R_q = rotation::optimal_rotation_using_T_qks(c_q, R_ks, T_ks, R_qks, T_qks);
+            R_q = rotation::optimal_rotation_using_T_qks_NEW_2(c_q, R_ks, T_ks, R_qks, T_qks);
         }
     }
 
@@ -985,7 +899,17 @@ Eigen::Matrix3d pose::R_q_closed_form (bool use_Rqk, bool normalize,
 
 
 //// RANSAC
-tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, Eigen::Matrix3d, vector<int>>
+tuple<Eigen::Vector3d,
+//Eigen::Vector3d,
+//Eigen::Vector3d,
+//Eigen::Matrix3d,
+Eigen::Matrix3d,
+//Eigen::Matrix3d,
+//Eigen::Matrix3d,
+//Eigen::Matrix3d,
+//Eigen::Matrix3d,
+//Eigen::Matrix3d,
+vector<int>>
 pose::hypothesizeRANSAC(double threshold,
                   const vector<Eigen::Matrix3d> & R_ks,
                   const vector<Eigen::Vector3d> & T_ks,
@@ -1010,22 +934,16 @@ pose::hypothesizeRANSAC(double threshold,
             vector<int> indices{i, j};
             double score = 0;
 
-//            Eigen::Matrix3d R_h = pose::R_q_average(vector<Eigen::Matrix3d>{R_qks[i] * R_ks[i], R_qks[j] * R_ks[j]});
-
+            Eigen::Matrix3d R_h = pose::R_q_average(vector<Eigen::Matrix3d>{R_qks[i] * R_ks[i], R_qks[j] * R_ks[j]});
             Eigen::Vector3d c_h = pose::c_q_closed_form(set_R_ks, set_T_ks, set_R_qks, set_T_qks);
-
             for (int k = 0; k < K; k++) {
                 if (k != i && k != j) {
 
-//                    Eigen::Matrix3d R_qk_h = R_h * R_ks[k].transpose();
-//                    Eigen::Vector3d T_qk_h = -R_qk_h * (R_ks[k] * c_h + T_ks[k]);
-//                    T_qk_h.normalize();
-
-                    Eigen::Vector3d T_qk_h = -R_qks[k] * (R_ks[k] * c_h + T_ks[k]);
+                    Eigen::Matrix3d R_qk_h = R_h * R_ks[k].transpose();
+                    Eigen::Vector3d T_qk_h = -R_qk_h * (R_ks[k] * c_h + T_ks[k]);
                     T_qk_h.normalize();
 
                     double T_angular_diff = functions::getAngleBetween(T_qk_h, T_qks[k]);
-
                     if (T_angular_diff <= threshold) {
                         set_R_ks.push_back(R_ks[k]);
                         set_T_ks.push_back(T_ks[k]);
@@ -1058,26 +976,31 @@ pose::hypothesizeRANSAC(double threshold,
 
 
     // Translation Methods
-    Eigen::Vector3d T_gov = pose::T_q_govindu(best_T_ks, best_R_qks, best_T_qks);
-    Eigen::Vector3d T_cf = pose::T_q_closed_form(best_R_ks, best_T_ks, best_R_qks, best_T_qks);
+//    Eigen::Vector3d T_gov = pose::T_q_govindu(best_T_ks, best_R_qks, best_T_qks);
+//    Eigen::Vector3d T_cf = pose::T_q_closed_form(best_R_ks, best_T_ks, best_R_qks, best_T_qks);
 
 
     // Rotation Methods
     Eigen::Matrix3d R_avg = pose::R_q_average(rotations);
-    Eigen::Matrix3d R_cf_R = pose::R_q_closed_form(true, false, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
-    Eigen::Matrix3d R_cf_R_NORM = pose::R_q_closed_form(true, true, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
-    Eigen::Matrix3d R_cf_T = pose::R_q_closed_form(false, false, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
-    Eigen::Matrix3d R_cf_T_NORM = pose::R_q_closed_form(false, true, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
+//    Eigen::Matrix3d R_cf_R = pose::R_q_closed_form(true, false, false, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
+//    Eigen::Matrix3d R_cf_R_NORM = pose::R_q_closed_form(true, true, false, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
+//    Eigen::Matrix3d R_cf_R_NEW = pose::R_q_closed_form(true, false, true, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
+//
+//    Eigen::Matrix3d R_cf_T = pose::R_q_closed_form(false, false, false, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
+//    Eigen::Matrix3d R_cf_T_NORM = pose::R_q_closed_form(false, true, false, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
+//    Eigen::Matrix3d R_cf_T_NEW = pose::R_q_closed_form(false, false, true, c, best_R_ks, best_T_ks, best_R_qks, best_T_qks);
 
     return {
             c,
-            T_gov,
-            T_cf,
+//            T_gov,
+//            T_cf,
             R_avg,
-            R_cf_R,
-            R_cf_R_NORM,
-            R_cf_T,
-            R_cf_T_NORM,
+//            R_cf_R,
+//            R_cf_R_NORM,
+//            R_cf_T,
+//            R_cf_T_NORM,
+//            R_cf_R_NEW,
+//            R_cf_T_NEW,
             best_indices
     };
 }
@@ -1085,9 +1008,9 @@ pose::hypothesizeRANSAC(double threshold,
 
 
 //// FINAL POSE ADJUSTMENT
-void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
-                             const vector<Eigen::Vector3d> & T_k,
-                             const vector<vector<tuple<cv::Point2d, cv::Point2d, double>>> & all_points,
+void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_ks,
+                             const vector<Eigen::Vector3d> & T_ks,
+                             const vector<vector<pair<cv::Point2d, cv::Point2d>>> & all_matches,
                              const double & error_thresh,
                              const double * K,
                              Eigen::Matrix3d & R_q,
@@ -1096,33 +1019,37 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
     Eigen::Matrix3d K_eig {{K[0], 0.,   K[2]},
                            {0.,   K[1], K[3]},
                            {0.,   0.,   1.}};
-    Eigen::Quaterniond q (R_q);
-    q = q.normalized();
-    double R [3] = {q.x(), q.y(), q.z()};
+
+    double R[3];
+    double R_arr[9] {R_q(0, 0), R_q(1, 0), R_q(2, 0),
+                     R_q(0, 1), R_q(1, 1), R_q(2, 1),
+                     R_q(0, 2), R_q(1, 2), R_q(2, 2)};
+    ceres::RotationMatrixToAngleAxis(R_arr, R);
+
     double T [3] = {T_q[0], T_q[1], T_q[2]};
 
 
-    int k = int (R_k.size());
+    int k = int (R_ks.size());
     ceres::Problem problem;
     ceres::LossFunction * loss_function = new ceres::HuberLoss(1.0);
     for (int i = 0; i < k; i++) {
 
-        Eigen::Matrix3d R_qk_real = R_q * R_k[i].transpose();
-        Eigen::Vector3d t_qk_real = T_q - R_qk_real * T_k[i];
-        t_qk_real.normalize();
+        Eigen::Matrix3d R_qk = R_q * R_ks[i].transpose();
+        Eigen::Vector3d t_qk = T_q - R_qk * T_ks[i];
+        t_qk.normalize();
 
-        Eigen::Matrix3d t_cross_real {
-                {0,               -t_qk_real(2), t_qk_real(1)},
-                {t_qk_real(2),  0,              -t_qk_real(0)},
-                {-t_qk_real(1), t_qk_real(0),               0}};
-        Eigen::Matrix3d E_real = t_cross_real * R_qk_real;
+        Eigen::Matrix3d t_qk_cross {
+                {0,               -t_qk(2), t_qk(1)},
+                {t_qk(2),  0,              -t_qk(0)},
+                {-t_qk(1), t_qk(0),               0}};
+        Eigen::Matrix3d E_real = t_qk_cross * R_qk;
 
         Eigen::Matrix3d F = K_eig.inverse().transpose() * E_real * K_eig.inverse();
 
-        for (const auto & match : all_points[i]) {
+        for (const auto & match : all_matches[i]) {
 
-            Eigen::Vector3d pt_q {get<0>(match).x, get<0>(match).y, 1.};
-            Eigen::Vector3d pt_db {get<1>(match).x, get<1>(match).y, 1.};
+            Eigen::Vector3d pt_q {match.first.x, match.first.y, 1.};
+            Eigen::Vector3d pt_db {match.second.x, match.second.y, 1.};
 
             Eigen::Vector3d epiline = F * pt_db;
 
@@ -1130,10 +1057,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
                     sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
 
             if (error <= error_thresh) {
-
-                ceres::CostFunction *cost_function = ReprojectionError::Create(R_k[i], T_k[i], K_eig,
-                                                                               get<1>(match),
-                                                                               get<0>(match));
+                ceres::CostFunction *cost_function = ReprojectionError::Create(R_ks[i], T_ks[i], K_eig, match.first, match.second);
                 problem.AddResidualBlock(cost_function, loss_function, R, T);
             }
         }
@@ -1142,7 +1066,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
     options.linear_solver_type = ceres::DENSE_SCHUR;
 //    options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
-    int num = problem.NumResidualBlocks();
+
     if (problem.NumResidualBlocks() > 0) {
         ceres::Solve(options, &problem, &summary);
     } else {
@@ -1150,13 +1074,10 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_k,
     }
 //    std::cout << summary.FullReport() << "\n";
 
-    double x = R[0];
-    double y = R[1];
-    double z = R[2];
-    double Z = 1. + x*x + y*y + z*z;
-    R_q = Eigen::Matrix3d {{(1. + x*x - y*y - z*z) / Z, (2.*x*y - 2.*z) / Z, (2.*x*z + 2.*y) / Z},
-                           {(2.*x*y + 2.*z) / Z, (1. + y*y - x*x - z*z) / Z, (2.*y*z - 2.*x) / Z},
-                           {(2.*x*z - 2.*y) / Z, (2.*y*z + 2.*x) / Z, (1. + z*z - x*x - y*y) / Z}};
+    ceres::AngleAxisToRotationMatrix(R, R_arr);
+    R_q = Eigen::Matrix3d {{R_arr[0], R_arr[3], R_arr[6]},
+                           {R_arr[1], R_arr[4], R_arr[7]},
+                           {R_arr[2], R_arr[5], R_arr[8]}};
     T_q = Eigen::Vector3d {T[0], T[1], T[2]};
 
 }

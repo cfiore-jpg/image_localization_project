@@ -37,7 +37,7 @@ void newEnergy(Point * a, Point * b) {
     if(n == 0) {
         temp->magnitude = DBL_MAX;
     } else {
-        temp->magnitude = 1. / pow(n, 2);
+        temp->magnitude = 1. / n;
     }
 
     a->energies[b->number] = temp;
