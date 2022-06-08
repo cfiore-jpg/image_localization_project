@@ -27,48 +27,48 @@ using namespace chrono;
 
 int main() {
 
-    string query = "/Users/cameronfiore/C++/image_localization_project/data/chess/seq-03/frame-000000";
-
-
-    ////// Dataset Visualization
-    vector<string> all;
-    auto info = sevenScenes::createInfoVector();
-    functions::createImageVector(all, info, 0);
-    unordered_map<string, cv::Scalar> seq_colors;
-    random_device generator;
-    uniform_int_distribution<int> distribution(1,255);
-    for (int i = 1; i < 15; i++) {
-        cv::Scalar color = cv::Scalar(distribution(generator), distribution(generator), distribution(generator));
-        if (i < 10) {
-            seq_colors["0" + to_string(i)] = color;
-        } else {
-            seq_colors[to_string(i)] = color;
-        }
-    }
-
-    functions::projectCentersTo2D(query, all, seq_colors, query + " All");
-
-    auto top1000 = functions::getTopN(query, ".color.png", 1000);
-    unordered_set<string> unincluded_all (all.begin(), all.end());
-    for (const auto & t : top1000) {
-        unincluded_all.erase(t);
-    }
-    functions::projectCentersTo2D(query, top1000, seq_colors, query + " top 1000");
-
-    auto retrieved = functions::retrieveSimilar(query, ".color.png", 1000, 1.6);
-    unordered_set<string> unincluded_top1000 (top1000.begin(), top1000.end());
-    for (const auto & r : retrieved) {
-        unincluded_top1000.erase(r);
-    }
-    functions::projectCentersTo2D(query, retrieved, seq_colors, query + " Retrieved");
-
-    functions::showAllImages(query, all, seq_colors, unincluded_all, unincluded_top1000, "All Images");
-
-    auto spaced = functions::optimizeSpacing(retrieved, 20, false, "7-Scenes");
-    functions::projectCentersTo2D(query, spaced, seq_colors, query + " Spaced");
-
-
-    exit(0);
+//    string query = "/Users/cameronfiore/C++/image_localization_project/data/chess/seq-03/frame-000000";
+//
+//
+//    ////// Dataset Visualization
+//    vector<string> all;
+//    auto info = sevenScenes::createInfoVector();
+//    functions::createImageVector(all, info, 0);
+//    unordered_map<string, cv::Scalar> seq_colors;
+//    random_device generator;
+//    uniform_int_distribution<int> distribution(1,255);
+//    for (int i = 1; i < 15; i++) {
+//        cv::Scalar color = cv::Scalar(distribution(generator), distribution(generator), distribution(generator));
+//        if (i < 10) {
+//            seq_colors["0" + to_string(i)] = color;
+//        } else {
+//            seq_colors[to_string(i)] = color;
+//        }
+//    }
+//
+//    functions::projectCentersTo2D(query, all, seq_colors, query + " All");
+//
+//    auto top1000 = functions::getTopN(query, ".color.png", 1000);
+//    unordered_set<string> unincluded_all (all.begin(), all.end());
+//    for (const auto & t : top1000) {
+//        unincluded_all.erase(t);
+//    }
+//    functions::projectCentersTo2D(query, top1000, seq_colors, query + " top 1000");
+//
+//    auto retrieved = functions::retrieveSimilar(query, ".color.png", 1000, 1.6);
+//    unordered_set<string> unincluded_top1000 (top1000.begin(), top1000.end());
+//    for (const auto & r : retrieved) {
+//        unincluded_top1000.erase(r);
+//    }
+//    functions::projectCentersTo2D(query, retrieved, seq_colors, query + " Retrieved");
+//
+//    functions::showAllImages(query, all, seq_colors, unincluded_all, unincluded_top1000, "All Images");
+//
+//    auto spaced = functions::optimizeSpacing(retrieved, 20, false, "7-Scenes");
+//    functions::projectCentersTo2D(query, spaced, seq_colors, query + " Spaced");
+//
+//
+//    exit(0);
 //    double K[4] = {525., 525., 320., 240.};
 //    pose::sceneBundleAdjust(1000, K, "/Users/cameronfiore/C++/image_localization_project/data",
 //                            "chess", "seq-01", "frame-", ".pose.txt", ".color.png");
