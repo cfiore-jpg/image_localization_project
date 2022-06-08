@@ -123,7 +123,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -O3 -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.1"
+					"fragment" : "-g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk -mmacosx-version-min=12.1"
 				},
 				{
 					"fragment" : "-std=gnu++14"
@@ -486,7 +486,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-O3 -g",
+				"fragment" : "-g",
 				"role" : "flags"
 			},
 			{

@@ -1170,7 +1170,7 @@ Mat functions::projectCentersTo2D(const string & query, const vector<string> & i
     auto r_q = sevenScenes::getR(query);
     Eigen::Vector3d dir_q = r_q * z;
 
-    centers.emplace_back(c_q, dir_q, Scalar(0., 0., 255.));
+    centers.emplace_back(c_q, dir_q, Scalar(0., 0., 0.));
 
     // do same for all images
     for (const auto & image : images) {
@@ -1211,7 +1211,7 @@ Mat functions::projectCentersTo2D(const string & query, const vector<string> & i
 
     double height = 1900.;
     double width = 3000.;
-    double avg_radius = 15.;
+    double avg_radius = 40.;
     double radial_variance = avg_radius * .5;
     double border = 4 * avg_radius;
     double m_over_px_x = (farthest_x / (width/2. - border));
@@ -1272,8 +1272,7 @@ cv::Mat functions::showAllImages(const string & query, const vector<string> & im
     auto r_q = sevenScenes::getR(query);
     Eigen::Vector3d dir_q = r_q * z;
 
-    centers.emplace_back(c_q, dir_q, Scalar(0., 0., 255.));
-    second_layer.emplace_back(c_q, dir_q, Scalar(0., 0., 255.));
+
     // do same for all images
     for (const auto & image : images) {
         // get camera center
@@ -1301,6 +1300,8 @@ cv::Mat functions::showAllImages(const string & query, const vector<string> & im
         centers.emplace_back(c, dir, color);
     }
     Eigen::Vector3d average = total / centers.size();
+    centers.emplace_back(c_q, dir_q, Scalar(0., 0., 0.));
+    second_layer.emplace_back(c_q, dir_q, Scalar(0., 0., 0.));
 
     double farthest_x = 0.;
     double farthest_y = 0.;

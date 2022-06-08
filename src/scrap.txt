@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 //    vector<Eigen::Matrix3d> Rs;
 //    ifstream Rs_fs ("/Users/cameronfiore/Desktop/Rs.txt");
 //    if (Rs_fs.is_open())

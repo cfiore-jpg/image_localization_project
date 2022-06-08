@@ -109,7 +109,7 @@ void cambridge::createPoseFiles(const string & folder) {
 vector<string> cambridge::getTestImages(const string & folder) {
 
     vector<string> ims;
-    string test_file = "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/dataset_test.txt";
+    string test_file = folder + "dataset_test.txt";
 
     ifstream tf(test_file);
     if (tf.is_open()) {
