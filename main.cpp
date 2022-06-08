@@ -93,7 +93,8 @@ vector<string> scenes {"/Users/cameronfiore/C++/image_localization_project/data/
                        "/Users/cameronfiore/C++/image_localization_project/data/OldHospital/",
                        "/Users/cameronfiore/C++/image_localization_project/data/ShopFacade/",
                        "/Users/cameronfiore/C++/image_localization_project/data/StMarysChurch/",
-                       "/Users/cameronfiore/C++/image_localization_project/data/Street/"};
+                       //"/Users/cameronfiore/C++/image_localization_project/data/Street/"
+                       };
 
 for(const auto & scene : scenes) {
 
@@ -266,8 +267,8 @@ for(const auto & scene : scenes) {
 //            uniform_int_distribution<int> distribution(1,255);
 //            for(int x = 0; x < pts_i_qk.size(); x+=10) {
 ////                cv::Mat src;
-                cv::Mat q_mat = cv::imread(query+".png");
-                cv::Mat im_mat = cv::imread(im+".png");
+//                cv::Mat q_mat = cv::imread(query+".png");
+//                cv::Mat im_mat = cv::imread(im+".png");
 //                Eigen::Vector3d pt_i {pts_i_qk[x].x, pts_i_qk[x].y, 1.};
 //                Eigen::Vector3d pt_q {pts_q_qk[x].x, pts_q_qk[x].y, 1.};
 ////                cv::hconcat(q_mat, im_mat, src);
@@ -314,10 +315,10 @@ for(const auto & scene : scenes) {
 //                colors.push_back(color_k);
 //
 //                functions::drawLines(q_mat, im_mat, lines_q, lines_k, points_q, points_k, colors);
-                cv::Mat src;
-                cv::hconcat(q_mat, im_mat, src);
-                cv::imshow("epiline", src);
-                cv::waitKey(0);
+//                cv::Mat src;
+//                cv::hconcat(q_mat, im_mat, src);
+//                cv::imshow("epiline", src);
+//                cv::waitKey(0);
 //            }
 
             vector<pair<cv::Point2d, cv::Point2d>> matches(pts_i_qk.size());
@@ -341,7 +342,7 @@ for(const auto & scene : scenes) {
             continue;
         }
 
-        auto results = pose::hypothesizeRANSAC(3., R_ks, T_ks, R_qks, T_qks);
+        auto results = pose::hypothesizeRANSAC(5., R_ks, T_ks, R_qks, T_qks);
 
         vector<int> inlier_indices = get<2>(results);
         cout << " Inliers: " << inlier_indices.size() << endl;
