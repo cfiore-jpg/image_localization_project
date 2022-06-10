@@ -273,54 +273,6 @@ src/functions.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/functions.cpp.s
 .PHONY : src/functions.cpp.s
 
-src/imageMatcher.o: src/imageMatcher.cpp.o
-.PHONY : src/imageMatcher.o
-
-# target to build an object file
-src/imageMatcher.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o
-.PHONY : src/imageMatcher.cpp.o
-
-src/imageMatcher.i: src/imageMatcher.cpp.i
-.PHONY : src/imageMatcher.i
-
-# target to preprocess a source file
-src/imageMatcher.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.i
-.PHONY : src/imageMatcher.cpp.i
-
-src/imageMatcher.s: src/imageMatcher.cpp.s
-.PHONY : src/imageMatcher.s
-
-# target to generate assembly for a file
-src/imageMatcher.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.s
-.PHONY : src/imageMatcher.cpp.s
-
-src/imageMatcher_Orb.o: src/imageMatcher_Orb.cpp.o
-.PHONY : src/imageMatcher_Orb.o
-
-# target to build an object file
-src/imageMatcher_Orb.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o
-.PHONY : src/imageMatcher_Orb.cpp.o
-
-src/imageMatcher_Orb.i: src/imageMatcher_Orb.cpp.i
-.PHONY : src/imageMatcher_Orb.i
-
-# target to preprocess a source file
-src/imageMatcher_Orb.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.i
-.PHONY : src/imageMatcher_Orb.cpp.i
-
-src/imageMatcher_Orb.s: src/imageMatcher_Orb.cpp.s
-.PHONY : src/imageMatcher_Orb.s
-
-# target to generate assembly for a file
-src/imageMatcher_Orb.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.s
-.PHONY : src/imageMatcher_Orb.cpp.s
-
 src/poseEstimation.o: src/poseEstimation.cpp.o
 .PHONY : src/poseEstimation.o
 
@@ -420,12 +372,6 @@ help:
 	@echo "... src/functions.o"
 	@echo "... src/functions.i"
 	@echo "... src/functions.s"
-	@echo "... src/imageMatcher.o"
-	@echo "... src/imageMatcher.i"
-	@echo "... src/imageMatcher.s"
-	@echo "... src/imageMatcher_Orb.o"
-	@echo "... src/imageMatcher_Orb.i"
-	@echo "... src/imageMatcher_Orb.s"
 	@echo "... src/poseEstimation.o"
 	@echo "... src/poseEstimation.i"
 	@echo "... src/poseEstimation.s"

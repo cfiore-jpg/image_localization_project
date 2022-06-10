@@ -5,7 +5,7 @@
 		<Option title="image_localization_project"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\opencv\;CMake Files\..\opencv\build\;CMake Files\..\DBoW2\;CMake Files\..\DBoW2\build\;CMake Files\..\DBoW3\;CMake Files\..\DBoW3\build\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\opt\;CMake Files\..\..\..\..\opt\homebrew\;CMake Files\..\..\..\..\opt\homebrew\lib\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\;CMake Files\..\..\..\..\opt\homebrew\share\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\cmake\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\opencv\;CMake Files\..\opencv\build\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\opt\;CMake Files\..\..\..\..\opt\homebrew\;CMake Files\..\..\..\..\opt\homebrew\lib\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\;CMake Files\..\..\..\..\opt\homebrew\share\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\cmake\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="/Users/cameronfiore/C++/image_localization_project/cmake-build-debug"/>
@@ -45,11 +45,6 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add option="-DGFLAGS_IS_A_DLL=0"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/include/python3.9"/>
-					<Add directory="/opt/homebrew/lib/python3.9/site-packages/numpy/core/include/numpy"/>
-					<Add directory="/Users/cameronfiore/C++/DBoW2/include/DBoW2"/>
-					<Add directory="/Users/cameronfiore/C++/DBoW3/src"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/build"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/core/include"/>
@@ -110,6 +105,7 @@
 					<Add directory="/opt/homebrew/include"/>
 					<Add directory="/opt/homebrew/include/eigen3"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
 					<Add directory="/System/Library/Frameworks"/>
@@ -130,11 +126,6 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add option="-DGFLAGS_IS_A_DLL=0"/>
-					<Add directory="/usr/local/include"/>
-					<Add directory="/opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/include/python3.9"/>
-					<Add directory="/opt/homebrew/lib/python3.9/site-packages/numpy/core/include/numpy"/>
-					<Add directory="/Users/cameronfiore/C++/DBoW2/include/DBoW2"/>
-					<Add directory="/Users/cameronfiore/C++/DBoW3/src"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/build"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/core/include"/>
@@ -195,6 +186,7 @@
 					<Add directory="/opt/homebrew/include"/>
 					<Add directory="/opt/homebrew/include/eigen3"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include"/>
 					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
 					<Add directory="/System/Library/Frameworks"/>
@@ -226,12 +218,6 @@
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/functions.cpp">
 			<Option target="image_localization_project"/>
 		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/imageMatcher.cpp">
-			<Option target="image_localization_project"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/imageMatcher_Orb.cpp">
-			<Option target="image_localization_project"/>
-		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/src/poseEstimation.cpp">
 			<Option target="image_localization_project"/>
 		</Unit>
@@ -252,12 +238,6 @@
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../opencv/build/OpenCVModules.cmake">
 			<Option virtualFolder="CMake Files\..\opencv\build\"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../DBoW2/build/DBoW2Config.cmake">
-			<Option virtualFolder="CMake Files\..\DBoW2\build\"/>
-		</Unit>
-		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../DBoW3/build/DBoW3Config.cmake">
-			<Option virtualFolder="CMake Files\..\DBoW3\build\"/>
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/CeresConfig.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>

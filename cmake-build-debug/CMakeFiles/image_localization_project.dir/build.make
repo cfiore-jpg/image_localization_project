@@ -97,24 +97,10 @@ CMakeFiles/image_localization_project.dir/src/calibrate.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/calibrate.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/image_localization_project/src/calibrate.cpp -o CMakeFiles/image_localization_project.dir/src/calibrate.cpp.s
 
-CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
-CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o: ../src/imageMatcher_Orb.cpp
-CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o -MF CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/imageMatcher_Orb.cpp
-
-CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cameronfiore/C++/image_localization_project/src/imageMatcher_Orb.cpp > CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.i
-
-CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/image_localization_project/src/imageMatcher_Orb.cpp -o CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.s
-
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: ../src/sevenScenes.cpp
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o -MF CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/sevenScenes.cpp
 
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.i: cmake_force
@@ -128,7 +114,7 @@ CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.s: cmake_force
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.cpp
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o -MF CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/synthetic.cpp
 
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.i: cmake_force
@@ -142,7 +128,7 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.s: cmake_force
 CMakeFiles/image_localization_project.dir/src/Space.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp
 CMakeFiles/image_localization_project.dir/src/Space.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/image_localization_project.dir/src/Space.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/image_localization_project.dir/src/Space.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/Space.cpp.o -MF CMakeFiles/image_localization_project.dir/src/Space.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/Space.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/Space.cpp
 
 CMakeFiles/image_localization_project.dir/src/Space.cpp.i: cmake_force
@@ -153,24 +139,10 @@ CMakeFiles/image_localization_project.dir/src/Space.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/Space.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/image_localization_project/src/Space.cpp -o CMakeFiles/image_localization_project.dir/src/Space.cpp.s
 
-CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
-CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o: ../src/imageMatcher.cpp
-CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o -MF CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/imageMatcher.cpp
-
-CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/cameronfiore/C++/image_localization_project/src/imageMatcher.cpp > CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.i
-
-CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/cameronfiore/C++/image_localization_project/src/imageMatcher.cpp -o CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.s
-
 CMakeFiles/image_localization_project.dir/src/functions.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/functions.cpp.o: ../src/functions.cpp
 CMakeFiles/image_localization_project.dir/src/functions.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/image_localization_project.dir/src/functions.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/image_localization_project.dir/src/functions.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/functions.cpp.o -MF CMakeFiles/image_localization_project.dir/src/functions.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/functions.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/functions.cpp
 
 CMakeFiles/image_localization_project.dir/src/functions.cpp.i: cmake_force
@@ -184,7 +156,7 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.s: cmake_force
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseEstimation.cpp
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o -MF CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/poseEstimation.cpp
 
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.i: cmake_force
@@ -198,7 +170,7 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.s: cmake_force
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../src/OptimalRotationSolver.cpp
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o -MF CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/OptimalRotationSolver.cpp
 
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.i: cmake_force
@@ -212,7 +184,7 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s: cmake
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: ../src/CambridgeLandmarks.cpp
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o -MF CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o -c /Users/cameronfiore/C++/image_localization_project/src/CambridgeLandmarks.cpp
 
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i: cmake_force
@@ -227,11 +199,9 @@ CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s: cmake_fo
 image_localization_project_OBJECTS = \
 "CMakeFiles/image_localization_project.dir/main.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/calibrate.cpp.o" \
-"CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/Space.cpp.o" \
-"CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/functions.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o" \
 "CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o" \
@@ -242,11 +212,9 @@ image_localization_project_EXTERNAL_OBJECTS =
 
 image_localization_project: CMakeFiles/image_localization_project.dir/main.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/calibrate.cpp.o
-image_localization_project: CMakeFiles/image_localization_project.dir/src/imageMatcher_Orb.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/Space.cpp.o
-image_localization_project: CMakeFiles/image_localization_project.dir/src/imageMatcher.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/functions.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o
 image_localization_project: CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o
@@ -286,10 +254,7 @@ image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_w
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_xfeatures2d.4.5.5.dylib
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_xobjdetect.4.5.5.dylib
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_xphoto.4.5.5.dylib
-image_localization_project: /Users/cameronfiore/C++/DBoW2/build/libDBoW2.dylib
-image_localization_project: /Users/cameronfiore/C++/DBow3/build/src/libDBoW3.dylib
 image_localization_project: /opt/homebrew/lib/libceres.2.0.0.dylib
-image_localization_project: /opt/homebrew/Cellar/python@3.9/3.9.9/Frameworks/Python.framework/Versions/3.9/lib/libpython3.9.dylib
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_shape.4.5.5.dylib
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_highgui.4.5.5.dylib
 image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_datasets.4.5.5.dylib
@@ -313,7 +278,7 @@ image_localization_project: /Users/cameronfiore/C++/opencv/build/lib/libopencv_c
 image_localization_project: /opt/homebrew/lib/libglog.0.5.0.dylib
 image_localization_project: /opt/homebrew/lib/libgflags.2.2.2.dylib
 image_localization_project: CMakeFiles/image_localization_project.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable image_localization_project"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/cameronfiore/C++/image_localization_project/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable image_localization_project"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/image_localization_project.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

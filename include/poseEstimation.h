@@ -7,7 +7,6 @@
 
 #endif //IMAGE_LOCALIZATION_PROJECT_POSEESTIMATION_H
 
-#include "../include/imageMatcher_Orb.h"
 #include "../include/sevenScenes.h"
 #include "../include/functions.h"
 #include "../include/Space.h"

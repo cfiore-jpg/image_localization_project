@@ -184,14 +184,6 @@
 			"path" : "/Users/cameronfiore/C++/opencv/build/OpenCVModules.cmake"
 		},
 		{
-			"isExternal" : true,
-			"path" : "/Users/cameronfiore/C++/DBoW2/build/DBoW2Config.cmake"
-		},
-		{
-			"isExternal" : true,
-			"path" : "/Users/cameronfiore/C++/DBoW3/build/DBoW3Config.cmake"
-		},
-		{
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.21/Modules/FindOpenMP.cmake"
