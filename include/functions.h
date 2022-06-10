@@ -87,10 +87,10 @@ namespace functions {
 //// Image Similarity Functions
     void saveResultVector(const vector<pair<int, float>>& result, const string& query_image, const string& method, const string & num);
     vector<pair<int, float>> getResultVector(const string& query_image, const string& method, const string & num);
-    string getScene(const string & image);
+    string getScene(const string & image, const string & mod);
     string getSequence(const string & image);
     vector<string> getTopN(const string& query_image, const string & ext, int N);
-    vector<string> retrieveSimilar(const string& query_image, const string & ext, int max_num, double max_descriptor_dist);
+    vector<string> retrieveSimilar(const string& query_image, const string & dataset, const string & ext, int max_num, double max_dist);
     vector<string> spaceWithMostMatches(const string & query_image, const string & ext, const double * cam_matrix, int K,
                                         int N_thresh, double max_descriptor_dist, double separation, int min_matches,
                                         vector<Eigen::Matrix3d> & R_k,

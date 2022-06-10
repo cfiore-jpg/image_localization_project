@@ -88,12 +88,12 @@ int main() {
 
 //// Testing Whole Dataset
 
-vector<string> scenes {"/Users/cameronfiore/C++/image_localization_project/data/GreatCourt/",
-                       "/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/",
-                       "/Users/cameronfiore/C++/image_localization_project/data/OldHospital/",
-                       "/Users/cameronfiore/C++/image_localization_project/data/ShopFacade/",
-                       "/Users/cameronfiore/C++/image_localization_project/data/StMarysChurch/",
-                       //"/Users/cameronfiore/C++/image_localization_project/data/Street/"
+vector<string> scenes {//"/Users/cameronfiore/C++/image_localization_project/data/GreatCourt/",
+                       //"/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/",
+                       //"/Users/cameronfiore/C++/image_localization_project/data/OldHospital/",
+                       //"/Users/cameronfiore/C++/image_localization_project/data/ShopFacade/",
+                       //"/Users/cameronfiore/C++/image_localization_project/data/StMarysChurch/",
+                       "/Users/cameronfiore/C++/image_localization_project/data/Street/"
                        };
 
 for(const auto & scene : scenes) {
@@ -178,6 +178,7 @@ for(const auto & scene : scenes) {
 
         string query = listQuery[q];
 
+
 //        auto desc_kp_q = functions::getDescriptors(query, ".color.png", "SIFT");
         auto desc_kp_q = functions::getDescriptors(query, ".png", "SIFT");
         cv::Mat desc_q = desc_kp_q.first;
@@ -193,25 +194,39 @@ for(const auto & scene : scenes) {
 
 
 //        double K[4] = {525., 525., 320., 240.};
-        double K[4] = {1670., 1670., 960., 540.};
+        double K[4] = {1680., 1680., 960., 540.};
 
 //        double K[4] = {744.375, 744.375, 960., 540.};
 //        double K[4] = {2584.9325098195013197, 2584.7918606057692159, 249.77137587221417903, 278.31267937919352562};
 
 //        auto retrieved = functions::retrieveSimilar(query, ".color.png", 100, 1.6);
 //        auto retrieved = synthetic::omitQuery(q, listQuery);
-        auto retrieved = functions::retrieveSimilar(query, ".png", 20, 1.2);
+        auto retrieved = functions::retrieveSimilar(query, "Cambridge", ".png", 15, 75.);
+
+        if (scene == "/Users/cameronfiore/C++/image_localization_project/data/Street/") {
+            if(functions::getScene(retrieved[0], "Street") != "Street") {
+                cout << query << endl;
+                continue;
+            }
+        } else {
+            string s = functions::getScene(query, "");
+            if(s != functions::getScene(retrieved[0], "")) {
+                cout << query << endl;
+                continue;
+            }
+        }
 
 //        auto spaced = functions::optimizeSpacing(retrieved, 20, false, "7-Scenes");
-        auto spaced = functions::optimizeSpacing(retrieved, 10, false, "Cambridge");
+        auto spaced = functions::optimizeSpacing(retrieved, 15, false, "Cambridge");
 //        auto spaced = functions::optimizeSpacing(retrieved, 10, false, "synthetic");
+
 
         vector<Eigen::Matrix3d> R_ks, R_ks_BA, R_qks, R_qk_reals;
         vector<Eigen::Vector3d> T_ks, T_ks_BA, T_qks, T_qk_reals;
         vector<pair<cv::Mat, vector<cv::KeyPoint>>> desc_kp_anchors;
         vector<string> anchors;
         vector<vector<pair<cv::Point2d, cv::Point2d>>> all_matches;
-        for (const auto &im: spaced) {
+        for (const auto & im: spaced) {
             Eigen::Matrix3d R_k, R_qk_calc, R_kq_calc, R_qk_real;
             Eigen::Vector3d T_k, T_qk_calc, T_kq_calc, T_qk_real;
 //            sevenScenes::getAbsolutePose(im, R_k, T_k);
@@ -345,26 +360,33 @@ for(const auto & scene : scenes) {
         auto results = pose::hypothesizeRANSAC(5., R_ks, T_ks, R_qks, T_qks);
 
         vector<int> inlier_indices = get<2>(results);
-        cout << " Inliers: " << inlier_indices.size() << endl;
+        cout << " Inliers: " << inlier_indices.size() << "/" << R_ks.size();
 
         Eigen::Vector3d c_q_est = get<0>(results);
         Eigen::Matrix3d R_q_est = get<1>(results);
+        Eigen::Vector3d T_q_est = -R_q_est * c_q_est;
+
 
         Eigen::Matrix3d R_q_adj = R_q_est;
         Eigen::Vector3d T_q_adj = -R_q_est * c_q_est;
-        pose::adjustHypothesis(R_ks, T_ks, all_matches, 3., K, R_q_adj, T_q_adj);
+        pose::adjustHypothesis(R_ks, T_ks, all_matches, 10., K, R_q_adj, T_q_adj);
         Eigen::Vector3d c_q_adj = -R_q_adj.transpose() * T_q_adj;
+
+        cout << endl;
+
+
+
 
 
         double c_ = functions::getDistBetween(c_q_est, c_q);
         double c_adj_ = functions::getDistBetween(c_q_adj, c_q);
-
 
 //        double T_gov_ = functions::getDistBetween(get<1>(results), T_q);
 //        double T_cf_ = functions::getDistBetween(get<2>(results), T_q);
 
         double R_avg_ = functions::rotationDifference(R_q_est, R_q);
         double R_adj_ = functions::rotationDifference(R_q_adj, R_q);
+
 
 
 

@@ -130,7 +130,7 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
     for (int q = 0; q < listQuery.size(); q++) {
 
         string query = listQuery[q];
-        vector<string> topN = functions::retrieveSimilar(query, ".pose.png", 20, 1.6);
+        vector<string> topN = functions::retrieveSimilar(query, ".pose.png", "", 20, 1.6);
         vector<string> top2 = functions::optimizeSpacing(topN, 2, false, "7-Scenes");
         if (top2.size() < 2) continue;
         string im_1 = top2[0];

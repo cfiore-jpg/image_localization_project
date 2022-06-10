@@ -35,7 +35,7 @@ void newEnergy(Point * a, Point * b) {
     auto * temp = new Energy;
     double n = (a->position - b->position).norm();
     if(n == 0) {
-        temp->magnitude = DBL_MAX;
+        temp->magnitude = DBL_MAX/2;
     } else {
         temp->magnitude = 1. / n;
     }

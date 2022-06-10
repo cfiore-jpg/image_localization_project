@@ -4,6 +4,7 @@
 
 #include "../include/imageMatcher_Orb.h"
 #include "../include/sevenScenes.h"
+#include "../include/CambridgeLandmarks.h"
 #include "../include/functions.h"
 #include "../include/Space.h"
 #include <iostream>
@@ -897,7 +898,15 @@ void functions::createQueryVector(vector<string> &listQuery, vector<tuple<string
 //    return result;
 //}
 
-string functions::getScene(const string & image) {
+string functions::getScene(const string & image, const string & mod) {
+
+    if(mod == "Street") {
+        string scene = image;
+        scene.erase(0, scene.find("data/") + 5);
+        scene = scene.substr(0, scene.find("/img"));
+        return scene;
+    }
+
     string scene = image;
     scene.erase(0, scene.find("data/") + 5);
     scene = scene.substr(0, scene.find("/seq"));
@@ -906,7 +915,7 @@ string functions::getScene(const string & image) {
 
 string functions::getSequence(const string & image) {
     string seq = image;
-    string scene = functions::getScene(image);
+    string scene = functions::getScene(image, "");
     seq.erase(0, seq.find(scene) + scene.size() + 5);
     seq = seq.substr(0, seq.find("/frame"));
     return seq;
@@ -936,109 +945,59 @@ vector<string> functions::getTopN(const string& query_image, const string & ext,
     return result;
 }
 
-vector<string> functions::retrieveSimilar(const string& query_image, const string & ext, int max_num, double max_descriptor_dist) {
-    int N = (max_num > 20) ? 20 : max_num;
+vector<string> functions::retrieveSimilar(const string & query_image, const string & dataset, const string & ext, int max_num, double max_dist) {
     vector<string> similar;
     ifstream file(query_image + ext + ".1000nn.txt");
+
     if (file.is_open()) {
         string line;
-        double descriptor_dist;
-        string scene;
-        unordered_map<string, int> mc;
-        string most_common;
-        int num_most_common = 0;
-        while (similar.size() < max_num && getline(file, line)) {
+        bool first = true;
+        Eigen::Vector3d c_ms;
+        int depth_of_search = 0;
+        while (similar.size() < max_num && getline(file, line) && depth_of_search < max_num) {
             stringstream ss(line);
             string buf, fn;
-            bool name = true;
-            while (ss >> buf) {
-                if (name) {
-                    fn = buf.substr(0, buf.find(ext));
-                    name = false;
+            ss >> buf;
+            fn = buf.substr(0, buf.find(ext));
+            if(first) {
+                Eigen::Matrix3d R_ms;
+                Eigen::Vector3d T_ms;
+                if(dataset == "Cambridge") {
+                    cambridge::getAbsolutePose(fn, R_ms, T_ms);
+                    c_ms = - R_ms.transpose() * T_ms;
+                } else if(dataset == "7-Scenes") {
+                    sevenScenes::getAbsolutePose(fn, R_ms, T_ms);
+                    c_ms = - R_ms.transpose() * T_ms;
                 } else {
-                    descriptor_dist = stod(buf);
+                    cout << "Bad dataset" << endl;
+                    exit(0);
                 }
-            }
-
-            if (descriptor_dist > max_descriptor_dist) break;
-
-            if (scene.empty()) {
+                first = false;
                 similar.push_back(fn);
-                if (similar.size() <= N) {
-                    string this_scene = getScene(fn);
-                    if (mc.find(this_scene) == mc.end()) {
-                        mc[this_scene] = 1;
-                    } else {
-                        mc[this_scene]++;
-                    }
-                    if (mc[this_scene] > num_most_common) most_common = this_scene;
-                } else {
-                    scene = most_common;
-                    vector<string> filtered;
-                    for (const auto & s: similar) {
-                        if (getScene(s) == scene) filtered.push_back(s);
-                    }
-                    similar = filtered;
-                }
             } else {
-                if (getScene(fn) == scene) similar.push_back(fn);
+                Eigen::Matrix3d R;
+                Eigen::Vector3d T;
+                Eigen::Vector3d c;
+                if(dataset == "Cambridge") {
+                    cambridge::getAbsolutePose(fn, R, T);
+                    c = - R.transpose() * T;
+                } else if(dataset == "7-Scenes") {
+                    sevenScenes::getAbsolutePose(fn, R, T);
+                    c = - R.transpose() * T;
+                } else {
+                    cout << "Bad dataset" << endl;
+                    exit(0);
+                }
+                double dist = getDistBetween(c_ms, c);
+                if(dist <= max_dist) {
+                    similar.push_back(fn);
+                }
             }
+            depth_of_search++;
         }
+        file.close();
     }
     return similar;
-}
-
-vector<string> functions::spaceWithMostMatches (const string & query_image, const string & ext,
-                                                const double * cam_matrix, int K,
-                                                int N_thresh, double max_descriptor_dist, double separation, int min_matches,
-                                                vector<Eigen::Matrix3d> & R_k,
-                                                vector<Eigen::Vector3d> & t_k,
-                                                vector<Eigen::Matrix3d> & R_qk,
-                                                vector<Eigen::Vector3d> & t_qk) {
-
-    auto images = retrieveSimilar(query_image, ext, N_thresh, max_descriptor_dist);
-
-    vector<string> to_return;
-    to_return.push_back(images[0]);
-
-    Eigen::Matrix3d R_1; Eigen::Vector3d t_1;
-    sevenScenes::getAbsolutePose(images[0], R_1, t_1);
-    R_k.push_back(R_1); t_k.push_back(t_1);
-
-    Eigen::Matrix3d R_q1; Eigen::Vector3d t_q1;
-    getRelativePose(images[0], ext, query_image, cam_matrix, "SIFT", R_q1, t_q1);
-    R_qk.push_back(R_q1); t_qk.push_back(t_q1);
-
-    int i = 1;
-    while (R_k.size() < K && i < images.size()) {
-
-        Eigen::Matrix3d R_i; Eigen::Vector3d t_i;
-        sevenScenes::getAbsolutePose(images[i], R_i, t_i);
-        Eigen::Vector3d c_i = sevenScenes::getT(images[i]);
-
-        bool too_close = false;
-        for (const auto & im : to_return) {
-            Eigen::Vector3d c_j = sevenScenes::getT(im);
-            double dist = getDistBetween(c_i, c_j);
-            if (dist < separation) {
-                too_close = true;
-                break;
-            }
-        }
-
-        if (!too_close) {
-            Eigen::Matrix3d R_qi; Eigen::Vector3d t_qi;
-            int num = getRelativePose(images[i], ext, query_image, cam_matrix, "SIFT", R_qi, t_qi);
-
-            if (num >= min_matches) {
-                to_return.push_back(images[i]);
-                R_k.push_back(R_i); t_k.push_back(t_i);
-                R_qk.push_back(R_qi); t_qk.push_back(t_qi);
-            }
-        }
-        i++;
-    }
-    return to_return;
 }
 
 
@@ -1046,7 +1005,7 @@ vector<string> functions::spaceWithMostMatches (const string & query_image, cons
 
 
 // Visualize
-void functions::showTop1000(const string & query_image, const string & ext, int max_num, double max_descriptor_dist, int inliers) {
+void functions::showTop1000(const string & query_image, const string & ext, int max_num, double max_dist, int inliers) {
 
     // Show Query
     Mat q = imread(query_image + ext);
@@ -1054,7 +1013,7 @@ void functions::showTop1000(const string & query_image, const string & ext, int 
     waitKey();
 
     // Get Query Scene
-    string scene = getScene(query_image);
+    string scene = getScene(query_image, "");
 
     // Get Top 1000 NetVLAD images
     vector<string> topN = getTopN(query_image, ext, 1000);
@@ -1065,7 +1024,7 @@ void functions::showTop1000(const string & query_image, const string & ext, int 
     }
 
     // Threshold, filter, and space the top 1000
-    vector<string> retrieved = functions::retrieveSimilar(query_image, ext, max_num, max_descriptor_dist);
+    vector<string> retrieved = functions::retrieveSimilar(query_image, "7-Scenes", ext, max_num, max_dist);
     vector<string> spaced = functions::optimizeSpacing(retrieved, inliers, false, "7-Scenes");
 
     // Do the following for images/100 windows
@@ -1113,7 +1072,7 @@ void functions::showTop1000(const string & query_image, const string & ext, int 
                 Rect roi_color(x_color, y_color, resizeWidth[k] + edgeThickness, resizeHeight + edgeThickness);
                 Size s_color = canvasImage(roi_color).size();
                 Mat target_ROI_color;
-                string this_scene = getScene(vecMat[100 * n + k].second);
+                string this_scene = getScene(vecMat[100 * n + k].second, "");
                 if (this_scene != scene) {
                     target_ROI_color = Mat (s_color, CV_8UC3, Scalar(0., 0., 255.));
                 } else {
