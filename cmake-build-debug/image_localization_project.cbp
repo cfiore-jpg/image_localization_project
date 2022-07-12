@@ -5,7 +5,7 @@
 		<Option title="image_localization_project"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\opencv\;CMake Files\..\opencv\build\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\opt\;CMake Files\..\..\..\..\opt\homebrew\;CMake Files\..\..\..\..\opt\homebrew\lib\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\;CMake Files\..\..\..\..\opt\homebrew\share\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\cmake\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\opencv\;CMake Files\..\opencv\build\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\opt\;CMake Files\..\..\..\..\opt\homebrew\;CMake Files\..\..\..\..\opt\homebrew\lib\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\TBB\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\;CMake Files\..\..\..\..\opt\homebrew\lib\cmake\gflags\;CMake Files\..\..\..\..\opt\homebrew\share\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\;CMake Files\..\..\..\..\opt\homebrew\share\eigen3\cmake\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="/Users/cameronfiore/C++/image_localization_project/cmake-build-debug"/>
@@ -44,6 +44,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add option="-DGLOG_CUSTOM_PREFIX_SUPPORT"/>
 					<Add option="-DGFLAGS_IS_A_DLL=0"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/build"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
@@ -71,8 +72,6 @@
 					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/saliency/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/text/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/videoio/include"/>
-					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/wechat_qrcode/include"/>
-					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/barcode/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/calib3d/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/datasets/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/highgui/include"/>
@@ -125,6 +124,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add option="-DGLOG_CUSTOM_PREFIX_SUPPORT"/>
 					<Add option="-DGFLAGS_IS_A_DLL=0"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/build"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/include"/>
@@ -152,8 +152,6 @@
 					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/saliency/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/text/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/videoio/include"/>
-					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/wechat_qrcode/include"/>
-					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/barcode/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/calib3d/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/opencv_contrib/modules/datasets/include"/>
 					<Add directory="/Users/cameronfiore/C++/opencv/modules/highgui/include"/>
@@ -250,6 +248,27 @@
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/CeresTargets.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/FindCXSparse.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/FindMETIS.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/Ceres/FindSuiteSparse.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\Ceres\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/TBB/TBBConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\TBB\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/TBB/TBBConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\TBB\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/TBB/TBBTargets-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\TBB\"/>
+		</Unit>
+		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/TBB/TBBTargets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\TBB\"/>
 		</Unit>
 		<Unit filename="/Users/cameronfiore/C++/image_localization_project/../../../../opt/homebrew/lib/cmake/glog/glog-config-version.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\opt\homebrew\lib\cmake\glog\"/>

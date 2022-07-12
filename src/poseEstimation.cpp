@@ -5,6 +5,7 @@
 #include "../include/functions.h"
 #include "../include/poseEstimation.h"
 #include <iostream>
+#include <fstream>
 #include <Eigen/Dense>
 #include <algorithm>
 #include <opencv2/imgcodecs.hpp>

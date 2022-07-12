@@ -616,9 +616,9 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/eigen.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/version.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/hal/interface.h \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/version.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/base.hpp \
   /Users/cameronfiore/C++/opencv/build/opencv2/opencv_modules.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvstd.hpp \
@@ -747,37 +747,6 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/unordered_set \
   /Users/cameronfiore/C++/image_localization_project/src/../include/poseEstimation.h \
-  /Users/cameronfiore/C++/image_localization_project/src/../include/../include/imageMatcher_Orb.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/fstream \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/filesystem \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/stack \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/deque \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iomanip \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/dirent.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/dirent.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/time.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_timeval64.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_select.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/DBoW2.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/TemplatedVocabulary.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FeatureVector.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/BowVector.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/ScoringObject.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/TemplatedDatabase.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/list \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/set \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/QueryResults.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FBrief.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FClass.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FORB.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FSurf64.h \
-  /Users/cameronfiore/C++/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /Users/cameronfiore/C++/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /Users/cameronfiore/C++/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
   /Users/cameronfiore/C++/image_localization_project/src/../include/../include/sevenScenes.h \
   /Users/cameronfiore/C++/image_localization_project/src/../include/../include/functions.h \
   /Users/cameronfiore/C++/image_localization_project/src/../include/../include/Space.h \
@@ -787,6 +756,8 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/async.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/../dnn/version.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
@@ -800,6 +771,7 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/saving.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/nn_index.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/set \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/all_indices.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
@@ -815,18 +787,20 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iomanip \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/index_testing.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/timer.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /Users/cameronfiore/C++/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /Users/cameronfiore/C++/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /Users/cameronfiore/C++/opencv/modules/videoio/include/opencv2/videoio.hpp \
   /Users/cameronfiore/C++/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /Users/cameronfiore/C++/opencv/modules/imgproc/include/opencv2/./imgproc/segmentation.hpp \
   /Users/cameronfiore/C++/opencv/modules/ml/include/opencv2/ml.hpp \
   /Users/cameronfiore/C++/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
   /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
   /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
   /Users/cameronfiore/C++/opencv/modules/photo/include/opencv2/photo.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
@@ -838,8 +812,10 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/list \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/queue \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/deque \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
@@ -847,6 +823,11 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video.hpp \
   /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video/tracking.hpp \
   /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/fstream \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/filesystem \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/stack \
   /opt/homebrew/include/ceres/ceres.h \
   /opt/homebrew/include/ceres/autodiff_cost_function.h \
   /opt/homebrew/include/ceres/internal/autodiff.h \
@@ -859,8 +840,10 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_posix_vdisable.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_seek_set.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/select.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_select.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_uuid_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/gethostuuid.h \
+  /opt/homebrew/include/glog/platform.h \
   /opt/homebrew/include/glog/export.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/inttypes.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include/inttypes.h \
@@ -873,26 +856,33 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /opt/homebrew/include/glog/vlog_is_on.h \
   /opt/homebrew/include/ceres/types.h \
   /opt/homebrew/include/ceres/internal/disable_warnings.h \
-  /opt/homebrew/include/ceres/internal/port.h \
-  /opt/homebrew/include/ceres/internal/config.h \
+  /opt/homebrew/include/ceres/internal/export.h \
   /opt/homebrew/include/ceres/internal/reenable_warnings.h \
   /opt/homebrew/include/ceres/internal/eigen.h \
   /opt/homebrew/include/ceres/internal/parameter_dims.h \
   /opt/homebrew/include/ceres/internal/integer_sequence_algorithm.h \
+  /opt/homebrew/include/ceres/jet_fwd.h \
   /opt/homebrew/include/ceres/internal/variadic_evaluate.h \
   /opt/homebrew/include/ceres/cost_function.h \
   /opt/homebrew/include/ceres/jet.h \
+  /opt/homebrew/include/ceres/internal/jet_traits.h \
+  /opt/homebrew/include/ceres/internal/port.h \
   /opt/homebrew/include/ceres/sized_cost_function.h \
+  /opt/homebrew/include/ceres/autodiff_first_order_function.h \
+  /opt/homebrew/include/ceres/first_order_function.h \
   /opt/homebrew/include/ceres/autodiff_local_parameterization.h \
   /opt/homebrew/include/ceres/local_parameterization.h \
   /opt/homebrew/include/ceres/internal/line_parameterization.h \
   /opt/homebrew/include/ceres/internal/householder_vector.h \
+  /opt/homebrew/include/ceres/autodiff_manifold.h \
+  /opt/homebrew/include/ceres/manifold.h \
   /opt/homebrew/include/ceres/conditioned_cost_function.h \
   /opt/homebrew/include/ceres/context.h \
   /opt/homebrew/include/ceres/cost_function_to_functor.h \
   /opt/homebrew/include/ceres/dynamic_cost_function_to_functor.h \
   /opt/homebrew/include/ceres/dynamic_cost_function.h \
   /opt/homebrew/include/ceres/covariance.h \
+  /opt/homebrew/include/ceres/internal/config.h \
   /opt/homebrew/include/ceres/crs_matrix.h \
   /opt/homebrew/include/ceres/dynamic_autodiff_cost_function.h \
   /opt/homebrew/include/ceres/dynamic_numeric_diff_cost_function.h \
@@ -904,14 +894,18 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: \
   /opt/homebrew/include/ceres/evaluation_callback.h \
   /opt/homebrew/include/ceres/gradient_checker.h \
   /opt/homebrew/include/ceres/gradient_problem.h \
-  /opt/homebrew/include/ceres/first_order_function.h \
   /opt/homebrew/include/ceres/gradient_problem_solver.h \
   /opt/homebrew/include/ceres/iteration_callback.h \
+  /opt/homebrew/include/ceres/line_manifold.h \
+  /opt/homebrew/include/ceres/internal/sphere_manifold_functions.h \
   /opt/homebrew/include/ceres/loss_function.h \
   /opt/homebrew/include/ceres/numeric_diff_cost_function.h \
+  /opt/homebrew/include/ceres/numeric_diff_first_order_function.h \
   /opt/homebrew/include/ceres/ordered_groups.h \
   /opt/homebrew/include/ceres/problem.h \
+  /opt/homebrew/include/ceres/product_manifold.h \
   /opt/homebrew/include/ceres/solver.h \
+  /opt/homebrew/include/ceres/sphere_manifold.h \
   /opt/homebrew/include/ceres/version.h \
   /opt/homebrew/include/ceres/rotation.h \
   /Users/cameronfiore/C++/image_localization_project/src/../include/calibrate.h \

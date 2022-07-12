@@ -7,6 +7,7 @@
 #include "../include/functions.h"
 #include "../include/Space.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <Eigen/Dense>
 #include <algorithm>
@@ -32,6 +33,45 @@
 
 using namespace std;
 using namespace cv;
+
+void functions::get_SG_points(const string & query, const string & db, vector<cv::Point2d> & pts_q, vector<cv::Point2d> & pts_i) {
+    string path = query.substr(query.find("data/") + 5, query.find(".color.png"));
+    path = "/Users/cameronfiore/Python/Localization/SuperGluePretrainedNetwork/7-Scenes/" + path + "/cpp_text_files/";
+    string seq = functions::getSequence(db);
+    string im = db.substr(db.find("frame"), db.find(".color"));
+    string mf = path + "seq-" + seq + "_" + im + "_matches.txt";
+
+    ifstream file (mf);
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line))
+        {
+            stringstream ss(line);
+            double q_x, q_y, db_x, db_y;
+            for (int i = 0; i < 4; i++) {
+                if( i == 0) ss >> q_x;
+                if( i == 1) ss >> q_y;
+                if( i == 2) ss >> db_x;
+                if( i == 3) ss >> db_y;
+            }
+            pts_q.emplace_back(q_x, q_y);
+            pts_i.emplace_back(db_x, db_y);
+        }
+        file.close();
+    }
+}
+
+void functions::record_spaced(const string & query, const vector<string> & spaced, const string & folder) {
+
+    ofstream file (folder + "/pairs.txt");
+    if (file.is_open()) {
+        for (const auto & im : spaced) {
+            file << query << ".color.png    " << im << ".color.png" << endl;
+        }
+        file.close();
+    }
+}
+
 
 Eigen::Matrix3d functions::smallRandomRotationMatrix(double s) {
 
@@ -285,22 +325,29 @@ bool functions::findMatches(double ratio,
     matcher->knnMatch(desc_q, desc_i, matches_2nn_qi, 2);
     matcher->knnMatch(desc_i, desc_q, matches_2nn_iq, 2);
 
-    vector<Point2d> selected_points_q, selected_points_i;
+    vector<tuple<Point2d, Point2d, double>> selected_points; // query, db, match_ratio
+
     for (const auto & match_qi : matches_2nn_qi) {
-        if(match_qi[0].distance/match_qi[1].distance < ratio and
-        matches_2nn_iq[match_qi[0].trainIdx][0].distance / matches_2nn_iq[match_qi[0].trainIdx][1].distance < ratio) {
+        double r1 = match_qi[0].distance/match_qi[1].distance;
+        double r2 = matches_2nn_iq[match_qi[0].trainIdx][0].distance / matches_2nn_iq[match_qi[0].trainIdx][1].distance;
+        if(r1 < ratio and r2 < ratio) {
             if(matches_2nn_iq[match_qi[0].trainIdx][0].trainIdx == match_qi[0].queryIdx) {
-                selected_points_q.push_back(kp_q[match_qi[0].queryIdx].pt);
-                selected_points_i.push_back(kp_i[matches_2nn_iq[match_qi[0].trainIdx][0].queryIdx].pt);
+                selected_points.emplace_back(kp_q[match_qi[0].queryIdx].pt,
+                                             kp_i[matches_2nn_iq[match_qi[0].trainIdx][0].queryIdx].pt,
+                                             (r1+r2)/2.);
             }
         }
     }
 
-    pts_i = selected_points_i;
-    pts_q = selected_points_q;
+    if (selected_points.empty()) return false;
 
-    if (pts_i.empty()) {
-        return false;
+    sort(selected_points.begin(), selected_points.end(), [](const auto & lhs, const auto & rhs){
+        return get<2>(lhs) < get<2>(rhs);
+    });
+
+    for (const auto & tup : selected_points) {
+        pts_q.push_back(get<0>(tup));
+        pts_i.push_back(get<1>(tup));
     }
 
     return true;
@@ -446,24 +493,42 @@ bool functions::findMatchesSorted(const string &db_image, const string & ext, co
     return true;
 }
 
-vector<pair<cv::Point2d, cv::Point2d>> functions::findInliersForFundamental(const Eigen::Matrix3d & F, double threshold,
-                                                                 const vector<tuple<cv::Point2d, cv::Point2d, double>> & points) {
-    vector<pair<cv::Point2d, cv::Point2d>> inliers;
-    for (const auto & tup : points) {
-        Eigen::Vector3d pt_q {get<0>(tup).x, get<0>(tup).y, 1.};
-        Eigen::Vector3d pt_db {get<1>(tup).x, get<1>(tup).y, 1.};
+void functions::findInliers(const Eigen::Matrix3d & R_q,
+                            const Eigen::Vector3d & T_q,
+                            const Eigen::Matrix3d & R_k,
+                            const Eigen::Vector3d & T_k,
+                            const Eigen::Matrix3d & K,
+                            double threshold,
+                            vector<cv::Point2d> & pts_q,
+                            vector<cv::Point2d> & pts_db) {
 
-        Eigen::Vector3d epiline = F * pt_db;
+    Eigen::Matrix3d R_qk = R_q * R_k.transpose();
+    Eigen::Vector3d T_qk = T_q - R_qk * T_k;
+    T_qk.normalize();
+    Eigen::Matrix3d T_qk_cross{{0, -T_qk(2), T_qk(1)},
+                               {T_qk(2), 0, -T_qk(0)},
+                               {-T_qk(1), T_qk(0), 0}};
+    Eigen::Matrix3d E_qk = T_qk_cross * R_qk;
+    Eigen::Matrix3d F_qk = K.inverse().transpose() * E_qk * K.inverse();
+
+    vector<cv::Point2d> inliers_q, inliers_db;
+    for (int i = 0; i < pts_q.size(); i++) {
+        Eigen::Vector3d pt_q {pts_q[i].x, pts_q[i].y, 1.};
+        Eigen::Vector3d pt_db {pts_db[i].x, pts_db[i].y, 1.};
+
+        Eigen::Vector3d epiline = F_qk * pt_db;
 
         double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
                        sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
 
         if (error <= threshold) {
-            inliers.emplace_back(cv::Point2d {get<0>(tup).x, get<0>(tup).y},
-                                 cv::Point2d {get<1>(tup).x, get<1>(tup).y});
+            inliers_q.push_back(pts_q[i]);
+            inliers_db.push_back(pts_db[i]);
         }
     }
-    return inliers;
+
+    pts_q = inliers_q;
+    pts_db = inliers_db;
 }
 
 int functions::getRelativePose(const string & db_image, const string & ext, const string & query_image, const double * K, const string & method,
@@ -517,7 +582,7 @@ bool functions::getRelativePose(vector<cv::Point2d> & pts_db, vector<cv::Point2d
         Mat mask;
         Mat K_mat = (Mat_<double>(3, 3) << K[0], 0., K[2], 0., K[1], K[3], 0., 0., 1.);
 
-        Mat E_qk_sols = findEssentialMat(pts_db, pts_q, K_mat, RANSAC, 0.9999999999, 3.0, mask);
+        Mat E_qk_sols = findEssentialMat(pts_db, pts_q, K_mat, cv::RANSAC, 0.9999999999, match_thresh, mask);
         Mat E_qk = E_qk_sols(cv::Range(0, 3), cv::Range(0, 3));
 
         vector<Point2d> inlier_db_points, inlier_q_points;
@@ -946,7 +1011,7 @@ vector<string> functions::getTopN(const string& query_image, const string & ext,
 
 vector<string> functions::retrieveSimilar(const string & query_image, const string & dataset, const string & ext, int max_num, double max_dist) {
     vector<string> similar;
-    ifstream file(query_image + ext + ".1000nn.txt");
+    ifstream file (query_image + ext + ".1000nn.txt");
 
     if (file.is_open()) {
         string line;

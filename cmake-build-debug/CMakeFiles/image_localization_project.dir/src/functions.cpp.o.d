@@ -1,6 +1,6 @@
 CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /Users/cameronfiore/C++/image_localization_project/src/functions.cpp \
-  /Users/cameronfiore/C++/image_localization_project/src/../include/imageMatcher_Orb.h \
+  /Users/cameronfiore/C++/image_localization_project/src/../include/sevenScenes.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iostream \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__config_site \
@@ -416,91 +416,20 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_fsfilcnt_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/_types/_nl_item.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__bsd_locale_defaults.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/fstream \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/filesystem \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/stack \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/deque \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__split_buffer \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iomanip \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/sstream \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/vector \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/dirent.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/dirent.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/time.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_timeval64.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_select.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/DBoW2.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/TemplatedVocabulary.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/numeric \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/cmath \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/math.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/math.h \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/version.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include/arm_neon.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/array \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/base.hpp \
-  /Users/cameronfiore/C++/opencv/build/opencv2/opencv_modules.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/check.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/types.hpp \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/cfloat \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/float.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include/float.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/float.h \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/complex \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/utility.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FeatureVector.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/BowVector.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__functional/is_transparent.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__node_handle \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/ScoringObject.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/TemplatedDatabase.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/list \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/set \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/QueryResults.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FBrief.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FClass.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FORB.h \
-  /Users/cameronfiore/C++/DBoW2/include/DBoW2/FSurf64.h \
-  /Users/cameronfiore/C++/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /Users/cameronfiore/C++/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /Users/cameronfiore/C++/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /Users/cameronfiore/C++/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/config.h \
-  /Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
-  /Users/cameronfiore/C++/image_localization_project/src/../include/sevenScenes.h \
   /opt/homebrew/include/eigen3/Eigen/Dense \
   /opt/homebrew/include/eigen3/Eigen/Core \
   /opt/homebrew/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
   /opt/homebrew/include/eigen3/Eigen/src/Core/util/Macros.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/cmath \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/math.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/math.h \
   /opt/homebrew/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include/arm_neon.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include/arm_fp16.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/complex \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/sstream \
   /opt/homebrew/include/eigen3/Eigen/src/Core/util/MKL_support.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/array \
   /opt/homebrew/include/eigen3/Eigen/src/Core/util/Constants.h \
   /opt/homebrew/include/eigen3/Eigen/src/Core/util/Meta.h \
   /opt/homebrew/include/eigen3/Eigen/src/Core/util/ForwardDeclarations.h \
@@ -685,6 +614,38 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /opt/homebrew/include/eigen3/Eigen/src/Eigenvalues/./RealQZ.h \
   /opt/homebrew/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/version.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/base.hpp \
+  /Users/cameronfiore/C++/opencv/build/opencv2/opencv_modules.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/check.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/types.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/cfloat \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/float.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include/float.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/float.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/vector \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__split_buffer \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/ovx.hpp \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/../../../Eigen/Core \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/../SpecialFunctions \
@@ -709,6 +670,7 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/src/util/CXX11Workarounds.h \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/src/util/MaxSizeVector.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/random \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/numeric \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/thread \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorMacros.h \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorForwardDeclarations.h \
@@ -772,19 +734,33 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /opt/homebrew/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /Users/cameronfiore/C++/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /Users/cameronfiore/C++/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/config.h \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/affine.hpp \
   /Users/cameronfiore/C++/image_localization_project/src/../include/CambridgeLandmarks.h \
   /Users/cameronfiore/C++/image_localization_project/src/../include/functions.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/unordered_map \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__functional/is_transparent.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__hash_table \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__node_handle \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/optional \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/unordered_set \
   /Users/cameronfiore/C++/image_localization_project/src/../include/Space.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/fstream \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/filesystem \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/stack \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/deque \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/iomanip \
   /Users/cameronfiore/C++/opencv/include/opencv2/opencv.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/async.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/../dnn/version.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__tree \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
   /Users/cameronfiore/C++/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
@@ -798,6 +774,7 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/saving.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/nn_index.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/set \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/all_indices.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
@@ -818,13 +795,14 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/index_testing.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/timer.h \
   /Users/cameronfiore/C++/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /Users/cameronfiore/C++/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /Users/cameronfiore/C++/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /Users/cameronfiore/C++/opencv/modules/videoio/include/opencv2/videoio.hpp \
   /Users/cameronfiore/C++/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /Users/cameronfiore/C++/opencv/modules/imgproc/include/opencv2/./imgproc/segmentation.hpp \
   /Users/cameronfiore/C++/opencv/modules/ml/include/opencv2/ml.hpp \
   /Users/cameronfiore/C++/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
   /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
   /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
   /Users/cameronfiore/C++/opencv/modules/photo/include/opencv2/photo.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
@@ -836,6 +814,7 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/list \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/queue \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
@@ -844,4 +823,6 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
   /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video.hpp \
   /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video/background_segm.hpp
+  /Users/cameronfiore/C++/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /Users/cameronfiore/C++/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp

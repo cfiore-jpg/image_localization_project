@@ -615,9 +615,9 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/version.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/hal/interface.h \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/version.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/base.hpp \
   /Users/cameronfiore/C++/opencv/build/opencv2/opencv_modules.hpp \
   /Users/cameronfiore/C++/opencv/modules/core/include/opencv2/core/cvstd.hpp \
@@ -660,6 +660,7 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_select.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/sys/_types/_uuid_t.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/gethostuuid.h \
+  /opt/homebrew/include/glog/platform.h \
   /opt/homebrew/include/glog/export.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/inttypes.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.1.6/include/inttypes.h \
@@ -672,27 +673,34 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: \
   /opt/homebrew/include/glog/vlog_is_on.h \
   /opt/homebrew/include/ceres/types.h \
   /opt/homebrew/include/ceres/internal/disable_warnings.h \
-  /opt/homebrew/include/ceres/internal/port.h \
-  /opt/homebrew/include/ceres/internal/config.h \
+  /opt/homebrew/include/ceres/internal/export.h \
   /opt/homebrew/include/ceres/internal/reenable_warnings.h \
   /opt/homebrew/include/ceres/internal/eigen.h \
   /opt/homebrew/include/ceres/internal/parameter_dims.h \
   /opt/homebrew/include/ceres/internal/integer_sequence_algorithm.h \
+  /opt/homebrew/include/ceres/jet_fwd.h \
   /opt/homebrew/include/ceres/internal/variadic_evaluate.h \
   /opt/homebrew/include/ceres/cost_function.h \
   /opt/homebrew/include/ceres/jet.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/numeric \
+  /opt/homebrew/include/ceres/internal/jet_traits.h \
+  /opt/homebrew/include/ceres/internal/port.h \
   /opt/homebrew/include/ceres/sized_cost_function.h \
+  /opt/homebrew/include/ceres/autodiff_first_order_function.h \
+  /opt/homebrew/include/ceres/first_order_function.h \
   /opt/homebrew/include/ceres/autodiff_local_parameterization.h \
   /opt/homebrew/include/ceres/local_parameterization.h \
   /opt/homebrew/include/ceres/internal/line_parameterization.h \
   /opt/homebrew/include/ceres/internal/householder_vector.h \
+  /opt/homebrew/include/ceres/autodiff_manifold.h \
+  /opt/homebrew/include/ceres/manifold.h \
   /opt/homebrew/include/ceres/conditioned_cost_function.h \
   /opt/homebrew/include/ceres/context.h \
   /opt/homebrew/include/ceres/cost_function_to_functor.h \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/numeric \
   /opt/homebrew/include/ceres/dynamic_cost_function_to_functor.h \
   /opt/homebrew/include/ceres/dynamic_cost_function.h \
   /opt/homebrew/include/ceres/covariance.h \
+  /opt/homebrew/include/ceres/internal/config.h \
   /opt/homebrew/include/ceres/crs_matrix.h \
   /opt/homebrew/include/ceres/dynamic_autodiff_cost_function.h \
   /opt/homebrew/include/ceres/dynamic_numeric_diff_cost_function.h \
@@ -704,11 +712,13 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: \
   /opt/homebrew/include/ceres/evaluation_callback.h \
   /opt/homebrew/include/ceres/gradient_checker.h \
   /opt/homebrew/include/ceres/gradient_problem.h \
-  /opt/homebrew/include/ceres/first_order_function.h \
   /opt/homebrew/include/ceres/gradient_problem_solver.h \
   /opt/homebrew/include/ceres/iteration_callback.h \
+  /opt/homebrew/include/ceres/line_manifold.h \
+  /opt/homebrew/include/ceres/internal/sphere_manifold_functions.h \
   /opt/homebrew/include/ceres/loss_function.h \
   /opt/homebrew/include/ceres/numeric_diff_cost_function.h \
+  /opt/homebrew/include/ceres/numeric_diff_first_order_function.h \
   /opt/homebrew/include/ceres/ordered_groups.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/map \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__functional/is_transparent.h \
@@ -719,8 +729,10 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/unordered_map \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/__hash_table \
   /opt/homebrew/include/ceres/problem.h \
+  /opt/homebrew/include/ceres/product_manifold.h \
   /opt/homebrew/include/ceres/solver.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include/c++/v1/unordered_set \
+  /opt/homebrew/include/ceres/sphere_manifold.h \
   /opt/homebrew/include/ceres/version.h \
   /opt/homebrew/include/ceres/rotation.h \
   /Users/cameronfiore/C++/image_localization_project/src/../include/OptimalRotationSolver.h \
@@ -773,12 +785,10 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: \
   /Users/cameronfiore/C++/opencv/modules/highgui/include/opencv2/highgui.hpp \
   /Users/cameronfiore/C++/opencv/modules/videoio/include/opencv2/videoio.hpp \
   /Users/cameronfiore/C++/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /Users/cameronfiore/C++/opencv/modules/imgproc/include/opencv2/./imgproc/segmentation.hpp \
   /Users/cameronfiore/C++/opencv/modules/ml/include/opencv2/ml.hpp \
   /Users/cameronfiore/C++/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
   /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
   /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /Users/cameronfiore/C++/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
   /Users/cameronfiore/C++/opencv/modules/photo/include/opencv2/photo.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching.hpp \
   /Users/cameronfiore/C++/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \

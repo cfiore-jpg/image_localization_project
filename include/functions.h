@@ -20,6 +20,10 @@ using namespace std;
 
 namespace functions {
 
+    void get_SG_points(const string & query, const string & db, vector<cv::Point2d> & pts_q, vector<cv::Point2d> & pts_i);
+
+    void record_spaced(const string & query, const vector<string> & spaced, const string & folder);
+
     Eigen::Matrix3d smallRandomRotationMatrix(double s);
 
     pair<vector<cv::Point2d>, vector<cv::Point2d>> same_inliers(
@@ -55,8 +59,14 @@ namespace functions {
     bool findMatchesSorted(const string &db_image, const string & ext, const string &query_image, const string &method, double ratio,
                            vector<tuple<cv::Point2d, cv::Point2d, double>> & points);
 
-    vector<pair<cv::Point2d, cv::Point2d>> findInliersForFundamental(const Eigen::Matrix3d & F, double threshold,
-                                                                     const vector<tuple<cv::Point2d, cv::Point2d, double>> & points);
+    void findInliers(const Eigen::Matrix3d & R_q,
+                     const Eigen::Vector3d & T_q,
+                     const Eigen::Matrix3d & R_k,
+                     const Eigen::Vector3d & T_k,
+                     const Eigen::Matrix3d & K,
+                     double threshold,
+                     vector<cv::Point2d> & pts_q,
+                     vector<cv::Point2d> & pts_db);
 
     int getRelativePose(const string & db_image, const string & ext, const string & query_image, const double * K, const string & method,
                         Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);

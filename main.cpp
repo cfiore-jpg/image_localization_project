@@ -5,6 +5,7 @@
 #include "include/poseEstimation.h"
 #include "include/calibrate.h"
 #include <iostream>
+#include <fstream>
 #include <Eigen/SVD>
 #include <chrono>
 #include "opencv2/opencv.hpp"
@@ -17,7 +18,7 @@
 #define PI 3.1415926536
 
 #define FOLDER "/Users/cameronfiore/C++/image_localization_project/data/"
-#define SCENE 5
+#define SCENE 6
 #define IMAGE_LIST "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt"
 #define EXT ".color.png"
 #define GENERATE_DATABASE false
@@ -88,22 +89,23 @@ int main() {
 
 //// Testing Whole Dataset
 
-vector<string> scenes {//"/Users/cameronfiore/C++/image_localization_project/data/GreatCourt/",
-                       //"/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/",
-                       //"/Users/cameronfiore/C++/image_localization_project/data/OldHospital/",
-                       //"/Users/cameronfiore/C++/image_localization_project/data/ShopFacade/",
-                       //"/Users/cameronfiore/C++/image_localization_project/data/StMarysChurch/",
-                       "/Users/cameronfiore/C++/image_localization_project/data/Street/"
-                       };
+//vector<string> scenes {//"/Users/cameronfiore/C++/image_localization_project/data/GreatCourt/",
+//                       //"/Users/cameronfiore/C++/image_localization_project/data/KingsCollege/",
+//                       //"/Users/cameronfiore/C++/image_localization_project/data/OldHospital/",
+//                       //"/Users/cameronfiore/C++/image_localization_project/data/ShopFacade/",
+//                       //"/Users/cameronfiore/C++/image_localization_project/data/StMarysChurch/",
+//                       "/Users/cameronfiore/C++/image_localization_project/data/Street/"
+//                       };
+//
+//for(const auto & scene : scenes) {
 
-for(const auto & scene : scenes) {
 
-
-    cambridge::createPoseFiles(scene);
-    vector<string> listQuery = cambridge::getTestImages(scene);
+//    cambridge::createPoseFiles(scene);
+//    vector<string> listQuery = cambridge::getTestImages(scene);
 //    vector<string> listQuery = synthetic::getAll();
-//    vector<tuple<string, string, vector<string>, vector<string>>> info = sevenScenes::createInfoVector();
-//    functions::createQueryVector(listQuery, info, SCENE);
+    vector<tuple<string, string, vector<string>, vector<string>>> info = sevenScenes::createInfoVector();
+    vector<string> listQuery;
+    functions::createQueryVector(listQuery, info, SCENE);
 
 
     //    ofstream angles;
@@ -136,20 +138,20 @@ for(const auto & scene : scenes) {
 //    ofstream T_dist_after;
 //    T_dist_after.open ("/Users/cameronfiore/C++/image_localization_project/data/analysis/BA_and_rel_pose_analysis/T_dist_after.txt");
 
-    ofstream c_error;
-    c_error.open(scene + "c_error.txt");
-    ofstream c_adj_error;
-    c_adj_error.open(scene + "c_adj_error.txt");
+//    ofstream c_error;
+//    c_error.open(scene + "c_error.txt");
+//    ofstream c_adj_error;
+//    c_adj_error.open(scene + "c_adj_error.txt");
 
 //    ofstream T_gov_error;
 //    T_gov_error.open("/Users/cameronfiore/C++/image_localization_project/data/analysis/results/T_gov_error.txt");
 //    ofstream T_cf_error;
 //    T_cf_error.open("/Users/cameronfiore/C++/image_localization_project/data/analysis/results/T_cf_error.txt");
 
-    ofstream R_avg_error;
-    R_avg_error.open(scene + "R_avg_error.txt");
-    ofstream R_adj_error;
-    R_adj_error.open(scene + "R_adj_error.txt");
+//    ofstream R_avg_error;
+//    R_avg_error.open(scene + "R_avg_error.txt");
+//    ofstream R_adj_error;
+//    R_adj_error.open(scene + "R_adj_error.txt");
 
 //    ofstream R_cf_R_error;
 //    R_cf_R_error.open("/Users/cameronfiore/C++/image_localization_project/data/analysis/results/R_cf_R_error.txt");
@@ -171,54 +173,52 @@ for(const auto & scene : scenes) {
 //    R_blend_T_error.open("/Users/cameronfiore/C++/image_localization_project/data/analysis/results/R_blend_T_error.txt");
 
     cout << "Running queries..." << endl;
-    int startIdx = 0;
+    int startIdx = 200;
     for (int q = startIdx; q < listQuery.size(); q++) {
 
-        cout << q + 1 << "/" << listQuery.size() << ": ";
+//        cout << q + 1 << "/" << listQuery.size() << ": ";
 
         string query = listQuery[q];
 
-
-//        auto desc_kp_q = functions::getDescriptors(query, ".color.png", "SIFT");
-        auto desc_kp_q = functions::getDescriptors(query, ".png", "SIFT");
+        auto desc_kp_q = functions::getDescriptors(query, ".color.png", "SIFT");
         cv::Mat desc_q = desc_kp_q.first;
         vector<cv::KeyPoint> kp_q = desc_kp_q.second;
 
         Eigen::Matrix3d R_q;
         Eigen::Vector3d T_q;
-//        sevenScenes::getAbsolutePose(query, R_q, T_q);
-//        Eigen::Vector3d c_q = synthetic::getC(query);
-//        synthetic::getAbsolutePose(query, R_q, t_q);
-        cambridge::getAbsolutePose(query, R_q, T_q);
+        sevenScenes::getAbsolutePose(query, R_q, T_q);
         Eigen::Vector3d c_q = -R_q.transpose() * T_q;
 
 
-//        double K[4] = {525., 525., 320., 240.};
-        double K[4] = {1680., 1680., 960., 540.};
-
+        double K[4] = {585., 585., 320., 240.};
+//        double K[4] = {1680., 1680., 960., 540.};
 //        double K[4] = {744.375, 744.375, 960., 540.};
 //        double K[4] = {2584.9325098195013197, 2584.7918606057692159, 249.77137587221417903, 278.31267937919352562};
+        cv::Mat K_mat = (cv::Mat_<double>(3, 3) << K[0], 0., K[2], 0., K[1], K[3], 0., 0., 1.);
+        Eigen::Matrix3d K_eig {{K[0], 0.,   K[2]},
+                               {0.,   K[1], K[3]},
+                               {0.,   0.,     1.}};
 
-//        auto retrieved = functions::retrieveSimilar(query, ".color.png", 100, 1.6);
+        auto retrieved = functions::retrieveSimilar(query, "7-Scenes", ".color.png", 100, 3.);
 //        auto retrieved = synthetic::omitQuery(q, listQuery);
-        auto retrieved = functions::retrieveSimilar(query, "Cambridge", ".png", 15, 75.);
+//        auto spaced = functions::retrieveSimilar(query, "Cambridge", ".png", 6, 3.);
 
-        if (scene == "/Users/cameronfiore/C++/image_localization_project/data/Street/") {
-            if(functions::getScene(retrieved[0], "Street") != "Street") {
-                cout << query << endl;
-                continue;
-            }
-        } else {
-            string s = functions::getScene(query, "");
-            if(s != functions::getScene(retrieved[0], "")) {
-                cout << query << endl;
-                continue;
-            }
-        }
+//        if (scene == "/Users/cameronfiore/C++/image_localization_project/data/Street/") {
+//            if(functions::getScene(retrieved[0], "Street") != "Street") {
+//                cout << query << endl;
+//                continue;
+//            }
+//        } else {
+//            string s = functions::getScene(query, "");
+//            if(s != functions::getScene(retrieved[0], "")) {
+//                cout << query << endl;
+//                continue;
+//            }
+//        }
 
-//        auto spaced = functions::optimizeSpacing(retrieved, 20, false, "7-Scenes");
-        auto spaced = functions::optimizeSpacing(retrieved, 15, false, "Cambridge");
-//        auto spaced = functions::optimizeSpacing(retrieved, 10, false, "synthetic");
+        auto spaced = functions::optimizeSpacing(retrieved, 20, false, "7-Scenes");
+
+//        functions::record_spaced(query, spaced, "/Users/cameronfiore/Python/Localization/SuperGluePretrainedNetwork/7-Scenes/stairs/seq-01/frame-000200");
 
 
         vector<Eigen::Matrix3d> R_ks, R_ks_BA, R_qks, R_qk_reals;
@@ -229,163 +229,178 @@ for(const auto & scene : scenes) {
         for (const auto & im: spaced) {
             Eigen::Matrix3d R_k, R_qk_calc, R_kq_calc, R_qk_real;
             Eigen::Vector3d T_k, T_qk_calc, T_kq_calc, T_qk_real;
-//            sevenScenes::getAbsolutePose(im, R_k, T_k);
-//            synthetic::getAbsolutePose(im, R_k, t_k);
-            cambridge::getAbsolutePose(im, R_k, T_k);
+            sevenScenes::getAbsolutePose(im, R_k, T_k);
 
-            cv::Mat K_mat = (cv::Mat_<double>(3, 3) << K[0], 0., K[2], 0., K[1], K[3], 0., 0., 1.);
-
-//            auto desc_kp_i = functions::getDescriptors(im, ".color.png", "SIFT");
-            auto desc_kp_i = functions::getDescriptors(im, ".png", "SIFT");
+            auto desc_kp_i = functions::getDescriptors(im, ".color.png", "SIFT");
             cv::Mat desc_i = desc_kp_i.first;
             vector<cv::KeyPoint> kp_i = desc_kp_i.second;
 
             vector<cv::Point2d> pts_i, pts_q;
             functions::findMatches(0.8, desc_i, kp_i, desc_q, kp_q, pts_i, pts_q);
-            if (pts_i.size() < 5) continue;
 
-//            synthetic::findSyntheticMatches(im, query, pts_db, pts_q);
-//            synthetic::addGaussianNoise(pts_db, pts_q, .1);
-//            synthetic::addOcclusion(pts_db, pts_q, 1000);
-//            synthetic::addMismatches(pts_db, pts_q, .10);
+//            for(int i = 0; i < pts_q.size(); i++) {
+//                cv::Mat src;
+//                cv::Mat q_mat = cv::imread(query + ".color.png");
+//                cv::Mat im_mat = cv::imread(im + ".color.png");
+//                cv::hconcat(q_mat, im_mat, src);
+//
+//                cv::Point2d pt_q = pts_q[i];
+//                cv::Point2d pt_i(pts_i[i].x + q_mat.cols, pts_i[i].y);
+//                cv::Scalar color = cv::Scalar(255, 0, 0);
+//                    circle(src, pt_q, 3, color, -1);
+//                    circle(src, pt_i, 3, color, -1);
+//                    cv::line(src, pt_q, pt_i, color, 2);
+//                cv::imshow("OLD MATCHING: match "+to_string(i+1)+" of "+to_string(pts_q.size()), src);
+//                cv::waitKey(0);
+//            }
 
             vector<cv::Point2d> pts_q_qk = pts_q, pts_i_qk = pts_i;
-            functions::getRelativePose(pts_i_qk, pts_q_qk, K, .5, R_qk_calc, T_qk_calc);
+            functions::getRelativePose(pts_i_qk, pts_q_qk, K, 1., R_qk_calc, T_qk_calc);
 
             vector<cv::Point2d> pts_q_kq = pts_q, pts_i_kq = pts_i;
-            functions::getRelativePose(pts_q_kq, pts_i_kq, K, .5, R_kq_calc, T_kq_calc);
+            functions::getRelativePose(pts_q_kq, pts_i_kq, K, 1., R_kq_calc, T_kq_calc);
 
             Eigen::Matrix3d R_qk_from_kq = R_kq_calc.transpose();
             Eigen::Vector3d T_qk_from_kq = -R_kq_calc.transpose() * T_kq_calc;
 
             double r_consistency = functions::rotationDifference(R_qk_from_kq, R_qk_calc);
             double t_consistency = functions::getAngleBetween(T_qk_from_kq, T_qk_calc);
-            if (r_consistency >= 0.0001 || t_consistency >= 0.0001) {
-                continue;
-            }
-
-            cout << " " << pts_i_qk.size() << ",";
+//            if (r_consistency >= 0.0001 || t_consistency >= 0.0001) {
+//                continue;
+//            }
 
             R_qk_real = R_q * R_k.transpose();
             T_qk_real = T_q - R_qk_real * T_k;
             T_qk_real.normalize();
 
-//            Eigen::Matrix3d R_kq_real = R_k * R_q.transpose();
-//            Eigen::Vector3d T_kq_real = T_k - R_kq_real * T_q;
-//            T_kq_real.normalize();
+            Eigen::Matrix3d R_kq_real = R_k * R_q.transpose();
+            Eigen::Vector3d T_kq_real = T_k - R_kq_real * T_q;
+            T_kq_real.normalize();
 
             double r_dist = functions::rotationDifference(R_qk_real, R_qk_calc);
             double t_dist = functions::getAngleBetween(T_qk_real, T_qk_calc);
 
+            cout << r_dist << ", " << t_dist << "       SIFT RANSAC Inliers: " << pts_q_qk.size() << "/" << pts_q.size() << endl;
 
-//            random_device generator;
-//            uniform_int_distribution<int> distribution(1,255);
-//            for(int x = 0; x < pts_i_qk.size(); x+=10) {
-////                cv::Mat src;
-//                cv::Mat q_mat = cv::imread(query+".png");
-//                cv::Mat im_mat = cv::imread(im+".png");
-//                Eigen::Vector3d pt_i {pts_i_qk[x].x, pts_i_qk[x].y, 1.};
-//                Eigen::Vector3d pt_q {pts_q_qk[x].x, pts_q_qk[x].y, 1.};
-////                cv::hconcat(q_mat, im_mat, src);
-////                for(int i = x; i < MIN(x + 10, pts_i_qk.size()) ; i++) {
-////                    cv::Point2d pt_q = pts_q_qk[i];
-////                    cv::Point2d pt_i (pts_i_qk[i].x + q_mat.cols, pts_i_qk[i].y);
-////                    cv::Scalar color = cv::Scalar(distribution(generator), distribution(generator),
-////                                                  distribution(generator));
-////                    circle(src, pt_q, 3, color, -1);
-////                    circle(src, pt_i, 3, color, -1);
-////                    cv::line(src, pt_q, pt_i, color, 2);
-////                }
-////                cv::imshow("Feature Matching", src);
-////                cv::waitKey(0);
-//
-//                Eigen::Matrix3d K_eig{{K[0], 0.,   K[2]},
-//                                      {0.,  K[1], K[3]},
-//                                      {0.,   0.,   1.}};
-//
-//                T_qk_real.normalize();
-//                Eigen::Matrix3d t_qk_cross {
-//                        {0,               -T_qk_real(2), T_qk_real(1)},
-//                        {T_qk_real(2),  0,              -T_qk_real(0)},
-//                        {-T_qk_real(1), T_qk_real(0),               0}};
-//                Eigen::Matrix3d E_qk = t_qk_cross * R_qk_real;
-//                Eigen::Vector3d epiline_qk = K_eig.inverse().transpose() * E_qk * K_eig.inverse() * pt_i;
-//
-//                vector<cv::Point3d> lines_q {cv::Point3d (epiline_qk[0], epiline_qk[1], epiline_qk[2])};
-//                vector<cv::Point2d> points_q {cv::Point2d (pt_q[0], pt_q[1])};
-//                cv::Scalar color_q = cv::Scalar(distribution(generator), distribution(generator), distribution(generator));
-//                vector<cv::Scalar> colors {color_q};
-//
-//
-//                Eigen::Matrix3d t_kq_cross {
-//                        {0,               -T_kq_real(2), T_kq_real(1)},
-//                        {T_kq_real(2),  0,              -T_kq_real(0)},
-//                        {-T_kq_real(1), T_kq_real(0),               0}};
-//                Eigen::Matrix3d E_kq = t_kq_cross * R_kq_real;
-//                Eigen::Vector3d epiline_kq = K_eig.inverse().transpose() * E_kq * K_eig.inverse() * pt_q;
-//
-//                vector<cv::Point3d> lines_k {cv::Point3d (epiline_kq[0], epiline_kq[1], epiline_kq[2])};
-//                vector<cv::Point2d> points_k {cv::Point2d (pt_i[0], pt_i[1])};
-//                cv::Scalar color_k = cv::Scalar(distribution(generator), distribution(generator), distribution(generator));
-//                colors.push_back(color_k);
-//
-//                functions::drawLines(q_mat, im_mat, lines_q, lines_k, points_q, points_k, colors);
+
+
+
+
+            vector<cv::Point2d> SG_points_q, SG_points_i;
+            functions::get_SG_points(query, im, SG_points_q, SG_points_i);
+
+            vector<cv::Point2d> inliers_q = SG_points_q, inliers_i = SG_points_i;
+            functions::findInliers(R_q, T_q, R_k, T_k, K_eig, 1., inliers_q, inliers_i);
+
+
+            pts_q_qk = SG_points_q;
+            pts_i_qk = SG_points_i;
+            functions::getRelativePose(pts_i_qk, pts_q_qk, K, 1., R_qk_calc, T_qk_calc);
+
+            pts_q_kq = SG_points_q;
+            pts_i_kq = SG_points_i;
+            functions::getRelativePose(pts_q_kq, pts_i_kq, K, 1., R_kq_calc, T_kq_calc);
+
+            R_qk_from_kq = R_kq_calc.transpose();
+            T_qk_from_kq = -R_kq_calc.transpose() * T_kq_calc;
+
+            r_consistency = functions::rotationDifference(R_qk_from_kq, R_qk_calc);
+            t_consistency = functions::getAngleBetween(T_qk_from_kq, T_qk_calc);
+//            if (r_consistency >= 0.0001 || t_consistency >= 0.0001) {
+//                continue;
+//            }
+
+            R_qk_real = R_q * R_k.transpose();
+            T_qk_real = T_q - R_qk_real * T_k;
+            T_qk_real.normalize();
+
+            double r_dist_SG = functions::rotationDifference(R_qk_real, R_qk_calc);
+            double t_dist_SG = functions::getAngleBetween(T_qk_real, T_qk_calc);
+
+            int cross = 0;
+            for (auto & i : inliers_q) {
+                double x = i.x;
+                double y = i.y;
+                for (auto & j : pts_q_qk) {
+                    if (x == j.x && y == j.y) {
+                        cross++;
+                    }
+                }
+            }
+
+            cout << r_dist_SG << ", " << t_dist_SG << "      SuperGlue RANSAC Inliers: " << pts_q_qk.size() << "/" << SG_points_q.size() << endl;
+            cout << "True Inlier Rate: " << inliers_q.size() << "/" << SG_points_q.size() << endl;
+            cout << cross << " RANSAC inliers are true inliers" << endl;
+            cout << endl << endl;
+
+//            random_device gen;
+//            uniform_int_distribution<int> dis (0, 256) ;
+//            for(int i = 0; i < inliers_q.size(); i++) {
 //                cv::Mat src;
+//                cv::Mat q_mat = cv::imread(query + ".color.png");
+//                cv::Mat im_mat = cv::imread(im + ".color.png");
 //                cv::hconcat(q_mat, im_mat, src);
-//                cv::imshow("epiline", src);
+//                cv::Point2d pt_q = inliers_q[i];
+//                cv::Point2d pt_i(inliers_i[i].x + q_mat.cols, inliers_i[i].y);
+//                cv::Scalar color = cv::Scalar(dis(gen), dis(gen), dis(gen));
+//                circle(src, pt_q, 3, color, -1);
+//                circle(src, pt_i, 3, color, -1);
+//                cv::line(src, pt_q, pt_i, color, 2);
+//                cv::imshow("NEW MATCHING", src);
 //                cv::waitKey(0);
 //            }
 
-            vector<pair<cv::Point2d, cv::Point2d>> matches(pts_i_qk.size());
-            for (int i = 0; i < pts_i_qk.size(); i++) {
-                matches[i] = pair<cv::Point2d, cv::Point2d>{pts_q_qk[i], pts_i_qk[i]};
-            }
-
-            all_matches.push_back(matches);
-            anchors.push_back(im);
-            R_ks.push_back(R_k);
-            T_ks.push_back(T_k);
-            R_qks.push_back(R_qk_calc);
-            T_qks.push_back(T_qk_calc);
-            desc_kp_anchors.push_back(desc_kp_i);
-            R_qk_reals.push_back(R_qk_real);
-            T_qk_reals.push_back(T_qk_real);
+//            vector<pair<cv::Point2d, cv::Point2d>> matches(pts_i_qk.size());
+//            for (int i = 0; i < pts_i_qk.size(); i++) {
+//                matches[i] = pair<cv::Point2d, cv::Point2d>{pts_q_qk[i], pts_i_qk[i]};
+//            }
+//            all_matches.push_back(matches);
+//            anchors.push_back(im);
+//            R_ks.push_back(R_k);
+//            T_ks.push_back(T_k);
+//            R_qks.push_back(R_qk_calc);
+//            T_qks.push_back(T_qk_calc);
+//            desc_kp_anchors.push_back(desc_kp_i);
+//            R_qk_reals.push_back(R_qk_real);
+//            T_qk_reals.push_back(T_qk_real);
         }
+
+        break;
 
         if (anchors.size() < 3) {
             cout << "Bad query..." << endl;
             continue;
         }
 
-        auto results = pose::hypothesizeRANSAC(5., R_ks, T_ks, R_qks, T_qks);
-
-        vector<int> inlier_indices = get<2>(results);
-        cout << " Inliers: " << inlier_indices.size() << "/" << R_ks.size();
-
-        Eigen::Vector3d c_q_est = get<0>(results);
-        Eigen::Matrix3d R_q_est = get<1>(results);
-        Eigen::Vector3d T_q_est = -R_q_est * c_q_est;
-
-
-        Eigen::Matrix3d R_q_adj = R_q_est;
-        Eigen::Vector3d T_q_adj = -R_q_est * c_q_est;
-        pose::adjustHypothesis(R_ks, T_ks, all_matches, 10., K, R_q_adj, T_q_adj);
-        Eigen::Vector3d c_q_adj = -R_q_adj.transpose() * T_q_adj;
-
-        cout << endl;
-
-
+//        auto results = pose::hypothesizeRANSAC(5., R_ks, T_ks, R_qks, T_qks);
+//
+//        vector<int> inlier_indices = get<2>(results);
+//        cout << " Inliers: " << inlier_indices.size() << "/" << R_ks.size();
+//
+//        Eigen::Vector3d c_q_est = get<0>(results);
+//        Eigen::Matrix3d R_q_est = get<1>(results);
+//        Eigen::Vector3d T_q_est = -R_q_est * c_q_est;
+//
+//
+//        Eigen::Matrix3d R_q_adj = R_q_est;
+//        Eigen::Vector3d T_q_adj = -R_q_est * c_q_est;
+//        pose::adjustHypothesis(R_ks, T_ks, all_matches, 10., K, R_q_adj, T_q_adj);
+//        Eigen::Vector3d c_q_adj = -R_q_adj.transpose() * T_q_adj;
+//
+//        cout << endl;
 
 
 
-        double c_ = functions::getDistBetween(c_q_est, c_q);
-        double c_adj_ = functions::getDistBetween(c_q_adj, c_q);
+
+
+//        double c_ = functions::getDistBetween(c_q_est, c_q);
+//        double c_adj_ = functions::getDistBetween(c_q_adj, c_q);
 
 //        double T_gov_ = functions::getDistBetween(get<1>(results), T_q);
 //        double T_cf_ = functions::getDistBetween(get<2>(results), T_q);
 
-        double R_avg_ = functions::rotationDifference(R_q_est, R_q);
-        double R_adj_ = functions::rotationDifference(R_q_adj, R_q);
+//        double R_avg_ = functions::rotationDifference(R_q_est, R_q);
+//        double R_adj_ = functions::rotationDifference(R_q_adj, R_q);
 
 
 
@@ -407,7 +422,7 @@ for(const auto & scene : scenes) {
 //        double R_blend_T_ = functions::rotationDifference(blend_T, R_q);
 
 
-        int stop = 0;
+//        int stop = 0;
 
 //        double total_d = 0, total_c = 0;
 //        for(const auto & n : inlier_indices) {
@@ -428,14 +443,14 @@ for(const auto & scene : scenes) {
 //        int stop = 0;
 
 ////Write to error files
-        c_error << c_ << endl;
-        c_adj_error << c_adj_ << endl;
+//        c_error << c_ << endl;
+//        c_adj_error << c_adj_ << endl;
 
 //        T_gov_error << T_gov_ << endl;
 //        T_cf_error << T_cf_ << endl;
 
-        R_avg_error << R_avg_ << endl;
-        R_adj_error << R_adj_ << endl;
+//        R_avg_error << R_avg_ << endl;
+//        R_adj_error << R_adj_ << endl;
 
 //        R_cf_R_error << R_cf_R_ << endl;
 //        R_cf_R_NORM_error << R_cf_R_NORM_ << endl;
@@ -518,13 +533,13 @@ for(const auto & scene : scenes) {
 
 //    angles.close();
 
-    c_error.close();
-    c_adj_error.close();
+//    c_error.close();
+//    c_adj_error.close();
 
 //    T_gov_error.close();
 //    T_cf_error.close();
-    R_avg_error.close();
-    R_adj_error.close();
+//    R_avg_error.close();
+//    R_adj_error.close();
 //    R_cf_R_error.close();
 //    R_cf_R_NORM_error.close();
 //    R_cf_T_error.close();
@@ -533,6 +548,6 @@ for(const auto & scene : scenes) {
 //    R_cf_T_New_error.close();
 //    R_blend_R_error.close();
 //    R_blend_T_error.close();
-}
+//}
     return 0;
 }
