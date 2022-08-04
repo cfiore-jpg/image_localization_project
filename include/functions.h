@@ -20,6 +20,8 @@ using namespace std;
 
 namespace functions {
 
+    vector<string> optimizeSpacingZhou(const vector<string> & images, double min, double max, int N, const string & dataset);
+
     void get_SG_points(const string & query, const string & db, vector<cv::Point2d> & pts_q, vector<cv::Point2d> & pts_i);
 
     void record_spaced(const string & query, const vector<string> & spaced, const string & folder);
@@ -81,6 +83,11 @@ namespace functions {
 
     vector<string> optimizeSpacing(const vector<string> & images, int N, bool show_process, const string & dataset);
 
+    vector<string> randomSelection(const vector<string> & images, int N);
+
+    vector<string> kMeans(const vector<string> & images, int N);
+
+
     void createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
     void createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
 
@@ -109,16 +116,26 @@ namespace functions {
                                         vector<Eigen::Vector3d> & t_qk);
 
 //// Visualization
+
+    void showTop150(const string & query_image, const vector<string> & returned, const string & ext);
+
+    void showSpaced(const string & query_image, const vector<string> & spaced, const string & ext);
+
+    void showSpacedInTop150(const string & query_image, const vector<string> & returned, const vector<string> & spaced, const string & ext);
+
     void showTop1000(const string & query_image, const string & ext, int max_num, double max_descriptor_dist, int inliers);
+
     cv::Mat projectCentersTo2D(const string & query, const vector<string> & images,
                                unordered_map<string, cv::Scalar> & seq_colors,
                                const string & Title);
+
     double drawLines(cv::Mat & im1, cv::Mat & im2,
                      const vector<cv::Point3d> & lines_draw_on_1,
                      const vector<cv::Point3d> & lines_draw_on_2,
                      const vector<cv::Point2d> & pts1,
                      const vector<cv::Point2d> & pts2,
                      const vector<cv::Scalar> & colors);
+
     cv::Mat showAllImages(const string & query, const vector<string> & images,
                           unordered_map<string, cv::Scalar> & seq_colors,
                           const unordered_set<string> & unincluded_all,

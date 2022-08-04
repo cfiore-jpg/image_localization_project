@@ -7,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o.d"
   "CMakeFiles/image_localization_project.dir/src/Space.cpp.o"
   "CMakeFiles/image_localization_project.dir/src/Space.cpp.o.d"
+  "CMakeFiles/image_localization_project.dir/src/aachen.cpp.o"
+  "CMakeFiles/image_localization_project.dir/src/aachen.cpp.o.d"
   "CMakeFiles/image_localization_project.dir/src/calibrate.cpp.o"
   "CMakeFiles/image_localization_project.dir/src/calibrate.cpp.o.d"
   "CMakeFiles/image_localization_project.dir/src/functions.cpp.o"

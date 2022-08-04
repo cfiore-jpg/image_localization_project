@@ -34,6 +34,49 @@
 using namespace std;
 using namespace cv;
 
+vector<string> functions::optimizeSpacingZhou (const vector<string> & images, double min, double max, int N, const string & dataset) {
+    vector<string> results;
+    vector<Eigen::Vector3d> centers;
+    Eigen::Vector3d first;
+
+    if (images.empty()) return results;
+
+    if (dataset == "7-Scenes")
+        first = sevenScenes::getT(images[0]);
+
+    results.push_back(images[0]);
+    centers.push_back(first);
+
+    for (int i = 1; i < images.size(); i++) {
+
+        string im = images[i];
+        Eigen::Vector3d c;
+        if (dataset == "7-Scenes")
+            c = sevenScenes::getT(im);
+
+        bool too_close = false;
+        bool close_enough = false;
+        for (auto & center : centers) {
+            double dist = functions::getDistBetween(c, center);
+            if (dist <= max) close_enough = true;
+            if (dist < min) {
+                too_close = true;
+                break;
+            }
+        }
+
+        if(close_enough && !too_close) {
+            results.push_back(im);
+            centers.push_back(c);
+        }
+
+        if (results.size() == N) break;
+
+    }
+
+    return results;
+}
+
 void functions::get_SG_points(const string & query, const string & db, vector<cv::Point2d> & pts_q, vector<cv::Point2d> & pts_i) {
     string path = query.substr(query.find("data/") + 5, query.find(".color.png"));
     path = "/Users/cameronfiore/Python/Localization/SuperGluePretrainedNetwork/7-Scenes/" + path + "/cpp_text_files/";
@@ -704,6 +747,101 @@ vector<string> functions::optimizeSpacing(const vector<string> & images, int N, 
     return names;
 }
 
+vector<string> functions::randomSelection(const vector<string> & images, int N) {
+
+    if (images.size() <= N) return images;
+
+    vector<string> take = images, give;
+    random_device gen;
+    while(give.size() < N) {
+        uniform_int_distribution<int> d (0, int(take.size()) - 1);
+        int idx = d(gen);
+        give.push_back(take[idx]);
+        take.erase(take.begin() + idx);
+    }
+    return give;
+}
+
+vector<string> functions::kMeans(const vector<string> & images, int N) {
+
+    if (images.size() <= N) return images;
+
+    // Get all image centers
+    vector<pair<string, Eigen::Vector3d>> im2c;
+    im2c.reserve(images.size());
+    for (const auto & im : images) {
+        im2c.emplace_back(im, sevenScenes::getT(im));
+    }
+
+    // Initialize clusters
+    vector<pair<string, Eigen::Vector3d>> take = im2c;
+    vector<pair<Eigen::Vector3d, vector<pair<string, Eigen::Vector3d>>>> clusters;
+    random_device gen;
+    while(clusters.size() < N) {
+        uniform_int_distribution<int> d (0, int(take.size()) - 1);
+        int idx = d(gen);
+        vector<pair<string, Eigen::Vector3d>> v;
+        clusters.emplace_back(im2c[idx].second, v);
+        take.erase(take.begin() + idx);
+    }
+
+    double total_shift = 1;
+    while (total_shift > 0.001) {
+        for (auto & c: clusters) {
+            c.second.clear();
+        }
+
+        // Assign to centers
+        for (const auto & im : im2c) {
+            double smallest_dist = 10000;
+            int closest = 0;
+            for (int i = 0; i < clusters.size(); i++) {
+                double dist = functions::getDistBetween(im.second, clusters[i].first);
+                if (dist < smallest_dist) {
+                    smallest_dist = dist;
+                    closest = i;
+                }
+            }
+            clusters[closest].second.push_back(im);
+        }
+
+        // Recalc centers
+        total_shift = 0;
+        for(auto & c : clusters) {
+            Eigen::Vector3d new_center {0, 0, 0};
+            if (c.second.empty()) {
+                uniform_int_distribution<int> d (0, int(im2c.size()) - 1);
+                new_center = im2c[d(gen)].second;
+            } else {
+                for(const auto & im : c.second) {
+                    new_center += im.second;
+                }
+                new_center /= double(c.second.size());
+            }
+            total_shift += functions::getDistBetween(new_center, c.first);
+            c.first = new_center;
+        }
+    }
+
+    // Find closest image to cluster center
+    vector<string> to_return;
+    to_return.reserve(clusters.size());
+    for (const auto & c : clusters) {
+        double smallest_dist = 1000;
+        string closest;
+        for (const auto & im : c.second) {
+            double dist = functions::getDistBetween(c.first, im.second);
+            if (dist < smallest_dist) {
+                smallest_dist = dist;
+                closest = im.first;
+            }
+        }
+        to_return.push_back(closest);
+    }
+
+    return to_return;
+}
+
 // DATABASE PREPARATION FUNCTIONS
 void functions::createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene)
 {
@@ -1015,49 +1153,22 @@ vector<string> functions::retrieveSimilar(const string & query_image, const stri
 
     if (file.is_open()) {
         string line;
-        bool first = true;
-        Eigen::Vector3d c_ms;
-        int depth_of_search = 0;
-        while (similar.size() < max_num && getline(file, line) && depth_of_search < max_num) {
+        while (similar.size() < max_num && getline(file, line)) {
             stringstream ss(line);
             string buf, fn;
-            ss >> buf;
-            fn = buf.substr(0, buf.find(ext));
-            if(first) {
-                Eigen::Matrix3d R_ms;
-                Eigen::Vector3d T_ms;
-                if(dataset == "Cambridge") {
-                    cambridge::getAbsolutePose(fn, R_ms, T_ms);
-                    c_ms = - R_ms.transpose() * T_ms;
-                } else if(dataset == "7-Scenes") {
-                    sevenScenes::getAbsolutePose(fn, R_ms, T_ms);
-                    c_ms = - R_ms.transpose() * T_ms;
+            double dist;
+            int count = 0;
+            while (ss >> buf) {
+                if (count == 0) {
+                    fn = buf.substr(0, buf.find(ext));
                 } else {
-                    cout << "Bad dataset" << endl;
-                    exit(0);
+                    dist = stod(buf);
                 }
-                first = false;
-                similar.push_back(fn);
-            } else {
-                Eigen::Matrix3d R;
-                Eigen::Vector3d T;
-                Eigen::Vector3d c;
-                if(dataset == "Cambridge") {
-                    cambridge::getAbsolutePose(fn, R, T);
-                    c = - R.transpose() * T;
-                } else if(dataset == "7-Scenes") {
-                    sevenScenes::getAbsolutePose(fn, R, T);
-                    c = - R.transpose() * T;
-                } else {
-                    cout << "Bad dataset" << endl;
-                    exit(0);
-                }
-                double dist = getDistBetween(c_ms, c);
-                if(dist <= max_dist) {
-                    similar.push_back(fn);
-                }
+                count++;
             }
-            depth_of_search++;
+            if (dist <= max_dist) {
+                similar.push_back(fn);
+            }
         }
         file.close();
     }
@@ -1069,6 +1180,260 @@ vector<string> functions::retrieveSimilar(const string & query_image, const stri
 
 
 // Visualize
+
+void functions::showTop150(const string & query_image, const vector<string> & returned, const string & ext) {
+
+    assert(returned.size() == 150);
+
+    Mat q = imread(query_image + ext);
+    imshow(query_image, q);
+    waitKey();
+
+    string scene = getScene(query_image, "");
+
+    vector<pair<Mat, string>> vecMat;
+    vecMat.reserve(150);
+    for(const auto & p : returned) {
+        vecMat.emplace_back(imread(p + ext), p);
+    }
+
+
+    // Get window parameters
+    int nRows = 10;
+    int windowHeight = 5000;
+    int edgeThickness = 20;
+    int imagesPerRow = 15;
+    int resizeHeight = int (floor(2.0 * ((floor(double(windowHeight - edgeThickness) / nRows)) / 2.0))) - edgeThickness;
+    int maxRowLength = 0;
+    std::vector<int> resizeWidth;
+    for (int i = 0; i < nRows; i++) {
+        int thisRowLen = 0;
+        for (int k = 0; k < imagesPerRow; k++) {
+            double aspectRatio = double(vecMat[i].first.cols) / vecMat[i].first.rows;
+            int temp = int(ceil(resizeHeight * aspectRatio));
+            resizeWidth.push_back(temp);
+            thisRowLen += temp;
+        }
+        if ((thisRowLen + edgeThickness * (imagesPerRow + 1)) > maxRowLength) {
+            maxRowLength = thisRowLen + edgeThickness * (imagesPerRow + 1);
+        }
+    }
+
+    // Create canvas
+    int windowWidth = maxRowLength;
+    Mat canvasImage(windowHeight, windowWidth, CV_8UC3, Scalar(0, 0, 0));
+
+    // Draw Images
+    for (int k = 0, i = 0; i < nRows; i++) {
+        int y = i * resizeHeight + (i + 1) * edgeThickness;
+        int x_end = edgeThickness;
+        for (int j = 0; j < imagesPerRow && k < 150; k++, j++) {
+            int x = x_end;
+            int y_color = y - edgeThickness / 2;
+            int x_color = x - edgeThickness / 2;
+
+            // Determine Highlight
+            Rect roi_color(x_color, y_color, resizeWidth[k] + edgeThickness, resizeHeight + edgeThickness);
+            Size s_color = canvasImage(roi_color).size();
+            Mat target_ROI_color;
+            string this_scene = getScene(vecMat[k].second, "");
+            if (this_scene != scene) {
+                target_ROI_color = Mat (s_color, CV_8UC3, Scalar(0., 0., 255.));
+            } else {
+                target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 0., 0.));
+            }
+            target_ROI_color.copyTo(canvasImage(roi_color));
+
+            // Draw Image
+            Rect roi(x, y, resizeWidth[k], resizeHeight);
+            Size s = canvasImage(roi).size();
+            // change the number of channels to three
+            Mat target_ROI(s, CV_8UC3);
+            if (vecMat[k].first.channels() != canvasImage.channels()) {
+                if (vecMat[k].first.channels() == 1) {
+                    cvtColor(vecMat[k].first, target_ROI, COLOR_GRAY2BGR);
+                }
+            } else {
+                vecMat[k].first.copyTo(target_ROI);
+            }
+            resize(target_ROI, target_ROI, s);
+            if (target_ROI.type() != canvasImage.type()) {
+                target_ROI.convertTo(target_ROI, canvasImage.type());
+            }
+            target_ROI.copyTo(canvasImage(roi));
+            x_end += resizeWidth[k] + edgeThickness;
+        }
+    }
+    imshow(query_image+"Top 150", canvasImage);
+    waitKey();
+}
+
+void functions::showSpaced(const string & query_image, const vector<string> & spaced, const string & ext) {
+    string scene = getScene(query_image, "");
+
+    vector<pair<Mat, string>> vecMat;
+    vecMat.reserve(spaced.size());
+    for(const auto & p : spaced) {
+        vecMat.emplace_back(imread(p + ext), p);
+    }
+
+
+    // Get window parameters
+    int nRows = int(sqrt(spaced.size()));
+    int windowHeight = 5000;
+    int edgeThickness = 20;
+    int imagesPerRow = int(spaced.size() / nRows);
+    int resizeHeight = int (floor(2.0 * ((floor(double(windowHeight - edgeThickness) / nRows)) / 2.0))) - edgeThickness;
+    int maxRowLength = 0;
+    std::vector<int> resizeWidth;
+    for (int i = 0; i < nRows; i++) {
+        int thisRowLen = 0;
+        for (int k = 0; k < imagesPerRow; k++) {
+            double aspectRatio = double(vecMat[i].first.cols) / vecMat[i].first.rows;
+            int temp = int(ceil(resizeHeight * aspectRatio));
+            resizeWidth.push_back(temp);
+            thisRowLen += temp;
+        }
+        if ((thisRowLen + edgeThickness * (imagesPerRow + 1)) > maxRowLength) {
+            maxRowLength = thisRowLen + edgeThickness * (imagesPerRow + 1);
+        }
+    }
+
+    // Create canvas
+    int windowWidth = maxRowLength;
+    Mat canvasImage(windowHeight, windowWidth, CV_8UC3, Scalar(0, 0, 0));
+
+    // Draw Images
+    for (int k = 0, i = 0; i < nRows; i++) {
+        int y = i * resizeHeight + (i + 1) * edgeThickness;
+        int x_end = edgeThickness;
+        for (int j = 0; j < imagesPerRow && k < spaced.size(); k++, j++) {
+            int x = x_end;
+            int y_color = y - edgeThickness / 2;
+            int x_color = x - edgeThickness / 2;
+
+            // Determine Highlight
+            Rect roi_color(x_color, y_color, resizeWidth[k] + edgeThickness, resizeHeight + edgeThickness);
+            Size s_color = canvasImage(roi_color).size();
+            Mat target_ROI_color;
+            string this_scene = getScene(vecMat[k].second, "");
+            if (this_scene != scene) {
+                target_ROI_color = Mat (s_color, CV_8UC3, Scalar(0., 0., 255.));
+            } else {
+                target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 0., 0.));
+            }
+            target_ROI_color.copyTo(canvasImage(roi_color));
+
+            // Draw Image
+            Rect roi(x, y, resizeWidth[k], resizeHeight);
+            Size s = canvasImage(roi).size();
+            // change the number of channels to three
+            Mat target_ROI(s, CV_8UC3);
+            if (vecMat[k].first.channels() != canvasImage.channels()) {
+                if (vecMat[k].first.channels() == 1) {
+                    cvtColor(vecMat[k].first, target_ROI, COLOR_GRAY2BGR);
+                }
+            } else {
+                vecMat[k].first.copyTo(target_ROI);
+            }
+            resize(target_ROI, target_ROI, s);
+            if (target_ROI.type() != canvasImage.type()) {
+                target_ROI.convertTo(target_ROI, canvasImage.type());
+            }
+            target_ROI.copyTo(canvasImage(roi));
+            x_end += resizeWidth[k] + edgeThickness;
+        }
+    }
+    imshow(query_image+" Top K", canvasImage);
+    waitKey();
+}
+
+void functions::showSpacedInTop150(const string & query_image, const vector<string> & returned, const vector<string> & spaced, const string & ext) {
+    assert(returned.size() == 150);
+
+    string scene = getScene(query_image, "");
+
+    vector<pair<Mat, string>> vecMat;
+    vecMat.reserve(150);
+    for (const auto &p: returned) {
+        vecMat.emplace_back(imread(p + ext), p);
+    }
+
+
+    // Get window parameters
+    int nRows = 10;
+    int windowHeight = 5000;
+    int edgeThickness = 20;
+    int imagesPerRow = 15;
+    int resizeHeight = int(floor(2.0 * ((floor(double(windowHeight - edgeThickness) / nRows)) / 2.0))) - edgeThickness;
+    int maxRowLength = 0;
+    std::vector<int> resizeWidth;
+    for (int i = 0; i < nRows; i++) {
+        int thisRowLen = 0;
+        for (int k = 0; k < imagesPerRow; k++) {
+            double aspectRatio = double(vecMat[i].first.cols) / vecMat[i].first.rows;
+            int temp = int(ceil(resizeHeight * aspectRatio));
+            resizeWidth.push_back(temp);
+            thisRowLen += temp;
+        }
+        if ((thisRowLen + edgeThickness * (imagesPerRow + 1)) > maxRowLength) {
+            maxRowLength = thisRowLen + edgeThickness * (imagesPerRow + 1);
+        }
+    }
+
+    // Create canvas
+    int windowWidth = maxRowLength;
+    Mat canvasImage(windowHeight, windowWidth, CV_8UC3, Scalar(0, 0, 0));
+
+    // Draw Images
+    for (int k = 0, i = 0; i < nRows; i++) {
+        int y = i * resizeHeight + (i + 1) * edgeThickness;
+        int x_end = edgeThickness;
+        for (int j = 0; j < imagesPerRow && k < 150; k++, j++) {
+            int x = x_end;
+            int y_color = y - edgeThickness / 2;
+            int x_color = x - edgeThickness / 2;
+
+            // Determine Highlight
+            Rect roi_color(x_color, y_color, resizeWidth[k] + edgeThickness, resizeHeight + edgeThickness);
+            Size s_color = canvasImage(roi_color).size();
+            Mat target_ROI_color;
+            string this_scene = getScene(vecMat[k].second, "");
+            if (this_scene != scene) {
+                target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 0., 255.));
+            } else {
+                if (count(spaced.begin(), spaced.end(), vecMat[k].second)) {
+                    target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 255., 0.));
+                } else {
+                    target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 0., 0.));
+                }
+            }
+            target_ROI_color.copyTo(canvasImage(roi_color));
+
+            // Draw Image
+            Rect roi(x, y, resizeWidth[k], resizeHeight);
+            Size s = canvasImage(roi).size();
+            // change the number of channels to three
+            Mat target_ROI(s, CV_8UC3);
+            if (vecMat[k].first.channels() != canvasImage.channels()) {
+                if (vecMat[k].first.channels() == 1) {
+                    cvtColor(vecMat[k].first, target_ROI, COLOR_GRAY2BGR);
+                }
+            } else {
+                vecMat[k].first.copyTo(target_ROI);
+            }
+            resize(target_ROI, target_ROI, s);
+            if (target_ROI.type() != canvasImage.type()) {
+                target_ROI.convertTo(target_ROI, canvasImage.type());
+            }
+            target_ROI.copyTo(canvasImage(roi));
+            x_end += resizeWidth[k] + edgeThickness;
+        }
+    }
+    imshow(query_image + "Top 150", canvasImage);
+    waitKey();
+}
+
 void functions::showTop1000(const string & query_image, const string & ext, int max_num, double max_dist, int inliers) {
 
     // Show Query

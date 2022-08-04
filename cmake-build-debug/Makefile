@@ -225,6 +225,30 @@ src/Space.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/Space.cpp.s
 .PHONY : src/Space.cpp.s
 
+src/aachen.o: src/aachen.cpp.o
+.PHONY : src/aachen.o
+
+# target to build an object file
+src/aachen.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/aachen.cpp.o
+.PHONY : src/aachen.cpp.o
+
+src/aachen.i: src/aachen.cpp.i
+.PHONY : src/aachen.i
+
+# target to preprocess a source file
+src/aachen.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/aachen.cpp.i
+.PHONY : src/aachen.cpp.i
+
+src/aachen.s: src/aachen.cpp.s
+.PHONY : src/aachen.s
+
+# target to generate assembly for a file
+src/aachen.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/src/aachen.cpp.s
+.PHONY : src/aachen.cpp.s
+
 src/calibrate.o: src/calibrate.cpp.o
 .PHONY : src/calibrate.o
 
@@ -366,6 +390,9 @@ help:
 	@echo "... src/Space.o"
 	@echo "... src/Space.i"
 	@echo "... src/Space.s"
+	@echo "... src/aachen.o"
+	@echo "... src/aachen.i"
+	@echo "... src/aachen.s"
 	@echo "... src/calibrate.o"
 	@echo "... src/calibrate.i"
 	@echo "... src/calibrate.s"

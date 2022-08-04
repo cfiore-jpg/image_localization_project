@@ -50,10 +50,10 @@ namespace pose {
                                 const vector<Eigen::Matrix3d> &R_qks,
                                 const vector<Eigen::Vector3d> &T_qks);
 
-    Eigen::Vector3d T_q_closed_form(const vector<Eigen::Matrix3d> &R_ks,
-                                    const vector<Eigen::Vector3d> &T_ks,
-                                    const vector<Eigen::Matrix3d> &R_qks,
-                                    const vector<Eigen::Vector3d> &T_qks);
+    pair<Eigen::Vector3d, Eigen::Vector3d> T_q_closed_form (const vector<Eigen::Matrix3d> & R_ks,
+                                                            const vector<Eigen::Vector3d> & T_ks,
+                                                            const vector<Eigen::Matrix3d> & R_qks,
+                                                            const vector<Eigen::Vector3d> & T_qks);
 
 
     //// ROTATION HYPOTHESIS
