@@ -22,14 +22,12 @@ using namespace std;
 
 //Point functions
 Point * newPoint(const string & name,
-                 const double & desc_disc,
                  int num,
                  int num_energies,
                  const Eigen::Vector3d & position) {
     auto * temp = new Point;
     temp->name = name;
     temp->number = num;
-    temp->constant = 1; //pow(1.5, desc_disc);
     temp->energies = vector<Energy*> (num_energies);
     temp->position = position;
     temp->total_energy = 0.;
@@ -48,8 +46,8 @@ void newEnergy(Point * a, Point * b) {
 
     a->energies[b->number] = temp;
     b->energies[a->number] = temp;
-    a->total_energy += a->constant * temp->magnitude;
-    b->total_energy += b->constant * temp->magnitude;
+    a->total_energy += temp->magnitude;
+    b->total_energy += temp->magnitude;
 }
 
 //Graph functions
@@ -57,12 +55,11 @@ Space::Space() = default;
 
 Space::Space(const string & query,
              const vector<string> & images,
-             const vector<double> & distances,
              const string & dataset) {
 
     if (dataset == "7-Scenes") {
         for (int i = 0; i < images.size(); i++) {
-            auto point_to_add = newPoint(images[i], distances[i], i, int(images.size()), sevenScenes::getT(images[i]));
+            auto point_to_add = newPoint(images[i], i, int(images.size()), sevenScenes::getT(images[i]));
             for (const auto point: points) {
                 newEnergy(point, point_to_add);
             }
@@ -72,7 +69,7 @@ Space::Space(const string & query,
     } else if (dataset == "Cambridge") {
         for (int i = 0; i < images.size(); i++) {
             Eigen::Vector3d c = - cambridge::getR(images[i]).transpose() * cambridge::getT(images[i]);
-            auto point_to_add = newPoint(images[i], distances[i], i, int(images.size()), c);
+            auto point_to_add = newPoint(images[i], i, int(images.size()), c);
             for (const auto point: points) {
                 newEnergy(point, point_to_add);
             }
@@ -80,7 +77,7 @@ Space::Space(const string & query,
         }
     } else if (dataset == "synthetic") {
         for (int i = 0; i < images.size(); i++) {
-            auto point_to_add = newPoint(images[i], distances[i], i, int(images.size()), synthetic::getC(images[i]));
+            auto point_to_add = newPoint(images[i], i, int(images.size()), synthetic::getC(images[i]));
             for (const auto point: points) {
                 newEnergy(point, point_to_add);
             }
@@ -93,7 +90,7 @@ Space::Space(const string & query,
                 cout << "Aachen error." << endl;
                 exit(1);
             }
-            auto point_to_add = newPoint(images[i], distances[i], i, int(images.size()), c);
+            auto point_to_add = newPoint(images[i], i, int(images.size()), c);
             for (const auto point: points) {
                 newEnergy(point, point_to_add);
             }
@@ -114,7 +111,7 @@ void Space::removeHighestEnergyPoint() {
     points.erase(points.begin());
     for (const auto point : points) {
         auto energy = point_to_remove->energies[point->number];
-        point->total_energy -= point->constant * energy->magnitude;
+        point->total_energy -= energy->magnitude;
     }
 }
 

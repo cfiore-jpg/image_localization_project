@@ -744,21 +744,7 @@ vector<string> functions::optimizeSpacing(const string & query,
                                           const vector<string> & images,
                                           const vector<double> & distances,
                                           int N, bool show_process, const string & dataset) {
-
-    double sum = std::accumulate(distances.begin(), distances.end(), 0.0);
-    double mean = sum / double(distances.size());
-    std::vector<double> diff(distances.size());
-    std::transform(distances.begin(), distances.end(), diff.begin(), [mean](double x) { return x - mean; });
-    double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-    double stdev = std::sqrt(sq_sum / double(distances.size()));
-
-    vector<double> norm_dist;
-    norm_dist.reserve(distances.size());
-    for(const auto & d : distances) {
-        norm_dist.push_back((d - mean)/stdev);
-    }
-
-    Space space (query, images, norm_dist, dataset);
+    Space space (query, images, dataset);
     space.getOptimalSpacing(N, show_process);
     vector<string> names = space.getPointNames();
     return names;
