@@ -27,6 +27,7 @@ struct Point
     Eigen::Vector3d position;
     vector<Energy*> energies;
     double total_energy {};
+    double constant {};
 };
 
 struct Energy {
@@ -35,13 +36,19 @@ struct Energy {
 
 class Space
 {
+    Eigen::Vector3d query;
     vector<Point*> points;
 public:
     Space ();
-    explicit Space (const vector<string> & images, const string & dataset);
+    explicit Space (const string & query,
+                    const vector<string> & images,
+                    const vector<double> & distances,
+                    const string & dataset);
     void removeHighestEnergyPoint();
     void getOptimalSpacing(int N, bool show_process);
     vector<string> getPointNames();
-    void projectPointsTo2D ();
+    void projectPointsTo2D (double & avg_width, double & avg_length,
+                            double & m_over_px_x, double & m_over_px_y, double & m_over_px_z,
+                            double & max_z, double & min_z);
 };
 

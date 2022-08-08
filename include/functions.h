@@ -81,7 +81,10 @@ namespace functions {
     int getRelativePose3D(const string &db_image, const string & ext, const string &query_image, const string &method,
                                     Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
-    vector<string> optimizeSpacing(const vector<string> & images, int N, bool show_process, const string & dataset);
+    vector<string> optimizeSpacing(const string & query,
+                                   const vector<string> & images,
+                                   const vector<double> & distances,
+                                   int N, bool show_process, const string & dataset);
 
     vector<string> randomSelection(const vector<string> & images, int N);
 
@@ -107,7 +110,8 @@ namespace functions {
     string getScene(const string & image, const string & mod);
     string getSequence(const string & image);
     vector<string> getTopN(const string& query_image, const string & ext, int N);
-    vector<string> retrieveSimilar(const string& query_image, const string & dataset, const string & ext, int max_num, double max_dist);
+    void retrieveSimilar(const string & query_image, const string & dataset, const string & ext, int max_num, double max_dist,
+                         vector<string> & similar, vector<double> & distances);
     vector<string> spaceWithMostMatches(const string & query_image, const string & ext, const double * cam_matrix, int K,
                                         int N_thresh, double max_descriptor_dist, double separation, int min_matches,
                                         vector<Eigen::Matrix3d> & R_k,

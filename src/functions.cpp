@@ -740,8 +740,25 @@ double functions::drawLines(Mat & im1, Mat & im2,
     return total_rep_error / double (pts1.size());
 }
 
-vector<string> functions::optimizeSpacing(const vector<string> & images, int N, bool show_process, const string & dataset) {
-    Space space (images, dataset);
+vector<string> functions::optimizeSpacing(const string & query,
+                                          const vector<string> & images,
+                                          const vector<double> & distances,
+                                          int N, bool show_process, const string & dataset) {
+
+    double sum = std::accumulate(distances.begin(), distances.end(), 0.0);
+    double mean = sum / double(distances.size());
+    std::vector<double> diff(distances.size());
+    std::transform(distances.begin(), distances.end(), diff.begin(), [mean](double x) { return x - mean; });
+    double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+    double stdev = std::sqrt(sq_sum / double(distances.size()));
+
+    vector<double> norm_dist;
+    norm_dist.reserve(distances.size());
+    for(const auto & d : distances) {
+        norm_dist.push_back((d - mean)/stdev);
+    }
+
+    Space space (query, images, norm_dist, dataset);
     space.getOptimalSpacing(N, show_process);
     vector<string> names = space.getPointNames();
     return names;
@@ -1147,8 +1164,8 @@ vector<string> functions::getTopN(const string& query_image, const string & ext,
     return result;
 }
 
-vector<string> functions::retrieveSimilar(const string & query_image, const string & dataset, const string & ext, int max_num, double max_dist) {
-    vector<string> similar;
+void functions::retrieveSimilar(const string & query_image, const string & dataset, const string & ext, int max_num, double max_dist,
+                vector<string> & similar, vector<double> & distances) {
     ifstream file (query_image + ext + ".1000nn.txt");
 
     if (file.is_open()) {
@@ -1168,11 +1185,11 @@ vector<string> functions::retrieveSimilar(const string & query_image, const stri
             }
             if (dist <= max_dist) {
                 similar.push_back(fn);
+                distances.push_back(dist);
             }
         }
         file.close();
     }
-    return similar;
 }
 
 
@@ -1453,8 +1470,9 @@ void functions::showTop1000(const string & query_image, const string & ext, int 
     }
 
     // Threshold, filter, and space the top 1000
-    vector<string> retrieved = functions::retrieveSimilar(query_image, "7-Scenes", ext, max_num, max_dist);
-    vector<string> spaced = functions::optimizeSpacing(retrieved, inliers, false, "7-Scenes");
+    vector<string> retrieved; vector<double> distances;
+    functions::retrieveSimilar(query_image, "7-Scenes", ext, max_num, max_dist, retrieved, distances);
+    vector<string> spaced = functions::optimizeSpacing(query_image, retrieved, distances, inliers, false, "7-Scenes");
 
     // Do the following for images/100 windows
     int N = 100;
