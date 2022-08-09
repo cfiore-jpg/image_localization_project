@@ -348,8 +348,8 @@ pair<cv::Mat, vector<cv::KeyPoint>> functions::getDescriptors(const string & ima
         surf->detectAndCompute(gray, Mat(), kp_vec, desc);
     } else if (method == "SIFT") {
         Ptr<SIFT> sift = SIFT::create();
-        Mat image_m = imread(image + ext);
-        sift->detectAndCompute(image_m, Mat(), kp_vec, desc);
+        Mat im = imread(image + ext, IMREAD_GRAYSCALE);
+        sift->detectAndCompute(im, Mat(), kp_vec, desc);
     } else {
         cout << "Not a valid method for feature matching..." << endl;
         exit(1);
@@ -363,35 +363,19 @@ bool functions::findMatches(double ratio,
                  const cv::Mat & desc_q, const vector<cv::KeyPoint> & kp_q,
                  vector<cv::Point2d> & pts_i, vector<cv::Point2d> & pts_q) {
 
-    auto matcher = BFMatcher::create(NORM_L2, false);
-    vector< vector<DMatch> > matches_2nn_qi, matches_2nn_iq;
+    auto matcher = BFMatcher::create();
+    vector<vector<DMatch>> matches_2nn_qi;
     matcher->knnMatch(desc_q, desc_i, matches_2nn_qi, 2);
-    matcher->knnMatch(desc_i, desc_q, matches_2nn_iq, 2);
 
-    vector<tuple<Point2d, Point2d, double>> selected_points; // query, db, match_ratio
-
-    for (const auto & match_qi : matches_2nn_qi) {
-        double r1 = match_qi[0].distance/match_qi[1].distance;
-        double r2 = matches_2nn_iq[match_qi[0].trainIdx][0].distance / matches_2nn_iq[match_qi[0].trainIdx][1].distance;
-        if(r1 < ratio and r2 < ratio) {
-            if(matches_2nn_iq[match_qi[0].trainIdx][0].trainIdx == match_qi[0].queryIdx) {
-                selected_points.emplace_back(kp_q[match_qi[0].queryIdx].pt,
-                                             kp_i[matches_2nn_iq[match_qi[0].trainIdx][0].queryIdx].pt,
-                                             (r1+r2)/2.);
-            }
+    for (const auto & match_qi: matches_2nn_qi) {
+        double r = match_qi[0].distance / match_qi[1].distance;
+        if (r <= ratio) {
+            pts_q.push_back(kp_q[match_qi[0].queryIdx].pt);
+            pts_i.push_back(kp_i[match_qi[0].trainIdx].pt);
         }
     }
 
-    if (selected_points.empty()) return false;
-
-    sort(selected_points.begin(), selected_points.end(), [](const auto & lhs, const auto & rhs){
-        return get<2>(lhs) < get<2>(rhs);
-    });
-
-    for (const auto & tup : selected_points) {
-        pts_q.push_back(get<0>(tup));
-        pts_i.push_back(get<1>(tup));
-    }
+    if (pts_q.empty()) return false;
 
     return true;
 }
@@ -742,7 +726,6 @@ double functions::drawLines(Mat & im1, Mat & im2,
 
 vector<string> functions::optimizeSpacing(const string & query,
                                           const vector<string> & images,
-                                          const vector<double> & distances,
                                           int N, bool show_process, const string & dataset) {
     Space space (query, images, dataset);
     space.getOptimalSpacing(N, show_process);
@@ -1458,7 +1441,7 @@ void functions::showTop1000(const string & query_image, const string & ext, int 
     // Threshold, filter, and space the top 1000
     vector<string> retrieved; vector<double> distances;
     functions::retrieveSimilar(query_image, "7-Scenes", ext, max_num, max_dist, retrieved, distances);
-    vector<string> spaced = functions::optimizeSpacing(query_image, retrieved, distances, inliers, false, "7-Scenes");
+    vector<string> spaced = functions::optimizeSpacing(query_image, retrieved, inliers, false, "7-Scenes");
 
     // Do the following for images/100 windows
     int N = 100;

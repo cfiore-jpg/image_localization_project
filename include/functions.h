@@ -83,7 +83,6 @@ namespace functions {
 
     vector<string> optimizeSpacing(const string & query,
                                    const vector<string> & images,
-                                   const vector<double> & distances,
                                    int N, bool show_process, const string & dataset);
 
     vector<string> randomSelection(const vector<string> & images, int N);
