@@ -154,7 +154,7 @@ int main() {
 
 
     cout << "Running queries..." << endl;
-    int startIdx = 1204;
+    int startIdx = 0;
     vector<string> not_all_right;
     for (int q = startIdx; q < listQuery.size(); q++) {
         cout << q << "/" << listQuery.size() - 1 << ":";
@@ -170,7 +170,7 @@ int main() {
         sevenScenes::getAbsolutePose(query, R_q, T_q);
         Eigen::Vector3d c_q = -R_q.transpose() * T_q;
 
-        int k_hat = 150;
+        int k_hat = 100;
         vector<string> retrieved; vector<double> distances;
         functions::retrieveSimilar(query, "7-Scenes", ".color.png", k_hat, 3., retrieved, distances);
 
