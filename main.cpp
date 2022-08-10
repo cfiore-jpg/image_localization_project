@@ -172,28 +172,30 @@ int main() {
 
         int k_hat = 100;
         vector<string> retrieved; vector<double> distances;
-        functions::retrieveSimilar(query, "7-Scenes", ".color.png", k_hat, 3., retrieved, distances);
+        functions::retrieveSimilar(query, "7-Scenes", ".color.png", k_hat, 3., retrieved, distances);\
 
-        std::thread pose_threads[k_hat];
-        auto * poses = new map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d>> ();
-        for (int k = 0; k < k_hat; k++)
-            pose_threads[k] = std::thread(get_poses, &desc_q, &kp_q, &retrieved[k], poses);
-        for (auto & th : pose_threads) th.join();
+        functions::kMeans(retrieved, 20, false);
 
-        std::thread error_threads[k_hat-1];
-        auto * error = new map <int, tuple<double, double, double>> ();
-        for (int k = 2; k <= k_hat; k++)
-            error_threads[k-2] = std::thread(make_estimate, &query, &c_q, &R_q, &retrieved, k, poses, error);
-        for (auto & th : error_threads) th.join();
-
-        for (int k = 2; k <= k_hat; k++) {
-            tuple<double, double, double> t = error->at(k);
-            k_effect << k << "," << get<0>(t) << "," << setprecision(5) << get<1>(t) << "," << get<2>(t) << ",";
-        }
-        k_effect << endl;
-        cout << endl;
-        delete poses;
-        delete error;
+//        std::thread pose_threads[k_hat];
+//        auto * poses = new map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d>> ();
+//        for (int k = 0; k < k_hat; k++)
+//            pose_threads[k] = std::thread(get_poses, &desc_q, &kp_q, &retrieved[k], poses);
+//        for (auto & th : pose_threads) th.join();
+//
+//        std::thread error_threads[k_hat-1];
+//        auto * error = new map <int, tuple<double, double, double>> ();
+//        for (int k = 2; k <= k_hat; k++)
+//            error_threads[k-2] = std::thread(make_estimate, &query, &c_q, &R_q, &retrieved, k, poses, error);
+//        for (auto & th : error_threads) th.join();
+//
+//        for (int k = 2; k <= k_hat; k++) {
+//            tuple<double, double, double> t = error->at(k);
+//            k_effect << k << "," << get<0>(t) << "," << setprecision(5) << get<1>(t) << "," << get<2>(t) << ",";
+//        }
+//        k_effect << endl;
+//        cout << endl;
+//        delete poses;
+//        delete error;
     }
     k_effect.close();
     return 0;

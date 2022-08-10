@@ -748,7 +748,62 @@ vector<string> functions::randomSelection(const vector<string> & images, int N) 
     return give;
 }
 
-vector<string> functions::kMeans(const vector<string> & images, int N) {
+
+void functions::showKmeans(const vector<pair<Eigen::Vector3d, vector<pair<string, Eigen::Vector3d>>>> & clusters,
+                           const vector<cv::Scalar> & colors) {
+
+    double height = 2000.;
+    double width = 3000.;
+    int radius = 20;
+
+    Eigen::Vector3d total {0, 0, 0};
+    int count = 0;
+    for (const auto & c : clusters) {
+        for (const auto & im : c.second) {
+            total += im.second;
+            count++;
+        }
+    }
+
+    Eigen::Vector3d average = total / count;
+    double avg_width = average[0];
+    double avg_length = average[2];
+
+    double farthest_x = 0.;
+    double farthest_y = 0.;
+    for (const auto & c : clusters) {
+        for (const auto & im: c.second) {
+            double x_dist = abs(avg_width - im.second[0]);
+            double y_dist = abs(avg_length - im.second[2]);
+            double h = im.second[1];
+            if (x_dist > farthest_x) farthest_x = x_dist;
+            if (y_dist > farthest_y) farthest_y = y_dist;
+        }
+    }
+
+    double m_over_px_x = (farthest_x / (width / 2. - radius));
+    double m_over_px_y = (farthest_y / (height / 2. - radius));
+
+    cv::Mat canvasImage(int(height), int(width), CV_8UC3, cv::Scalar(255., 255., 255.));
+
+    cv::Point2d im_center {width / 2, height / 2};
+    for (int i = 0; i < clusters.size(); i++) {
+        cv::Scalar color = colors[i];
+        for (const auto & im: clusters[i].second) {
+            cv::Point2d c_pt {
+                im_center.x + ((im.second[0] - avg_width) / m_over_px_x),
+                im_center.y + ((im.second[2] - avg_length) / m_over_px_y)
+            };
+            cv::circle(canvasImage, c_pt, radius, color, -1);
+        }
+    }
+    imshow("KMEANS", canvasImage);
+    cv::waitKey(0);
+}
+
+
+
+vector<string> functions::kMeans(const vector<string> & images, int N, bool show_process) {
 
     if (images.size() <= N) return images;
 
@@ -762,6 +817,8 @@ vector<string> functions::kMeans(const vector<string> & images, int N) {
     // Initialize clusters
     vector<pair<string, Eigen::Vector3d>> take = im2c;
     vector<pair<Eigen::Vector3d, vector<pair<string, Eigen::Vector3d>>>> clusters;
+    vector<cv::Scalar> colors;
+    uniform_int_distribution<int> color_dist (0, 255);
     random_device gen;
     while(clusters.size() < N) {
         uniform_int_distribution<int> d (0, int(take.size()) - 1);
@@ -769,10 +826,14 @@ vector<string> functions::kMeans(const vector<string> & images, int N) {
         vector<pair<string, Eigen::Vector3d>> v;
         clusters.emplace_back(im2c[idx].second, v);
         take.erase(take.begin() + idx);
+
+        cv::Scalar color (color_dist(gen), color_dist(gen), color_dist(gen));
+        colors.push_back(color);
     }
 
     double total_shift = 1;
     while (total_shift > 0.001) {
+
         for (auto & c: clusters) {
             c.second.clear();
         }
@@ -806,6 +867,11 @@ vector<string> functions::kMeans(const vector<string> & images, int N) {
             }
             total_shift += functions::getDistBetween(new_center, c.first);
             c.first = new_center;
+        }
+
+        // Display Center
+        if (show_process) {
+            showKmeans(clusters, colors);
         }
     }
 

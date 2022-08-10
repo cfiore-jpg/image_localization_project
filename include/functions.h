@@ -87,7 +87,10 @@ namespace functions {
 
     vector<string> randomSelection(const vector<string> & images, int N);
 
-    vector<string> kMeans(const vector<string> & images, int N);
+    void showKmeans(const vector<pair<Eigen::Vector3d, vector<pair<string, Eigen::Vector3d>>>> & clusters,
+                    const vector<cv::Scalar> & colors);
+
+    vector<string> kMeans(const vector<string> & images, int N, bool show_process);
 
 
     void createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
