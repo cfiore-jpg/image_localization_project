@@ -20,6 +20,10 @@ namespace sevenScenes
 {
     vector<tuple<string, string, vector<string>, vector<string>>> createInfoVector();
 
+    void createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
+
+    void createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
+
     Eigen::Matrix3d getR(const string & image);
 
     Eigen::Vector3d getT(const string & image);

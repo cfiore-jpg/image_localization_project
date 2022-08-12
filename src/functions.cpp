@@ -754,7 +754,7 @@ void functions::showKmeans(const vector<pair<Eigen::Vector3d, vector<pair<string
 
     double height = 2000.;
     double width = 3000.;
-    int radius = 20;
+    double max_radius = 50.;
 
     Eigen::Vector3d total {0, 0, 0};
     int count = 0;
@@ -771,6 +771,8 @@ void functions::showKmeans(const vector<pair<Eigen::Vector3d, vector<pair<string
 
     double farthest_x = 0.;
     double farthest_y = 0.;
+    double max_z = -1000;
+    double min_z = 1000;
     for (const auto & c : clusters) {
         for (const auto & im: c.second) {
             double x_dist = abs(avg_width - im.second[0]);
@@ -778,11 +780,18 @@ void functions::showKmeans(const vector<pair<Eigen::Vector3d, vector<pair<string
             double h = im.second[1];
             if (x_dist > farthest_x) farthest_x = x_dist;
             if (y_dist > farthest_y) farthest_y = y_dist;
+            if (h > max_z) {
+                max_z = h;
+            } else if (h < min_z) {
+                min_z = h;
+            }
         }
     }
 
-    double m_over_px_x = (farthest_x / (width / 2. - radius));
-    double m_over_px_y = (farthest_y / (height / 2. - radius));
+    double m_over_px_x = (farthest_x / (width / 2. - max_radius));
+    double m_over_px_y = (farthest_y / (height / 2. - max_radius));
+    double m_over_px_z = (max_z - min_z) * 1.2 / max_radius;
+    double sep = max_z - min_z;
 
     cv::Mat canvasImage(int(height), int(width), CV_8UC3, cv::Scalar(255., 255., 255.));
 
@@ -794,7 +803,10 @@ void functions::showKmeans(const vector<pair<Eigen::Vector3d, vector<pair<string
                 im_center.x + ((im.second[0] - avg_width) / m_over_px_x),
                 im_center.y + ((im.second[2] - avg_length) / m_over_px_y)
             };
-            cv::circle(canvasImage, c_pt, radius, color, -1);
+            double radius = (im.second[1] - min_z + sep*.2) / m_over_px_z;
+
+
+            cv::circle(canvasImage, c_pt, int(radius), color, -1);
         }
     }
     imshow("KMEANS", canvasImage);
@@ -802,7 +814,7 @@ void functions::showKmeans(const vector<pair<Eigen::Vector3d, vector<pair<string
 }
 
 
-
+//// THIS METHOD IS TAILORED FOR 7 SCENES
 vector<string> functions::kMeans(const vector<string> & images, int N, bool show_process) {
 
     if (images.size() <= N) return images;
@@ -810,7 +822,7 @@ vector<string> functions::kMeans(const vector<string> & images, int N, bool show
     // Get all image centers
     vector<pair<string, Eigen::Vector3d>> im2c;
     im2c.reserve(images.size());
-    for (const auto & im : images) {
+    for (const auto &im: images) {
         im2c.emplace_back(im, sevenScenes::getT(im));
     }
 
@@ -818,53 +830,64 @@ vector<string> functions::kMeans(const vector<string> & images, int N, bool show
     vector<pair<string, Eigen::Vector3d>> take = im2c;
     vector<pair<Eigen::Vector3d, vector<pair<string, Eigen::Vector3d>>>> clusters;
     vector<cv::Scalar> colors;
-    uniform_int_distribution<int> color_dist (0, 255);
+    uniform_int_distribution<int> color_dist(0, 255);
     random_device gen;
-    while(clusters.size() < N) {
-        uniform_int_distribution<int> d (0, int(take.size()) - 1);
+    while (clusters.size() < N) {
+        uniform_int_distribution<int> d(0, int(take.size()) - 1);
         int idx = d(gen);
-        vector<pair<string, Eigen::Vector3d>> v;
-        clusters.emplace_back(im2c[idx].second, v);
+        clusters.emplace_back(take[idx].second, vector<pair<string, Eigen::Vector3d>> ());
         take.erase(take.begin() + idx);
-
-        cv::Scalar color (color_dist(gen), color_dist(gen), color_dist(gen));
+        cv::Scalar color(color_dist(gen), color_dist(gen), color_dist(gen));
         colors.push_back(color);
     }
 
+    bool first = true;
     double total_shift = 1;
     while (total_shift > 0.001) {
 
-        for (auto & c: clusters) {
+        for (auto &c: clusters) {
             c.second.clear();
         }
 
         // Assign to centers
-        for (const auto & im : im2c) {
+        for (int i = 0; i < im2c.size(); i++) {
             double smallest_dist = 10000;
             int closest = 0;
-            for (int i = 0; i < clusters.size(); i++) {
-                double dist = functions::getDistBetween(im.second, clusters[i].first);
-                if (dist < smallest_dist) {
+            vector<int> ties;
+            for (int c = 0; c < clusters.size(); c++) {
+                double dist = functions::getDistBetween(im2c[i].second, clusters[c].first);
+
+                if (dist == smallest_dist) {
+                    ties.push_back(c);
+                } else if (dist < smallest_dist) {
                     smallest_dist = dist;
                     closest = i;
+                    ties.clear();
+                    ties.push_back(c);
                 }
             }
-            clusters[closest].second.push_back(im);
+
+            int smallest = 0;
+            int smallest_size = 10000;
+            for (const auto & c : ties) {
+                int s = int(clusters[c].second.size());
+                if (s < smallest_size) {
+                    smallest_size = s;
+                    smallest = c;
+                }
+            }
+
+            clusters[smallest].second.push_back(im2c[i]);
         }
 
         // Recalc centers
         total_shift = 0;
-        for(auto & c : clusters) {
-            Eigen::Vector3d new_center {0, 0, 0};
-            if (c.second.empty()) {
-                uniform_int_distribution<int> d (0, int(im2c.size()) - 1);
-                new_center = im2c[d(gen)].second;
-            } else {
-                for(const auto & im : c.second) {
-                    new_center += im.second;
-                }
-                new_center /= double(c.second.size());
+        for (auto &c: clusters) {
+            Eigen::Vector3d new_center{0, 0, 0};
+            for (const auto &im: c.second) {
+                new_center += im.second;
             }
+            new_center /= double(c.second.size());
             total_shift += functions::getDistBetween(new_center, c.first);
             c.first = new_center;
         }
@@ -878,10 +901,10 @@ vector<string> functions::kMeans(const vector<string> & images, int N, bool show
     // Find closest image to cluster center
     vector<string> to_return;
     to_return.reserve(clusters.size());
-    for (const auto & c : clusters) {
-        double smallest_dist = 1000;
+    for (const auto &c: clusters) {
+        double smallest_dist = 10000;
         string closest;
-        for (const auto & im : c.second) {
+        for (const auto &im: c.second) {
             double dist = functions::getDistBetween(c.first, im.second);
             if (dist < smallest_dist) {
                 smallest_dist = dist;
@@ -892,78 +915,6 @@ vector<string> functions::kMeans(const vector<string> & images, int N, bool show
     }
 
     return to_return;
-}
-
-// DATABASE PREPARATION FUNCTIONS
-void functions::createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene)
-{
-    cout << "Creating image vector..." << endl;
-    int begin;
-    int end;
-    if (scene == -1)
-    {
-        begin = 0;
-        end = int (info.size());
-    } else
-    {
-        begin = scene;
-        end = scene + 1;
-    }
-    for (int i = begin; i < end; ++i)
-    {
-        string folder = get<0>(info[i]);
-        string imageList = get<1>(info[i]);
-        vector<string> train = get<2>(info[i]);
-        for (auto & seq : train)
-        {
-            ifstream im_list(imageList);
-            if (im_list.is_open())
-            {
-                string image;
-                while (getline(im_list, image))
-                {
-                    string file = "seq-"; file.append(seq).append("/").append(image);
-                    listImage.push_back(folder + file);
-                }
-                im_list.close();
-            }
-        }
-    }
-    cout << "done" << endl;
-}
-
-void functions::createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene)
-{
-    cout << "Creating query vector..." << endl;
-    int begin;
-    int end;
-    if (scene == -1)
-    {
-        begin = 0;
-        end = int (info.size());
-    } else
-    {
-        begin = scene;
-        end = scene + 1;
-    }
-    for (int i = begin; i < end; ++i)
-    {
-        string folder = get<0>(info[i]);
-        string imageList = get<1>(info[i]);
-        vector<string> test = get<3>(info[i]);
-        for (auto & seq : test) {
-            ifstream im_list(imageList);
-            if (im_list.is_open()) {
-                string image;
-                while (getline(im_list, image)) {
-                    string file = "seq-"; file.append(seq).append("/").append(image);
-                    listQuery.push_back(folder + file);
-                }
-                im_list.close();
-            }
-        }
-    }
-    cout << "done" << endl;
 }
 
 

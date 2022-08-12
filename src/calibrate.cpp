@@ -119,7 +119,7 @@ void calibrate::calibrate (double K [4], int scene, bool display_triplets) {
 // get queries
     vector<string> listQuery;
     auto info = sevenScenes::createInfoVector();
-    functions::createQueryVector(listQuery, info, scene);
+    sevenScenes::createQueryVector(listQuery, info, scene);
 
     int old_percent;
     int new_percent = 0;

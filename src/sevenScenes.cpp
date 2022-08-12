@@ -90,6 +90,77 @@ vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::creat
     return info;
 }
 
+void sevenScenes::createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene)
+{
+    cout << "Creating image vector..." << endl;
+    int begin;
+    int end;
+    if (scene == -1)
+    {
+        begin = 0;
+        end = int (info.size());
+    } else
+    {
+        begin = scene;
+        end = scene + 1;
+    }
+    for (int i = begin; i < end; ++i)
+    {
+        string folder = get<0>(info[i]);
+        string imageList = get<1>(info[i]);
+        vector<string> train = get<2>(info[i]);
+        for (auto & seq : train)
+        {
+            ifstream im_list(imageList);
+            if (im_list.is_open())
+            {
+                string image;
+                while (getline(im_list, image))
+                {
+                    string file = "seq-"; file.append(seq).append("/").append(image);
+                    listImage.push_back(folder + file);
+                }
+                im_list.close();
+            }
+        }
+    }
+    cout << "done" << endl;
+}
+
+void sevenScenes::createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene)
+{
+    cout << "Creating query vector..." << endl;
+    int begin;
+    int end;
+    if (scene == -1)
+    {
+        begin = 0;
+        end = int (info.size());
+    } else
+    {
+        begin = scene;
+        end = scene + 1;
+    }
+    for (int i = begin; i < end; ++i)
+    {
+        string folder = get<0>(info[i]);
+        string imageList = get<1>(info[i]);
+        vector<string> test = get<3>(info[i]);
+        for (auto & seq : test) {
+            ifstream im_list(imageList);
+            if (im_list.is_open()) {
+                string image;
+                while (getline(im_list, image)) {
+                    string file = "seq-"; file.append(seq).append("/").append(image);
+                    listQuery.push_back(folder + file);
+                }
+                im_list.close();
+            }
+        }
+    }
+    cout << "done" << endl;
+}
+
 Eigen::Matrix3d sevenScenes::getR(const string& image)
 {
     Eigen::Matrix3d R;

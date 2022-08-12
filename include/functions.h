@@ -92,10 +92,6 @@ namespace functions {
 
     vector<string> kMeans(const vector<string> & images, int N, bool show_process);
 
-
-    void createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
-    void createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
-
 ////SURF Functions
 //void loadFeaturesSURF(const vector<string> &listImage, vector<vector<vector<float>>> &features);
 //void changeStructureSURF(const vector<float> &plain, vector<vector<float>> &out, int L);

@@ -38,7 +38,6 @@ void get_poses (const cv::Mat * desc_q, const vector<cv::KeyPoint> * kp_q, const
 
     Eigen::Matrix3d R_k, R_qk_calc, R_kq_calc;
     Eigen::Vector3d T_k, T_qk_calc, T_kq_calc;
-
     sevenScenes::getAbsolutePose(*im, R_k, T_k);
 
     auto * desc_kp_i =  new pair<cv::Mat, vector<cv::KeyPoint>> ();
@@ -84,74 +83,94 @@ void get_poses (const cv::Mat * desc_q, const vector<cv::KeyPoint> * kp_q, const
     delete pts_i_kq;
 }
 
-void make_estimate(const string * query,
+void test_methods (const string * query,
                    const Eigen::Vector3d * c_q,
                    const Eigen::Matrix3d * R_q,
                    const vector<string> * K_hat,
                    int num_K,
                    const map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d>> * poses,
-                   std::map <int, tuple<double, double, double>> * error) {
+                   std::map <int, vector<tuple<double, double, double>>> * error) {
 
-    vector<string> spaced = functions::optimizeSpacing(*query, *K_hat, num_K, false, "7-Scenes");
+    vector<tuple<double, double, double>> v;
 
-    auto * R_ks = new vector<Eigen::Matrix3d> ();
-    auto * R_qks = new vector<Eigen::Matrix3d> ();
-    auto * T_ks = new vector<Eigen::Vector3d> ();
-    auto * T_qks = new vector<Eigen::Vector3d> ();
+    vector<vector<string>> methods;
+    methods.push_back(functions::optimizeSpacing(*query, *K_hat, num_K, false, "7-Scenes"));
+    methods.push_back(functions::optimizeSpacingZhou(*K_hat, 0.05, 10, num_K, "7-Scenes"));
+    methods.push_back(functions::kMeans(*K_hat, num_K, false));
+    methods.push_back(functions::randomSelection(*K_hat, num_K));
+    vector<string> first_k (num_K);
+    for (int i = 0; i < num_K; i++) {
+        first_k[i] = (*K_hat)[i];
+    }
+    methods.push_back(first_k);
 
-    for (const string & im : spaced) {
-        try {
-            tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d> t = poses->at(im);
-            Eigen::Matrix3d R_k = get<0>(t);
-            Eigen::Vector3d T_k = get<1>(t);
-            Eigen::Matrix3d R_qk_calc = get<2>(t);
-            Eigen::Vector3d T_qk_calc = get<3>(t);
+    for(const auto & spaced : methods) {
 
-            R_ks->push_back(R_k);
-            T_ks->push_back(T_k);
-            R_qks->push_back(R_qk_calc);
-            T_qks->push_back(T_qk_calc);
-        } catch (...) {
-            continue;
+        auto *R_ks = new vector<Eigen::Matrix3d>();
+        auto *R_qks = new vector<Eigen::Matrix3d>();
+        auto *T_ks = new vector<Eigen::Vector3d>();
+        auto *T_qks = new vector<Eigen::Vector3d>();
+
+        for (const string & im: spaced) {
+            try {
+                tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d> t = poses->at(im);
+                Eigen::Matrix3d R_k = get<0>(t);
+                Eigen::Vector3d T_k = get<1>(t);
+                Eigen::Matrix3d R_qk_calc = get<2>(t);
+                Eigen::Vector3d T_qk_calc = get<3>(t);
+
+                R_ks->push_back(R_k);
+                T_ks->push_back(T_k);
+                R_qks->push_back(R_qk_calc);
+                T_qks->push_back(T_qk_calc);
+            } catch (...) {
+                continue;
+            }
         }
+
+        if (R_ks->size() < 2) {
+            v.emplace_back(-1, -1, -1);
+        } else {
+            auto results = pose::hypothesizeRANSAC(5., *R_ks, *T_ks, *R_qks, *T_qks);
+            Eigen::Vector3d c_est = get<0>(results);
+            Eigen::Matrix3d R_est = get<1>(results);
+
+            int num_inliers = int(get<2>(results).size());
+            double c_error = functions::getDistBetween(*c_q, c_est);
+            double r_error = functions::rotationDifference(*R_q, R_est);
+
+            v.emplace_back(num_inliers, c_error, r_error);
+        }
+
+        delete R_ks;
+        delete T_ks;
+        delete R_qks;
+        delete T_qks;
     }
-
-    if (R_ks->size() < 2) {
-        mtx.lock();
-        error->insert(make_pair(num_K, make_tuple(-1, -1, -1)));
-        mtx.unlock();
-    } else {
-        auto results = pose::hypothesizeRANSAC(5., *R_ks, *T_ks, *R_qks, *T_qks);
-        Eigen::Vector3d c_est = get<0>(results);
-        Eigen::Matrix3d R_est = get<1>(results);
-
-        int num_inliers = int(get<2>(results).size());
-        double c_error = functions::getDistBetween(*c_q, c_est);
-        double r_error = functions::rotationDifference(*R_q, R_est);
-
-        mtx.lock();
-        error->insert(make_pair(num_K, make_tuple(num_inliers, c_error, r_error)));
-        mtx.unlock();
-    }
-
-    delete R_ks;
-    delete T_ks;
-    delete R_qks;
-    delete T_qks;
+    mtx.lock();
+    error->emplace(num_K, v);
+    mtx.unlock();
 }
+
 
 int main() {
 
 //// Testing Whole Dataset
 
-    ofstream k_effect;
-    k_effect.open("/Users/cameronfiore/C++/image_localization_project/data/chess/k_effect.csv");
-
+    ofstream files [5];
+    files[0].open("/Users/cameronfiore/C++/image_localization_project/data/chess/k_effect_ours.csv", ios::app);
+    files[1].open("/Users/cameronfiore/C++/image_localization_project/data/chess/k_effect_zhou.csv", ios::app);
+    files[2].open("/Users/cameronfiore/C++/image_localization_project/data/chess/k_effect_kmeans.csv", ios::app);
+    files[3].open("/Users/cameronfiore/C++/image_localization_project/data/chess/k_effect_random.csv", ios::app);
+    files[4].open("/Users/cameronfiore/C++/image_localization_project/data/chess/k_effect_firstk.csv", ios::app);
 
     vector<string> listQuery;
     auto info = sevenScenes::createInfoVector();
-    functions::createQueryVector(listQuery, info, 0);
+    sevenScenes::createQueryVector(listQuery, info, 0);
 
+    int k_hat = 150;
+    thread pose_threads[k_hat];
+    thread error_threads[k_hat - 1];
 
     cout << "Running queries..." << endl;
     int startIdx = 0;
@@ -168,35 +187,35 @@ int main() {
         Eigen::Matrix3d R_q;
         Eigen::Vector3d T_q;
         sevenScenes::getAbsolutePose(query, R_q, T_q);
-        Eigen::Vector3d c_q = -R_q.transpose() * T_q;
+        Eigen::Vector3d c_q = sevenScenes::getT(query);
 
-        int k_hat = 100;
         vector<string> retrieved; vector<double> distances;
-        functions::retrieveSimilar(query, "7-Scenes", ".color.png", k_hat, 3., retrieved, distances);\
+        functions::retrieveSimilar(query, "7-Scenes", ".color.png", k_hat, 3., retrieved, distances);
 
-        functions::kMeans(retrieved, 20, false);
+        auto * poses = new map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d>> ();
+        for (int k = 0; k < k_hat; k++)
+            pose_threads[k] = std::thread(get_poses, &desc_q, &kp_q, &retrieved[k], poses);
+        for (auto & th : pose_threads) th.join();
 
-//        std::thread pose_threads[k_hat];
-//        auto * poses = new map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, Eigen::Matrix3d, Eigen::Vector3d>> ();
-//        for (int k = 0; k < k_hat; k++)
-//            pose_threads[k] = std::thread(get_poses, &desc_q, &kp_q, &retrieved[k], poses);
-//        for (auto & th : pose_threads) th.join();
-//
-//        std::thread error_threads[k_hat-1];
-//        auto * error = new map <int, tuple<double, double, double>> ();
-//        for (int k = 2; k <= k_hat; k++)
-//            error_threads[k-2] = std::thread(make_estimate, &query, &c_q, &R_q, &retrieved, k, poses, error);
-//        for (auto & th : error_threads) th.join();
-//
-//        for (int k = 2; k <= k_hat; k++) {
-//            tuple<double, double, double> t = error->at(k);
-//            k_effect << k << "," << get<0>(t) << "," << setprecision(5) << get<1>(t) << "," << get<2>(t) << ",";
-//        }
-//        k_effect << endl;
-//        cout << endl;
-//        delete poses;
-//        delete error;
+        auto * error = new std::map <int, vector<tuple<double, double, double>>> ();
+        for (int k = 2; k <= k_hat; k++)
+            error_threads[k-2] = thread(test_methods, &query, &c_q, &R_q, &retrieved, k, poses, error);
+        for (auto & th : error_threads) th.join();
+
+        for (int f = 0; f < 5; f++) {
+            for (int k = 2; k <= k_hat; k++) {
+                tuple<double, double, double> t = error->at(k)[f];
+                files[f] << k << "," << get<0>(t) << "," << setprecision(5) << get<1>(t) << "," << get<2>(t) << ",";
+            }
+            files[f] << endl;
+        }
+
+        cout << endl;
+        delete poses;
+        delete error;
     }
-    k_effect.close();
+    for (auto & file : files) {
+        file.close();
+    }
     return 0;
 }
