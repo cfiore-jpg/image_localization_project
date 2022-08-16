@@ -189,9 +189,14 @@ Eigen::Matrix3d sevenScenes::getR(const string& image)
             }
         }
         im_pose.close();
-        Eigen::JacobiSVD<Eigen::Matrix3d> svd (R, Eigen::ComputeFullU | Eigen::ComputeFullV);
-        Eigen::Matrix3d new_R = svd.matrixU() * svd.matrixV().transpose();
-        return new_R;
+        double det = R.determinant();
+        if(abs(det - 1.) > 0.00000000001) {
+            Eigen::JacobiSVD<Eigen::Matrix3d> svd (R, Eigen::ComputeFullU | Eigen::ComputeFullV);
+            const auto & u = svd.matrixU();
+            auto v = svd.matrixV();
+            R = u * v.transpose();
+        }
+        return R;
     } else
     {
         cout << "Pose file does not exist for: " << image << endl;
@@ -264,7 +269,9 @@ Eigen::Matrix3d sevenScenes::getR_BA(const string & image) {
         double det = R.determinant();
         if(abs(det - 1.) > 0.00000000001) {
             Eigen::JacobiSVD<Eigen::Matrix3d> svd (R, Eigen::ComputeFullU | Eigen::ComputeFullV);
-            R = svd.matrixU() * svd.matrixV().transpose();
+            const auto & u = svd.matrixU();
+            auto v = svd.matrixV();
+            R = u * v.transpose();
         }
         return R;
     } else {

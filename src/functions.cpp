@@ -28,7 +28,7 @@
 //#include "triangulate.h"
 //#include "vector.h"
 
-#define PI 3.1415926536
+#define PI 3.14159265358979323846
 #define FOLDER "/Users/cameronfiore/C++/image_localization_project/data/"
 
 using namespace std;
@@ -1433,7 +1433,8 @@ void functions::showSpacedInTop150(const string & query_image, const vector<stri
             x_end += resizeWidth[k] + edgeThickness;
         }
     }
-    imshow(query_image + "Top 150", canvasImage);
+    string title = "K=" + to_string(spaced.size());
+    imshow(title, canvasImage);
     waitKey();
 }
 
