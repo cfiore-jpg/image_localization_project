@@ -22,6 +22,12 @@ namespace cambridge
 
     vector<string> getTestImages(const string & folder);
 
+    vector<string> getDbImages(const string & folder);
+
+    vector<string> findClosest(const string & image, const string & folder, int num);
+
+    vector<string> retrieveSimilar(const string & query_image, int max_num);
+
     Eigen::Matrix3d getR(const string& image);
 
     Eigen::Vector3d getT(const string& image);

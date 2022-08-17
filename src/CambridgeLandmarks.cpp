@@ -124,8 +124,7 @@ vector<string> cambridge::getTestImages(const string & folder) {
             string item;
             string fn;
             if (ss >> item) {
-                string f = item.substr(0, item.find(".png"));
-                fn = folder + f;
+                fn = folder + item;
                 ims.push_back(fn);
             }
         }
@@ -134,11 +133,85 @@ vector<string> cambridge::getTestImages(const string & folder) {
     return ims;
 }
 
+vector<string> cambridge::getDbImages(const string & folder) {
+
+    vector<string> ims;
+    string test_file = folder + "dataset_test.txt";
+
+    ifstream tf(test_file);
+    if (tf.is_open()) {
+        string line;
+        int pass = 0;
+        while (getline(tf, line)) {
+            if (pass < 3) {
+                pass++;
+                continue;
+            }
+            stringstream ss(line);
+            string item;
+            string fn;
+            if (ss >> item) {
+                fn = folder + item;
+                ims.push_back(fn);
+            }
+        }
+        tf.close();
+    }
+    return ims;
+}
+
+vector<string> cambridge::findClosest(const string & image, const string & folder, int num) {
+    Eigen::Matrix3d R_q;
+    Eigen::Vector3d T_q;
+    cambridge::getAbsolutePose(image, R_q, T_q);
+    Eigen::Vector3d c_q = -R_q.transpose() * T_q;
+
+    vector<string> db_ims = getDbImages(folder);
+
+    vector<pair<string, double>> im_dist (db_ims.size());
+    for (int i = 0; i < db_ims.size(); i++) {
+        Eigen::Matrix3d R_i;
+        Eigen::Vector3d T_i;
+        cambridge::getAbsolutePose(db_ims[i], R_i, T_i);
+        Eigen::Vector3d c_i = -R_i.transpose() * T_i;
+        double dist = functions::getDistBetween(c_q, c_i);
+        im_dist[i] = pair<string, double> (db_ims[i], dist);
+    }
+
+
+    sort(im_dist.begin(), im_dist.end(), [](const pair<string, double> & l, const pair<string, double> & r) {
+        return l.second < r.second;
+    });
+
+    vector<string> closest (num);
+    for (int i = 0; i < num; i++) {
+        closest[i] = im_dist[i].first;
+    }
+
+    return closest;
+}
+
+vector<string> cambridge::retrieveSimilar(const string & query_image, int max_num) {
+    vector<string> similar;
+    ifstream file (query_image + ".1000nn.txt");
+    if (file.is_open()) {
+        string line;
+        while (similar.size() < max_num && getline(file, line)) {
+            stringstream ss (line);
+            string fn;
+            ss >> fn;
+            similar.push_back(fn);
+        }
+        file.close();
+    }
+    return similar;
+}
+
 Eigen::Matrix3d cambridge::getR(const string& image) {
 
     Eigen::Matrix3d R;
 
-    string poseFile = image + ".pose.txt";
+    string poseFile = image.substr(0, image.find(".png")) + ".pose.txt";
     ifstream im_pose (poseFile);
     if (im_pose.is_open())
     {
@@ -176,7 +249,7 @@ Eigen::Matrix3d cambridge::getR(const string& image) {
 Eigen::Vector3d cambridge::getT(const string& image) {
     Eigen::Vector3d t;
 
-    string poseFile = image + ".pose.txt";
+    string poseFile = image.substr(0, image.find(".png")) + ".pose.txt";
     ifstream im_pose (poseFile);
     if (im_pose.is_open())
     {

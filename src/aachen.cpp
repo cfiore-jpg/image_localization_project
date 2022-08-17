@@ -145,6 +145,42 @@ void aachen::createQueryVector(vector<string> & queries, vector<tuple<double, do
     }
 }
 
+void aachen::createDBVector(vector<string> & db_ims) {
+    string base_dir = "/Users/cameronfiore/C++/image_localization_project/data/images_upright/db/";
+    for (int i = 0; i < 4480; i++) {
+        string fn = base_dir + to_string(i) + ".jpg";
+        db_ims.push_back(fn);
+    }
+}
+
+vector<string> aachen::findClosest(const string & image, int num) {
+    Eigen::Vector3d c_q;
+    aachen::getC(image, c_q);
+
+    vector<string> db_ims;
+    createDBVector (db_ims);
+
+    vector<pair<string, double>> im_dist (db_ims.size());
+    for (int i = 0; i < db_ims.size(); i++) {
+        Eigen::Vector3d c_i;
+        aachen::getC(db_ims[i], c_i);
+        double dist = functions::getDistBetween(c_q, c_i);
+        im_dist[i] = pair<string, double> (db_ims[i], dist);
+    }
+
+
+    sort(im_dist.begin(), im_dist.end(), [](const pair<string, double> & l, const pair<string, double> & r) {
+        return l.second < r.second;
+    });
+
+    vector<string> closest (num);
+    for (int i = 0; i < num; i++) {
+        closest[i] = im_dist[i].first;
+    }
+
+    return closest;
+}
+
 bool aachen::getR(const string & image, Eigen::Matrix3d & R) {
     string im = image.substr(0, image.find(".jpg"));
     string poseFile = im + ".pose.txt";

@@ -1184,9 +1184,11 @@ void functions::retrieveSimilar(const string & query_image, const string & datas
 
 // Visualize
 
-void functions::showTop150(const string & query_image, const vector<string> & returned, const string & ext) {
+void functions::showTop(int rows, int cols,
+                        const string & query_image, const vector<string> & returned,
+                        const string & ext, const string & title) {\
 
-    assert(returned.size() == 150);
+    int num = int(returned.size());
 
     Mat q = imread(query_image + ext);
     imshow(query_image, q);
@@ -1195,24 +1197,24 @@ void functions::showTop150(const string & query_image, const vector<string> & re
     string scene = getScene(query_image, "");
 
     vector<pair<Mat, string>> vecMat;
-    vecMat.reserve(150);
+    vecMat.reserve(num);
     for(const auto & p : returned) {
         vecMat.emplace_back(imread(p + ext), p);
     }
 
 
     // Get window parameters
-    int nRows = 10;
-    int windowHeight = 5000;
+    int nRows = rows;
+    int windowHeight = 6000;
     int edgeThickness = 20;
-    int imagesPerRow = 15;
+    int imagesPerRow = cols;
     int resizeHeight = int (floor(2.0 * ((floor(double(windowHeight - edgeThickness) / nRows)) / 2.0))) - edgeThickness;
     int maxRowLength = 0;
     std::vector<int> resizeWidth;
-    for (int i = 0; i < nRows; i++) {
+    for (int k = 0, i = 0; i < nRows; i++) {
         int thisRowLen = 0;
-        for (int k = 0; k < imagesPerRow; k++) {
-            double aspectRatio = double(vecMat[i].first.cols) / vecMat[i].first.rows;
+        for (int j = 0; j < imagesPerRow && k < num; k++, j++) {
+            double aspectRatio = double(vecMat[k].first.cols) / vecMat[k].first.rows;
             int temp = int(ceil(resizeHeight * aspectRatio));
             resizeWidth.push_back(temp);
             thisRowLen += temp;
@@ -1230,7 +1232,7 @@ void functions::showTop150(const string & query_image, const vector<string> & re
     for (int k = 0, i = 0; i < nRows; i++) {
         int y = i * resizeHeight + (i + 1) * edgeThickness;
         int x_end = edgeThickness;
-        for (int j = 0; j < imagesPerRow && k < 150; k++, j++) {
+        for (int j = 0; j < imagesPerRow && k < num; k++, j++) {
             int x = x_end;
             int y_color = y - edgeThickness / 2;
             int x_color = x - edgeThickness / 2;
@@ -1267,7 +1269,7 @@ void functions::showTop150(const string & query_image, const vector<string> & re
             x_end += resizeWidth[k] + edgeThickness;
         }
     }
-    imshow(query_image+"Top 150", canvasImage);
+    imshow(title, canvasImage);
     waitKey();
 }
 
@@ -1351,23 +1353,26 @@ void functions::showSpaced(const string & query_image, const vector<string> & sp
     waitKey();
 }
 
-void functions::showSpacedInTop150(const string & query_image, const vector<string> & returned, const vector<string> & spaced, const string & ext) {
-    assert(returned.size() == 150);
+void functions::showSpacedInTop(int rows, int cols,
+                                const string & query_image, const vector<string> & returned,
+                                const vector<string> & spaced, const string & ext) {
+
+    int num = int(returned.size());
 
     string scene = getScene(query_image, "");
 
     vector<pair<Mat, string>> vecMat;
-    vecMat.reserve(150);
+    vecMat.reserve(num);
     for (const auto &p: returned) {
         vecMat.emplace_back(imread(p + ext), p);
     }
 
 
     // Get window parameters
-    int nRows = 10;
+    int nRows = rows;
     int windowHeight = 5000;
     int edgeThickness = 20;
-    int imagesPerRow = 15;
+    int imagesPerRow = cols;
     int resizeHeight = int(floor(2.0 * ((floor(double(windowHeight - edgeThickness) / nRows)) / 2.0))) - edgeThickness;
     int maxRowLength = 0;
     std::vector<int> resizeWidth;
@@ -1392,7 +1397,7 @@ void functions::showSpacedInTop150(const string & query_image, const vector<stri
     for (int k = 0, i = 0; i < nRows; i++) {
         int y = i * resizeHeight + (i + 1) * edgeThickness;
         int x_end = edgeThickness;
-        for (int j = 0; j < imagesPerRow && k < 150; k++, j++) {
+        for (int j = 0; j < imagesPerRow && k < num; k++, j++) {
             int x = x_end;
             int y_color = y - edgeThickness / 2;
             int x_color = x - edgeThickness / 2;

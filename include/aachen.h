@@ -24,6 +24,10 @@ namespace aachen {
 
     void createQueryVector(vector<string> & queries, vector<tuple<double, double, double>> & calibrations);
 
+    void createDBVector(vector<string> & db_ims);
+
+    vector<string> findClosest(const string & image, int num);
+
     bool getR(const string & image, Eigen::Matrix3d & R);
 
     bool getC(const string & image, Eigen::Vector3d & c);

@@ -119,11 +119,15 @@ namespace functions {
 
 //// Visualization
 
-    void showTop150(const string & query_image, const vector<string> & returned, const string & ext);
+    void showTop(int rows, int cols,
+                 const string & query_image, const vector<string> & returned,
+                 const string & ext, const string & title);
 
     void showSpaced(const string & query_image, const vector<string> & spaced, const string & ext);
 
-    void showSpacedInTop150(const string & query_image, const vector<string> & returned, const vector<string> & spaced, const string & ext);
+    void showSpacedInTop(int rows, int cols,
+                         const string & query_image, const vector<string> & returned,
+                         const vector<string> & spaced, const string & ext);
 
     void showTop1000(const string & query_image, const string & ext, int max_num, double max_descriptor_dist, int inliers);
 
