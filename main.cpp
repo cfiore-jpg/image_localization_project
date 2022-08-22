@@ -34,7 +34,7 @@ int main() {
     int cols = 15;
     assert(rows*cols == num);
 
-    vector<string> queries = cambridge::getTestImages("/Users/cameronfiore/C++/image_localization_project/data/"+folder+"/");
+    vector<string> queries;// = cambridge::getTestImages("/Users/cameronfiore/C++/image_localization_project/data/"+folder+"/");
     vector<tuple<double, double, double>> calibrations;
     aachen::createQueryVector(queries, calibrations);
 
@@ -44,14 +44,24 @@ int main() {
 
         string query = queries[q];
 
-        vector<string> retrieved = cambridge::retrieveSimilar(query, num);
-//        vector<string> retrieved = aachen::retrieveSimilar(query, num);
+//        vector<string> retrieved = cambridge::retrieveSimilar(query, num);
+        vector<string> retrieved = aachen::retrieveSimilar(query, num);
 
-        vector<string> closest = cambridge::findClosest(query, "/Users/cameronfiore/C++/image_localization_project/data/"+folder+"/", num);
-//        vector<string> closest = aachen::findClosest(retrieved[0], num);
+//        vector<string> closest = cambridge::findClosest(query, "/Users/cameronfiore/C++/image_localization_project/data/"+folder+"/", num);
+        vector<string> closest = aachen::findClosest(retrieved[0], num);
 
-        functions::showTop(rows, cols, query, retrieved, "", "Top "+to_string(num));
-        functions::showTop(rows, cols, query, closest, "", "Closest "+to_string(num));
+        cv::Mat query_pic = cv::imread(query);
+        cv::imshow(query, query_pic);
+        cv::waitKey();
+
+        for (const auto & im : retrieved) {
+            cv::Mat im_pic = cv::imread(im);
+            cv::imshow(im, im_pic);
+            cv::waitKey();
+        }
+        
+//        functions::showTop(rows, cols, query, retrieved, "", "Top "+to_string(num));
+//        functions::showTop(rows, cols, query, closest, "", "Closest "+to_string(num));
 
     }
 

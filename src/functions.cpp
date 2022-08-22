@@ -1190,9 +1190,9 @@ void functions::showTop(int rows, int cols,
 
     int num = int(returned.size());
 
-    Mat q = imread(query_image + ext);
-    imshow(query_image, q);
-    waitKey();
+//    Mat q = imread(query_image + ext);
+//    imshow(query_image, q);
+//    waitKey();
 
     string scene = getScene(query_image, "");
 
