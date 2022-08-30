@@ -20,7 +20,6 @@
 #define FOLDER "/Users/cameronfiore/C++/image_localization_project/data/"
 //#define SCENE 2
 #define IMAGE_LIST "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt"
-#define EXT ".color.png"
 #define GENERATE_DATABASE false
 
 using namespace std;
@@ -28,15 +27,21 @@ using namespace chrono;
 
 int main() {
 
-    string folder = "StMarysChurch";
-    int num = 150;
-    int rows = 10;
-    int cols = 15;
-    assert(rows*cols == num);
+    string scene = "chess";
+    string ext = ".color.png";
 
-    vector<string> queries;// = cambridge::getTestImages("/Users/cameronfiore/C++/image_localization_project/data/"+folder+"/");
-    vector<tuple<double, double, double>> calibrations;
-    aachen::createQueryVector(queries, calibrations);
+    string data_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
+    string base_dir = data_dir + scene + "/";
+
+    vector<string> queries;
+    auto info = sevenScenes::createInfoVector();
+    sevenScenes::createQueryVector(queries, info, 0);
+
+    ofstream superglue_r_error;
+    superglue_r_error.open(base_dir+"superglue_r_error.txt");
+
+    ofstream superglue_t_error;
+    superglue_t_error.open(base_dir+"superglue_t_error.txt");
 
     for (int q = 0; q < queries.size(); q++) {
 
@@ -44,26 +49,64 @@ int main() {
 
         string query = queries[q];
 
-//        vector<string> retrieved = cambridge::retrieveSimilar(query, num);
-        vector<string> retrieved = aachen::retrieveSimilar(query, num);
+        Eigen::Matrix3d R_q;
+        Eigen::Vector3d T_q;
+        sevenScenes::getAbsolutePose(query, R_q, T_q);
+        Eigen::Vector3d c_q = -R_q.transpose() * T_q;
 
-//        vector<string> closest = cambridge::findClosest(query, "/Users/cameronfiore/C++/image_localization_project/data/"+folder+"/", num);
-        vector<string> closest = aachen::findClosest(retrieved[0], num);
+        vector<string> retrieved;
+        vector<double> distances;
+        functions::retrieveSimilar(query, "7-Scenes", ".color.png", 100, 3.0, retrieved, distances);
 
-        cv::Mat query_pic = cv::imread(query);
-        cv::imshow(query, query_pic);
-        cv::waitKey();
-
+//        auto map = sevenScenes::getAnchorPoses(base_dir);
+//
+        vector<Eigen::Matrix3d> R_ks, R_qks;
+        vector<Eigen::Vector3d> T_ks, T_qks;
         for (const auto & im : retrieved) {
-            cv::Mat im_pic = cv::imread(im);
-            cv::imshow(im, im_pic);
-            cv::waitKey();
-        }
-        
-//        functions::showTop(rows, cols, query, retrieved, "", "Top "+to_string(num));
-//        functions::showTop(rows, cols, query, closest, "", "Closest "+to_string(num));
 
+            Eigen::Matrix3d R_k;
+            Eigen::Vector3d T_k;
+            sevenScenes::getAbsolutePose(im, R_k, T_k);
+
+
+            Eigen::Matrix3d R_qk_real = R_q * R_k.transpose();
+            Eigen::Vector3d T_qk_real = T_q - R_qk_real * T_k;
+
+
+//            Eigen::Matrix3d R_qk;
+//            Eigen::Vector3d T_qk;
+//            try {
+//                pair<string, string> key = make_pair(query+ext, im+ext);
+//                pair<Eigen::Matrix3d, Eigen::Vector3d> value = map.at(key);
+//                R_qk = value.first;
+//                T_qk = value.second;
+//            } catch(...) {
+//                continue;
+//            }
+//
+//            double r_dist = functions::rotationDifference(R_qk_real, R_qk);
+//            double t_dist = functions::getAngleBetween(T_qk_real, T_qk);
+
+            R_ks.push_back(R_k);
+            T_ks.push_back(T_k);
+            R_qks.push_back(R_qk_real);
+            T_qks.push_back(T_qk_real);
+        }
+
+        auto result = pose::hypothesizeRANSAC(3., R_ks, T_ks, R_qks, T_qks);
+        Eigen::Vector3d c_calc = get<0>(result);
+        Eigen::Matrix3d R_calc = get<1>(result);
+        int inliers = int(get<2>(result).size());
+
+        double r_diff = functions::rotationDifference(R_calc, R_q);
+        double c_diff = functions::getDistBetween(c_calc, c_q);
+
+        superglue_r_error << r_diff << endl;
+        superglue_t_error << c_diff << endl;
     }
+
+    superglue_r_error.close();
+    superglue_t_error.close();
 
     return 0;
 }

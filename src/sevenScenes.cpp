@@ -5,6 +5,7 @@
 #include "../include/sevenScenes.h"
 
 #include <iostream>
+#include <map>
 #include <string>
 #include <Eigen/Dense>
 #include <opencv2/opencv.hpp>
@@ -346,6 +347,51 @@ void sevenScenes::getAbsolutePose(const string& image, Eigen::Matrix3d &R_iw, Ei
 void sevenScenes::getAbsolutePose_BA(const string& image, Eigen::Matrix3d & R_iw, Eigen::Vector3d & T_iw) {
     R_iw = sevenScenes::getR_BA(image);
     T_iw = sevenScenes::getT_BA(image);
+}
+
+map<pair<string, string>, pair<Eigen::Matrix3d, Eigen::Vector3d>> sevenScenes::getAnchorPoses(const string & dir) {
+
+    map<pair<string, string>, pair<Eigen::Matrix3d, Eigen::Vector3d>> map;
+    string file = dir + "anchor_poses.txt";
+    ifstream rel_poses(file);
+
+    if (rel_poses.is_open()) {
+        string line;
+        while(getline(rel_poses, line)) {
+            stringstream ss (line);
+            int count = 0;
+            string item;
+            string query;
+            string anchor;
+            Eigen::Matrix3d R_qi;
+            Eigen::Vector3d T_qi;
+            while (ss >> item) {
+                if (count == 0) query = item;
+                if (count == 1) anchor = item;
+                if (count == 2) R_qi(0, 0) = stod(item);
+                if (count == 3) R_qi(0, 1) = stod(item);
+                if (count == 4) R_qi(0, 2) = stod(item);
+                if (count == 5) R_qi(1, 0) = stod(item);
+                if (count == 6) R_qi(1, 1) = stod(item);
+                if (count == 7) R_qi(1, 2) = stod(item);
+                if (count == 8) R_qi(2, 0) = stod(item);
+                if (count == 9) R_qi(2, 1) = stod(item);
+                if (count == 10) R_qi(2, 2) = stod(item);
+                if (count == 11) T_qi(0) = stod(item);
+                if (count == 12) T_qi(1) = stod(item);
+                if (count == 13) T_qi(2) = stod(item);
+                count++;
+            }
+            if (!query.empty()) {
+                pair<string, string> key = make_pair(dir + query, dir + anchor);
+                pair<Eigen::Matrix3d, Eigen::Vector3d> value = make_pair(R_qi, T_qi);
+                map.emplace(key, value);
+            }
+        }
+        rel_poses.close();
+    }
+
+    return map;
 }
 
 

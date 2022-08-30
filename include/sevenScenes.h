@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <string>
+#include <map>
 #include <Eigen/Dense>
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/calib3d.hpp>
@@ -37,6 +38,8 @@ namespace sevenScenes
     void getAbsolutePose(const string& image, Eigen::Matrix3d & R_iw, Eigen::Vector3d & T_iw);
 
     void getAbsolutePose_BA(const string& image, Eigen::Matrix3d & R_iw, Eigen::Vector3d & T_iw);
+
+    map<pair<string, string>, pair<Eigen::Matrix3d, Eigen::Vector3d>> getAnchorPoses(const string & dir);
 
 }
 

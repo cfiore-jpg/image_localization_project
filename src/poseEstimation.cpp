@@ -845,10 +845,12 @@ Eigen::Quaternion<DataType> pose::averageQuaternions(ForwardIterator const & beg
         q(1) = it->x();
         q(2) = it->y();
         q(3) = it->z();
-        A += q.transpose()*q;
+        auto a = q.transpose()*q;
+        A += a;
         sum++;
     }
     A /= sum;
+    cout << A << endl;
 
     Eigen::EigenSolver<Eigen::Matrix<DataType, 4, 4>> es(A);
 
@@ -856,6 +858,8 @@ Eigen::Quaternion<DataType> pose::averageQuaternions(ForwardIterator const & beg
     int index;
     mat.real().maxCoeff(&index);
     Eigen::Matrix<DataType, 4, 1> largest_ev(es.eigenvectors().real().block(0, index, 4, 1));
+
+    cout << largest_ev << endl;
 
     return Eigen::Quaternion<DataType>(largest_ev(0), largest_ev(1), largest_ev(2), largest_ev(3));
 }
@@ -966,7 +970,7 @@ pose::hypothesizeRANSAC(double threshold,
                         set_R_qks.push_back(R_qks[k]);
                         set_T_qks.push_back(T_qks[k]);
                         indices.push_back(k);
-                        score += T_angular_diff;
+                        score += R_angular_diff + T_angular_diff;
                     }
                 }
             }
