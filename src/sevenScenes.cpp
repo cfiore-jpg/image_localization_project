@@ -21,145 +21,76 @@
 
 using namespace std;
 
-vector<tuple<string, string, vector<string>, vector<string>>> sevenScenes::createInfoVector()
-{
-    vector<tuple<string, string, vector<string>, vector<string>>> info;
+vector<string> sevenScenes::createQueryVector(const string & data_dir, const string & scene) {
 
-    tuple<string, string, vector<string>, vector<string>> chess;
-    vector<string> train0 {"01", "02", "04", "06"};
-    vector<string> test0 {"03", "05"};
-    get<0>(chess) = "/Users/cameronfiore/C++/image_localization_project/data/chess/";
-    get<1>(chess) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
-    get<2>(chess) = train0;
-    get<3>(chess) = test0;
-    info.push_back(chess);
+    vector<string> queries;
+    vector<string> seqs;
+    string base = data_dir;
+    int num_ims = 0;
 
-    tuple<string, string, vector<string>, vector<string>> fire;
-    vector<string> train1 {"01", "02"};
-    vector<string> test1 {"03", "04"};
-    get<0>(fire) = "/Users/cameronfiore/C++/image_localization_project/data/fire/";
-    get<1>(fire) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
-    get<2>(fire) = train1;
-    get<3>(fire) = test1;
-    info.push_back(fire);
-
-    tuple<string, string, vector<string>, vector<string>> heads;
-    vector<string> train2 {"02"};
-    vector<string> test2 {"01"};
-    get<0>(heads) = "/Users/cameronfiore/C++/image_localization_project/data/heads/";
-    get<1>(heads) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
-    get<2>(heads) = train2;
-    get<3>(heads) = test2;
-    info.push_back(heads);
-
-    tuple<string, string, vector<string>, vector<string>> office;
-    vector<string> train3 {"01", "03", "04", "05", "08", "10"};
-    vector<string> test3 {"02", "06", "07", "09"};
-    get<0>(office) = "/Users/cameronfiore/C++/image_localization_project/data/office/";
-    get<1>(office) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
-    get<2>(office) = train3;
-    get<3>(office) = test3;
-    info.push_back(office);
-
-    tuple<string, string, vector<string>, vector<string>> pumpkin;
-    vector<string> train4 {"02", "03", "06", "08"};
-    vector<string> test4 {"01", "07"};
-    get<0>(pumpkin) = "/Users/cameronfiore/C++/image_localization_project/data/pumpkin/";
-    get<1>(pumpkin) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
-    get<2>(pumpkin) = train4;
-    get<3>(pumpkin) = test4;
-    info.push_back(pumpkin);
-
-    tuple<string, string, vector<string>, vector<string>> redkitchen;
-    vector<string> train5 {"01", "02", "05", "07", "08", "11", "13"};
-    vector<string> test5 {"03", "04", "06", "12", "14"};
-    get<0>(redkitchen) = "/Users/cameronfiore/C++/image_localization_project/data/redkitchen/";
-    get<1>(redkitchen) = "/Users/cameronfiore/C++/image_localization_project/data/images_1000.txt";
-    get<2>(redkitchen) = train5;
-    get<3>(redkitchen) = test5;
-    info.push_back(redkitchen);
-
-    tuple<string, string, vector<string>, vector<string>> stairs;
-    vector<string> train6 {"02", "03", "05", "06"};
-    vector<string> test6 {"01", "04"};
-    get<0>(stairs) = "/Users/cameronfiore/C++/image_localization_project/data/stairs/";
-    get<1>(stairs) = "/Users/cameronfiore/C++/image_localization_project/data/images_500.txt";
-    get<2>(stairs) = train6;
-    get<3>(stairs) = test6;
-    info.push_back(stairs);
-
-    return info;
-}
-
-void sevenScenes::createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene)
-{
-    cout << "Creating image vector..." << endl;
-    int begin;
-    int end;
-    if (scene == -1)
-    {
-        begin = 0;
-        end = int (info.size());
-    } else
-    {
-        begin = scene;
-        end = scene + 1;
+    if (scene == "chess") {
+        base += "chess/";
+        seqs = {"03", "05"};
+        num_ims = 1000;
     }
-    for (int i = begin; i < end; ++i)
-    {
-        string folder = get<0>(info[i]);
-        string imageList = get<1>(info[i]);
-        vector<string> train = get<2>(info[i]);
-        for (auto & seq : train)
-        {
-            ifstream im_list(imageList);
-            if (im_list.is_open())
-            {
-                string image;
-                while (getline(im_list, image))
-                {
-                    string file = "seq-"; file.append(seq).append("/").append(image);
-                    listImage.push_back(folder + file);
-                }
-                im_list.close();
+
+    if (scene == "fire") {
+        base += "fire/";
+        seqs = {"03", "04"};
+        num_ims = 1000;
+    }
+
+    if (scene == "heads") {
+        base += "heads/";
+        seqs = {"01"};
+        num_ims = 1000;
+    }
+
+    if (scene == "office") {
+        base += "office/";
+        seqs = {"02", "06", "07", "09"};
+        num_ims = 1000;
+    }
+
+    if (scene == "pumpkin") {
+        base += "pumpkin/";
+        seqs = {"01", "07"};
+        num_ims = 1000;
+    }
+
+    if (scene == "redkitchen") {
+        base += "redkitchen/";
+        seqs = {"03", "04", "06", "12", "14"};
+        num_ims = 1000;
+    }
+
+    if (scene == "stairs") {
+        base += "stairs/";
+        seqs = {"01", "04"};
+        num_ims = 500;
+    }
+
+
+    for (const auto &seq: seqs) {
+        for (int i = 0; i < num_ims; i++) {
+            string stem = "seq-" + seq + "/frame-";
+            string base_num = to_string(i);
+            int num_zeros = 6 - int(base_num.length());
+            for (int j = 0; j < num_zeros; j++) {
+                stem += "0";
             }
+            stem += base_num;
+            queries.push_back(base + stem);
         }
     }
-    cout << "done" << endl;
+
+    return queries;
 }
 
-void sevenScenes::createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene)
-{
-    cout << "Creating query vector..." << endl;
-    int begin;
-    int end;
-    if (scene == -1)
-    {
-        begin = 0;
-        end = int (info.size());
-    } else
-    {
-        begin = scene;
-        end = scene + 1;
-    }
-    for (int i = begin; i < end; ++i)
-    {
-        string folder = get<0>(info[i]);
-        string imageList = get<1>(info[i]);
-        vector<string> test = get<3>(info[i]);
-        for (auto & seq : test) {
-            ifstream im_list(imageList);
-            if (im_list.is_open()) {
-                string image;
-                while (getline(im_list, image)) {
-                    string file = "seq-"; file.append(seq).append("/").append(image);
-                    listQuery.push_back(folder + file);
-                }
-                im_list.close();
-            }
-        }
-    }
-    cout << "done" << endl;
+void sevenScenes::getCalibration(double & f, double & cx, double & cy) {
+    f = 585.;
+    cx = 320.;
+    cy = 240.;
 }
 
 Eigen::Matrix3d sevenScenes::getR(const string& image)
@@ -393,7 +324,3 @@ map<pair<string, string>, pair<Eigen::Matrix3d, Eigen::Vector3d>> sevenScenes::g
 
     return map;
 }
-
-
-
-

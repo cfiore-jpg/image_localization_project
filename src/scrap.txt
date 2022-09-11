@@ -1,20 +1,33 @@
 
 
+//   Stairs   //
 
-
-// Stairs>>>
-
-COLMAP
+COLMAP (SIFT with FLAN matcher)
 // R: 2.72
 // C: 0.14
 
-CV WITH NEW PARAMETERS
+SIFT with BF matcher
 // R: 2.91
 // C: 0.18
 
-SUPERGLUE
+SUPERPOINT with BF Matcher
+// R: 2.82
+// C: 0.13
+
+SUPERPOINTS and SUPERGLUE
 // R: 2.44
 // C: 0.13
+
+
+
+
+
+
+
+
+
+
+
 
 /// --------------------------------MOST RECENT MAIN-------------------------------------------------------------------
 

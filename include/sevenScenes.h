@@ -19,11 +19,9 @@ using namespace std;
 
 namespace sevenScenes
 {
-    vector<tuple<string, string, vector<string>, vector<string>>> createInfoVector();
+    vector<string> createQueryVector(const string & data_dir, const string & scene);
 
-    void createImageVector(vector<string> &listImage, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
-
-    void createQueryVector(vector<string> &listQuery, vector<tuple<string, string, vector<string>, vector<string>>> &info, int scene);
+    void getCalibration(double & f, double & cx, double & cy);
 
     Eigen::Matrix3d getR(const string & image);
 

@@ -15,7 +15,6 @@
 #include "glog/logging.h"
 #include "../include/sevenScenes.h"
 #include "../include/functions.h"
-#include "../include/calibrate.h"
 #include "../include/OptimalRotationSolver.h"
 #include <iomanip>
 #include <chrono>

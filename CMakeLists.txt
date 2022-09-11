@@ -15,7 +15,6 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_executable(image_localization_project
         main.cpp
-        src/calibrate.cpp
         src/sevenScenes.cpp
         src/synthetic.cpp
         src/Space.cpp
