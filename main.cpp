@@ -28,11 +28,9 @@ int main() {
 
     vector<string> queries = sevenScenes::createQueryVector("/Users/cameronfiore/C++/image_localization_project/data/", "stairs");
 
-
-
-
-
-
+    for (const auto & q : queries) {
+        cout << q << endl;
+    }
 
     return 0;
 }
