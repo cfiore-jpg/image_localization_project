@@ -108,7 +108,7 @@ namespace functions {
     string getScene(const string & image, const string & mod);
     string getSequence(const string & image);
     vector<string> getTopN(const string& query_image, const string & ext, int N);
-    void retrieveSimilar(const string & query_image, const string & dataset, const string & ext, int max_num, double max_dist,
+    void retrieveSimilar(const string & query_image, const string & replace, const string & ext, int max_num, double max_dist,
                          vector<string> & similar, vector<double> & distances);
     vector<string> spaceWithMostMatches(const string & query_image, const string & ext, const double * cam_matrix, int K,
                                         int N_thresh, double max_descriptor_dist, double separation, int min_matches,
@@ -116,6 +116,10 @@ namespace functions {
                                         vector<Eigen::Vector3d> & t_k,
                                         vector<Eigen::Matrix3d> & R_qk,
                                         vector<Eigen::Vector3d> & t_qk);
+    map<string, map<
+            string, pair<
+                    Eigen::Matrix3d,
+                    Eigen::Vector3d>>> getRelativePoses(const string & folder, const string & base);
 
 //// Visualization
 

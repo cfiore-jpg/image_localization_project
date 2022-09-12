@@ -1150,8 +1150,14 @@ vector<string> functions::getTopN(const string& query_image, const string & ext,
     return result;
 }
 
-void functions::retrieveSimilar(const string & query_image, const string & dataset, const string & ext, int max_num, double max_dist,
-                vector<string> & similar, vector<double> & distances) {
+void functions::retrieveSimilar(const string & query_image,
+                                const string & replace,
+                                const string & ext,
+                                int max_num,
+                                double max_dist,
+                                vector<string> & similar,
+                                vector<double> & distances) {
+
     ifstream file (query_image + ext + ".1000nn.txt");
 
     if (file.is_open()) {
@@ -1163,7 +1169,13 @@ void functions::retrieveSimilar(const string & query_image, const string & datas
             int count = 0;
             while (ss >> buf) {
                 if (count == 0) {
-                    fn = buf.substr(0, buf.find(ext));
+                    if (replace.empty()) {
+                        fn = buf.substr(0, buf.find(ext));
+                    } else {
+                        size_t start = buf.find("data")+4;
+                        size_t stop = buf.length() - start - ext.length();
+                        fn = replace + buf.substr(start, stop);
+                    }
                 } else {
                     dist = stod(buf);
                 }
@@ -1176,6 +1188,50 @@ void functions::retrieveSimilar(const string & query_image, const string & datas
         }
         file.close();
     }
+}
+
+map<string, map<
+        string, pair<
+                Eigen::Matrix3d,
+                Eigen::Vector3d>>> functions::getRelativePoses(const string & folder, const string & base) {
+
+    map<string, map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>>> big_map;
+
+    string fn = folder + "sp_sg_rel_poses.txt";
+    ifstream poses (fn);
+    if (poses.is_open()) {
+        string line;
+        string last_query, cur_query;
+        while(getline(poses, line)) {
+            stringstream ss (line);
+
+            string q; ss >> q; cur_query = base + q;
+
+            if (cur_query != last_query) {
+                last_query = cur_query;
+                map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>> little_map;
+                pair<string, map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>>> item = make_pair(cur_query, little_map);
+                big_map.insert(item);
+            }
+
+            string im; ss >> im; string image = base + im;
+
+            string R00, R01, R02, R10, R11, R12, R20, R21, R22;
+            ss >> R00; ss >> R01; ss >> R02; ss >> R10; ss >> R11; ss >> R12; ss >> R20; ss >> R21; ss >> R22;
+            Eigen::Matrix3d R_qk {{stod(R00), stod(R01), stod(R02)},
+                                  {stod(R10), stod(R11), stod(R12)},
+                                  {stod(R20), stod(R21), stod(R22)}};
+            string T0, T1, T2;
+            ss >> T0; ss >> T1; ss >> T2;
+            Eigen::Vector3d T_qk {stod(T0), stod(T1), stod(T2)};
+            pair<Eigen::Matrix3d, Eigen::Vector3d> pose = make_pair(R_qk, T_qk);
+
+            pair<string, pair<Eigen::Matrix3d, Eigen::Vector3d>> item = make_pair(image, pose);
+            big_map.at(cur_query).insert(item);
+        }
+        poses.close();
+    }
+    return big_map;
 }
 
 
@@ -1463,7 +1519,7 @@ void functions::showTop1000(const string & query_image, const string & ext, int 
 
     // Threshold, filter, and space the top 1000
     vector<string> retrieved; vector<double> distances;
-    functions::retrieveSimilar(query_image, "7-Scenes", ext, max_num, max_dist, retrieved, distances);
+    functions::retrieveSimilar(query_image, "", ext, max_num, max_dist, retrieved, distances);
     vector<string> spaced = functions::optimizeSpacing(query_image, retrieved, inliers, false, "7-Scenes");
 
     // Do the following for images/100 windows
