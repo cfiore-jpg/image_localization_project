@@ -395,6 +395,89 @@ struct RotationError {
 };
 
 
+struct SimultaneousEstimation {
+    SimultaneousEstimation(Eigen::Vector3d c_k,
+                           Eigen::Vector3d t_qk)
+                           : c_k(move(c_k)), t_qk(move(t_qk)) {}
+
+    template<typename T>
+    bool operator()(const T * const c_q, const T * const r_q, const T * const lambda, T * residuals) const {
+
+        T R_q [9];
+        ceres::AngleAxisToRotationMatrix(r_q, R_q);
+
+        T ray[3];
+        ray[0] = lambda[0] * (R_q[0]*T(t_qk[0]) + R_q[1]*T(t_qk[1]) + R_q[2]*T(t_qk[2]));
+        ray[1] = lambda[0] * (R_q[3]*T(t_qk[0]) + R_q[4]*T(t_qk[1]) + R_q[5]*T(t_qk[2]));
+        ray[2] = lambda[0] * (R_q[6]*T(t_qk[0]) + R_q[7]*T(t_qk[1]) + R_q[8]*T(t_qk[2]));
+
+        T x_error = T(c_k[0]) - (c_q[0] + ray[0]);
+        T y_error = T(c_k[1]) - (c_q[1] + ray[1]);
+        T z_error = T(c_k[2]) - (c_q[2] + ray[2]);
+
+        residuals[0] = x_error;
+        residuals[1] = y_error;
+        residuals[2] = z_error;
+
+        return true;
+    }
+
+    // Factory to hide the construction of the CostFunction object from
+    // the client code.
+    static ceres::CostFunction *Create(const Eigen::Vector3d & c_k,
+                                       const Eigen::Vector3d & t_qk) {
+        return (new ceres::AutoDiffCostFunction<SimultaneousEstimation, 3, 3, 3, 1>(
+                new SimultaneousEstimation(c_k, t_qk)));
+    }
+
+    Eigen::Vector3d c_k;
+    Eigen::Vector3d t_qk;
+};
+
+
+void pose::estimatePose(const vector<Eigen::Matrix3d> & R_ks,
+                        const vector<Eigen::Vector3d> & T_ks,
+                        const vector<Eigen::Vector3d> & T_qks,
+                        Eigen::Matrix3d & R,
+                        Eigen::Vector3d & c) {
+
+    int k = int(R_ks.size());
+
+    double c_q_arr [3] {c[0], c[1], c[2]};
+    double AA_arr [3];
+    double R_arr[9]{R(0, 0), R(1, 0), R(2, 0), R(0, 1), R(1, 1), R(2, 1), R(0, 2), R(1, 2), R(2, 2)};
+    ceres::RotationMatrixToAngleAxis(R_arr, AA_arr);
+
+    ceres::Problem problem;
+    ceres::LossFunction * loss_function = new ceres::HuberLoss(1.0);
+    for (int i = 0; i < k; i++) {
+        Eigen::Vector3d c_k = - R_ks[i].transpose() * T_ks[i];
+        double lambda [1] {(c_k - c).transpose() * R.transpose() * T_qks[i]};
+        ceres::CostFunction *cost_function = SimultaneousEstimation::Create(c_k, T_qks[i]);
+        problem.AddResidualBlock(cost_function, loss_function, c_q_arr, AA_arr, lambda);
+    }
+    ceres::Solver::Options options;
+    options.linear_solver_type = ceres::DENSE_SCHUR;
+//    options.minimizer_progress_to_stdout = true;
+    ceres::Solver::Summary summary;
+    ceres::Solve(options, &problem, &summary);
+
+//    std::cout << summary.FullReport() << "\n";
+
+    ceres::AngleAxisToRotationMatrix(AA_arr, R_arr);
+    R = Eigen::Matrix3d {{R_arr[0], R_arr[3], R_arr[6]},
+                         {R_arr[1], R_arr[4], R_arr[7]},
+                         {R_arr[2], R_arr[5], R_arr[8]}};
+    c = Eigen::Vector3d {c_q_arr[0], c_q_arr[1], c_q_arr[2]};
+}
+
+
+
+
+
+
+
+
 
 /// BUNDLE ADJUSTMENT
 string formatNum(int n, int num_digits) {
@@ -849,7 +932,6 @@ Eigen::Quaternion<DataType> pose::averageQuaternions(ForwardIterator const & beg
         sum++;
     }
     A /= sum;
-    cout << A << endl;
 
     Eigen::EigenSolver<Eigen::Matrix<DataType, 4, 4>> es(A);
 
@@ -857,8 +939,6 @@ Eigen::Quaternion<DataType> pose::averageQuaternions(ForwardIterator const & beg
     int index;
     mat.real().maxCoeff(&index);
     Eigen::Matrix<DataType, 4, 1> largest_ev(es.eigenvectors().real().block(0, index, 4, 1));
-
-    cout << largest_ev << endl;
 
     return Eigen::Quaternion<DataType>(largest_ev(0), largest_ev(1), largest_ev(2), largest_ev(3));
 }
@@ -928,10 +1008,10 @@ Eigen::Matrix3d,
 //Eigen::Matrix3d,
 vector<int>>
 pose::hypothesizeRANSAC(double threshold,
-                  const vector<Eigen::Matrix3d> & R_ks,
-                  const vector<Eigen::Vector3d> & T_ks,
-                  const vector<Eigen::Matrix3d> & R_qks,
-                  const vector<Eigen::Vector3d> & T_qks) {
+                        const vector<Eigen::Matrix3d> & R_ks,
+                        const vector<Eigen::Vector3d> & T_ks,
+                        const vector<Eigen::Matrix3d> & R_qks,
+                        const vector<Eigen::Vector3d> & T_qks) {
 
     int K = int(R_ks.size());
 

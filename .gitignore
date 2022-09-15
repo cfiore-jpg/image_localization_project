@@ -3,3 +3,4 @@ data/
 figs/
 data2/
 cmake-build-debug/
+CMakeLists.txt

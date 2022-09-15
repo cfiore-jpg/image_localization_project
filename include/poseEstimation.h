@@ -23,6 +23,12 @@
 
 namespace pose {
 
+    void estimatePose(const vector<Eigen::Matrix3d> & R_ks,
+                      const vector<Eigen::Vector3d> & T_ks,
+                      const vector<Eigen::Vector3d> & T_qks,
+                      Eigen::Matrix3d & R_q,
+                      Eigen::Vector3d & c_q);
+
     /// BUNDLE ADJUSTMENT
     void sceneBundleAdjust(int num_ims, const double K[4],
                            const string &folder, const string &scene, const string &sequence, const string &frame,
