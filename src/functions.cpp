@@ -1190,12 +1190,10 @@ void functions::retrieveSimilar(const string & query_image,
     }
 }
 
-map<string, map<
-        string, pair<
-                Eigen::Matrix3d,
-                Eigen::Vector3d>>> functions::getRelativePoses(const string & folder, const string & base) {
+map<string, map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>>
+        functions::getRelativePoses(const string & folder, const string & base) {
 
-    map<string, map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>>> big_map;
+    map<string, map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>> big_map;
 
     string fn = folder + "sp_sg_rel_poses.txt";
     ifstream poses (fn);
@@ -1209,8 +1207,8 @@ map<string, map<
 
             if (cur_query != last_query) {
                 last_query = cur_query;
-                map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>> little_map;
-                pair<string, map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>>> item = make_pair(cur_query, little_map);
+                map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>> little_map;
+                pair<string, map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>> item = make_pair(cur_query, little_map);
                 big_map.insert(item);
             }
 
@@ -1224,9 +1222,36 @@ map<string, map<
             string T0, T1, T2;
             ss >> T0; ss >> T1; ss >> T2;
             Eigen::Vector3d T_qk {stod(T0), stod(T1), stod(T2)};
-            pair<Eigen::Matrix3d, Eigen::Vector3d> pose = make_pair(R_qk, T_qk);
 
-            pair<string, pair<Eigen::Matrix3d, Eigen::Vector3d>> item = make_pair(image, pose);
+            string cx, cy, f;
+            ss >> cx; ss >> cy; ss >> f; ss >> f;
+            vector<double> K1 {stod(cx), stod(cy), stod(f), stod(f)};
+
+            ss >> cx; ss >> cy; ss >> f; ss >> f;
+            vector<double> K2 {stod(cx), stod(cy), stod(f), stod(f)};
+
+            int counter = 1;
+            string val;
+            vector<pair<cv::Point2d, cv::Point2d>> points;
+            double x_q, y_q, x_i, y_i;
+            while (ss >> val) {
+                if (counter == 1) {
+                    x_q = stod(val);
+                } else if (counter == 2) {
+                    y_q = stod(val);
+                } else if (counter == 3) {
+                    x_i = stod(val);
+                } else {
+                    y_i = stod(val);
+                    cv::Point2d pq (x_q, y_q), pi (x_i, y_i);
+                    points.emplace_back(pq, pi);
+                    counter = 0;
+                }
+                counter++;
+            }
+
+            tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>> pp = make_tuple(R_qk, T_qk, K1, K2, points);
+            pair<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>> item = make_pair(image, pp);
             big_map.at(cur_query).insert(item);
         }
         poses.close();

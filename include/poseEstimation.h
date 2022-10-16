@@ -96,11 +96,12 @@ namespace pose {
 
 
     //// FINAL POSE ADJUSTMENT
-    void adjustHypothesis(const vector<Eigen::Matrix3d> &R_k,
-                          const vector<Eigen::Vector3d> &T_k,
-                          const vector<vector<pair<cv::Point2d, cv::Point2d>>> & all_points,
-                          const double &error_thresh,
-                          const double *K,
-                          Eigen::Matrix3d &R_q,
-                          Eigen::Vector3d &T_q);
+    void adjustHypothesis(const vector<Eigen::Matrix3d> & R_ks,
+                          const vector<Eigen::Vector3d> & T_ks,
+                          const vector<vector<pair<cv::Point2d, cv::Point2d>>> & all_matches,
+                          const double & error_thresh,
+                          const vector<vector<double>> & K1s,
+                          const vector<vector<double>> & K2s,
+                          Eigen::Matrix3d & R_q,
+                          Eigen::Vector3d & T_q);
 }
