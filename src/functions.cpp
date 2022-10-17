@@ -1190,45 +1190,61 @@ void functions::retrieveSimilar(const string & query_image,
     }
 }
 
-map<string, map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>>
-        functions::getRelativePoses(const string & folder, const string & base) {
+map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>
+        functions::getRelativePoses(const string & query, const string & data_folder) {
 
-    map<string, map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>> big_map;
+    map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>> map;
 
-    string fn = folder + "sp_sg_rel_poses.txt";
+    string seq = query.substr(query.find("seq"),6);
+    string image_base = query.substr(query.find("frame"),12);
+    string fn = data_folder + "relposes/" + seq + "/" + image_base + "_rel_poses.txt";
     ifstream poses (fn);
     if (poses.is_open()) {
         string line;
-        string last_query, cur_query;
         while(getline(poses, line)) {
-            stringstream ss (line);
+            stringstream ss(line);
 
-            string q; ss >> q; cur_query = base + q;
+            string q;
+            ss >> q;
+            string cur_query = data_folder + q;
+            assert(cur_query == query);
 
-            if (cur_query != last_query) {
-                last_query = cur_query;
-                map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>> little_map;
-                pair<string, map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>> item = make_pair(cur_query, little_map);
-                big_map.insert(item);
-            }
 
-            string im; ss >> im; string image = base + im;
+            string im;
+            ss >> im;
+            string image = data_folder + im;
 
             string R00, R01, R02, R10, R11, R12, R20, R21, R22;
-            ss >> R00; ss >> R01; ss >> R02; ss >> R10; ss >> R11; ss >> R12; ss >> R20; ss >> R21; ss >> R22;
-            Eigen::Matrix3d R_qk {{stod(R00), stod(R01), stod(R02)},
-                                  {stod(R10), stod(R11), stod(R12)},
-                                  {stod(R20), stod(R21), stod(R22)}};
+            ss >> R00;
+            ss >> R01;
+            ss >> R02;
+            ss >> R10;
+            ss >> R11;
+            ss >> R12;
+            ss >> R20;
+            ss >> R21;
+            ss >> R22;
+            Eigen::Matrix3d R_qk{{stod(R00), stod(R01), stod(R02)},
+                                 {stod(R10), stod(R11), stod(R12)},
+                                 {stod(R20), stod(R21), stod(R22)}};
             string T0, T1, T2;
-            ss >> T0; ss >> T1; ss >> T2;
-            Eigen::Vector3d T_qk {stod(T0), stod(T1), stod(T2)};
+            ss >> T0;
+            ss >> T1;
+            ss >> T2;
+            Eigen::Vector3d T_qk{stod(T0), stod(T1), stod(T2)};
 
             string cx, cy, f;
-            ss >> cx; ss >> cy; ss >> f; ss >> f;
-            vector<double> K1 {stod(cx), stod(cy), stod(f), stod(f)};
+            ss >> cx;
+            ss >> cy;
+            ss >> f;
+            ss >> f;
+            vector<double> K1{stod(cx), stod(cy), stod(f), stod(f)};
 
-            ss >> cx; ss >> cy; ss >> f; ss >> f;
-            vector<double> K2 {stod(cx), stod(cy), stod(f), stod(f)};
+            ss >> cx;
+            ss >> cy;
+            ss >> f;
+            ss >> f;
+            vector<double> K2{stod(cx), stod(cy), stod(f), stod(f)};
 
             int counter = 1;
             string val;
@@ -1243,20 +1259,22 @@ map<string, map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, 
                     x_i = stod(val);
                 } else {
                     y_i = stod(val);
-                    cv::Point2d pq (x_q, y_q), pi (x_i, y_i);
+                    cv::Point2d pq(x_q, y_q), pi(x_i, y_i);
                     points.emplace_back(pq, pi);
                     counter = 0;
                 }
                 counter++;
             }
 
-            tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>> pp = make_tuple(R_qk, T_qk, K1, K2, points);
-            pair<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>> item = make_pair(image, pp);
-            big_map.at(cur_query).insert(item);
+            tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>> pp = make_tuple(
+                    R_qk, T_qk, K1, K2, points);
+            pair<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>> item = make_pair(
+                    image, pp);
+            map.insert(item);
         }
         poses.close();
     }
-    return big_map;
+    return map;
 }
 
 

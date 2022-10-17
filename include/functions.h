@@ -116,8 +116,8 @@ namespace functions {
                                         vector<Eigen::Vector3d> & t_k,
                                         vector<Eigen::Matrix3d> & R_qk,
                                         vector<Eigen::Vector3d> & t_qk);
-    map<string, map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>>
-    getRelativePoses(const string & folder, const string & base);
+    map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>
+    getRelativePoses(const string & query, const string & data_folder);
 
 //// Visualization
 

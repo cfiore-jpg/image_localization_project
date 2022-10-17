@@ -71,14 +71,14 @@ int main() {
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
     string scene_dir = home_dir + scene + "/";
 
-    auto rel_poses = functions::getRelativePoses(scene_dir, scene_dir);
-
     ofstream error;
-    error.open(scene_dir + "SP_all_spaced.txt");
+    error.open(scene_dir + "sp_all_spaced.txt");
 
-    for (const auto & query : rel_poses) {
+    vector<string> all_queries = sevenScenes::createQueryVector(home_dir, scene);
 
-        string query_name = query.first;
+    for (const auto & query_name : all_queries) {
+
+        auto anchors = functions::getRelativePoses(query_name, scene_dir);
 
         Eigen::Matrix3d R_q; Eigen::Vector3d T_q;
         sevenScenes::getAbsolutePose(query_name, R_q, T_q);
@@ -90,7 +90,7 @@ int main() {
         vector<vector<pair<cv::Point2d, cv::Point2d>>> all_points;
         vector<vector<double>> K1s, K2s;
 
-        for (const auto & anchor : query.second) {
+        for (const auto & anchor : anchors) {
 
             string anchor_name = anchor.first;
             anchor_names.push_back(anchor_name);
@@ -194,7 +194,7 @@ int main() {
 
         Eigen::Matrix3d r_adj = R_est_initial;
         Eigen::Vector3d t_adj = - R_est_initial * c_est_initial;
-        pose::adjustHypothesis (best_R_ks, best_T_ks, best_all_points, 3., best_K1s, best_K2s, r_adj, t_adj);
+        pose::adjustHypothesis (best_R_ks, best_T_ks, best_all_points, 5., best_K1s, best_K2s, r_adj, t_adj);
         Eigen::Vector3d c_adj = -r_adj.transpose() * t_adj;
 
         c_all = functions::getDistBetween(c_q, c_adj);
@@ -207,7 +207,7 @@ int main() {
         R_ks.clear(); R_qks.clear(); T_ks.clear(); T_qks.clear(); all_points.clear(); K1s.clear(); K2s.clear();
         for (const auto & sp : spaced) {
 
-            auto anchor = query.second.at(sp);
+            auto anchor = anchors.at(sp);
 
             string anchor_name = sp;
 
@@ -252,8 +252,8 @@ int main() {
 
         threshold = 10.;
 
-        count = 0;
         std::thread threads2[count];
+        count = 0;
         for (int i = 0; i < K - 1; i++) {
             for (int j = i + 1; j < K; j++) {
                 threads2[count] = thread(findInliers, threshold, i, j, &R_ks, &T_ks, &R_qks, &T_qks, results2);
