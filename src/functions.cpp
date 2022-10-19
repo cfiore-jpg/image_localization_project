@@ -1191,13 +1191,13 @@ void functions::retrieveSimilar(const string & query_image,
 }
 
 map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>
-        functions::getRelativePoses(const string & query, const string & data_folder) {
+        functions::getRelativePoses(const string & query, const string & feat_folder, const string & data_folder) {
 
     map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>> map;
 
-    string seq = query.substr(query.find("seq"),6);
+    string seq = query.substr(query.find("seq"),7);
     string image_base = query.substr(query.find("frame"),12);
-    string fn = data_folder + "relposes/" + seq + "/" + image_base + "_rel_poses.txt";
+    string fn = data_folder + feat_folder + seq + image_base + "_rel_poses.txt";
     ifstream poses (fn);
     if (poses.is_open()) {
         string line;

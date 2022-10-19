@@ -69,16 +69,16 @@ int main() {
     string scene = "chess";
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/";
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
-    string scene_dir = home_dir + scene + "/";
+    string scene_dir = ccv_dir + scene + "/";
 
     ofstream error;
-    error.open(scene_dir + "sp_all_spaced.txt");
+    error.open(scene_dir + "results/sp_all_spaced.txt");
 
-    vector<string> all_queries = sevenScenes::createQueryVector(home_dir, scene);
+    vector<string> all_queries = sevenScenes::createQueryVector(ccv_dir, scene);
 
     for (const auto & query_name : all_queries) {
 
-        auto anchors = functions::getRelativePoses(query_name, scene_dir);
+        auto anchors = functions::getRelativePoses(query_name, "relposes_sift/", scene_dir);
 
         Eigen::Matrix3d R_q; Eigen::Vector3d T_q;
         sevenScenes::getAbsolutePose(query_name, R_q, T_q);
@@ -156,13 +156,17 @@ int main() {
         tuple<int, int, double,vector<int>> best_set = results->at(0);
         int idx = 0;
         while (true) {
-            auto set = results->at(idx);
-            idx++;
-            if (get<3>(set).size() != s) break;
-            if (get<2>(set) < best_score) {
-                best_score = get<2>(set);
-                best_set = set;
+            try {
+                auto set = results->at(idx);
+                if (get<3>(set).size() != s) break;
+                if (get<2>(set) < best_score) {
+                    best_score = get<2>(set);
+                    best_set = set;
+                }
+            } catch (...) {
+                break;
             }
+            idx++;
         }
 
         vector<string> best_anchor_names;
@@ -272,13 +276,17 @@ int main() {
         best_set = results2->at(0);
         idx = 0;
         while (true) {
-            auto set = results2->at(idx);
-            idx++;
-            if (get<3>(set).size() != s) break;
-            if (get<2>(set) < best_score) {
-                best_score = get<2>(set);
-                best_set = set;
+            try {
+                auto set = results2->at(idx);
+                if (get<3>(set).size() != s) break;
+                if (get<2>(set) < best_score) {
+                    best_score = get<2>(set);
+                    best_set = set;
+                }
+            } catch (...) {
+                break;
             }
+            idx++;
         }
 
         best_anchor_names.clear();
@@ -310,11 +318,11 @@ int main() {
 
         Eigen::Matrix3d r_adj_spaced = R_est_initial;
         Eigen::Vector3d t_adj_spaced = - R_est_initial * c_est_initial;
-        pose::adjustHypothesis (best_R_ks, best_T_ks, best_all_points, 5., best_K1s, best_K2s, r_adj, t_adj);
-        Eigen::Vector3d c_adj_spaced = -r_adj.transpose() * t_adj;
+        pose::adjustHypothesis (best_R_ks, best_T_ks, best_all_points, 5., best_K1s, best_K2s, r_adj_spaced, t_adj_spaced);
+        Eigen::Vector3d c_adj_spaced = -r_adj_spaced.transpose() * t_adj_spaced;
 
-        c_spaced = functions::getDistBetween(c_q, c_adj);
-        r_spaced = functions::rotationDifference(R_q, r_adj);
+        c_spaced = functions::getDistBetween(c_q, c_adj_spaced);
+        r_spaced = functions::rotationDifference(R_q, r_adj_spaced);
 
         string p = query_name;
         p += "  " + to_string(r_all) + "  " + to_string(c_all) + "  " + to_string(r_spaced) + "  " + to_string(c_spaced) + "\n";
