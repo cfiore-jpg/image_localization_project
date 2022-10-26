@@ -63,9 +63,7 @@ void findInliers (double threshold,
     mtx.unlock();
 }
 
-void findRelativePoses(int * a,
-                       int A,
-                       const string * anchor,
+void findRelativePoses(const string * anchor,
                        const vector<cv::Point2d> * pts_q,
                        const vector<cv::Point2d> * pts_i,
                        const vector<double> * K_q,
@@ -101,15 +99,11 @@ void findRelativePoses(int * a,
         auto p = make_pair(*anchor, pose);
 
         mtx.lock();
-        cout << (*a)+1 << "/" << A << " ---> SUCCESS" << endl;
-        (*a)++;
         rel_poses->insert(p);
         mtx.unlock();
+        return;
     } catch (...) {
-        mtx.lock();
-        cout << (*a)+1 << "/" << A << " ---> FAILURE" << endl;
-        (*a)++;
-        mtx.unlock();
+        return;
     }
 }
 
@@ -150,7 +144,7 @@ int main() {
         std::thread threads_0[K];
         int a = 0;
         for (int i = 0; i < K; i++) {
-            threads_0[i] = thread(findRelativePoses, &a, K, &anchors[i], &all_pts_q[i], &all_pts_i[i], &K_q, &K_is[i], m);
+            threads_0[i] = thread(findRelativePoses, &anchors[i], &all_pts_q[i], &all_pts_i[i], &K_q, &K_is[i], m);
             this_thread::sleep_for(std::chrono::microseconds (1));
         }
         for (auto & th : threads_0) th.join();
