@@ -268,7 +268,8 @@ int main() {
         cout << " (" << R_error_estimation
              << ", " << c_error_estimation
              << ")   (" << R_error_adjustment
-             << ", " << c_error_adjustment << endl;
+             << ", " << c_error_adjustment
+             << ")" << endl;
 
 
 
