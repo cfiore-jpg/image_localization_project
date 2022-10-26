@@ -39,6 +39,7 @@ vector<string> functions::getQueries(const string & queryList, const string & sc
     vector<string> queries;
     ifstream file(queryList);
     if (file.is_open()) {
+        cout << "Here" << endl;
         string line;
         while (getline(file, line)) {
             size_t pos = line.find('/');
@@ -46,7 +47,10 @@ vector<string> functions::getQueries(const string & queryList, const string & sc
                 queries.push_back(line);
             }
         }
-
+        file.close();
+    } else {
+        cout << "Can't open query list file." << endl;
+        exit(1);
     }
     return queries;
 }
@@ -150,6 +154,9 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
             all_points_i.push_back(points_i);
         }
         file.close();
+    } else {
+        cout << "Can't open relpose file." << endl;
+        exit(1);
     }
     auto t = make_tuple(query_id, R_q, T_q, K_q, anchors, R_is, T_is, K_is, all_points_q, all_points_i);
     return t;

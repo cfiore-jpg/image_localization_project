@@ -117,7 +117,9 @@ int main() {
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/"+dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
 
-    vector<string> queries = functions::getQueries(home_dir+"q.txt", scene);
+    vector<string> queries = functions::getQueries(ccv_dir+"q.txt", scene);
+
+    cout << queries.size() << endl;
 
     int start = 0;
 
@@ -127,7 +129,7 @@ int main() {
 
         cout << query;
 
-        auto info = functions::parseRelposeFile(home_dir, query, relpose_fn);
+        auto info = functions::parseRelposeFile(ccv_dir, query, relpose_fn);
         auto R_q = get<1>(info);
         auto T_q = get<2>(info);
         auto K_q = get<3>(info);
