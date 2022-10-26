@@ -125,6 +125,8 @@ int main() {
 
         string query = queries[q];
 
+        cout << query;
+
         auto info = functions::parseRelposeFile(home_dir, query, relpose_fn);
         auto R_q = get<1>(info);
         auto T_q = get<2>(info);
@@ -259,9 +261,14 @@ int main() {
         Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment = functions::getDistBetween(c_q, c_adjustment);
-        double r_error_adjustment = functions::rotationDifference(R_q, R_adjustment);
+        double R_error_adjustment = functions::rotationDifference(R_q, R_adjustment);
 
         int stop = 0;
+
+        cout << " (" << R_error_estimation
+             << ", " << c_error_estimation
+             << ")   (" << R_error_adjustment
+             << ", " << c_error_adjustment << endl;
 
 
 
