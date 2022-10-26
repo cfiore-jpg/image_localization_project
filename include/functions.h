@@ -28,7 +28,8 @@ namespace functions {
           parseRelposeFile (const string & dir, const string & query, const string & fn);
 
 
-    vector<string> optimizeSpacingZhou(const vector<string> & images, double min, double max, int N, const string & dataset);
+    vector<int> optimizeSpacingZhou(const vector<Eigen::Vector3d> & old_centers,
+                                    double l_thresh, double u_thresh, int N);
 
     void get_SG_points(const string & query, const string & db, vector<cv::Point2d> & pts_q, vector<cv::Point2d> & pts_i);
 
@@ -89,9 +90,9 @@ namespace functions {
     int getRelativePose3D(const string &db_image, const string & ext, const string &query_image, const string &method,
                                     Eigen::Matrix3d &R_kq, Eigen::Vector3d &t_kq);
 
-    vector<string> optimizeSpacing(const string & query,
-                                   const vector<string> & images,
-                                   int N, bool show_process, const string & dataset);
+    vector<int> optimizeSpacing(const Eigen::Vector3d & query,
+                                const vector<Eigen::Vector3d> & centers,
+                                int N, bool show_process);
 
     vector<string> randomSelection(const vector<string> & images, int N);
 

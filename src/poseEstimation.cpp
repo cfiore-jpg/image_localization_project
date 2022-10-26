@@ -176,7 +176,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     if (problem.NumResidualBlocks() > 0) {
         ceres::Solve(options, &problem, &summary);
     } else {
-        cout << ", Can't Adjust";
+        cout << "  Can't Adjust  ";
     }
 //    std::cout << summary.FullReport() << "\n";
 
