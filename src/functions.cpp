@@ -41,7 +41,7 @@ vector<string> functions::getQueries(const string & queryList, const string & sc
     if (file.is_open()) {
         string line;
         while (getline(file, line)) {
-            size_t pos = line.find('/');
+            size_t pos = line.find('/') + 1;
             if (pos > 0 && line.substr(0, pos) == scene) {
                 queries.push_back(line);
             }
@@ -155,47 +155,29 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
     return t;
 }
 
-vector<string> functions::optimizeSpacingZhou (const vector<string> & images, double min, double max, int N, const string & dataset) {
-    vector<string> results;
-    vector<Eigen::Vector3d> centers;
-    Eigen::Vector3d first;
-
-    if (images.empty()) return results;
-
-    if (dataset == "7-Scenes")
-        first = sevenScenes::getT(images[0]);
-
-    results.push_back(images[0]);
-    centers.push_back(first);
-
-    for (int i = 1; i < images.size(); i++) {
-
-        string im = images[i];
-        Eigen::Vector3d c;
-        if (dataset == "7-Scenes")
-            c = sevenScenes::getT(im);
-
+vector<int> functions::optimizeSpacingZhou (const vector<Eigen::Vector3d> & old_centers,
+                                            double l_thresh, double u_thresh, int N) {
+    vector<int> indices {0};
+    vector<Eigen::Vector3d> new_centers {old_centers[0]};
+    for (int i = 1; i < old_centers.size(); i++) {
+        Eigen::Vector3d c = old_centers[i];
         bool too_close = false;
         bool close_enough = false;
-        for (auto & center : centers) {
+        for (auto & center : new_centers) {
             double dist = functions::getDistBetween(c, center);
-            if (dist <= max) close_enough = true;
-            if (dist < min) {
+            if (dist <= u_thresh) close_enough = true;
+            if (dist < l_thresh) {
                 too_close = true;
                 break;
             }
         }
-
         if(close_enough && !too_close) {
-            results.push_back(im);
-            centers.push_back(c);
+            indices.push_back(i);
+            new_centers.push_back(c);
         }
-
-        if (results.size() == N) break;
-
+        if (indices.size() == N) break;
     }
-
-    return results;
+    return indices;
 }
 
 void functions::get_SG_points(const string & query, const string & db, vector<cv::Point2d> & pts_q, vector<cv::Point2d> & pts_i) {
@@ -845,13 +827,13 @@ double functions::drawLines(Mat & im1, Mat & im2,
     return total_rep_error / double (pts1.size());
 }
 
-vector<string> functions::optimizeSpacing(const string & query,
-                                          const vector<string> & images,
-                                          int N, bool show_process, const string & dataset) {
-    Space space (query, images, dataset);
+vector<int> functions::optimizeSpacing(const Eigen::Vector3d & query,
+                                          const vector<Eigen::Vector3d> & centers,
+                                          int N, bool show_process) {
+    Space space (query, centers);
     space.getOptimalSpacing(N, show_process);
-    vector<string> names = space.getPointNames();
-    return names;
+    vector<int> ids = space.getIDs();
+    return ids;
 }
 
 vector<string> functions::randomSelection(const vector<string> & images, int N) {
@@ -1663,114 +1645,114 @@ void functions::showSpacedInTop(int rows, int cols,
     waitKey();
 }
 
-void functions::showTop1000(const string & query_image, const string & ext, int max_num, double max_dist, int inliers) {
-
-    // Show Query
-    Mat q = imread(query_image + ext);
-    imshow(query_image, q);
-    waitKey();
-
-    // Get Query Scene
-    string scene = getScene(query_image, "");
-
-    // Get Top 1000 NetVLAD images
-    vector<string> topN = getTopN(query_image, ext, 1000);
-    vector<pair<Mat, string>> vecMat;
-    vecMat.reserve(topN.size());
-    for(const auto & p : topN) {
-        vecMat.emplace_back(imread(p + ext), p);
-    }
-
-    // Threshold, filter, and space the top 1000
-    vector<string> retrieved; vector<double> distances;
-    functions::retrieveSimilar(query_image, "", ext, max_num, max_dist, retrieved, distances);
-    vector<string> spaced = functions::optimizeSpacing(query_image, retrieved, inliers, false, "7-Scenes");
-
-    // Do the following for images/100 windows
-    int N = 100;
-    int num = int (vecMat.size()) / 100;
-    for (int n = 0; n < num; n++) {
-
-        // Get window parameters
-        int nRows = 10;
-        int windowHeight = 5000;
-        nRows = nRows > N ? N : nRows;
-        int edgeThickness = 20;
-        int imagesPerRow = ceil(double(N) / nRows);
-        int resizeHeight = int (floor(2.0 * ((floor(double(windowHeight - edgeThickness) / nRows)) / 2.0))) - edgeThickness;
-        int maxRowLength = 0;
-        std::vector<int> resizeWidth;
-        for (int i = 0; i < N;) {
-            int thisRowLen = 0;
-            for (int k = 0; k < imagesPerRow; k++) {
-                double aspectRatio = double(vecMat[100 * n + i].first.cols) / vecMat[100 * n + i].first.rows;
-                int temp = int(ceil(resizeHeight * aspectRatio));
-                resizeWidth.push_back(temp);
-                thisRowLen += temp;
-                if (++i == N) break;
-            }
-            if ((thisRowLen + edgeThickness * (imagesPerRow + 1)) > maxRowLength) {
-                maxRowLength = thisRowLen + edgeThickness * (imagesPerRow + 1);
-            }
-        }
-
-        // Create canvas
-        int windowWidth = maxRowLength;
-        Mat canvasImage(windowHeight, windowWidth, CV_8UC3, Scalar(0, 0, 0));
-
-        // Draw Images
-        for (int k = 0, i = 0; i < nRows; i++) {
-            int y = i * resizeHeight + (i + 1) * edgeThickness;
-            int x_end = edgeThickness;
-            for (int j = 0; j < imagesPerRow && k < N; k++, j++) {
-                int x = x_end;
-                int y_color = y - edgeThickness / 2;
-                int x_color = x - edgeThickness / 2;
-
-                // Determine Highlight
-                Rect roi_color(x_color, y_color, resizeWidth[k] + edgeThickness, resizeHeight + edgeThickness);
-                Size s_color = canvasImage(roi_color).size();
-                Mat target_ROI_color;
-                string this_scene = getScene(vecMat[100 * n + k].second, "");
-                if (this_scene != scene) {
-                    target_ROI_color = Mat (s_color, CV_8UC3, Scalar(0., 0., 255.));
-                } else {
-                    if (count(retrieved.begin(), retrieved.end(), vecMat[100 * n + k].second)) {
-                        target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 0., 0.));
-                        if (count(spaced.begin(), spaced.end(), vecMat[100 * n + k].second)) {
-                            target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 255., 0.));
-                        }
-                    } else {
-                        target_ROI_color = Mat(s_color, CV_8UC3, Scalar(255., 255., 255.));
-                    }
-                }
-                target_ROI_color.copyTo(canvasImage(roi_color));
-
-                // Draw Image
-                Rect roi(x, y, resizeWidth[k], resizeHeight);
-                Size s = canvasImage(roi).size();
-                // change the number of channels to three
-                Mat target_ROI(s, CV_8UC3);
-                if (vecMat[100 * n + k].first.channels() != canvasImage.channels()) {
-                    if (vecMat[100 * n + k].first.channels() == 1) {
-                        cvtColor(vecMat[100 * n + k].first, target_ROI, COLOR_GRAY2BGR);
-                    }
-                } else {
-                    vecMat[100 * n + k].first.copyTo(target_ROI);
-                }
-                resize(target_ROI, target_ROI, s);
-                if (target_ROI.type() != canvasImage.type()) {
-                    target_ROI.convertTo(target_ROI, canvasImage.type());
-                }
-                target_ROI.copyTo(canvasImage(roi));
-                x_end += resizeWidth[k] + edgeThickness;
-            }
-        }
-        string title = query_image + "NN from " + to_string(100 * n + 1) + " to " + to_string(100 * n + 100);
-        imshow(title, canvasImage);
-        waitKey();
-    }
-}
+//void functions::showTop1000(const string & query_image, const string & ext, int max_num, double max_dist, int inliers) {
+//
+//    // Show Query
+//    Mat q = imread(query_image + ext);
+//    imshow(query_image, q);
+//    waitKey();
+//
+//    // Get Query Scene
+//    string scene = getScene(query_image, "");
+//
+//    // Get Top 1000 NetVLAD images
+//    vector<string> topN = getTopN(query_image, ext, 1000);
+//    vector<pair<Mat, string>> vecMat;
+//    vecMat.reserve(topN.size());
+//    for(const auto & p : topN) {
+//        vecMat.emplace_back(imread(p + ext), p);
+//    }
+//
+//    // Threshold, filter, and space the top 1000
+//    vector<string> retrieved; vector<double> distances;
+//    functions::retrieveSimilar(query_image, "", ext, max_num, max_dist, retrieved, distances);
+//    vector<string> spaced = functions::optimizeSpacing(query_image, retrieved, inliers, false, "7-Scenes");
+//
+//    // Do the following for images/100 windows
+//    int N = 100;
+//    int num = int (vecMat.size()) / 100;
+//    for (int n = 0; n < num; n++) {
+//
+//        // Get window parameters
+//        int nRows = 10;
+//        int windowHeight = 5000;
+//        nRows = nRows > N ? N : nRows;
+//        int edgeThickness = 20;
+//        int imagesPerRow = ceil(double(N) / nRows);
+//        int resizeHeight = int (floor(2.0 * ((floor(double(windowHeight - edgeThickness) / nRows)) / 2.0))) - edgeThickness;
+//        int maxRowLength = 0;
+//        std::vector<int> resizeWidth;
+//        for (int i = 0; i < N;) {
+//            int thisRowLen = 0;
+//            for (int k = 0; k < imagesPerRow; k++) {
+//                double aspectRatio = double(vecMat[100 * n + i].first.cols) / vecMat[100 * n + i].first.rows;
+//                int temp = int(ceil(resizeHeight * aspectRatio));
+//                resizeWidth.push_back(temp);
+//                thisRowLen += temp;
+//                if (++i == N) break;
+//            }
+//            if ((thisRowLen + edgeThickness * (imagesPerRow + 1)) > maxRowLength) {
+//                maxRowLength = thisRowLen + edgeThickness * (imagesPerRow + 1);
+//            }
+//        }
+//
+//        // Create canvas
+//        int windowWidth = maxRowLength;
+//        Mat canvasImage(windowHeight, windowWidth, CV_8UC3, Scalar(0, 0, 0));
+//
+//        // Draw Images
+//        for (int k = 0, i = 0; i < nRows; i++) {
+//            int y = i * resizeHeight + (i + 1) * edgeThickness;
+//            int x_end = edgeThickness;
+//            for (int j = 0; j < imagesPerRow && k < N; k++, j++) {
+//                int x = x_end;
+//                int y_color = y - edgeThickness / 2;
+//                int x_color = x - edgeThickness / 2;
+//
+//                // Determine Highlight
+//                Rect roi_color(x_color, y_color, resizeWidth[k] + edgeThickness, resizeHeight + edgeThickness);
+//                Size s_color = canvasImage(roi_color).size();
+//                Mat target_ROI_color;
+//                string this_scene = getScene(vecMat[100 * n + k].second, "");
+//                if (this_scene != scene) {
+//                    target_ROI_color = Mat (s_color, CV_8UC3, Scalar(0., 0., 255.));
+//                } else {
+//                    if (count(retrieved.begin(), retrieved.end(), vecMat[100 * n + k].second)) {
+//                        target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 0., 0.));
+//                        if (count(spaced.begin(), spaced.end(), vecMat[100 * n + k].second)) {
+//                            target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 255., 0.));
+//                        }
+//                    } else {
+//                        target_ROI_color = Mat(s_color, CV_8UC3, Scalar(255., 255., 255.));
+//                    }
+//                }
+//                target_ROI_color.copyTo(canvasImage(roi_color));
+//
+//                // Draw Image
+//                Rect roi(x, y, resizeWidth[k], resizeHeight);
+//                Size s = canvasImage(roi).size();
+//                // change the number of channels to three
+//                Mat target_ROI(s, CV_8UC3);
+//                if (vecMat[100 * n + k].first.channels() != canvasImage.channels()) {
+//                    if (vecMat[100 * n + k].first.channels() == 1) {
+//                        cvtColor(vecMat[100 * n + k].first, target_ROI, COLOR_GRAY2BGR);
+//                    }
+//                } else {
+//                    vecMat[100 * n + k].first.copyTo(target_ROI);
+//                }
+//                resize(target_ROI, target_ROI, s);
+//                if (target_ROI.type() != canvasImage.type()) {
+//                    target_ROI.convertTo(target_ROI, canvasImage.type());
+//                }
+//                target_ROI.copyTo(canvasImage(roi));
+//                x_end += resizeWidth[k] + edgeThickness;
+//            }
+//        }
+//        string title = query_image + "NN from " + to_string(100 * n + 1) + " to " + to_string(100 * n + 100);
+//        imshow(title, canvasImage);
+//        waitKey();
+//    }
+//}
 
 Mat functions::projectCentersTo2D(const string & query, const vector<string> & images,
                                   unordered_map<string, cv::Scalar> & seq_colors,

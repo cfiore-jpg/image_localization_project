@@ -21,13 +21,11 @@
 using namespace std;
 
 //Point functions
-Point * newPoint(const string & name,
-                 int num,
+Point * newPoint(int idx,
                  int num_energies,
                  const Eigen::Vector3d & position) {
     auto * temp = new Point;
-    temp->name = name;
-    temp->number = num;
+    temp->idx = idx;
     temp->energies = vector<Energy*> (num_energies);
     temp->position = position;
     temp->total_energy = 0.;
@@ -44,8 +42,8 @@ void newEnergy(Point * a, Point * b) {
         temp->magnitude = 1. / pow(n, 2.);
     }
 
-    a->energies[b->number] = temp;
-    b->energies[a->number] = temp;
+    a->energies[b->idx] = temp;
+    b->energies[a->idx] = temp;
     a->total_energy += temp->magnitude;
     b->total_energy += temp->magnitude;
 }
@@ -53,54 +51,17 @@ void newEnergy(Point * a, Point * b) {
 //Graph functions
 Space::Space() = default;
 
-Space::Space(const string & query,
-             const vector<string> & images,
-             const string & dataset) {
+Space::Space(const Eigen::Vector3d & query,
+             const vector<Eigen::Vector3d> & centers) {
 
-    if (dataset == "7-Scenes") {
-        for (int i = 0; i < images.size(); i++) {
-            auto point_to_add = newPoint(images[i], i, int(images.size()), sevenScenes::getT(images[i]));
-            for (const auto point: points) {
-                newEnergy(point, point_to_add);
-            }
-            points.push_back(point_to_add);
+    for (int i = 0; i < centers.size(); i++) {
+        auto point_to_add = newPoint(i, int(centers.size()), centers[i]);
+        for (const auto point: points) {
+            newEnergy(point, point_to_add);
         }
-        this->query = sevenScenes::getT(query);
-    } else if (dataset == "Cambridge") {
-        for (int i = 0; i < images.size(); i++) {
-            Eigen::Vector3d c = - cambridge::getR(images[i]).transpose() * cambridge::getT(images[i]);
-            auto point_to_add = newPoint(images[i], i, int(images.size()), c);
-            for (const auto point: points) {
-                newEnergy(point, point_to_add);
-            }
-            points.push_back(point_to_add);
-        }
-    } else if (dataset == "synthetic") {
-        for (int i = 0; i < images.size(); i++) {
-            auto point_to_add = newPoint(images[i], i, int(images.size()), synthetic::getC(images[i]));
-            for (const auto point: points) {
-                newEnergy(point, point_to_add);
-            }
-            points.push_back(point_to_add);
-        }
-    } else if (dataset == "aachen") {
-        for (int i = 0; i < images.size(); i++) {
-            Eigen::Vector3d c;
-            if (!aachen::getC(images[i], c)) {
-                cout << "Aachen error." << endl;
-                exit(1);
-            }
-            auto point_to_add = newPoint(images[i], i, int(images.size()), c);
-            for (const auto point: points) {
-                newEnergy(point, point_to_add);
-            }
-            points.push_back(point_to_add);
-        }
-    } else {
-        cout << "Unknown Dataset for image retrieval." << endl;
-        exit(1);
+        points.push_back(point_to_add);
     }
-
+    this->query = query;
 }
 
 void Space::removeHighestEnergyPoint() {
@@ -110,7 +71,7 @@ void Space::removeHighestEnergyPoint() {
     auto point_to_remove = points[0];
     points.erase(points.begin());
     for (const auto point : points) {
-        auto energy = point_to_remove->energies[point->number];
+        auto energy = point_to_remove->energies[point->idx];
         point->total_energy -= energy->magnitude;
     }
 }
@@ -126,12 +87,12 @@ void Space::getOptimalSpacing(int N, bool show_process) {
     }
 }
 
-vector<string> Space::getPointNames() {
-    vector<string> names;
+vector<int> Space::getIDs() {
+    vector<int> ids;
     for (const auto point : points) {
-        names.push_back(point->name);
+        ids.push_back(point->idx);
     }
-    return names;
+    return ids;
 }
 
 void Space::projectPointsTo2D (double & avg_width, double & avg_length,
