@@ -20,6 +20,14 @@ using namespace std;
 
 namespace functions {
 
+    vector<string> getQueries(const string & queryList, const string & scene);
+
+    tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
+          vector<string>, vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>, vector<vector<double>>,
+          vector<vector<cv::Point2d>>, vector<vector<cv::Point2d>>>
+          parseRelposeFile (const string & dir, const string & query, const string & fn);
+
+
     vector<string> optimizeSpacingZhou(const vector<string> & images, double min, double max, int N, const string & dataset);
 
     void get_SG_points(const string & query, const string & db, vector<cv::Point2d> & pts_q, vector<cv::Point2d> & pts_i);
@@ -117,7 +125,7 @@ namespace functions {
                                         vector<Eigen::Matrix3d> & R_qk,
                                         vector<Eigen::Vector3d> & t_qk);
     map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>
-    getRelativePoses(const string & query, const string & feat_folder, const string & data_folder);
+    getRelativePoses(const string & query, const string & data_folder);
 
 //// Visualization
 

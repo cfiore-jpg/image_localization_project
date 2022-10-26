@@ -25,13 +25,13 @@
 
 /// CERES COST FUNCTIONS
 struct ReprojectionError{
-    ReprojectionError(Eigen::Matrix3d R_k,
-                      Eigen::Vector3d T_k,
-                      Eigen::Matrix3d K1,
-                      Eigen::Matrix3d K2,
+    ReprojectionError(Eigen::Matrix3d R_i,
+                      Eigen::Vector3d T_i,
+                      Eigen::Matrix3d K_i,
+                      Eigen::Matrix3d K_q,
                       cv::Point2d pt_q,
-                      cv::Point2d pt_db)
-                      : R_k(move(R_k)), T_k(move(T_k)), K1(move(K1)), K2(move(K2)), pt_db(std::move(pt_db)), pt_q(std::move(pt_q)) {}
+                      cv::Point2d pt_i)
+                      : R_i(move(R_i)), T_i(move(T_i)), K_i(move(K_i)), K_q(move(K_q)), pt_q(move(pt_q)), pt_i(move(pt_i)) {}
 
     template<typename T>
     bool operator()(const T * const R, const T * const T_q, T * residuals) const {
@@ -39,76 +39,160 @@ struct ReprojectionError{
         T R_q [9];
         ceres::AngleAxisToRotationMatrix(R, R_q);
 
-        T px2point_1[3];
-        px2point_1[0] = (T(pt_db.x) - K2(0,2)) / K2(0,0);
-        px2point_1[1] = (T(pt_db.y) - K2(1,2)) / K2(1,1);
-        px2point_1[2] = T(1.);
+        T px2point[3];
+        px2point[0] = (T(pt_i.x) - K_i(0,2)) / K_i(0,0);
+        px2point[1] = (T(pt_i.y) - K_i(1,2)) / K_i(1,1);
+        px2point[2] = T(1.);
 
         T R_qk [9];
-        R_qk[0] = R_q[0] * T(R_k(0,0)) + R_q[3] * T(R_k(0,1)) + R_q[6] * T(R_k(0,2));
-        R_qk[1] = R_q[1] * T(R_k(0,0)) + R_q[4] * T(R_k(0,1)) + R_q[7] * T(R_k(0,2));
-        R_qk[2] = R_q[2] * T(R_k(0,0)) + R_q[5] * T(R_k(0,1)) + R_q[8] * T(R_k(0,2));
-        R_qk[3] = R_q[0] * T(R_k(1,0)) + R_q[3] * T(R_k(1,1)) + R_q[6] * T(R_k(1,2));
-        R_qk[4] = R_q[1] * T(R_k(1,0)) + R_q[4] * T(R_k(1,1)) + R_q[7] * T(R_k(1,2));
-        R_qk[5] = R_q[2] * T(R_k(1,0)) + R_q[5] * T(R_k(1,1)) + R_q[8] * T(R_k(1,2));
-        R_qk[6] = R_q[0] * T(R_k(2,0)) + R_q[3] * T(R_k(2,1)) + R_q[6] * T(R_k(2,2));
-        R_qk[7] = R_q[1] * T(R_k(2,0)) + R_q[4] * T(R_k(2,1)) + R_q[7] * T(R_k(2,2));
-        R_qk[8] = R_q[2] * T(R_k(2,0)) + R_q[5] * T(R_k(2,1)) + R_q[8] * T(R_k(2,2));
+        R_qk[0] = R_q[0] * T(R_i(0,0)) + R_q[3] * T(R_i(0,1)) + R_q[6] * T(R_i(0,2));
+        R_qk[1] = R_q[1] * T(R_i(0,0)) + R_q[4] * T(R_i(0,1)) + R_q[7] * T(R_i(0,2));
+        R_qk[2] = R_q[2] * T(R_i(0,0)) + R_q[5] * T(R_i(0,1)) + R_q[8] * T(R_i(0,2));
+        R_qk[3] = R_q[0] * T(R_i(1,0)) + R_q[3] * T(R_i(1,1)) + R_q[6] * T(R_i(1,2));
+        R_qk[4] = R_q[1] * T(R_i(1,0)) + R_q[4] * T(R_i(1,1)) + R_q[7] * T(R_i(1,2));
+        R_qk[5] = R_q[2] * T(R_i(1,0)) + R_q[5] * T(R_i(1,1)) + R_q[8] * T(R_i(1,2));
+        R_qk[6] = R_q[0] * T(R_i(2,0)) + R_q[3] * T(R_i(2,1)) + R_q[6] * T(R_i(2,2));
+        R_qk[7] = R_q[1] * T(R_i(2,0)) + R_q[4] * T(R_i(2,1)) + R_q[7] * T(R_i(2,2));
+        R_qk[8] = R_q[2] * T(R_i(2,0)) + R_q[5] * T(R_i(2,1)) + R_q[8] * T(R_i(2,2));
 
         T T_qk [3];
-        T_qk[0] = T_q[0] - (R_qk[0] * T_k[0] + R_qk[3] * T_k[1] + R_qk[6] * T_k[2]);
-        T_qk[1] = T_q[1] - (R_qk[1] * T_k[0] + R_qk[4] * T_k[1] + R_qk[7] * T_k[2]);
-        T_qk[2] = T_q[2] - (R_qk[2] * T_k[0] + R_qk[5] * T_k[1] + R_qk[8] * T_k[2]);
+        T_qk[0] = T_q[0] - (R_qk[0] * T_i[0] + R_qk[3] * T_i[1] + R_qk[6] * T_i[2]);
+        T_qk[1] = T_q[1] - (R_qk[1] * T_i[0] + R_qk[4] * T_i[1] + R_qk[7] * T_i[2]);
+        T_qk[2] = T_q[2] - (R_qk[2] * T_i[0] + R_qk[5] * T_i[1] + R_qk[8] * T_i[2]);
 
         T E_qk [9];
-        E_qk[0] = -T_qk[2] * R_qk[1] + T_qk[1] * R_qk[2];
-        E_qk[1] = T_qk[2] * R_qk[0] - T_qk[0] * R_qk[2];
-        E_qk[2] = -T_qk[1] * R_qk[0] + T_qk[0] * R_qk[1];
-        E_qk[3] = -T_qk[2] * R_qk[4] + T_qk[1] * R_qk[5];
-        E_qk[4] = T_qk[2] * R_qk[3] - T_qk[0] * R_qk[5];
-        E_qk[5] = -T_qk[1] * R_qk[3] + T_qk[0] * R_qk[4];
-        E_qk[6] = -T_qk[2] * R_qk[7] + T_qk[1] * R_qk[8];
-        E_qk[7] = T_qk[2] * R_qk[6] - T_qk[0] * R_qk[8];
-        E_qk[8] = -T_qk[1] * R_qk[6] + T_qk[0] * R_qk[7];
+        E_qk[0] =                     - T_qk[2] * R_qk[1] + T_qk[1] * R_qk[2];
+        E_qk[1] =   T_qk[2] * R_qk[0]                     - T_qk[0] * R_qk[2];
+        E_qk[2] = - T_qk[1] * R_qk[0] + T_qk[0] * R_qk[1];
+        E_qk[3] =                     - T_qk[2] * R_qk[4] + T_qk[1] * R_qk[5];
+        E_qk[4] =   T_qk[2] * R_qk[3]                     - T_qk[0] * R_qk[5];
+        E_qk[5] = - T_qk[1] * R_qk[3] + T_qk[0] * R_qk[4];
+        E_qk[6] =                     - T_qk[2] * R_qk[7] + T_qk[1] * R_qk[8];
+        E_qk[7] =   T_qk[2] * R_qk[6]                     - T_qk[0] * R_qk[8];
+        E_qk[8] = - T_qk[1] * R_qk[6] + T_qk[0] * R_qk[7];
 
-        T point2point_1[3];
-        point2point_1[0] = E_qk[0] * px2point_1[0] + E_qk[3] * px2point_1[1] + E_qk[6] * px2point_1[2];
-        point2point_1[1] = E_qk[1] * px2point_1[0] + E_qk[4] * px2point_1[1] + E_qk[7] * px2point_1[2];
-        point2point_1[2] = E_qk[2] * px2point_1[0] + E_qk[5] * px2point_1[1] + E_qk[8] * px2point_1[2];
+        T point2point[3];
+        point2point[0] = E_qk[0] * px2point[0] + E_qk[3] * px2point[1] + E_qk[6] * px2point[2];
+        point2point[1] = E_qk[1] * px2point[0] + E_qk[4] * px2point[1] + E_qk[7] * px2point[2];
+        point2point[2] = E_qk[2] * px2point[0] + E_qk[5] * px2point[1] + E_qk[8] * px2point[2];
 
         T epiline[3];
-        epiline[0] = (T(1.) /  K1(0,0)) * point2point_1[0];
-        epiline[1] = (T(1.) /  K1(1,1)) * point2point_1[1];
-        epiline[2] = -( K1(0,2) /  K1(0,0)) * point2point_1[0]
-                - ( K1(1,2) /  K1(1,1)) * point2point_1[1]
-                + point2point_1[2];
+        epiline[0] = (T(1.) /  K_q(0,0)) * point2point[0];
+        epiline[1] = (T(1.) /  K_q(1,1)) * point2point[1];
+        epiline[2] = (-K_q(0,2)/K_q(0,0)) * point2point[0] - (K_q(1,2)/K_q(1,1)) * point2point[1] + point2point[2];
 
         T error = ceres::abs(epiline[0] * T(pt_q.x) + epiline[1] * T(pt_q.y) + epiline[2]) /
-                ceres::sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+                  ceres::sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
 
         residuals[0] = error;
 
         return true;
     }
 
-    static ceres::CostFunction *Create(const Eigen::Matrix3d & R_k,
-                                       const Eigen::Vector3d & T_k,
-                                       const Eigen::Matrix3d & K1,
-                                       const Eigen::Matrix3d & K2,
+    static ceres::CostFunction *Create(const Eigen::Matrix3d & R_i,
+                                       const Eigen::Vector3d & T_i,
+                                       const Eigen::Matrix3d & K_i,
+                                       const Eigen::Matrix3d & K_q,
                                        const cv::Point2d & pt_q,
-                                       const cv::Point2d & pt_db) {
+                                       const cv::Point2d & pt_i) {
         return (new ceres::AutoDiffCostFunction<ReprojectionError, 1, 3, 3>(
-                new ReprojectionError(R_k, T_k, K1, K2, pt_q, pt_db)));
+                new ReprojectionError(R_i, T_i, K_i, K_q, pt_q, pt_i)));
     }
 
-
-    Eigen::Matrix3d R_k;
-    Eigen::Vector3d T_k;
-    Eigen::Matrix3d K1;
-    Eigen::Matrix3d K2;
+    Eigen::Matrix3d R_i;
+    Eigen::Vector3d T_i;
+    Eigen::Matrix3d K_i;
+    Eigen::Matrix3d K_q;
     cv::Point2d pt_q;
-    cv::Point2d pt_db;
+    cv::Point2d pt_i;
 };
+
+//// FINAL POSE ADJUSTMENT
+void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
+                             const vector<Eigen::Vector3d> & T_is,
+                             const vector<vector<double>> & K_is,
+                             const vector<double> & K_q,
+                             const vector<vector<cv::Point2d>> & all_pts_q,
+                             const vector<vector<cv::Point2d>> & all_pts_i,
+                             const double & error_thresh,
+                             Eigen::Matrix3d & R_q,
+                             Eigen::Vector3d & T_q) {
+
+    double R[3];
+    double R_arr[9] {R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
+    ceres::RotationMatrixToAngleAxis(R_arr, R);
+
+    double T [3] = {T_q[0], T_q[1], T_q[2]};
+
+    Eigen::Matrix3d K_q_eig {{K_q[2], 0., K_q[0]},
+                             {0., K_q[3], K_q[1]},
+                             {0.,     0.,     1.}};
+
+    int K = int (R_is.size());
+
+    ceres::Problem problem;
+    ceres::LossFunction * loss_function = new ceres::CauchyLoss(1.0);
+    for (int i = 0; i < K; i++) {
+
+        Eigen::Matrix3d K_i_eig {{K_is[i][2], 0., K_is[i][0]},
+                                 {0., K_is[i][3], K_is[i][1]},
+                                 {0.,         0.,         1.}};
+
+        Eigen::Matrix3d R_qi = R_q * R_is[i].transpose();
+        Eigen::Vector3d T_qi = T_q - R_qi * T_is[i];
+        T_qi.normalize();
+
+        Eigen::Matrix3d T_qi_cross {
+                {       0, -T_qi(2),  T_qi(1)},
+                { T_qi(2),        0, -T_qi(0)},
+                {-T_qi(1),  T_qi(0),        0}};
+        Eigen::Matrix3d E_qi = T_qi_cross * R_qi;
+
+        Eigen::Matrix3d F = K_q_eig.inverse().transpose() * E_qi * K_i_eig.inverse();
+
+        assert(all_pts_i[i].size() == all_pts_q[i].size());
+
+        for (int j = 0; j < all_pts_i[i].size(); j++) {
+
+            Eigen::Vector3d pt_q {all_pts_q[i][j].x, all_pts_q[i][j].y, 1.};
+            Eigen::Vector3d pt_i {all_pts_i[i][j].x, all_pts_i[i][j].y, 1.};
+
+            Eigen::Vector3d epiline = F * pt_i;
+
+            double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
+                           sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+
+            if (error <= error_thresh) {
+                auto cost_function = ReprojectionError::Create(R_is[i], T_is[i], K_i_eig, K_q_eig, all_pts_q[i][j], all_pts_i[i][j]);
+                problem.AddResidualBlock(cost_function, loss_function, R, T);
+            }
+        }
+    }
+    ceres::Solver::Options options;
+    options.linear_solver_type = ceres::DENSE_SCHUR;
+    options.minimizer_progress_to_stdout = true;
+    ceres::Solver::Summary summary;
+
+    if (problem.NumResidualBlocks() > 0) {
+        ceres::Solve(options, &problem, &summary);
+    } else {
+        cout << ", Can't Adjust";
+    }
+    std::cout << summary.FullReport() << "\n";
+
+    double R_adj[9];
+    ceres::AngleAxisToRotationMatrix(R, R_adj);
+    R_q = Eigen::Matrix3d {{R_adj[0], R_adj[3], R_adj[6]},
+                           {R_adj[1], R_adj[4], R_adj[7]},
+                           {R_adj[2], R_adj[5], R_adj[8]}};
+    T_q = Eigen::Vector3d {T[0], T[1], T[2]};
+
+}
+
+
+
+
+
 
 struct ReprojectionErrorBA{
     ReprojectionErrorBA(cv::Point2d pt_1, cv::Point2d pt_2)
@@ -1107,86 +1191,4 @@ pose::hypothesizeRANSAC(double threshold,
 //            R_cf_T_NEW,
             best_indices
     };
-}
-
-
-
-//// FINAL POSE ADJUSTMENT
-void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_ks,
-                             const vector<Eigen::Vector3d> & T_ks,
-                             const vector<vector<pair<cv::Point2d, cv::Point2d>>> & all_matches,
-                             const double & error_thresh,
-                             const vector<vector<double>> & K1s,
-                             const vector<vector<double>> & K2s,
-                             Eigen::Matrix3d & R_q,
-                             Eigen::Vector3d & T_q) {
-
-    double R[3];
-    double R_arr[9] {R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
-    ceres::RotationMatrixToAngleAxis(R_arr, R);
-
-    double T [3] = {T_q[0], T_q[1], T_q[2]};
-
-    int k = int (R_ks.size());
-    ceres::Problem problem;
-    ceres::LossFunction * loss_function = new ceres::HuberLoss(1.0);
-    for (int i = 0; i < k; i++) {
-
-        vector<double> K1 = K1s[i];
-        vector<double> K2 = K2s[i];
-
-        Eigen::Matrix3d K_eig1 {{K1[0], 0.,   K1[2]},
-                                {0.,   K1[1], K1[3]},
-                                {0.,   0.,   1.}};
-
-        Eigen::Matrix3d K_eig2 {{K2[0], 0.,   K2[2]},
-                                {0.,   K2[1], K2[3]},
-                                {0.,   0.,   1.}};
-
-        Eigen::Matrix3d R_qk = R_q * R_ks[i].transpose();
-        Eigen::Vector3d t_qk = T_q - R_qk * T_ks[i];
-        t_qk.normalize();
-
-        Eigen::Matrix3d t_qk_cross {
-                {0,               -t_qk(2), t_qk(1)},
-                {t_qk(2),  0,              -t_qk(0)},
-                {-t_qk(1), t_qk(0),               0}};
-        Eigen::Matrix3d E_real = t_qk_cross * R_qk;
-
-        Eigen::Matrix3d F = K_eig1.inverse().transpose() * E_real * K_eig2.inverse();
-
-        for (const auto & match : all_matches[i]) {
-
-            Eigen::Vector3d pt_q {match.first.x, match.first.y, 1.};
-            Eigen::Vector3d pt_db {match.second.x, match.second.y, 1.};
-
-            Eigen::Vector3d epiline = F * pt_db;
-
-            double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
-                    sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
-
-            if (error <= error_thresh) {
-                ceres::CostFunction *cost_function = ReprojectionError::Create(R_ks[i], T_ks[i], K_eig1, K_eig2, match.first, match.second);
-                problem.AddResidualBlock(cost_function, loss_function, R, T);
-            }
-        }
-    }
-    ceres::Solver::Options options;
-    options.linear_solver_type = ceres::DENSE_SCHUR;
-//    options.minimizer_progress_to_stdout = true;
-    ceres::Solver::Summary summary;
-
-    if (problem.NumResidualBlocks() > 0) {
-        ceres::Solve(options, &problem, &summary);
-    } else {
-        cout << ", Can't Adjust";
-    }
-//    std::cout << summary.FullReport() << "\n";
-
-    ceres::AngleAxisToRotationMatrix(R, R_arr);
-    R_q = Eigen::Matrix3d {{R_arr[0], R_arr[3], R_arr[6]},
-                           {R_arr[1], R_arr[4], R_arr[7]},
-                           {R_arr[2], R_arr[5], R_arr[8]}};
-    T_q = Eigen::Vector3d {T[0], T[1], T[2]};
-
 }

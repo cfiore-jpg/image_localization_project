@@ -34,6 +34,127 @@
 using namespace std;
 using namespace cv;
 
+vector<string> functions::getQueries(const string & queryList, const string & scene) {
+
+    vector<string> queries;
+    ifstream file(queryList);
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            size_t pos = line.find('/');
+            if (pos > 0 && line.substr(0, pos) == scene) {
+                queries.push_back(line);
+            }
+        }
+
+    }
+    return queries;
+}
+
+tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
+        vector<string>, vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>, vector<vector<double>>,
+        vector<vector<cv::Point2d>>, vector<vector<cv::Point2d>>>
+        functions::parseRelposeFile (const string & dir, const string & query, const string & fn) {
+
+    string query_id = query.substr(0, query.find('.'));
+    Eigen::Matrix3d R_q;
+    Eigen::Vector3d T_q;
+    vector<double> K_q;
+
+    vector<string> anchors;
+    vector<Eigen::Matrix3d> R_is;
+    vector<Eigen::Vector3d> T_is;
+    vector<vector<double>> K_is;
+    vector<vector<cv::Point2d>> all_points_q, all_points_i;
+
+    string relpose_fn = dir + query_id + "." + fn + ".txt";
+    ifstream file (relpose_fn);
+    if (file.is_open()) {
+        string first_line;
+        if (getline(file, first_line)) {
+            stringstream ss (first_line);
+            int count = 0;
+            string it;
+            while (ss >> it) {
+                if (count == 0) {
+                    assert(it == "Query_Info:");
+                } else if (count >= 1 && count <= 9) {
+                    int row = (count - 1) / 3;
+                    int col = (count - 1) % 3;
+                    R_q(row, col) = stod(it);
+                } else if (count >= 10 && count <= 12) {
+                    int row = count - 10;
+                    T_q(row) = stod(it);
+                } else {
+                    assert(count >= 13 && count <= 16);
+                    K_q.push_back(stod(it));
+                }
+                count++;
+            }
+        } else {
+            cout << "Can't ready query info " + query_id << endl;
+            exit(1);
+        }
+
+        string line;
+        while(getline(file, line)) {
+            stringstream ss (line);
+            int count = 0;
+            int inner = 0;
+            double q_x = 0, q_y = 0, i_x = 0, i_y = 0;
+            string it;
+
+            string anchor;
+            Eigen::Matrix3d R_i;
+            Eigen::Vector3d T_i;
+            vector<double> K_i;
+            vector<cv::Point2d> points_q, points_i;
+
+            while(ss >> it) {
+                if (count == 0) {
+                    anchor = it;
+                } else if (count >= 1 && count <= 9) {
+                    int row = (count - 1) / 3;
+                    int col = (count - 1) % 3;
+                    R_i(row, col) = stod(it);
+                } else if (count >= 10 && count <= 12) {
+                    int row = count - 10;
+                    T_i(row) = stod(it);
+                } else if (count >= 13 && count <= 16) {
+                    K_i.push_back(stod(it));
+                } else {
+                    assert(count >= 17);
+                    assert(round(stod(it)) - stod(it) == 0);
+                    if (inner == 0) {
+                        q_x = stod(it);
+                    } else if (inner == 1) {
+                        q_y = stod(it);
+                    } else if (inner == 2) {
+                        i_x = stod(it);
+                    } else {
+                        assert(inner == 3);
+                        i_y = stod(it);
+                        points_q.emplace_back(q_x, q_y);
+                        points_i.emplace_back(i_x, i_y);
+                        inner = -1;
+                    }
+                    inner++;
+                }
+                count++;
+            }
+            anchors.push_back(anchor);
+            R_is.push_back(R_i);
+            T_is.push_back(T_i);
+            K_is.push_back(K_i);
+            all_points_q.push_back(points_q);
+            all_points_i.push_back(points_i);
+        }
+        file.close();
+    }
+    auto t = make_tuple(query_id, R_q, T_q, K_q, anchors, R_is, T_is, K_is, all_points_q, all_points_i);
+    return t;
+}
+
 vector<string> functions::optimizeSpacingZhou (const vector<string> & images, double min, double max, int N, const string & dataset) {
     vector<string> results;
     vector<Eigen::Vector3d> centers;
@@ -1191,13 +1312,13 @@ void functions::retrieveSimilar(const string & query_image,
 }
 
 map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>>
-        functions::getRelativePoses(const string & query, const string & feat_folder, const string & data_folder) {
+        functions::getRelativePoses(const string & query, const string & data_folder) {
 
     map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<double>, vector<pair<cv::Point2d, cv::Point2d>>>> map;
 
-    string seq = query.substr(query.find("seq"),7);
+    string seq = query.substr(query.find("seq"),6);
     string image_base = query.substr(query.find("frame"),12);
-    string fn = data_folder + feat_folder + seq + image_base + "_rel_poses.txt";
+    string fn = data_folder + "relposes/" + seq + "/" + image_base + "_rel_poses.txt";
     ifstream poses (fn);
     if (poses.is_open()) {
         string line;
