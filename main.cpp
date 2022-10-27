@@ -112,82 +112,53 @@ int main() {
 
     string scene = "chess/";
     string dataset = "seven_scenes/";
-    string relpose_fn = "relpose";
+    string point = "SP";
+    string fn = "inliers";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/"+dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
 
     ofstream error;
-    error.open(ccv_dir+scene+relpose_fn+"_error.txt");
+    error.open(home_dir+scene+point+"_error.txt");
 
-    vector<string> queries = functions::getQueries(ccv_dir+"q.txt", scene);
+    vector<string> queries = functions::getQueries(home_dir+"q.txt", scene);
 
     int start = 0;
     for (int q = start; q < queries.size(); q++) {
 
         string query = queries[q];
 
-        string line = query;
+        string line = to_string(q); line += "/" + to_string(queries.size())query;
 
-        auto info = functions::parseRelposeFile(ccv_dir, query, relpose_fn);
+        string file = fn; file += "_" + point;
+        auto info = functions::parseRelposeFile(home_dir, query, file);
         auto R_q = get<1>(info);
         auto T_q = get<2>(info);
         auto K_q = get<3>(info);
         auto anchors = get<4>(info);
         auto R_is = get<5>(info);
         auto T_is = get<6>(info);
-        auto K_is = get<7>(info);
-        auto all_pts_q = get<8>(info);
-        auto all_pts_i = get<9>(info);
+        auto R_qis = get<7>(info);
+        auto T_qis = get<8>(info);
+        auto K_is = get<9>(info);
+        auto inliers_q = get<10>(info);
+        auto inliers_i = get<11>(info);
 
         int K = int(anchors.size());
 
         Eigen::Vector3d c_q = -R_q.transpose() * T_q;
 
-        cout << "Finding relposes..." << endl;
-
-        auto m = new map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>> ();
-        std::thread threads_0[K];
-        int a = 0;
         for (int i = 0; i < K; i++) {
-            threads_0[i] = thread(findRelativePoses, &anchors[i], &all_pts_q[i], &all_pts_i[i], &K_q, &K_is[i], m);
-            this_thread::sleep_for(std::chrono::microseconds (1));
-        }
-        for (auto & th : threads_0) th.join();
-
-        vector<string> anchors_calc;
-        vector<Eigen::Matrix3d> R_is_calc, R_qis_calc;
-        vector<Eigen::Vector3d> T_is_calc, T_qis_calc;
-        vector<vector<double>> K_is_calc;
-        vector<vector<cv::Point2d>> all_pts_q_calc, all_pts_i_calc;
-        for (int i = 0; i < K; i++) {
-            try {
-                auto pose = m->at(anchors[i]);
-                R_qis_calc.push_back(pose.first);
-                T_qis_calc.push_back(pose.second);
-                anchors_calc.push_back(anchors[i]);
-                R_is_calc.push_back(R_is[i]);
-                T_is_calc.push_back(T_is[i]);
-                K_is_calc.push_back(K_is[i]);
-                all_pts_q_calc.push_back(all_pts_q[i]);
-                all_pts_i_calc.push_back(all_pts_i[i]);
-            } catch (...) {
-                continue;
-            }
-            Eigen::Matrix3d R_qi_real = R_q * R_is_calc[i].transpose();
-            Eigen::Vector3d T_qi_real = T_q - R_qi_real * T_is_calc[i];
+            Eigen::Matrix3d R_qi_real = R_q * R_is[i].transpose();
+            Eigen::Vector3d T_qi_real = T_q - R_qi_real * T_is[i];
             T_qi_real.normalize();
-            double R_error = functions::rotationDifference(R_qi_real, R_qis_calc[i]);
-            double T_error = functions::getAngleBetween(T_qi_real, T_qis_calc[i]);
+            double R_error = functions::rotationDifference(R_qi_real, R_qis[i]);
+            double T_error = functions::getAngleBetween(T_qi_real, T_qis[i]);
+            cout << R_error << ",  " << T_error << endl;
             int check = 0;
         }
-        delete m;
 
-
-
-        cout << "Finding All K Solution..." << endl;
         // ALL K -------------------------------------------------------------------------------------------------------
-        K = int(R_is_calc.size());
 
         int count = 0;
         for (int i = 0; i < K - 1; i++) {
@@ -201,7 +172,7 @@ int main() {
         auto * results = new vector<tuple<int,int,double,vector<int>>> ();
         for (int i = 0; i < K - 1; i++) {
             for (int j = i + 1; j < K; j++) {
-                threads_1[count] = thread(findInliers, threshold, i, j, &R_is_calc, &T_is_calc, &R_qis_calc, &T_qis_calc, results);
+                threads_1[count] = thread(findInliers, threshold, i, j, &R_is, &T_is, &R_qis, &T_qis, results);
                 this_thread::sleep_for(std::chrono::microseconds (1));
                 count++;
             }
@@ -237,16 +208,16 @@ int main() {
         vector<Eigen::Matrix3d> best_R_is, best_R_qis;
         vector<Eigen::Vector3d> best_T_is, best_T_qis;
         vector<vector<double>> best_K_is;
-        vector<vector<cv::Point2d>> best_all_pts_q, best_all_pts_i;
+        vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
         for (const auto & i : get<3>(best_set)) {
-            best_anchors.push_back(anchors_calc[i]);
-            best_R_is.push_back(R_is_calc[i]);
-            best_R_qis.push_back(R_qis_calc[i]);
-            best_T_is.push_back(T_is_calc[i]);
-            best_T_qis.push_back(T_qis_calc[i]);
-            best_all_pts_q.push_back(all_pts_q_calc[i]);
-            best_all_pts_i.push_back(all_pts_i_calc[i]);
-            best_K_is.push_back(K_is_calc[i]);
+            best_anchors.push_back(anchors[i]);
+            best_R_is.push_back(R_is[i]);
+            best_R_qis.push_back(R_qis[i]);
+            best_T_is.push_back(T_is[i]);
+            best_T_qis.push_back(T_qis[i]);
+            best_inliers_q.push_back(inliers_q[i]);
+            best_inliers_i.push_back(inliers_i[i]);
+            best_K_is.push_back(K_is[i]);
         }
 
         vector<Eigen::Matrix3d> rotations(best_R_is.size());
@@ -263,7 +234,7 @@ int main() {
         Eigen::Matrix3d R_adjustment = R_estimation;
         Eigen::Vector3d T_adjustment = - R_estimation * c_estimation;
 
-        pose::adjustHypothesis (R_is_calc, T_is_calc, K_is_calc, K_q, all_pts_q_calc, all_pts_i_calc, 5., R_adjustment, T_adjustment);
+        pose::adjustHypothesis (best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, 5., R_adjustment, T_adjustment);
         Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
@@ -287,23 +258,23 @@ int main() {
         K = int(anchors.size());
         vector<Eigen::Vector3d> centers (K);
         for(int i = 0; i < K; i++) {
-            centers[i] = - R_is_calc[i].transpose() * T_is_calc[i];
+            centers[i] = - R_is[i].transpose() * T_is[i];
         }
         vector<int> spaced_indices = functions::optimizeSpacingZhou(centers, 0.05, 10., 20);
         vector<string> anchors_zhou;
         vector<Eigen::Matrix3d> R_is_zhou, R_qis_zhou;
         vector<Eigen::Vector3d> T_is_zhou, T_qis_zhou;
         vector<vector<double>> K_is_zhou;
-        vector<vector<cv::Point2d>> all_pts_q_zhou, all_pts_i_zhou;
+        vector<vector<cv::Point2d>> inliers_q_zhou, inliers_i_zhou;
         for (const auto & i : spaced_indices) {
-            R_qis_zhou.push_back(R_qis_calc[i]);
-            T_qis_zhou.push_back(T_qis_calc[i]);
-            anchors_zhou.push_back(anchors_calc[i]);
-            R_is_zhou.push_back(R_is_calc[i]);
-            T_is_zhou.push_back(T_is_calc[i]);
-            K_is_zhou.push_back(K_is_calc[i]);
-            all_pts_q_zhou.push_back(all_pts_q_calc[i]);
-            all_pts_i_zhou.push_back(all_pts_i_calc[i]);
+            R_qis_zhou.push_back(R_qis[i]);
+            T_qis_zhou.push_back(T_qis[i]);
+            anchors_zhou.push_back(anchors[i]);
+            R_is_zhou.push_back(R_is[i]);
+            T_is_zhou.push_back(T_is[i]);
+            K_is_zhou.push_back(K_is[i]);
+            inliers_q_zhou.push_back(inliers_q[i]);
+            inliers_i_zhou.push_back(inliers_i[i]);
         }
 
         K = int(anchors_zhou.size());
@@ -355,16 +326,16 @@ int main() {
         best_T_is.clear();
         best_T_qis.clear();
         best_K_is.clear();
-        best_all_pts_q.clear();
-        best_all_pts_i.clear();
+        best_inliers_q.clear();
+        best_inliers_i.clear();
         for (const auto & i : get<3>(best_set)) {
             best_anchors.push_back(anchors_zhou[i]);
             best_R_is.push_back(R_is_zhou[i]);
             best_R_qis.push_back(R_qis_zhou[i]);
             best_T_is.push_back(T_is_zhou[i]);
             best_T_qis.push_back(T_qis_zhou[i]);
-            best_all_pts_q.push_back(all_pts_q_zhou[i]);
-            best_all_pts_i.push_back(all_pts_i_zhou[i]);
+            best_inliers_q.push_back(inliers_q_zhou[i]);
+            best_inliers_i.push_back(inliers_i_zhou[i]);
             best_K_is.push_back(K_is_zhou[i]);
         }
 
@@ -383,7 +354,7 @@ int main() {
         R_adjustment = R_estimation;
         T_adjustment = - R_estimation * c_estimation;
 
-        pose::adjustHypothesis (R_is_zhou, T_is_zhou, K_is_zhou, K_q, all_pts_q_zhou, all_pts_i_zhou, 5., R_adjustment, T_adjustment);
+        pose::adjustHypothesis (best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, 5., R_adjustment, T_adjustment);
         c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_zhou = functions::getDistBetween(c_q, c_adjustment);
@@ -407,16 +378,16 @@ int main() {
         vector<Eigen::Matrix3d> R_is_ours, R_qis_ours;
         vector<Eigen::Vector3d> T_is_ours, T_qis_ours;
         vector<vector<double>> K_is_ours;
-        vector<vector<cv::Point2d>> all_pts_q_ours, all_pts_i_ours;
+        vector<vector<cv::Point2d>> inliers_q_ours, inliers_i_ours;
         for (const auto & i : our_indices) {
-            R_qis_ours.push_back(R_qis_calc[i]);
-            T_qis_ours.push_back(T_qis_calc[i]);
-            anchors_ours.push_back(anchors_calc[i]);
-            R_is_ours.push_back(R_is_calc[i]);
-            T_is_ours.push_back(T_is_calc[i]);
-            K_is_ours.push_back(K_is_calc[i]);
-            all_pts_q_ours.push_back(all_pts_q_calc[i]);
-            all_pts_i_ours.push_back(all_pts_i_calc[i]);
+            R_qis_ours.push_back(R_qis[i]);
+            T_qis_ours.push_back(T_qis[i]);
+            anchors_ours.push_back(anchors[i]);
+            R_is_ours.push_back(R_is[i]);
+            T_is_ours.push_back(T_is[i]);
+            K_is_ours.push_back(K_is[i]);
+            inliers_q_ours.push_back(inliers_q[i]);
+            inliers_i_ours.push_back(inliers_i[i]);
         }
 
         K = int(anchors_ours.size());
@@ -468,16 +439,16 @@ int main() {
         best_T_is.clear();
         best_T_qis.clear();
         best_K_is.clear();
-        best_all_pts_q.clear();
-        best_all_pts_i.clear();
+        best_inliers_q.clear();
+        best_inliers_i.clear();
         for (const auto & i : get<3>(best_set)) {
             best_anchors.push_back(anchors_ours[i]);
             best_R_is.push_back(R_is_ours[i]);
             best_R_qis.push_back(R_qis_ours[i]);
             best_T_is.push_back(T_is_ours[i]);
             best_T_qis.push_back(T_qis_ours[i]);
-            best_all_pts_q.push_back(all_pts_q_ours[i]);
-            best_all_pts_i.push_back(all_pts_i_ours[i]);
+            best_inliers_q.push_back(inliers_q_ours[i]);
+            best_inliers_i.push_back(inliers_i_ours[i]);
             best_K_is.push_back(K_is_ours[i]);
         }
 
@@ -496,7 +467,7 @@ int main() {
         R_adjustment = R_estimation;
         T_adjustment = - R_estimation * c_estimation;
 
-        pose::adjustHypothesis (R_is_ours, T_is_ours, K_is_ours, K_q, all_pts_q_ours, all_pts_i_ours, 5., R_adjustment, T_adjustment);
+        pose::adjustHypothesis (best_R_is, best_T_is, best_K_is, K_q, inliers_q, inliers_i, 5., R_adjustment, T_adjustment);
         c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_ours = functions::getDistBetween(c_q, c_adjustment);
@@ -509,7 +480,7 @@ int main() {
                 + " Ours_Post_Adj: " + to_string(R_error_adjustment_ours)
                 + " " + to_string(c_error_adjustment_ours);
 
-        line += '\n';
+        line += "\n";
         cout << line;
         error << line;
     }

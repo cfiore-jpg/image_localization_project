@@ -54,8 +54,11 @@ vector<string> functions::getQueries(const string & queryList, const string & sc
     return queries;
 }
 
-tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
-        vector<string>, vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>, vector<vector<double>>,
+tuple<string, Eigen::Matrix3d,Eigen::Vector3d, vector<double>,
+        vector<string>,
+        vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>,
+        vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>,
+        vector<vector<double>>,
         vector<vector<cv::Point2d>>, vector<vector<cv::Point2d>>>
         functions::parseRelposeFile (const string & dir, const string & query, const string & fn) {
 
@@ -65,8 +68,8 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
     vector<double> K_q;
 
     vector<string> anchors;
-    vector<Eigen::Matrix3d> R_is;
-    vector<Eigen::Vector3d> T_is;
+    vector<Eigen::Matrix3d> R_is, R_qis;
+    vector<Eigen::Vector3d> T_is, T_qis;
     vector<vector<double>> K_is;
     vector<vector<cv::Point2d>> all_points_q, all_points_i;
 
@@ -108,8 +111,8 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
             string it;
 
             string anchor;
-            Eigen::Matrix3d R_i;
-            Eigen::Vector3d T_i;
+            Eigen::Matrix3d R_i, R_qi;
+            Eigen::Vector3d T_i, T_qi;
             vector<double> K_i;
             vector<cv::Point2d> points_q, points_i;
 
@@ -125,8 +128,15 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
                     T_i(row) = stod(it);
                 } else if (count >= 13 && count <= 16) {
                     K_i.push_back(stod(it));
+                } else if(count >= 17 && count <= 25){
+                    int row = (count - 17) / 3;
+                    int col = (count - 17) % 3;
+                    R_qi(row, col) = stod(it);
+                } else if (count >= 26 && count <= 28) {
+                    int row = count - 26;
+                    T_qi(row) = stod(it);
                 } else {
-                    assert(count >= 17);
+                    assert(count >= 29);
                     assert(round(stod(it)) - stod(it) == 0);
                     if (inner == 0) {
                         q_x = stod(it);
@@ -148,6 +158,8 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
             anchors.push_back(anchor);
             R_is.push_back(R_i);
             T_is.push_back(T_i);
+            R_qis.push_back(R_qi);
+            T_qis.push_back(T_qi);
             K_is.push_back(K_i);
             all_points_q.push_back(points_q);
             all_points_i.push_back(points_i);
@@ -157,7 +169,7 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
         cout << "Can't open relpose file." << endl;
         exit(1);
     }
-    auto t = make_tuple(query_id, R_q, T_q, K_q, anchors, R_is, T_is, K_is, all_points_q, all_points_i);
+    auto t = make_tuple(query_id, R_q, T_q, K_q, anchors, R_is, T_is, R_qis, T_qis, K_is, all_points_q, all_points_i);
     return t;
 }
 

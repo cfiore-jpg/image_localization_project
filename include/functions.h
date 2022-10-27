@@ -23,8 +23,11 @@ namespace functions {
     vector<string> getQueries(const string & queryList, const string & scene);
 
     tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
-          vector<string>, vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>, vector<vector<double>>,
-          vector<vector<cv::Point2d>>, vector<vector<cv::Point2d>>>
+            vector<string>,
+            vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>,
+            vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>,
+            vector<vector<double>>,
+            vector<vector<cv::Point2d>>, vector<vector<cv::Point2d>>>
           parseRelposeFile (const string & dir, const string & query, const string & fn);
 
 
