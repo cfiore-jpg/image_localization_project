@@ -118,11 +118,12 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/"+dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
+    string dir = ccv_dir;
 
     ofstream error;
-    error.open(home_dir+scene+point+"_error.txt");
+    error.open(dir+scene+point+"_error.txt");
 
-    vector<string> queries = functions::getQueries(home_dir+"q.txt", scene);
+    vector<string> queries = functions::getQueries(dir+"q.txt", scene);
 
     int start = 0;
     for (int q = start; q < queries.size(); q++) {
@@ -132,7 +133,7 @@ int main() {
         string query = queries[q];
         string line = query;
 
-        auto info = functions::parseRelposeFile(home_dir, query, file);
+        auto info = functions::parseRelposeFile(dir, query, file);
         auto R_q = get<1>(info);
         auto T_q = get<2>(info);
         auto K_q = get<3>(info);
@@ -149,15 +150,15 @@ int main() {
 
         Eigen::Vector3d c_q = -R_q.transpose() * T_q;
 
-        for (int i = 0; i < K; i++) {
-            Eigen::Matrix3d R_qi_real = R_q * R_is[i].transpose();
-            Eigen::Vector3d T_qi_real = T_q - R_qi_real * T_is[i];
-            T_qi_real.normalize();
-            double R_error = functions::rotationDifference(R_qi_real, R_qis[i]);
-            double T_error = functions::getAngleBetween(T_qi_real, T_qis[i]);
-            cout << R_error << ",  " << T_error << endl;
-            int check = 0;
-        }
+//        for (int i = 0; i < K; i++) {
+//            Eigen::Matrix3d R_qi_real = R_q * R_is[i].transpose();
+//            Eigen::Vector3d T_qi_real = T_q - R_qi_real * T_is[i];
+//            T_qi_real.normalize();
+//            double R_error = functions::rotationDifference(R_qi_real, R_qis[i]);
+//            double T_error = functions::getAngleBetween(T_qi_real, T_qis[i]);
+//            cout << R_error << ",  " << T_error << endl;
+//            int check = 0;
+//        }
 
         // ALL K -------------------------------------------------------------------------------------------------------
 
@@ -466,7 +467,7 @@ int main() {
         R_adjustment = R_estimation;
         T_adjustment = - R_estimation * c_estimation;
 
-        pose::adjustHypothesis (best_R_is, best_T_is, best_K_is, K_q, inliers_q, inliers_i, 5., R_adjustment, T_adjustment);
+        pose::adjustHypothesis (best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, 5., R_adjustment, T_adjustment);
         c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_ours = functions::getDistBetween(c_q, c_adjustment);
@@ -474,9 +475,9 @@ int main() {
 
         stop = 0;
 
-        line += " Ours_Pre_Adj: " + to_string(R_error_estimation_ours)
+        line += " Ours_Pre_Adj " + to_string(R_error_estimation_ours)
                 + " " + to_string(c_error_estimation_ours)
-                + " Ours_Post_Adj: " + to_string(R_error_adjustment_ours)
+                + " Ours_Post_Adj " + to_string(R_error_adjustment_ours)
                 + " " + to_string(c_error_adjustment_ours);
 
         line += "\n";
