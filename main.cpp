@@ -114,6 +114,7 @@ int main() {
     string dataset = "seven_scenes/";
     string point = "SP";
     string fn = "inliers";
+    string file = fn; file += "_" + point;
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/"+dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
@@ -126,11 +127,11 @@ int main() {
     int start = 0;
     for (int q = start; q < queries.size(); q++) {
 
+        cout << q+1 << "/" << queries.size() << "..." << endl;
+
         string query = queries[q];
+        string line = query;
 
-        string line = to_string(q); line += "/" + to_string(queries.size())query;
-
-        string file = fn; file += "_" + point;
         auto info = functions::parseRelposeFile(home_dir, query, file);
         auto R_q = get<1>(info);
         auto T_q = get<2>(info);
@@ -253,7 +254,6 @@ int main() {
 
 
 
-        cout << "Finding Zhou solution..." << endl;
         // Zhou Spacing ------------------------------------------------------------------------------------------------
         K = int(anchors.size());
         vector<Eigen::Vector3d> centers (K);
@@ -371,7 +371,6 @@ int main() {
 
 
 
-        cout << "Finding Our Solution..." << endl;
         // Our Spacing -------------------------------------------------------------------------------------------------
         vector<int> our_indices = functions::optimizeSpacing(c_q, centers, 20, false);
         vector<string> anchors_ours;
