@@ -112,19 +112,13 @@ int main() {
 
     string scene = "chess/";
     string dataset = "seven_scenes/";
-    string relpose_fn = "relpose_SIFT";
+    string relpose_fn = "relpose";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/"+dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
 
-<<<<<<< HEAD
-    vector<string> queries = functions::getQueries(ccv_dir+"q.txt", scene);
-
-    cout << queries.size() << endl;
-=======
     ofstream error;
-    error.open(ccv_dir+scene+"error.txt");
->>>>>>> 44f1e57671c2a0bc32fb3f9e1a0a367f2f5e4553
+    error.open(ccv_dir+scene+relpose_fn+"_error.txt");
 
     vector<string> queries = functions::getQueries(ccv_dir+"q.txt", scene);
 
@@ -149,6 +143,8 @@ int main() {
         int K = int(anchors.size());
 
         Eigen::Vector3d c_q = -R_q.transpose() * T_q;
+
+        cout << "Finding relposes..." << endl;
 
         auto m = new map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>> ();
         std::thread threads_0[K];
@@ -189,7 +185,7 @@ int main() {
 
 
 
-
+        cout << "Finding All K Solution..." << endl;
         // ALL K -------------------------------------------------------------------------------------------------------
         K = int(R_is_calc.size());
 
@@ -277,15 +273,16 @@ int main() {
 
         int stop = 0;
 
-        line += "  All_Pre_Adj:  " + to_string(R_error_estimation_all)
-             + "  " + to_string(c_error_estimation_all)
-             + "  All_Post_Adj:  " + to_string(R_error_adjustment_all)
-             + "  " + to_string(c_error_adjustment_all);
+        line += " All_Pre_Adj " + to_string(R_error_estimation_all)
+             + " " + to_string(c_error_estimation_all)
+             + " All_Post_Adj " + to_string(R_error_adjustment_all)
+             + " " + to_string(c_error_adjustment_all);
         //--------------------------------------------------------------------------------------------------------------
 
 
 
 
+        cout << "Finding Zhou solution..." << endl;
         // Zhou Spacing ------------------------------------------------------------------------------------------------
         K = int(anchors.size());
         vector<Eigen::Vector3d> centers (K);
@@ -394,16 +391,16 @@ int main() {
 
         stop = 0;
 
-        line += "  Zhou_Pre_Adj:  " + to_string(R_error_estimation_zhou)
-                + "  " + to_string(c_error_estimation_zhou)
-                + "  Zhou_Post_Adj:  " + to_string(R_error_adjustment_zhou)
-                + "  " + to_string(c_error_adjustment_zhou);
+        line += " Zhou_Pre_Adj " + to_string(R_error_estimation_zhou)
+                + " " + to_string(c_error_estimation_zhou)
+                + " Zhou_Post_Adj " + to_string(R_error_adjustment_zhou)
+                + " " + to_string(c_error_adjustment_zhou);
         //--------------------------------------------------------------------------------------------------------------
 
 
 
 
-
+        cout << "Finding Our Solution..." << endl;
         // Our Spacing -------------------------------------------------------------------------------------------------
         vector<int> our_indices = functions::optimizeSpacing(c_q, centers, 20, false);
         vector<string> anchors_ours;
@@ -507,19 +504,15 @@ int main() {
 
         stop = 0;
 
-        line += "  Ours_Pre_Adj:  " + to_string(R_error_estimation_ours)
-                + "  " + to_string(c_error_estimation_ours)
-                + "  Ours_Post_Adj:  " + to_string(R_error_adjustment_ours)
-                + "  " + to_string(c_error_adjustment_ours);
+        line += " Ours_Pre_Adj: " + to_string(R_error_estimation_ours)
+                + " " + to_string(c_error_estimation_ours)
+                + " Ours_Post_Adj: " + to_string(R_error_adjustment_ours)
+                + " " + to_string(c_error_adjustment_ours);
 
         line += '\n';
         cout << line;
-
         error << line;
-
     }
-
     error.close();
-
     return 0;
 }

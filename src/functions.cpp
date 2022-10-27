@@ -39,7 +39,6 @@ vector<string> functions::getQueries(const string & queryList, const string & sc
     vector<string> queries;
     ifstream file(queryList);
     if (file.is_open()) {
-        cout << "Here" << endl;
         string line;
         while (getline(file, line)) {
             size_t pos = line.find('/') + 1;
