@@ -132,6 +132,9 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Problem problem;
     ceres::LossFunction * loss_function = new ceres::CauchyLoss(1.0);
+
+    double total_error_before = 0;
+    double count = 0;
     for (int i = 0; i < K; i++) {
 
         Eigen::Matrix3d K_i_eig {{K_is[i][2], 0., K_is[i][0]},
@@ -162,6 +165,9 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
             double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
                            sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
 
+            total_error_before += error;
+            count += 1;
+
             if (error <= error_thresh) {
                 auto cost_function = ReprojectionError::Create(R_is[i], T_is[i], K_i_eig, K_q_eig, all_pts_q[i][j], all_pts_i[i][j]);
                 problem.AddResidualBlock(cost_function, loss_function, R, T);
@@ -187,6 +193,51 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                            {R_adj[2], R_adj[5], R_adj[8]}};
     T_q = Eigen::Vector3d {T[0], T[1], T[2]};
 
+    double before = total_error_before / count;
+
+
+
+
+    double total_error_after = 0;
+    count = 0;
+    for (int i = 0; i < K; i++) {
+
+        Eigen::Matrix3d K_i_eig {{K_is[i][2], 0., K_is[i][0]},
+                                 {0., K_is[i][3], K_is[i][1]},
+                                 {0.,         0.,         1.}};
+
+        Eigen::Matrix3d R_qi = R_q * R_is[i].transpose();
+        Eigen::Vector3d T_qi = T_q - R_qi * T_is[i];
+        T_qi.normalize();
+
+        Eigen::Matrix3d T_qi_cross {
+                {       0, -T_qi(2),  T_qi(1)},
+                { T_qi(2),        0, -T_qi(0)},
+                {-T_qi(1),  T_qi(0),        0}};
+        Eigen::Matrix3d E_qi = T_qi_cross * R_qi;
+
+        Eigen::Matrix3d F = K_q_eig.inverse().transpose() * E_qi * K_i_eig.inverse();
+
+        assert(all_pts_i[i].size() == all_pts_q[i].size());
+
+        for (int j = 0; j < all_pts_i[i].size(); j++) {
+
+            Eigen::Vector3d pt_q {all_pts_q[i][j].x, all_pts_q[i][j].y, 1.};
+            Eigen::Vector3d pt_i {all_pts_i[i][j].x, all_pts_i[i][j].y, 1.};
+
+            Eigen::Vector3d epiline = F * pt_i;
+
+            double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
+                           sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+
+            total_error_after += error;
+            count += 1;
+        }
+    }
+
+    double after = total_error_after / count;
+
+    cout << "Before: " << before << "  After: " << after << endl;
 }
 
 
