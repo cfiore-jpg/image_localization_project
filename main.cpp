@@ -112,7 +112,7 @@ int main() {
 
     string scene = "chess/";
     string dataset = "seven_scenes/";
-    string point = "SP";
+    string point = "SIFT";
     string fn = "inliers";
     string file = fn; file += "_" + point;
 
@@ -124,6 +124,9 @@ int main() {
     error.open(dir+scene+point+"_error.txt");
 
     vector<string> queries = functions::getQueries(dir+"q.txt", scene);
+
+    double threshold = 10.;
+    double adj_threshold = 1.;
 
     int start = 0;
     for (int q = start; q < queries.size(); q++) {
@@ -168,7 +171,6 @@ int main() {
                 count++;
             }
         }
-        double threshold = 5.;
         std::thread threads_1[count];
         count = 0;
         auto * results = new vector<tuple<int,int,double,vector<int>>> ();
@@ -236,7 +238,7 @@ int main() {
         Eigen::Matrix3d R_adjustment = R_estimation;
         Eigen::Vector3d T_adjustment = - R_estimation * c_estimation;
 
-        pose::adjustHypothesis (best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, 5., R_adjustment, T_adjustment);
+        pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
         Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
@@ -285,7 +287,6 @@ int main() {
                 count++;
             }
         }
-        threshold = 5.;
         std::thread threads_2[count];
         count = 0;
         results = new vector<tuple<int,int,double,vector<int>>> ();
@@ -355,7 +356,7 @@ int main() {
         R_adjustment = R_estimation;
         T_adjustment = - R_estimation * c_estimation;
 
-        pose::adjustHypothesis (best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, 5., R_adjustment, T_adjustment);
+        pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
         c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_zhou = functions::getDistBetween(c_q, c_adjustment);
@@ -397,7 +398,6 @@ int main() {
                 count++;
             }
         }
-        threshold = 5.;
         std::thread threads_3[count];
         count = 0;
         results = new vector<tuple<int,int,double,vector<int>>> ();
@@ -467,7 +467,7 @@ int main() {
         R_adjustment = R_estimation;
         T_adjustment = - R_estimation * c_estimation;
 
-        pose::adjustHypothesis (best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, 5., R_adjustment, T_adjustment);
+        pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
         c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_ours = functions::getDistBetween(c_q, c_adjustment);
