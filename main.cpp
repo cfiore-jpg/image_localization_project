@@ -390,7 +390,7 @@ int main() {
         }
 
         K = int(anchors_ours.size());
-        int count = 0;
+        count = 0;
         for (int i = 0; i < K - 1; i++) {
             for (int j = i + 1; j < K; j++) {
                 count++;
@@ -398,7 +398,7 @@ int main() {
         }
         std::thread threads_3[count];
         count = 0;
-        auto results = new vector<tuple<int,int,double,vector<int>>> ();
+        results = new vector<tuple<int,int,double,vector<int>>> ();
         for (int i = 0; i < K - 1; i++) {
             for (int j = i + 1; j < K; j++) {
                 threads_3[count] = thread(findInliers, threshold, i, j, &R_is_ours, &T_is_ours, &R_qis_ours, &T_qis_ours, results);
@@ -412,10 +412,10 @@ int main() {
             return get<3>(a).size() > get<3>(b).size();
         });
         // Sort by lowest score
-        auto best_set = results->at(0);
-        auto size = int(get<3>(best_set).size());
-        auto best_score = get<2>(best_set);
-        auto idx = 0;
+        best_set = results->at(0);
+        size = int(get<3>(best_set).size());
+        best_score = get<2>(best_set);
+        idx = 0;
         while (true) {
             try {
                 auto set = results->at(idx);
@@ -450,23 +450,22 @@ int main() {
             best_K_is.push_back(K_is_ours[i]);
         }
 
-        vector<Eigen::Matrix3d> rotations;
-        rotations.reserve(best_anchors.size());
+        rotations.clear();
         for (int i = 0; i < best_R_is.size(); i++) {
             rotations.emplace_back(best_R_qis[i] * best_R_is[i]);
         }
 
-        auto c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
-        auto R_estimation = pose::R_q_average(rotations);
+        c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
+        R_estimation = pose::R_q_average(rotations);
 
         double c_error_estimation_ours = functions::getDistBetween(c_q, c_estimation);
         double R_error_estimation_ours = functions::rotationDifference(R_q, R_estimation);
 
-        Eigen::Matrix3d R_adjustment = R_estimation;
-        Eigen::Vector3d T_adjustment = - R_estimation * c_estimation;
+        R_adjustment = R_estimation;
+        T_adjustment = - R_estimation * c_estimation;
 
         pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
-        auto c_adjustment = -R_adjustment.transpose() * T_adjustment;
+        c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_ours = functions::getDistBetween(c_q, c_adjustment);
         double R_error_adjustment_ours = functions::rotationDifference(R_q, R_adjustment);
