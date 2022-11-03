@@ -199,7 +199,7 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                            {R_adj[2], R_adj[5], R_adj[8]}};
     T_q = Eigen::Vector3d {T[0], T[1], T[2]};
 
-    return avg_avg
+    return avg_avg;
 }
 
 
