@@ -112,21 +112,21 @@ int main() {
 
     string scene = "chess/";
     string dataset = "seven_scenes/";
-    string file = "inliers_debug_sift";
+    string relpose_file = "relpose_SIFT";
+    string error_file = "error_SIFT_pt_5_thresh";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/"+dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
     string dir = ccv_dir;
 
     ofstream error;
-    error.open(dir+file+"_error.txt");
-
-    vector<string> queries = functions::getQueries(dir+"q.txt", scene);
+    error.open(dir+scene+error_file+".txt");
 
     double threshold = 10.;
-    double adj_threshold = 3.;
+    double adj_threshold = .5;
 
     int start = 0;
+    vector<string> queries = functions::getQueries(dir+"q.txt", scene);
     for (int q = start; q < queries.size(); q++) {
 
         cout << q+1 << "/" << queries.size() << "..." << endl;
@@ -134,7 +134,7 @@ int main() {
         string query = queries[q];
         string line = query;
 
-        auto info = functions::parseRelposeFile(dir, query, file);
+        auto info = functions::parseRelposeFile(dir, query, relpose_file);
         auto R_q = get<1>(info);
         auto T_q = get<2>(info);
         auto K_q = get<3>(info);
@@ -161,8 +161,7 @@ int main() {
 //            int check = 0;
 //        }
 
-        // ALL K -------------------------------------------------------------------------------------------------------
-
+       // ALL K -------------------------------------------------------------------------------------------------------
        int count = 0;
        for (int i = 0; i < K - 1; i++) {
            for (int j = i + 1; j < K; j++) {
@@ -236,21 +235,30 @@ int main() {
        Eigen::Matrix3d R_adjustment = R_estimation;
        Eigen::Vector3d T_adjustment = - R_estimation * c_estimation;
 
-       pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
+       cout << "No anchors..." << endl;
+       double avg_rep = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
        Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
        double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
        double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
-       double d = R_adjustment.determinant();
 
-       int stop = 0;
-
-       line += " All_Pre_Adj " + to_string(R_error_estimation_all)
+       line += " All_Avg_Rep " + avg_rep
+            + " All_Pre_Adj " + to_string(R_error_estimation_all)
             + " " + to_string(c_error_estimation_all)
             + " All_Post_Adj " + to_string(R_error_adjustment_all)
             + " " + to_string(c_error_adjustment_all);
        //--------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -354,19 +362,26 @@ int main() {
        R_adjustment = R_estimation;
        T_adjustment = - R_estimation * c_estimation;
 
-       pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
+       cout << "Zhou spacing..." << endl;
+       avg_rep = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
        c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
        double c_error_adjustment_zhou = functions::getDistBetween(c_q, c_adjustment);
        double R_error_adjustment_zhou = functions::rotationDifference(R_q, R_adjustment);
 
-       stop = 0;
 
-       line += " Zhou_Pre_Adj " + to_string(R_error_estimation_zhou)
+       line += " All_Avg_Rep " + avg_rep
+               + " Zhou_Pre_Adj " + to_string(R_error_estimation_zhou)
                + " " + to_string(c_error_estimation_zhou)
                + " Zhou_Post_Adj " + to_string(R_error_adjustment_zhou)
                + " " + to_string(c_error_adjustment_zhou);
         //--------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 
 
@@ -464,21 +479,21 @@ int main() {
         R_adjustment = R_estimation;
         T_adjustment = - R_estimation * c_estimation;
 
-        pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
+        cout << "Our Anchors..." << endl;
+        avg_rep = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
         c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
         double c_error_adjustment_ours = functions::getDistBetween(c_q, c_adjustment);
         double R_error_adjustment_ours = functions::rotationDifference(R_q, R_adjustment);
 
-        // auto stop = 0;
-
-        line += " Ours_Pre_Adj " + to_string(R_error_estimation_ours)
+        line += " All_Avg_Rep " + avg_rep
+                + " Ours_Pre_Adj " + to_string(R_error_estimation_ours)
                 + " " + to_string(c_error_estimation_ours)
                 + " Ours_Post_Adj " + to_string(R_error_adjustment_ours)
                 + " " + to_string(c_error_adjustment_ours);
         line += "\n";
 
-        cout << line;
+        cout << line << endl;
         error << line;
     }
     error.close();

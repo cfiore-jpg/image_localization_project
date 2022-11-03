@@ -108,7 +108,7 @@ struct ReprojectionError{
 };
 
 //// FINAL POSE ADJUSTMENT
-void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
+double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                              const vector<Eigen::Vector3d> & T_is,
                              const vector<vector<double>> & K_is,
                              const vector<double> & K_q,
@@ -132,6 +132,8 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Problem problem;
     ceres::LossFunction * loss_function = new ceres::CauchyLoss(1.0);
+
+    double total_total = 0;
     for (int i = 0; i < K; i++) {
 
         Eigen::Matrix3d K_i_eig {{K_is[i][2], 0., K_is[i][0]},
@@ -152,6 +154,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
         assert(all_pts_i[i].size() == all_pts_q[i].size());
 
+        double total = 0;
         for (int j = 0; j < all_pts_i[i].size(); j++) {
 
             Eigen::Vector3d pt_q {all_pts_q[i][j].x, all_pts_q[i][j].y, 1.};
@@ -162,12 +165,22 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
             double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
                            sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
 
+            total += error;
+
             if (error <= error_thresh) {
                 auto cost_function = ReprojectionError::Create(R_is[i], T_is[i], K_i_eig, K_q_eig, all_pts_q[i][j], all_pts_i[i][j]);
                 problem.AddResidualBlock(cost_function, loss_function, R, T);
             }
         }
+
+        double avg = total / double(all_pts_i[i].size());
+
+        total_total += avg;
+
     }
+
+    double avg_avg = total_total / K;
+
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
 //    options.minimizer_progress_to_stdout = true;
@@ -186,6 +199,8 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                            {R_adj[1], R_adj[4], R_adj[7]},
                            {R_adj[2], R_adj[5], R_adj[8]}};
     T_q = Eigen::Vector3d {T[0], T[1], T[2]};
+
+    return avg_avg
 }
 
 
