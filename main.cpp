@@ -242,7 +242,7 @@ int main() {
        double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
 
-       line += " All_Avg_Rep " + avg_rep
+       line += " All_Avg_Rep " + to_string(avg_rep)
             + " All_Pre_Adj " + to_string(R_error_estimation_all)
             + " " + to_string(c_error_estimation_all)
             + " All_Post_Adj " + to_string(R_error_adjustment_all)
@@ -368,7 +368,7 @@ int main() {
        double R_error_adjustment_zhou = functions::rotationDifference(R_q, R_adjustment);
 
 
-       line += " All_Avg_Rep " + avg_rep
+       line += " All_Avg_Rep " + to_string(avg_rep)
                + " Zhou_Pre_Adj " + to_string(R_error_estimation_zhou)
                + " " + to_string(c_error_estimation_zhou)
                + " Zhou_Post_Adj " + to_string(R_error_adjustment_zhou)
@@ -483,7 +483,7 @@ int main() {
         double c_error_adjustment_ours = functions::getDistBetween(c_q, c_adjustment);
         double R_error_adjustment_ours = functions::rotationDifference(R_q, R_adjustment);
 
-        line += " All_Avg_Rep " + avg_rep
+        line += " All_Avg_Rep " + to_string(avg_rep)
                 + " Ours_Pre_Adj " + to_string(R_error_estimation_ours)
                 + " " + to_string(c_error_estimation_ours)
                 + " Ours_Post_Adj " + to_string(R_error_adjustment_ours)
