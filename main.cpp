@@ -235,7 +235,6 @@ int main() {
        Eigen::Matrix3d R_adjustment = R_estimation;
        Eigen::Vector3d T_adjustment = - R_estimation * c_estimation;
 
-       cout << "No anchors..." << endl;
        double avg_rep = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
        Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
@@ -362,7 +361,6 @@ int main() {
        R_adjustment = R_estimation;
        T_adjustment = - R_estimation * c_estimation;
 
-       cout << "Zhou spacing..." << endl;
        avg_rep = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
        c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
@@ -479,7 +477,6 @@ int main() {
         R_adjustment = R_estimation;
         T_adjustment = - R_estimation * c_estimation;
 
-        cout << "Our Anchors..." << endl;
         avg_rep = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
         c_adjustment = -R_adjustment.transpose() * T_adjustment;
 

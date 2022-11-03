@@ -174,7 +174,6 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         }
 
         double avg = total / double(all_pts_i[i].size());
-
         total_total += avg;
 
     }
