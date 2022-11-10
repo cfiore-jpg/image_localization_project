@@ -839,8 +839,8 @@ double functions::drawLines(Mat & im1, Mat & im2,
         line(im1, i1, j1, color);
         line(im2, i2, j2, color);
 
-        circle(im1, pt1, 5, color, -1);
-        circle(im2, pt2, 5, color, -1);
+        circle(im1, pt1, 4, color, -1);
+        circle(im2, pt2, 4, color, -1);
     }
     return total_rep_error / double (pts1.size());
 }

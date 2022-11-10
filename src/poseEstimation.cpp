@@ -119,35 +119,35 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                              Eigen::Vector3d & T_q) {
 
     double R[3];
-    double R_arr[9] {R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
+    double R_arr[9]{R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
     ceres::RotationMatrixToAngleAxis(R_arr, R);
 
-    double T [3] = {T_q[0], T_q[1], T_q[2]};
+    double T[3] = {T_q[0], T_q[1], T_q[2]};
 
-    Eigen::Matrix3d K_q_eig {{K_q[2], 0., K_q[0]},
-                             {0., K_q[3], K_q[1]},
-                             {0.,     0.,     1.}};
+    Eigen::Matrix3d K_q_eig{{K_q[2], 0.,     K_q[0]},
+                            {0.,     K_q[3], K_q[1]},
+                            {0.,     0.,     1.}};
 
-    int K = int (R_is.size());
+    int K = int(R_is.size());
 
     ceres::Problem problem;
-    ceres::LossFunction * loss_function = new ceres::CauchyLoss(1.0);
+    ceres::LossFunction *loss_function = new ceres::CauchyLoss(1.0);
 
     double total_total = 0;
     for (int i = 0; i < K; i++) {
 
-        Eigen::Matrix3d K_i_eig {{K_is[i][2], 0., K_is[i][0]},
-                                 {0., K_is[i][3], K_is[i][1]},
-                                 {0.,         0.,         1.}};
+        Eigen::Matrix3d K_i_eig{{K_is[i][2], 0.,         K_is[i][0]},
+                                {0.,         K_is[i][3], K_is[i][1]},
+                                {0.,         0.,         1.}};
 
         Eigen::Matrix3d R_qi = R_q * R_is[i].transpose();
         Eigen::Vector3d T_qi = T_q - R_qi * T_is[i];
         T_qi.normalize();
 
-        Eigen::Matrix3d T_qi_cross {
-                {       0, -T_qi(2),  T_qi(1)},
-                { T_qi(2),        0, -T_qi(0)},
-                {-T_qi(1),  T_qi(0),        0}};
+        Eigen::Matrix3d T_qi_cross{
+                {0,        -T_qi(2), T_qi(1)},
+                {T_qi(2),  0,        -T_qi(0)},
+                {-T_qi(1), T_qi(0),  0}};
         Eigen::Matrix3d E_qi = T_qi_cross * R_qi;
 
         Eigen::Matrix3d F = K_q_eig.inverse().transpose() * E_qi * K_i_eig.inverse();
@@ -157,8 +157,8 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         double total = 0;
         for (int j = 0; j < all_pts_i[i].size(); j++) {
 
-            Eigen::Vector3d pt_q {all_pts_q[i][j].x, all_pts_q[i][j].y, 1.};
-            Eigen::Vector3d pt_i {all_pts_i[i][j].x, all_pts_i[i][j].y, 1.};
+            Eigen::Vector3d pt_q{all_pts_q[i][j].x, all_pts_q[i][j].y, 1.};
+            Eigen::Vector3d pt_i{all_pts_i[i][j].x, all_pts_i[i][j].y, 1.};
 
             Eigen::Vector3d epiline = F * pt_i;
 
@@ -168,7 +168,8 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
             total += error;
 
             if (error <= error_thresh) {
-                auto cost_function = ReprojectionError::Create(R_is[i], T_is[i], K_i_eig, K_q_eig, all_pts_q[i][j], all_pts_i[i][j]);
+                auto cost_function = ReprojectionError::Create(R_is[i], T_is[i], K_i_eig, K_q_eig, all_pts_q[i][j],
+                                                               all_pts_i[i][j]);
                 problem.AddResidualBlock(cost_function, loss_function, R, T);
             }
         }
@@ -194,12 +195,155 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     double R_adj[9];
     ceres::AngleAxisToRotationMatrix(R, R_adj);
-    R_q = Eigen::Matrix3d {{R_adj[0], R_adj[3], R_adj[6]},
-                           {R_adj[1], R_adj[4], R_adj[7]},
-                           {R_adj[2], R_adj[5], R_adj[8]}};
-    T_q = Eigen::Vector3d {T[0], T[1], T[2]};
+    R_q = Eigen::Matrix3d{{R_adj[0], R_adj[3], R_adj[6]},
+                          {R_adj[1], R_adj[4], R_adj[7]},
+                          {R_adj[2], R_adj[5], R_adj[8]}};
+    T_q = Eigen::Vector3d{T[0], T[1], T[2]};
 
     return avg_avg;
+}
+
+
+
+
+
+
+void pose::visualizeRelpose(const string & query,
+                            const vector<string> & anchors,
+                            const vector<Eigen::Matrix3d> & R_is,
+                            const vector<Eigen::Vector3d> & T_is,
+                            const vector<Eigen::Matrix3d> & R_qis,
+                            const vector<Eigen::Vector3d> & T_qis,
+                            const vector<vector<double>> & K_is,
+                            const vector<double> & K_q,
+                            const vector<vector<cv::Point2d>> & all_pts_q,
+                            const vector<vector<cv::Point2d>> & all_pts_i,
+                            const Eigen::Matrix3d & R_q_before,
+                            const Eigen::Vector3d & T_q_before,
+                            const Eigen::Matrix3d & R_q_after,
+                            const Eigen::Vector3d & T_q_after) {
+
+    cv::Mat im_q = cv::imread(query);
+
+    Eigen::Matrix3d K_q_eig {{K_q[2], 0., K_q[0]},
+                             {0., K_q[3], K_q[1]},
+                             {0.,     0.,     1.}};
+
+    int K = int (anchors.size());
+
+    double total_total = 0;
+    for (int i = 0; i < K; i++) {
+
+        string anchor_name = "/Users/cameronfiore/C++/image_localization_project/data/" + anchors[i].substr(anchors[i].find("chess"), anchors[i].size());
+        cv::Mat im_i = cv::imread(anchor_name);
+        Eigen::Matrix3d K_i_eig {{K_is[i][2], 0., K_is[i][0]},
+                                 {0., K_is[i][3], K_is[i][1]},
+                                 {0.,         0.,         1.}};
+
+
+        Eigen::Matrix3d R_qi_est = R_qis[i];
+        Eigen::Vector3d T_qi_est = T_qis[i];
+        T_qi_est.normalize();
+        Eigen::Matrix3d T_qi_est_x {
+                {       0, -T_qi_est(2),  T_qi_est(1)},
+                { T_qi_est(2),        0, -T_qi_est(0)},
+                {-T_qi_est(1),  T_qi_est(0),        0}};
+        Eigen::Matrix3d E_qi_est = T_qi_est_x * R_qi_est;
+        Eigen::Matrix3d F_est = K_q_eig.inverse().transpose() * E_qi_est * K_i_eig.inverse();
+
+
+        Eigen::Matrix3d R_qi_before = R_q_before * R_is[i].transpose();
+        Eigen::Vector3d T_qi_before = T_q_before - R_qi_before * T_is[i];
+        T_qi_before.normalize();
+        Eigen::Matrix3d T_qi_before_x {
+                {       0, -T_qi_before(2),  T_qi_before(1)},
+                { T_qi_before(2),        0, -T_qi_before(0)},
+                {-T_qi_before(1),  T_qi_before(0),        0}};
+        Eigen::Matrix3d E_qi_before = T_qi_before_x * R_qi_before;
+        Eigen::Matrix3d F_before = K_q_eig.inverse().transpose() * E_qi_before * K_i_eig.inverse();
+
+
+        Eigen::Matrix3d R_qi_after = R_q_after * R_is[i].transpose();
+        Eigen::Vector3d T_qi_after = T_q_after - R_qi_after * T_is[i];
+        T_qi_after.normalize();
+        Eigen::Matrix3d T_qi_after_x {
+                {       0, -T_qi_after(2),  T_qi_after(1)},
+                { T_qi_after(2),        0, -T_qi_after(0)},
+                {-T_qi_after(1),  T_qi_after(0),        0}};
+        Eigen::Matrix3d E_qi_after = T_qi_after_x * R_qi_after;
+        Eigen::Matrix3d F_after = K_q_eig.inverse().transpose() * E_qi_after * K_i_eig.inverse();
+
+        vector<int> indices (K);
+        for(int n = 0; n < K; n++) {
+            indices[n] = n;
+        }
+        random_device gen;
+//        shuffle(indices.begin(), indices.end(), default_random_engine(123));
+        shuffle(indices.begin(), indices.end(), gen);
+
+
+        vector<cv::Point3d> est_lines_q, est_lines_i, before_lines_q, before_lines_i, after_lines_q, after_lines_i;
+        vector<cv::Point2d> pts_q, pts_i;
+        vector<cv::Scalar> colors;
+        uniform_int_distribution<int> d (0, 255);
+        assert(all_pts_i[i].size() == all_pts_q[i].size());
+        for (int x = 0; x < 20; x++) {
+            int idx = indices[x];
+
+            colors.emplace_back(d(gen), d(gen), d(gen));
+
+            Eigen::Vector3d pq {all_pts_q[i][idx].x, all_pts_q[i][idx].y, 1.};
+            Eigen::Vector3d pi {all_pts_i[i][idx].x, all_pts_i[i][idx].y, 1.};
+
+            Eigen::Vector3d elq = F_est * pi;
+            Eigen::Vector3d eli = pq.transpose() * F_est;
+            cv::Point3d est_line_q (elq[0], elq[1], elq[2]);
+            cv::Point3d est_line_i (eli[0], eli[1], eli[2]);
+            est_lines_q.push_back(est_line_q);
+            est_lines_i.push_back(est_line_i);
+
+            Eigen::Vector3d blq = F_before * pi;
+            Eigen::Vector3d bli = pq.transpose() * F_before;
+            cv::Point3d before_line_q (blq[0], blq[1], blq[2]);
+            cv::Point3d before_line_i (bli[0], bli[1], bli[2]);
+            before_lines_q.push_back(before_line_q);
+            before_lines_i.push_back(before_line_i);
+
+            Eigen::Vector3d alq = F_after * pi;
+            Eigen::Vector3d ali = pq.transpose() * F_after;
+            cv::Point3d after_line_q (alq[0], alq[1], alq[2]);
+            cv::Point3d after_line_i (ali[0], ali[1], ali[2]);
+            after_lines_q.push_back(after_line_q);
+            after_lines_i.push_back(after_line_i);
+
+            cv::Point2d pt_q (all_pts_q[i][idx].x, all_pts_q[i][idx].y);
+            cv::Point2d pt_i (all_pts_i[i][idx].x, all_pts_i[i][idx].y);
+            pts_q.push_back(pt_q);
+            pts_i.push_back(pt_i);
+        }
+
+        cv::Mat q_est = im_q.clone(), i_est = im_i.clone();
+        functions::drawLines(q_est, i_est, est_lines_q, est_lines_i, pts_q, pts_i, colors);
+        cv::Mat h_est;
+        cv::hconcat(q_est, i_est, h_est);
+        cv::imshow("<Query>                                 Local Reprojection                                 <Anchor>", h_est);
+
+
+        cv::Mat q_before = im_q.clone(), i_before = im_i.clone();
+        functions::drawLines(q_before, i_before, before_lines_q, before_lines_i, pts_q, pts_i, colors);
+        cv::Mat h_before;
+        cv::hconcat(q_before, i_before, h_before);
+        cv::imshow("<Query>                                 Reprojection Before Adjustment                                 <Anchor>", h_before);
+
+
+        cv::Mat q_after = im_q.clone(), i_after = im_i.clone();
+        functions::drawLines(q_after, i_after, after_lines_q, after_lines_i, pts_q, pts_i, colors);
+        cv::Mat h_after;
+        cv::hconcat(q_after, i_after, h_after);
+        cv::imshow("<Query>                                 Reprojection After Adjustment                                 <Anchor>", h_after);
+
+        cv::waitKey(0);
+    }
 }
 
 
