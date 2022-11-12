@@ -28,7 +28,7 @@ void findInliers (double threshold,
                   const vector<Eigen::Vector3d> * T_ks,
                   const vector<Eigen::Matrix3d> * R_qks,
                   const vector<Eigen::Vector3d> * T_qks,
-                  vector<tuple<int, int, double, vector<int>>> * results) {
+                  vector<tuple<int, int, double, vector<pair<int, double>>>> * results) {
 
     int K = int((*R_ks).size());
 
@@ -36,7 +36,7 @@ void findInliers (double threshold,
     vector<Eigen::Vector3d> set_T_ks {(*T_ks)[i], (*T_ks)[j]};
     vector<Eigen::Matrix3d> set_R_qks {(*R_qks)[i], (*R_qks)[j]};
     vector<Eigen::Vector3d> set_T_qks {(*T_qks)[i], (*T_qks)[j]};
-    vector<int> indices{i, j};
+    vector<pair<int, double>> indices {make_pair(i, 0.), make_pair(j, 0.)};
     double score = 0;
 
     Eigen::Matrix3d R_h = pose::R_q_average(vector<Eigen::Matrix3d>{(*R_qks)[i] * (*R_ks)[i], (*R_qks)[j] * (*R_ks)[j]});
@@ -49,7 +49,7 @@ void findInliers (double threshold,
             double T_angular_diff = functions::getAngleBetween(T_qk_h, (*T_qks)[k]);
             double R_angular_diff = functions::rotationDifference(R_qk_h, (*R_qks)[k]);
             if (T_angular_diff <= threshold && R_angular_diff <= threshold) {
-                indices.push_back(k);
+                indices.emplace_back(k, R_angular_diff + T_angular_diff);
                 score += R_angular_diff + T_angular_diff;
             }
         }
@@ -63,50 +63,6 @@ void findInliers (double threshold,
     mtx.unlock();
 }
 
-void findRelativePoses(const string * anchor,
-                       const vector<cv::Point2d> * pts_q,
-                       const vector<cv::Point2d> * pts_i,
-                       const vector<double> * K_q,
-                       const vector<double> * K_i,
-                       map<string, pair<Eigen::Matrix3d, Eigen::Vector3d>> * rel_poses) {
-    try {
-        cv::Mat K_q_mat = (cv::Mat_<double>(3, 3) << (*K_q)[2], 0., (*K_q)[0], 0., (*K_q)[3], (*K_q)[1], 0., 0., 1.);
-        cv::Mat K_i_mat = (cv::Mat_<double>(3, 3) << (*K_i)[2], 0., (*K_i)[0], 0., (*K_i)[3], (*K_i)[1], 0., 0., 1.);
-
-        vector<cv::Point2d> u_pts_q, u_pts_i;
-        cv::Mat d;
-        cv::undistortPoints(*pts_q, u_pts_q, K_q_mat, d);
-        cv::undistortPoints(*pts_i, u_pts_i, K_i_mat, d);
-
-        double thresh = .5 / (((*K_q)[2] + (*K_q)[3] + (*K_i)[2] + (*K_i)[3]) / 4);
-
-        cv::Mat mask;
-        cv::Mat E_ = cv::findEssentialMat(u_pts_i, u_pts_q,
-                                          1., cv::Point2d(0., 0.),
-                                          cv::RANSAC, 0.9999999999999999, thresh, mask);
-
-        cv::Mat E = E_(cv::Range(0, 3), cv::Range(0, 3));
-
-        cv::Mat R_, T_;
-        recoverPose(E, u_pts_i, u_pts_q, R_, T_, 1.0, cv::Point2d(0, 0), mask);
-
-        Eigen::Matrix3d R_qk;
-        Eigen::Vector3d T_qk;
-        cv2eigen(R_, R_qk);
-        cv2eigen(T_, T_qk);
-
-        auto pose = make_pair(R_qk, T_qk);
-        auto p = make_pair(*anchor, pose);
-
-        mtx.lock();
-        rel_poses->insert(p);
-        mtx.unlock();
-        return;
-    } catch (...) {
-        return;
-    }
-}
-
 
 int main() {
 
@@ -114,7 +70,9 @@ int main() {
 
     string dataset = "seven_scenes/";
     string relpose_file = "relpose_SIFT";
-    string error_file = "error_K_sweep";
+    string error_file1 = "error_K_sweep_by_support";
+    string error_file2 = "error_K_sweep_by_spacing";
+
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
@@ -122,19 +80,26 @@ int main() {
 
     for (const auto &scene: scenes) {
 
-        ofstream error;
-        error.open(dir + scene + error_file + ".txt");
+        ofstream error1;
+        error1.open(dir + scene + error_file1 + ".txt");
+
+        ofstream error2;
+        error2.open(dir + scene + error_file2 + ".txt");
 
         double threshold = 10.;
         double adj_threshold = 3.;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
+        vector<Eigen::Matrix3d> R_is_subset, R_qis_subset, rotations_subset;
+        vector<Eigen::Vector3d> T_is_subset, T_qis_subset;
         for (int q = start; q < queries.size(); q++) {
 
             cout << q + 1 << "/" << queries.size() << "..." << endl;
             string query = queries[q];
-            string line = query;
+            string line1 = query;
+            string line2 = query;
+
 
             auto info = functions::parseRelposeFile(dir, query, relpose_file);
             auto R_q = get<1>(info);
@@ -172,7 +137,7 @@ int main() {
             }
             std::thread threads_1[count];
             count = 0;
-            auto *results = new vector<tuple<int, int, double, vector<int>>>();
+            auto *results = new vector<tuple<int, int, double, vector<pair<int, double>>>>();
             for (int i = 0; i < K - 1; i++) {
                 for (int j = i + 1; j < K; j++) {
                     threads_1[count] = thread(findInliers, threshold, i, j, &R_is, &T_is, &R_qis, &T_qis, results);
@@ -207,20 +172,35 @@ int main() {
             }
             delete results;
 
-            vector<string> best_anchors;
+
+
+            int I_i = get<0>(best_set);
+            int I_j = get<1>(best_set);
+            vector<Eigen::Matrix3d> base_R_is {R_is[I_i], R_is[I_j]};
+            vector<Eigen::Matrix3d> base_R_qis {R_qis[I_i], R_qis[I_j]};
+            vector<Eigen::Matrix3d> base_rotations {R_qis[I_i] * R_is[I_i], R_qis[I_j] * R_is[I_j]};
+            vector<Eigen::Vector3d> base_T_is {T_is[I_i], T_is[I_j]};
+            vector<Eigen::Vector3d> base_T_qis {T_qis[I_i], T_qis[I_j]};
+
+
+            vector<pair<int, double>> best_indices = get<3>(best_set);
+            sort(best_indices.begin(), best_indices.end(), [](const auto &a, const auto &b) {
+                return a.second < b.second;
+            });
+
             vector<Eigen::Matrix3d> best_R_is, best_R_qis;
             vector<Eigen::Vector3d> best_T_is, best_T_qis;
-            vector<vector<double>> best_K_is;
             vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
-            for (const auto &i: get<3>(best_set)) {
-                best_anchors.push_back(anchors[i]);
-                best_R_is.push_back(R_is[i]);
-                best_R_qis.push_back(R_qis[i]);
-                best_T_is.push_back(T_is[i]);
-                best_T_qis.push_back(T_qis[i]);
-                best_inliers_q.push_back(inliers_q[i]);
-                best_inliers_i.push_back(inliers_i[i]);
-                best_K_is.push_back(K_is[i]);
+            for (auto & best_index : best_indices) {
+                int id = best_index.first;
+                if (id != I_i && id != I_j) {
+                    best_R_is.push_back(R_is[id]);
+                    best_R_qis.push_back(R_qis[id]);
+                    best_T_is.push_back(T_is[id]);
+                    best_T_qis.push_back(T_qis[id]);
+                    best_inliers_q.push_back(inliers_q[id]);
+                    best_inliers_i.push_back(inliers_i[id]);
+                }
             }
 
             vector<Eigen::Matrix3d> rotations(best_R_is.size());
@@ -228,42 +208,65 @@ int main() {
                 rotations[i] = best_R_qis[i] * best_R_is[i];
             }
 
-            K = int(best_anchors.size());
+            K = int(best_R_is.size());
             vector<Eigen::Vector3d> centers(K);
             for (int i = 0; i < K; i++) {
                 centers[i] = -best_R_is[i].transpose() * best_T_is[i];
             }
 
-            vector<Eigen::Matrix3d> R_is_subset, R_qis_subset, rotations_subset;
-            vector<Eigen::Vector3d> T_is_subset, T_qis_subset;
-            vector<vector<double>> K_is_subset;
-            for(int k = 2; k <= K; k++) {
+            for(int k = 0; k <= K; k++) {
+
+                R_is_subset = base_R_is;
+                R_qis_subset = base_R_qis;
+                rotations_subset = base_rotations;
+                T_is_subset = base_T_is;
+                T_qis_subset = base_T_qis;
+                for (int i = 0; i < k; i++) {
+                    R_is_subset.push_back(best_R_is[i]);
+                    T_is_subset.push_back(best_T_is[i]);
+                    R_qis_subset.push_back(best_R_qis[i]);
+                    T_qis_subset.push_back(best_T_qis[i]);
+                    rotations_subset.push_back(rotations[i]);
+                }
+                Eigen::Vector3d c_estimation = pose::c_q_closed_form(R_is_subset, T_is_subset, R_qis_subset, T_qis_subset);
+                Eigen::Matrix3d R_estimation = pose::R_q_average(rotations_subset);
+                Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
+                double c_error = functions::getDistBetween(c_q, c_estimation);
+                double R_error = functions::rotationDifference(R_q, R_estimation);
+                line1 += " " + to_string(k) + " " + to_string(c_error) + " " + to_string(R_error);
+                R_is_subset.clear();
+                T_is_subset.clear();
+                R_qis_subset.clear();
+                T_qis_subset.clear();
+                rotations_subset.clear();
+
+                R_is_subset = base_R_is;
+                R_qis_subset = base_R_qis;
+                rotations_subset = base_rotations;
+                T_is_subset = base_T_is;
+                T_qis_subset = base_T_qis;
                 vector<int> subset_indices = functions::optimizeSpacing(c_q, centers, k, false);
                 for (const auto & i: subset_indices) {
                     R_is_subset.push_back(best_R_is[i]);
                     T_is_subset.push_back(best_T_is[i]);
                     R_qis_subset.push_back(best_R_qis[i]);
                     T_qis_subset.push_back(best_T_qis[i]);
-                    K_is_subset.push_back(best_K_is[i]);
                     rotations_subset.push_back(rotations[i]);
                 }
-                Eigen::Vector3d c_estimation = pose::c_q_closed_form(R_is_subset, T_is_subset, R_qis_subset, T_qis_subset);
-                Eigen::Matrix3d R_estimation = pose::R_q_average(rotations_subset);
-                Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
-
-                double c_error = functions::getDistBetween(c_q, c_estimation);
-                double R_error = functions::rotationDifference(R_q, R_estimation);
-
-                line += " " + to_string(k) + " " + to_string(c_error) + " " + to_string(R_error);
-
+                c_estimation = pose::c_q_closed_form(R_is_subset, T_is_subset, R_qis_subset, T_qis_subset);
+                R_estimation = pose::R_q_average(rotations_subset);
+                T_estimation = -R_estimation * c_estimation;
+                c_error = functions::getDistBetween(c_q, c_estimation);
+                R_error = functions::rotationDifference(R_q, R_estimation);
+                line2 += " " + to_string(k) + " " + to_string(c_error) + " " + to_string(R_error);
                 R_is_subset.clear();
                 T_is_subset.clear();
                 R_qis_subset.clear();
                 T_qis_subset.clear();
-                K_is_subset.clear();
                 rotations_subset.clear();
             }
-            error << line << endl;
+            error1 << line1 << endl;
+            error2 << line2 << endl;
 
 //            Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
 //            Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
@@ -541,7 +544,8 @@ int main() {
 //            cout << line << endl;
 //            error << line;
         }
-        error.close();
+        error1.close();
+        error2.close();
     }
     return 0;
 }

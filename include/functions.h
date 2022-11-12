@@ -97,7 +97,7 @@ namespace functions {
                                 const vector<Eigen::Vector3d> & centers,
                                 int N, bool show_process);
 
-    vector<string> randomSelection(const vector<string> & images, int N);
+    vector<int> randomSelection(int size, int N);
 
     void showKmeans(const vector<pair<Eigen::Vector3d, vector<pair<string, Eigen::Vector3d>>>> & clusters,
                     const vector<cv::Scalar> & colors);

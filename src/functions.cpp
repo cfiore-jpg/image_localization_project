@@ -854,19 +854,22 @@ vector<int> functions::optimizeSpacing(const Eigen::Vector3d & query,
     return ids;
 }
 
-vector<string> functions::randomSelection(const vector<string> & images, int N) {
+vector<int> functions::randomSelection(int size, int N) {
 
-    if (images.size() <= N) return images;
-
-    vector<string> take = images, give;
-    random_device gen;
-    while(give.size() < N) {
-        uniform_int_distribution<int> d (0, int(take.size()) - 1);
-        int idx = d(gen);
-        give.push_back(take[idx]);
-        take.erase(take.begin() + idx);
+    vector<int> all (size);
+    for (int i = 0; i < size; i++) {
+        all[i] = i;
     }
-    return give;
+
+    random_device gen;
+    shuffle(all.begin(), all.end(), gen);
+
+    vector<int> ret (N);
+    for (int i = 0; i < N; i++) {
+        ret[i] = all[i];
+    }
+
+    return ret;
 }
 
 
