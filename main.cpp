@@ -91,8 +91,6 @@ int main() {
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
-        vector<Eigen::Matrix3d> R_is_subset, R_qis_subset, rotations_subset;
-        vector<Eigen::Vector3d> T_is_subset, T_qis_subset;
         for (int q = start; q < queries.size(); q++) {
 
             cout << q + 1 << "/" << queries.size() << "..." << endl;
@@ -137,10 +135,10 @@ int main() {
             }
             std::thread threads_1[count];
             count = 0;
-            auto *results = new vector<tuple<int, int, double, vector<pair<int, double>>>>();
+            vector<tuple<int, int, double, vector<pair<int, double>>>> results;
             for (int i = 0; i < K - 1; i++) {
                 for (int j = i + 1; j < K; j++) {
-                    threads_1[count] = thread(findInliers, threshold, i, j, &R_is, &T_is, &R_qis, &T_qis, results);
+                    threads_1[count] = thread(findInliers, threshold, i, j, &R_is, &T_is, &R_qis, &T_qis, &results);
                     this_thread::sleep_for(std::chrono::microseconds(1));
                     count++;
                 }
@@ -148,18 +146,18 @@ int main() {
             for (auto &th: threads_1) th.join();
 
             // Sort by number of inliers
-            sort(results->begin(), results->end(), [](const auto &a, const auto &b) {
+            sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
                 return get<3>(a).size() > get<3>(b).size();
             });
 
             // Sort by lowest score
-            auto best_set = results->at(0);
+            auto best_set = results.at(0);
             int size = int(get<3>(best_set).size());
             double best_score = get<2>(best_set);
             int idx = 0;
             while (true) {
                 try {
-                    auto set = results->at(idx);
+                    auto set = results.at(idx);
                     if (get<3>(set).size() != size) break;
                     if (get<2>(set) < best_score) {
                         best_score = get<2>(set);
@@ -170,8 +168,6 @@ int main() {
                 }
                 idx++;
             }
-            delete results;
-
 
 
             int I_i = get<0>(best_set);
@@ -214,6 +210,8 @@ int main() {
                 centers[i] = -best_R_is[i].transpose() * best_T_is[i];
             }
 
+            vector<Eigen::Matrix3d> R_is_subset, R_qis_subset, rotations_subset;
+            vector<Eigen::Vector3d> T_is_subset, T_qis_subset;
             for(int k = 0; k <= K; k++) {
 
                 R_is_subset = base_R_is;
