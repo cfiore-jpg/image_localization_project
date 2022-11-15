@@ -66,17 +66,17 @@ void findInliers (double threshold,
 
 int main() {
 
-    vector<string> scenes = {"chess/"};
+    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
 
     string dataset = "seven_scenes/";
-    string relpose_file = "relpose_SIFT";
+    string relpose_file = "relpose_SP";
     string error_file1 = "error_K_sweep_by_support";
     string error_file2 = "error_K_sweep_by_spacing";
-    string error_file3 = "error_K_sweep_by_ransel";
+    string error_file3 = "error_K_sweep_by_randsel";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto &scene: scenes) {
 
@@ -155,7 +155,7 @@ int main() {
             auto best_set = results.at(0);
             int size = int(get<3>(best_set).size());
 
-            if (size < 77) {
+            if (size < 102) {
                 continue;
             }
 
@@ -214,7 +214,7 @@ int main() {
                 centers[i] = -best_R_is[i].transpose() * best_T_is[i];
             }
 
-            for(int k = 0; k <= 75; k++) {
+            for(int k = 0; k <= 100; k++) {
 
                 vector<Eigen::Matrix3d> R_is_subset1, R_qis_subset1, rotations_subset1;
                 vector<Eigen::Vector3d> T_is_subset1, T_qis_subset1;
@@ -264,7 +264,7 @@ int main() {
                 rotations_subset3 = base_rotations;
                 T_is_subset3 = base_T_is;
                 T_qis_subset3 = base_T_qis;
-                vector<int> subset3_indices = functions::randomSelection(int(centers.size()), k);
+                vector<int> subset3_indices = functions::randomSelection(int(best_R_is.size()), k);
                 for (const auto & i: subset3_indices) {
                     R_is_subset3.push_back(best_R_is[i]);
                     T_is_subset3.push_back(best_T_is[i]);
