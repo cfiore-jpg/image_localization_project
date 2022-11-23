@@ -66,9 +66,9 @@ void findInliers (double threshold,
 
 int main() {
 
-    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
 
-    string dataset = "seven_scenes/";
+    string dataset = "cambridge/";
     string relpose_file = "relpose_SP";
     string error_file1 = "error_K_sweep_by_support";
     string error_file2 = "error_K_sweep_by_spacing";
@@ -155,10 +155,6 @@ int main() {
             auto best_set = results.at(0);
             int size = int(get<3>(best_set).size());
 
-            if (size < 102) {
-                continue;
-            }
-
             double best_score = get<2>(best_set);
             int idx = 0;
             while (true) {
@@ -214,7 +210,7 @@ int main() {
                 centers[i] = -best_R_is[i].transpose() * best_T_is[i];
             }
 
-            for(int k = 0; k <= 100; k++) {
+            for(int k = 0; k <= K; k++) {
 
                 vector<Eigen::Matrix3d> R_is_subset1, R_qis_subset1, rotations_subset1;
                 vector<Eigen::Vector3d> T_is_subset1, T_qis_subset1;
