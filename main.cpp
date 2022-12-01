@@ -90,7 +90,7 @@ int main() {
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir+"q.txt", scene);
-        for (int q = start; q < queries.size(); q++) {
+        for (int q = start; q < int(queries.size()); q++) {
 
             cout << q+1 << "/" << queries.size() << "..." << endl;
 
@@ -134,18 +134,18 @@ int main() {
 
             // Sort by number of inliers
             for (auto & th : threads_1) th.join();
-            sort(results->begin(), results->end(), [](const auto & a, const auto & b) {
+            sort(results.begin(), results.end(), [](const auto & a, const auto & b) {
                 return get<3>(a).size() > get<3>(b).size();
             });
 
             // Sort by lowest score
-            auto best_set = results->at(0);
+            auto best_set = results.at(0);
             int size = int(get<3>(best_set).size());
             double best_score = get<2>(best_set);
             int idx = 0;
             while (true) {
                 try {
-                    auto set = results->at(idx);
+                    auto set = results.at(idx);
                     if (get<3>(set).size() != size) break;
                     if (get<2>(set) < best_score) {
                         best_score = get<2>(set);
@@ -163,31 +163,31 @@ int main() {
                 best_inliers_i.push_back(inliers_i[i]);
             }
 
-            map<cv::Point2d, int> matches_counts;
-            for (int i = 0; i < int(best_inliers_q.size); i++) {
+            map<pair<double, double>, int> matches_counts;
+            for (int i = 0; i < int(best_inliers_q.size()); i++) {
                 auto points_q = best_inliers_q[i];
                 auto points_i = best_inliers_i[i];
-                for(int j = 0; j < int(points_q.size()); j++) {
-                    itr = matches_counts.find(points_q[j]);
-                    if (itr != m.end()) {
+                for(auto & point_q : points_q) {
+                    auto itr = matches_counts.find(make_pair(point_q.x, point_q.y));
+                    if (itr != matches_counts.end()) {
                         itr->second += 1;
                     } else {
-                        matches_counts.insert({points_q, 1});
+                        matches_counts.insert(make_pair(make_pair(point_q.x, point_q.y), 1));
                     }
                 }
             }
 
-            for (it = matches_counts.begin(); it != matches_counts.end(); it++) {
-                itr = matches.find(it->second);
-                if (itr != m.end()) {
+            for (auto & matches_count : matches_counts) {
+                auto itr = matches.find(matches_count.second);
+                if (itr != matches.end()) {
                         itr->second += 1;
                 } else {
-                    matches.insert({it->second, 1});
+                    matches.insert({matches_count.second, 1});
                 }
             }
 
-            itr = inliers.find(int(get<3>(best_set).size()));
-            if (itr != m.end()) {
+            auto itr = inliers.find(int(get<3>(best_set).size()));
+            if (itr != inliers.end()) {
                     itr->second += 1;
             } else {
                 inliers.insert({int(get<3>(best_set).size()), 1});
@@ -195,21 +195,21 @@ int main() {
         }
     }
 
-    for (it = matches.begin(); it != matches.end(); it++) {
-        int num = it->first;
-        int count = it->second;
+    for (auto & match : matches) {
+        int num = match.first;
+        int count = match.second;
         matches_count_file << num << " " << count << endl;
     }
 
-    for (it = inliers.begin(); it != inliers.end(); it++) {
-        int num = it->first;
-        int count = it->second;
+    for (auto & inlier : inliers) {
+        int num = inlier.first;
+        int count = inlier.second;
         inliers_count_file << num << " " << count << endl;
     }
 
 
-    matches_file.close();
-    inliers_file.close();
+    matches_count_file.close();
+    inliers_count_file.close();
 
     return 0;
 }
