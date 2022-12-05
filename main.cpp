@@ -117,91 +117,91 @@ int main() {
     //            int check = 0;
     //        }
 
-        // ALL K -------------------------------------------------------------------------------------------------------
-        int count = 0;
-        for (int i = 0; i < K - 1; i++) {
-            for (int j = i + 1; j < K; j++) {
-                count++;
-            }
-        }
-        std::thread threads_1[count];
-        count = 0;
-        vector<tuple<int,int,double,vector<int>>> results;
-        for (int i = 0; i < K - 1; i++) {
-            for (int j = i + 1; j < K; j++) {
-                threads_1[count] = thread(findInliers, threshold, i, j, &R_is, &T_is, &R_qis, &T_qis, results);
-                this_thread::sleep_for(std::chrono::microseconds (1));
-                count++;
-            }
-        }
-
-        // Sort by number of inliers
-        for (auto & th : threads_1) th.join();
-        sort(results->begin(), results->end(), [](const auto & a, const auto & b) {
-            return get<3>(a).size() > get<3>(b).size();
-        });
-
-        // Sort by lowest score
-        auto best_set = results->at(0);
-        int size = int(get<3>(best_set).size());
-        double best_score = get<2>(best_set);
-        int idx = 0;
-        while (true) {
-            try {
-                auto set = results->at(idx);
-                if (get<3>(set).size() != size) break;
-                if (get<2>(set) < best_score) {
-                    best_score = get<2>(set);
-                    best_set = set;
+            // ALL K -------------------------------------------------------------------------------------------------------
+            int count = 0;
+            for (int i = 0; i < K - 1; i++) {
+                for (int j = i + 1; j < K; j++) {
+                    count++;
                 }
-            } catch (...) {
-                break;
             }
-            idx++;
-        }
+            std::thread threads_1[count];
+            count = 0;
+            vector<tuple<int,int,double,vector<int>>> results;
+            for (int i = 0; i < K - 1; i++) {
+                for (int j = i + 1; j < K; j++) {
+                    threads_1[count] = thread(findInliers, threshold, i, j, &R_is, &T_is, &R_qis, &T_qis, results);
+                    this_thread::sleep_for(std::chrono::microseconds (1));
+                    count++;
+                }
+            }
 
-        vector<string> best_anchors;
-        vector<Eigen::Matrix3d> best_R_is, best_R_qis;
-        vector<Eigen::Vector3d> best_T_is, best_T_qis;
-        vector<vector<double>> best_K_is;
-        vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
-        for (const auto & i : get<3>(best_set)) {
-            best_anchors.push_back(anchors[i]);
-            best_R_is.push_back(R_is[i]);
-            best_R_qis.push_back(R_qis[i]);
-            best_T_is.push_back(T_is[i]);
-            best_T_qis.push_back(T_qis[i]);
-            best_inliers_q.push_back(inliers_q[i]);
-            best_inliers_i.push_back(inliers_i[i]);
-            best_K_is.push_back(K_is[i]);
-        }
+            // Sort by number of inliers
+            for (auto & th : threads_1) th.join();
+            sort(results->begin(), results->end(), [](const auto & a, const auto & b) {
+                return get<3>(a).size() > get<3>(b).size();
+            });
 
-        vector<Eigen::Matrix3d> rotations(best_R_is.size());
-        for (int i = 0; i < best_R_is.size(); i++) {
-            rotations[i] = best_R_qis[i] * best_R_is[i];
-        }
+            // Sort by lowest score
+            auto best_set = results->at(0);
+            int size = int(get<3>(best_set).size());
+            double best_score = get<2>(best_set);
+            int idx = 0;
+            while (true) {
+                try {
+                    auto set = results->at(idx);
+                    if (get<3>(set).size() != size) break;
+                    if (get<2>(set) < best_score) {
+                        best_score = get<2>(set);
+                        best_set = set;
+                    }
+                } catch (...) {
+                    break;
+                }
+                idx++;
+            }
 
-        Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
-        Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
+            vector<string> best_anchors;
+            vector<Eigen::Matrix3d> best_R_is, best_R_qis;
+            vector<Eigen::Vector3d> best_T_is, best_T_qis;
+            vector<vector<double>> best_K_is;
+            vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
+            for (const auto & i : get<3>(best_set)) {
+                best_anchors.push_back(anchors[i]);
+                best_R_is.push_back(R_is[i]);
+                best_R_qis.push_back(R_qis[i]);
+                best_T_is.push_back(T_is[i]);
+                best_T_qis.push_back(T_qis[i]);
+                best_inliers_q.push_back(inliers_q[i]);
+                best_inliers_i.push_back(inliers_i[i]);
+                best_K_is.push_back(K_is[i]);
+            }
 
-        double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
-        double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
+            vector<Eigen::Matrix3d> rotations(best_R_is.size());
+            for (int i = 0; i < best_R_is.size(); i++) {
+                rotations[i] = best_R_qis[i] * best_R_is[i];
+            }
 
-        Eigen::Matrix3d R_adjustment = R_estimation;
-        Eigen::Vector3d T_adjustment = - R_estimation * c_estimation;
+            Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
+            Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
 
-        double avg_rep = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
-        Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
+            double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
+            double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
 
-        double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
-        double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
+            Eigen::Matrix3d R_adjustment = R_estimation;
+            Eigen::Vector3d T_adjustment = - R_estimation * c_estimation;
+
+            double avg_rep = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
+            Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
+
+            double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
+            double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
 
-        line += " All_Pre_Adj " + to_string(R_error_estimation_all)
-                + " " + to_string(c_error_estimation_all)
-                + " All_Post_Adj " + to_string(R_error_adjustment_all)
-                + " " + to_string(c_error_adjustment_all);
-        //--------------------------------------------------------------------------------------------------------------
+            line += " All_Pre_Adj " + to_string(R_error_estimation_all)
+                    + " " + to_string(c_error_estimation_all)
+                    + " All_Post_Adj " + to_string(R_error_adjustment_all)
+                    + " " + to_string(c_error_adjustment_all);
+            //--------------------------------------------------------------------------------------------------------------
 
 
 
