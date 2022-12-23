@@ -96,7 +96,7 @@ namespace pose {
 
 
     //// FINAL POSE ADJUSTMENT
-    double adjustHypothesis(const vector<Eigen::Matrix3d> & R_is,
+    void adjustHypothesis(const vector<Eigen::Matrix3d> & R_is,
                             const vector<Eigen::Vector3d> & T_is,
                             const vector<vector<double>> & K_is,
                             const vector<double> & K_q,

@@ -39,10 +39,17 @@ struct ReprojectionError{
         T R_q [9];
         ceres::AngleAxisToRotationMatrix(R, R_q);
 
-        T px2point[3];
-        px2point[0] = (T(pt_i.x) - K_i(0,2)) / K_i(0,0);
-        px2point[1] = (T(pt_i.y) - K_i(1,2)) / K_i(1,1);
-        px2point[2] = T(1.);
+        T i_point[3];
+        i_point[0] = (T(pt_i.x) - K_i(0,2)) / K_i(0,0);
+        i_point[1] = (T(pt_i.y) - K_i(1,2)) / K_i(1,1);
+        i_point[2] = T(1.);
+
+        T q_point[3];
+        q_point[0] = (T(pt_q.x) - K_q(0,2)) / K_q(0,0);
+        q_point[1] = (T(pt_q.y) - K_q(1,2)) / K_q(1,1);
+        q_point[2] = T(1.);
+
+
 
         T R_qk [9];
         R_qk[0] = R_q[0] * T(R_i(0,0)) + R_q[3] * T(R_i(0,1)) + R_q[6] * T(R_i(0,2));
@@ -71,20 +78,39 @@ struct ReprojectionError{
         E_qk[7] =   T_qk[2] * R_qk[6]                     - T_qk[0] * R_qk[8];
         E_qk[8] = - T_qk[1] * R_qk[6] + T_qk[0] * R_qk[7];
 
-        T point2point[3];
-        point2point[0] = E_qk[0] * px2point[0] + E_qk[3] * px2point[1] + E_qk[6] * px2point[2];
-        point2point[1] = E_qk[1] * px2point[0] + E_qk[4] * px2point[1] + E_qk[7] * px2point[2];
-        point2point[2] = E_qk[2] * px2point[0] + E_qk[5] * px2point[1] + E_qk[8] * px2point[2];
 
-        T epiline[3];
-        epiline[0] = (T(1.) /  K_q(0,0)) * point2point[0];
-        epiline[1] = (T(1.) /  K_q(1,1)) * point2point[1];
-        epiline[2] = (-K_q(0,2)/K_q(0,0)) * point2point[0] - (K_q(1,2)/K_q(1,1)) * point2point[1] + point2point[2];
 
-        T error = ceres::abs(epiline[0] * T(pt_q.x) + epiline[1] * T(pt_q.y) + epiline[2]) /
-                  ceres::sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+        T point2point_i[3];
+        point2point_i[0] = E_qk[0] * i_point[0] + E_qk[3] * i_point[1] + E_qk[6] * i_point[2];
+        point2point_i[1] = E_qk[1] * i_point[0] + E_qk[4] * i_point[1] + E_qk[7] * i_point[2];
+        point2point_i[2] = E_qk[2] * i_point[0] + E_qk[5] * i_point[1] + E_qk[8] * i_point[2];
 
-        residuals[0] = error;
+        T point2point_q[3];
+        point2point_q[0] = E_qk[0] * q_point[0] + E_qk[1] * q_point[1] + E_qk[2] * q_point[2];
+        point2point_q[1] = E_qk[3] * q_point[0] + E_qk[4] * q_point[1] + E_qk[5] * q_point[2];
+        point2point_q[2] = E_qk[6] * q_point[0] + E_qk[7] * q_point[1] + E_qk[8] * q_point[2];
+
+
+
+        T epiline_on_q[3];
+        epiline_on_q[0] = (T(1.) /  K_q(0,0)) * point2point_i[0];
+        epiline_on_q[1] = (T(1.) /  K_q(1,1)) * point2point_i[1];
+        epiline_on_q[2] = (-K_q(0,2)/K_q(0,0)) * point2point_i[0] - (K_q(1,2)/K_q(1,1)) * point2point_i[1] + point2point_i[2];
+
+        T epiline_on_i[3];
+        epiline_on_i[0] = (T(1.) /  K_i(0,0)) * point2point_q[0];
+        epiline_on_i[1] = (T(1.) /  K_i(1,1)) * point2point_q[1];
+        epiline_on_i[2] = (-K_i(0,2)/K_i(0,0)) * point2point_q[0] - (K_i(1,2)/K_i(1,1)) * point2point_q[1] + point2point_q[2];
+
+
+        T error_q = ceres::abs(epiline_on_q[0] * T(pt_q.x) + epiline_on_q[1] * T(pt_q.y) + epiline_on_q[2]) /
+                    ceres::sqrt(epiline_on_q[0] * epiline_on_q[0] + epiline_on_q[1] * epiline_on_q[1]);
+
+        T error_i = ceres::abs(epiline_on_i[0] * T(pt_i.x) + epiline_on_i[1] * T(pt_i.y) + epiline_on_i[2]) /
+                  ceres::sqrt(epiline_on_i[0] * epiline_on_i[0] + epiline_on_i[1] * epiline_on_i[1]);
+
+        residuals[0] = error_i;
+        residuals[1] = error_q;
 
         return true;
     }
@@ -95,7 +121,7 @@ struct ReprojectionError{
                                        const Eigen::Matrix3d & K_q,
                                        const cv::Point2d & pt_q,
                                        const cv::Point2d & pt_i) {
-        return (new ceres::AutoDiffCostFunction<ReprojectionError, 1, 3, 3>(
+        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 3, 3>(
                 new ReprojectionError(R_i, T_i, K_i, K_q, pt_q, pt_i)));
     }
 
@@ -108,7 +134,7 @@ struct ReprojectionError{
 };
 
 //// FINAL POSE ADJUSTMENT
-double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
+void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                              const vector<Eigen::Vector3d> & T_is,
                              const vector<vector<double>> & K_is,
                              const vector<double> & K_q,
@@ -133,7 +159,9 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     ceres::Problem problem;
     ceres::LossFunction *loss_function = new ceres::CauchyLoss(1.0);
 
-    double total_total = 0;
+    double total_q_all_points= 0;
+    double total_i_all_points= 0;
+
     for (int i = 0; i < K; i++) {
 
         Eigen::Matrix3d K_i_eig{{K_is[i][2], 0.,         K_is[i][0]},
@@ -154,32 +182,41 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
         assert(all_pts_i[i].size() == all_pts_q[i].size());
 
-        double total = 0;
+        double total_q_this_point = 0;
+        double total_i_this_point = 0;
+
         for (int j = 0; j < all_pts_i[i].size(); j++) {
 
-            Eigen::Vector3d pt_q{all_pts_q[i][j].x, all_pts_q[i][j].y, 1.};
-            Eigen::Vector3d pt_i{all_pts_i[i][j].x, all_pts_i[i][j].y, 1.};
+            Eigen::Vector3d pt_q {all_pts_q[i][j].x, all_pts_q[i][j].y, 1.};
+            Eigen::Vector3d pt_i {all_pts_i[i][j].x, all_pts_i[i][j].y, 1.};
 
-            Eigen::Vector3d epiline = F * pt_i;
+            Eigen::Vector3d line_on_q = F * pt_i;
+            Eigen::Vector3d line_on_i = pt_q.transpose() * F;
 
-            double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
-                           sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+            double rep_error_q = abs(line_on_q[0] * pt_q[0] + line_on_q[1] * pt_q[1] + line_on_q[2]) /
+                           sqrt(line_on_q[0] * line_on_q[0] + line_on_q[1] * line_on_q[1]);
 
-            total += error;
+            double rep_error_i = abs(line_on_i[0] * pt_i[0] + line_on_i[1] * pt_i[1] + line_on_i[2]) /
+                                 sqrt(line_on_i[0] * line_on_i[0] + line_on_i[1] * line_on_i[1]);
 
-            if (error <= error_thresh) {
+            total_q_this_point += rep_error_q;
+            total_i_this_point += rep_error_i;
+
+            if (rep_error_q <= error_thresh && rep_error_i <= error_thresh) {
                 auto cost_function = ReprojectionError::Create(R_is[i], T_is[i], K_i_eig, K_q_eig, all_pts_q[i][j],
                                                                all_pts_i[i][j]);
                 problem.AddResidualBlock(cost_function, loss_function, R, T);
             }
         }
+        total_q_this_point /= double(all_pts_i[i].size());
+        total_i_this_point /= double(all_pts_i[i].size());
 
-        double avg = total / double(all_pts_i[i].size());
-        total_total += avg;
+        total_q_all_points += total_q_this_point;
+        total_i_all_points += total_i_this_point;
 
     }
-
-    double avg_avg = total_total / K;
+    total_q_all_points /= K;
+    total_i_all_points /= K;
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
@@ -200,7 +237,65 @@ double pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                           {R_adj[2], R_adj[5], R_adj[8]}};
     T_q = Eigen::Vector3d{T[0], T[1], T[2]};
 
-    return avg_avg;
+
+
+    total_q_all_points= 0;
+    total_i_all_points= 0;
+
+    for (int i = 0; i < K; i++) {
+
+        Eigen::Matrix3d K_i_eig{{K_is[i][2], 0.,         K_is[i][0]},
+                                {0.,         K_is[i][3], K_is[i][1]},
+                                {0.,         0.,         1.}};
+
+        Eigen::Matrix3d R_qi = R_q * R_is[i].transpose();
+        Eigen::Vector3d T_qi = T_q - R_qi * T_is[i];
+        T_qi.normalize();
+
+        Eigen::Matrix3d T_qi_cross{
+                {0,        -T_qi(2), T_qi(1)},
+                {T_qi(2),  0,        -T_qi(0)},
+                {-T_qi(1), T_qi(0),  0}};
+        Eigen::Matrix3d E_qi = T_qi_cross * R_qi;
+
+        Eigen::Matrix3d F = K_q_eig.inverse().transpose() * E_qi * K_i_eig.inverse();
+
+        assert(all_pts_i[i].size() == all_pts_q[i].size());
+
+        double total_q_this_point = 0;
+        double total_i_this_point = 0;
+
+        for (int j = 0; j < all_pts_i[i].size(); j++) {
+
+            Eigen::Vector3d pt_q {all_pts_q[i][j].x, all_pts_q[i][j].y, 1.};
+            Eigen::Vector3d pt_i {all_pts_i[i][j].x, all_pts_i[i][j].y, 1.};
+
+            Eigen::Vector3d line_on_q = F * pt_i;
+            Eigen::Vector3d line_on_i = pt_q.transpose() * F;
+
+            double rep_error_q = abs(line_on_q[0] * pt_q[0] + line_on_q[1] * pt_q[1] + line_on_q[2]) /
+                                 sqrt(line_on_q[0] * line_on_q[0] + line_on_q[1] * line_on_q[1]);
+
+            double rep_error_i = abs(line_on_i[0] * pt_i[0] + line_on_i[1] * pt_i[1] + line_on_i[2]) /
+                                 sqrt(line_on_i[0] * line_on_i[0] + line_on_i[1] * line_on_i[1]);
+
+            total_q_this_point += rep_error_q;
+            total_i_this_point += rep_error_i;
+
+        }
+        total_q_this_point /= double(all_pts_i[i].size());
+        total_i_this_point /= double(all_pts_i[i].size());
+
+        total_q_all_points += total_q_this_point;
+        total_i_all_points += total_i_this_point;
+
+    }
+    total_q_all_points /= K;
+    total_i_all_points /= K;
+
+    int x = 0;
+
+
 }
 
 
