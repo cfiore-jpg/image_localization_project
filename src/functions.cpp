@@ -34,6 +34,49 @@
 using namespace std;
 using namespace cv;
 
+vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>>
+functions::find_shared_matches (const vector<Eigen::Matrix3d> & R_is,
+                                const vector<Eigen::Vector3d> & T_is,
+                                const vector<vector<double>> & K_is,
+                                const vector<vector<cv::Point2d>> & all_pts_q,
+                                const vector<vector<cv::Point2d>> & all_pts_i) {
+
+    size_t K = R_is.size();
+    assert(R_is.size() == K && T_is.size() == K && K_is.size() == K && all_pts_q.size() == K);
+
+    map<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>> m;
+
+    for (int i = 0; i < K; i++) {
+        auto R_i = R_is[i];
+        auto T_i = T_is[i];
+        auto K_i = K_is[i];
+        auto pts_i = all_pts_i[i];
+        auto pts_q = all_pts_q[i];
+        for (int j = 0; j < pts_i.size(); j++) {
+            auto pt_q = make_pair(pts_q[j].x, pts_q[j].y);
+            auto t = make_tuple(make_pair(pts_i[j].x, pts_i[j].y), R_i, T_i, K_i);
+            if(m.find(pt_q) != m.end()) {
+                m.at(pt_q).push_back(t);
+            } else {
+                vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> v = {t};
+                m.insert({pt_q, v});
+            }
+        }
+    }
+
+    vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>> result;
+    for (const auto & it : m) {
+        result.push_back(it);
+    }
+
+    sort(result.begin(), result.end(), [](auto & lhs, auto & rhs) {
+        return lhs.second.size() > rhs.second.size();
+    });
+
+
+    return result;
+}
+
 vector<string> functions::getQueries(const string & queryList, const string & scene) {
 
     vector<string> queries;

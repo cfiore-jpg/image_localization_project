@@ -191,6 +191,8 @@ int main() {
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
 
+            auto r = functions::find_shared_matches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+
             pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i,
                                    adj_threshold, R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
