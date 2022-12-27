@@ -107,36 +107,41 @@
 //    cv::Point2d pt_i;
 //};
 
-struct ReprojectionError{
-    ReprojectionError(double x, double y) : x(x), y(y) {}
+struct ReprojectionError {
+    ReprojectionError(double x,
+                      double y,
+                      double X,
+                      double Y,
+                      double Z,
+                      double fx,
+                      double fy,
+                      double cx,
+                      double cy)
+                      : x(x), y(y), X(X), Y(Y), Z(Z), fx(fx), fy(fy), cx(cx), cy(cy) {}
 
     template<typename T>
-    bool operator()(const T * const camera, const T * const point, T * residuals) const {
+    bool operator()(const T *const camera, T *residuals) const {
 
         T AA[3];
         AA[0] = camera[0];
         AA[1] = camera[1];
         AA[2] = camera[2];
 
-        T R_q [9];
+        T R_q[9];
         ceres::AngleAxisToRotationMatrix(AA, R_q);
 
-        T T_q [3];
+        T T_q[3];
         T_q[0] = camera[3];
         T_q[1] = camera[4];
         T_q[2] = camera[5];
 
-        T focal = camera[6];
-        T cx = camera[7];
-        T cy = camera[8];
-
         T point_C[3];
-        point_C[0] = R_q[0]*point[0] + R_q[3]*point[1] + R_q[6]*point[2] + T_q[0];
-        point_C[1] = R_q[1]*point[0] + R_q[4]*point[1] + R_q[7]*point[2] + T_q[1];
-        point_C[2] = R_q[2]*point[0] + R_q[5]*point[1] + R_q[8]*point[2] + T_q[2];
+        point_C[0] = R_q[0] * T(X) + R_q[3] * T(Y) + R_q[6] * T(Z) + T_q[0];
+        point_C[1] = R_q[1] * T(X) + R_q[4] * T(Y) + R_q[7] * T(Z) + T_q[1];
+        point_C[2] = R_q[2] * T(X) + R_q[5] * T(Y) + R_q[8] * T(Z) + T_q[2];
 
-        T reprojected_x = focal*(point_C[0]/point_C[2]) + cx;
-        T reprojected_y = focal*(point_C[1]/point_C[2]) + cy;
+        T reprojected_x = T(fx) * (point_C[0] / point_C[2]) + T(cx);
+        T reprojected_y = T(fy) * (point_C[1] / point_C[2]) + T(cy);
 
         T error_x = reprojected_x - T(x);
         T error_y = reprojected_y - T(y);
@@ -147,13 +152,28 @@ struct ReprojectionError{
         return true;
     }
 
-    static ceres::CostFunction *Create(const double x, const double y) {
-        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 9, 3>(
-                new ReprojectionError(x, y)));
+    static ceres::CostFunction *Create(const double x,
+                                       const double y,
+                                       const double X,
+                                       const double Y,
+                                       const double Z,
+                                       const double fx,
+                                       const double fy,
+                                       const double cx,
+                                       const double cy) {
+        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 6>(
+                new ReprojectionError(x, y, X, Y, Z, fx, fy, cx, cy)));
     }
 
     double x;
     double y;
+    double X;
+    double Y;
+    double Z;
+    double fx;
+    double fy;
+    double cx;
+    double cy;
 };
 
 //// FINAL POSE ADJUSTMENT
@@ -172,12 +192,11 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     double R[3];
     double R_arr[9] {R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
     ceres::RotationMatrixToAngleAxis(R_arr, R);
-    double focal = (K_q[2] + K_q[3]) / 2.;
-    double camera[9] {R[0], R[1], R[2], T_q[0], T_q[1], T_q[2], focal, K_q[0], K_q[1]};
+    double camera[9] {R[0], R[1], R[2], T_q[0], T_q[1], T_q[2]};
 
     auto r = functions::findSharedMatches(R_is, T_is, K_is, all_pts_q, all_pts_i);
     vector<cv::Point2d> points2d;
-    vector<Eigen::Vector3d> points3dv;
+    vector<Eigen::Vector3d> points3d;
     for (const auto & p : r) {
         cv::Point2d pt (p.first.first, p.first.second);
         Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
@@ -185,29 +204,29 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         double dist = sqrt(pow(pt.x-reproj.x, 2.) + pow(pt.y-reproj.y, 2.));
         if (dist <= error_thresh) {
             points2d.push_back(pt);
-            points3dv.push_back(point3d);
+            points3d.push_back(point3d);
         }
-    }
-    auto points3d = new double[points3dv.size()][3];
-    for (int i = 0; i < points3dv.size(); i++) {
-        points3d[i][0] = points3dv[i][0];
-        points3d[i][1] = points3dv[i][1];
-        points3d[i][2] = points3dv[i][2];
-
     }
 
     ceres::Problem problem;
-    ceres::LossFunction *loss_function = new ceres::CauchyLoss(1.0);
+    ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
 
     for (int i = 0; i < points2d.size(); i++) {
-        auto cost_function = ReprojectionError::Create(points2d[i].x, points2d[i].y);
-        auto p = points3d[i];
-        problem.AddResidualBlock(cost_function, loss_function, camera, p);
+        auto cost_function = ReprojectionError::Create(points2d[i].x,
+                                                       points2d[i].y,
+                                                       points3d[i][0],
+                                                       points3d[i][1],
+                                                       points3d[i][2],
+                                                       K_q[2],
+                                                       K_q[3],
+                                                       K_q[0],
+                                                       K_q[1]);
+        problem.AddResidualBlock(cost_function, loss_function, camera);
     }
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-//    options.minimizer_progress_to_stdout = true;
+    options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
 
     if (problem.NumResidualBlocks() > 0) {
@@ -215,7 +234,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     } else {
         cout << " Can't Adjust ";
     }
-//    std::cout << summary.FullReport() << "\n";
+    std::cout << summary.FullReport() << "\n";
 
     R[0] = camera[0];
     R[1] = camera[1];
@@ -226,11 +245,8 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                           {R_adj[1], R_adj[4], R_adj[7]},
                           {R_adj[2], R_adj[5], R_adj[8]}};
     T_q = Eigen::Vector3d{camera[3], camera[4], camera[5]};
-    focal = camera[6];
-    double cx = camera[7];
-    double cy = camera[8];
 
-    delete[] points3d;
+    int x = 0;
 }
 //void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 //                             const vector<Eigen::Vector3d> & T_is,

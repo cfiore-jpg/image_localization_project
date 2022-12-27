@@ -71,15 +71,15 @@ int main() {
     string error_file = "error_SP";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/"+dataset;
-    string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/";
+    string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/"+dataset;
     string dir = home_dir;
 
     for (const auto & scene : scenes) {
         ofstream error;
         error.open(dir+scene+error_file+".txt");
 
-        double threshold = 10.;
-        double adj_threshold = 15.;
+        double threshold = 5.;
+        double adj_threshold = 20.;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir+"q.txt", scene);
@@ -191,29 +191,6 @@ int main() {
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
 
-//            auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
-//
-//            for(const auto & p : r) {
-//                cv::Mat im = cv::imread(dir + query);
-//                cv::Point2d pt (p.first.first, p.first.second);
-//                auto color = cv::Scalar(255, 0, 0);
-//                cv::circle(im, pt, 10, color, -1);
-//
-//                Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
-//
-//                cv::Point2d reproj2DFromGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-//                color = cv::Scalar(0, 255, 0);
-//                cv::circle(im, reproj2DFromGT, 10, color, -1);
-//
-//                cv::Point2d reproj2DFromEst = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
-//                color = cv::Scalar(0, 0, 255);
-//                cv::circle(im, reproj2DFromEst, 10, color, -1);
-//
-//
-//                cv::imshow("Found v Calculated", im);
-//                cv::waitKey(0);
-//            }
-
             pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i,
                                    adj_threshold, R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
@@ -221,11 +198,38 @@ int main() {
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
+            auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+            for(const auto & p : r) {
+                cv::Mat im = cv::imread(dir + query);
+                cv::Point2d pt (p.first.first, p.first.second);
+                auto color = cv::Scalar(0, 255, 0);
+                cv::circle(im, pt, 10, color, -1);
+
+                Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
+
+                cv::Point2d reproj2DFromGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
+                color = cv::Scalar(0, 0, 255);
+                cv::circle(im, reproj2DFromGT, 10, color, -1);
+
+                cv::Point2d reproj2DFromEst = pose::reproject3Dto2D(point3d, R_estimation, -R_estimation * c_estimation, K_q);
+                color = cv::Scalar(255, 0, 0);
+                cv::circle(im, reproj2DFromEst, 10, color, -1);
+
+                cv::Point2d reproj2DFromAdj = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
+                color = cv::Scalar(255, 0, 255);
+                cv::circle(im, reproj2DFromAdj, 10, color, -1);
+
+                cv::imshow("Found v Calculated", im);
+                cv::waitKey(0);
+            }
 
             line += " All_Pre_Adj " + to_string(R_error_estimation_all)
                     + " " + to_string(c_error_estimation_all)
                     + " All_Post_Adj " + to_string(R_error_adjustment_all)
                     + " " + to_string(c_error_adjustment_all);
+
+            error << line << endl;
+            cout << line << endl;
             //--------------------------------------------------------------------------------------------------------------
         }
         error.close();
