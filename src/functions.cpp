@@ -35,11 +35,11 @@ using namespace std;
 using namespace cv;
 
 vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>>
-functions::find_shared_matches (const vector<Eigen::Matrix3d> & R_is,
-                                const vector<Eigen::Vector3d> & T_is,
-                                const vector<vector<double>> & K_is,
-                                const vector<vector<cv::Point2d>> & all_pts_q,
-                                const vector<vector<cv::Point2d>> & all_pts_i) {
+functions::findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
+                             const vector<Eigen::Vector3d> & T_is,
+                             const vector<vector<double>> & K_is,
+                             const vector<vector<cv::Point2d>> & all_pts_q,
+                             const vector<vector<cv::Point2d>> & all_pts_i) {
 
     size_t K = R_is.size();
     assert(R_is.size() == K && T_is.size() == K && K_is.size() == K && all_pts_q.size() == K);
@@ -72,7 +72,6 @@ functions::find_shared_matches (const vector<Eigen::Matrix3d> & R_is,
     sort(result.begin(), result.end(), [](auto & lhs, auto & rhs) {
         return lhs.second.size() > rhs.second.size();
     });
-
 
     return result;
 }

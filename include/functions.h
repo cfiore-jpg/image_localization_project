@@ -21,11 +21,11 @@ using namespace std;
 namespace functions {
 
     vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>>
-    find_shared_matches (const vector<Eigen::Matrix3d> & R_is,
-                         const vector<Eigen::Vector3d> & T_is,
-                         const vector<vector<double>> & K_is,
-                         const vector<vector<cv::Point2d>> & all_pts_q,
-                         const vector<vector<cv::Point2d>> & all_pts_i);
+    findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
+                      const vector<Eigen::Vector3d> & T_is,
+                      const vector<vector<double>> & K_is,
+                      const vector<vector<cv::Point2d>> & all_pts_q,
+                      const vector<vector<cv::Point2d>> & all_pts_i);
 
     vector<string> getQueries(const string & queryList, const string & scene);
 

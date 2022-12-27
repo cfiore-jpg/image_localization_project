@@ -79,7 +79,7 @@ int main() {
         error.open(dir+scene+error_file+".txt");
 
         double threshold = 10.;
-        double adj_threshold = 3.;
+        double adj_threshold = 15.;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir+"q.txt", scene);
@@ -191,7 +191,28 @@ int main() {
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
 
-            auto r = functions::find_shared_matches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+//            auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+//
+//            for(const auto & p : r) {
+//                cv::Mat im = cv::imread(dir + query);
+//                cv::Point2d pt (p.first.first, p.first.second);
+//                auto color = cv::Scalar(255, 0, 0);
+//                cv::circle(im, pt, 10, color, -1);
+//
+//                Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
+//
+//                cv::Point2d reproj2DFromGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
+//                color = cv::Scalar(0, 255, 0);
+//                cv::circle(im, reproj2DFromGT, 10, color, -1);
+//
+//                cv::Point2d reproj2DFromEst = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
+//                color = cv::Scalar(0, 0, 255);
+//                cv::circle(im, reproj2DFromEst, 10, color, -1);
+//
+//
+//                cv::imshow("Found v Calculated", im);
+//                cv::waitKey(0);
+//            }
 
             pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i,
                                    adj_threshold, R_adjustment, T_adjustment);
