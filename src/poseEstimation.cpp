@@ -190,19 +190,19 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     int K = int(R_is.size());
 
     double R[3];
-    double R_arr[9] {R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
+    double R_arr[9]{R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
     ceres::RotationMatrixToAngleAxis(R_arr, R);
-    double camera[6] {R[0], R[1], R[2], T_q[0], T_q[1], T_q[2]};
+    double camera[6]{R[0], R[1], R[2], T_q[0], T_q[1], T_q[2]};
 
     auto r = functions::findSharedMatches(R_is, T_is, K_is, all_pts_q, all_pts_i);
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    for (const auto & p : r) {
-        cv::Point2d pt (p.first.first, p.first.second);
+    for (const auto &p: r) {
+        cv::Point2d pt(p.first.first, p.first.second);
         Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
         cv::Point2d reproj = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-        double dist = sqrt(pow(pt.x-reproj.x, 2.) + pow(pt.y-reproj.y, 2.));
+        double dist = sqrt(pow(pt.x - reproj.x, 2.) + pow(pt.y - reproj.y, 2.));
         if (dist <= error_thresh) {
             points2d.push_back(pt);
             points3d.push_back(point3d);
@@ -227,7 +227,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-     options.minimizer_progress_to_stdout = true;
+    options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
 
     if (problem.NumResidualBlocks() > 0) {
@@ -235,7 +235,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     } else {
         cout << " Can't Adjust ";
     }
-     std::cout << summary.FullReport() << "\n";
+    std::cout << summary.FullReport() << "\n";
 
     R[0] = camera[0];
     R[1] = camera[1];
