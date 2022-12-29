@@ -192,7 +192,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     double R[3];
     double R_arr[9] {R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
     ceres::RotationMatrixToAngleAxis(R_arr, R);
-    double camera[9] {R[0], R[1], R[2], T_q[0], T_q[1], T_q[2]};
+    double camera[6] {R[0], R[1], R[2], T_q[0], T_q[1], T_q[2]};
 
     auto r = functions::findSharedMatches(R_is, T_is, K_is, all_pts_q, all_pts_i);
 
