@@ -65,10 +65,12 @@ void findInliers (double threshold,
 
 int main() {
 
-    // vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-    // string dataset = "seven_scenes/";
+//     vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+//    vector<string> scenes = {"chess/"};
+//    string dataset = "seven_scenes/";
 
-    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+//    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+    vector<string> scenes = {"KingsCollege/"};
     string dataset = "cambridge/";
 
 
@@ -77,7 +79,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -196,43 +198,55 @@ int main() {
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
 
-            pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
+            pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold,
+                                   R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
 
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
-            // auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
-            // for (const auto &p: r) {
-            //     cv::Mat im = cv::imread(dir + query);
-            //     cv::Point2d pt (p.first.first, p.first.second);
-            //     Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
-            //     cv::Point2d reproj2DFromGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-            //     cv::Point2d reproj2DFromEst = pose::reproject3Dto2D(point3d, R_estimation, -R_estimation * c_estimation, K_q);
-            //     cv::Point2d reproj2DFromAdj = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
-
-            //     string title = "GREEN=OBSERVED | RED=REPROJECT WITH GT | BLUE=REPROJECTED WITH EST | PURPLE=REPROJECTED WITH ADJ";
-
-            //     auto color = cv::Scalar(0, 255, 0);
-            //     cv::circle(im, pt, 10, color, -1);
-            //     cv::imshow(title, im);
-            //     cv::waitKey(0);
-
-            //     color = cv::Scalar(0, 0, 255);
-            //     cv::circle(im, reproj2DFromGT, 10, color, -1);
-            //     cv::imshow(title, im);
-            //     cv::waitKey(0);
-
-            //     color = cv::Scalar(255, 0, 0);
-            //     cv::circle(im, reproj2DFromEst, 10, color, -1);
-            //     cv::imshow(title, im);
-            //     cv::waitKey(0);
-
-            //     color = cv::Scalar(255, 0, 255);
-            //     cv::circle(im, reproj2DFromAdj, 10, color, -1);
-            //     cv::imshow(title, im);
-            //     cv::waitKey(0);
-            // }
+//            auto r = functions::findSharedMatches(R_is, T_is, K_is, inliers_q, inliers_i);
+//            auto t = double(r[0].second.size());
+//
+//            string title = "REPROJECTION RESULTS";
+//            cv::Mat im = cv::imread(dir + query);
+//            for (const auto & p: r) {
+//                if (double(p.second.size()) < .5 * t) break;
+//
+//                cv::Point2d pt(p.first.first, p.first.second);
+//                Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
+//
+//                cv::Point2d reproj2DFromGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
+//                cv::Point2d reproj2DFromEst = pose::reproject3Dto2D(point3d, R_estimation, -R_estimation * c_estimation,
+//                                                                    K_q);
+//                cv::Point2d reproj2DFromAdj = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
+//
+//                double d = sqrt(pow(pt.x - reproj2DFromEst.x, 2.) + pow(pt.y - reproj2DFromEst.y, 2.));
+//                if (d > adj_threshold) continue;
+//
+//
+//                auto color = cv::Scalar(255, 0, 0);
+//                cv::circle(im, pt, 5, color, -1);
+//                cv::imshow(title, im);
+////                cv::waitKey(0);
+//
+//                color = cv::Scalar(0, 255, 0);
+//                cv::circle(im, reproj2DFromGT, 5, color, -1);
+////                cv::imshow(title, im);
+////                cv::waitKey(0);
+//
+//                color = cv::Scalar(0, 0, 255);
+//                cv::circle(im, reproj2DFromEst, 5, color, -1);
+////                cv::imshow(title, im);
+////                cv::waitKey(0);
+//
+//                color = cv::Scalar(255, 0, 255);
+//                cv::circle(im, reproj2DFromAdj, 5, color, -1);
+////                cv::imshow(title, im);
+////                cv::waitKey(0);
+//            }
+//            cv::imshow(title, im);
+//            cv::waitKey(0);
 
             line += " All_Pre_Adj " + to_string(R_error_estimation_all)
                     + " " + to_string(c_error_estimation_all)

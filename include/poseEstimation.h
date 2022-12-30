@@ -23,12 +23,6 @@
 
 namespace pose {
 
-    void estimate3DHelper(int i, int j, const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> * matches,
-                          mutex * mtx,
-                          vector<tuple<int, double, Eigen::Vector3d>> * result);
-
-    Eigen::Vector3d estimate3DpointMT(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
-
     Eigen::Vector3d estimate3Dpoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
 
     cv::Point2d reproject3Dto2D(const Eigen::Vector3d & point3d,

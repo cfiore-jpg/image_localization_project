@@ -110,14 +110,17 @@
 struct ReprojectionError {
     ReprojectionError(double x,
                       double y,
+                      double X,
+                      double Y,
+                      double Z,
                       double fx,
                       double fy,
                       double cx,
                       double cy)
-                      : x(x), y(y), fx(fx), fy(fy), cx(cx), cy(cy) {}
+                      : x(x), y(y), X(X), Y(Y), Z(Z), fx(fx), fy(fy), cx(cx), cy(cy) {}
 
     template<typename T>
-    bool operator()(const T * const camera, const T * const point, T * residuals) const {
+    bool operator()(const T * const camera, T * residuals) const {
 
         T AA[3];
         AA[0] = camera[0];
@@ -133,9 +136,9 @@ struct ReprojectionError {
         T_q[2] = camera[5];
 
         T point_C[3];
-        point_C[0] = R_q[0]*point[0] + R_q[3]*point[1] + R_q[6]*point[2] + T_q[0];
-        point_C[1] = R_q[1]*point[0] + R_q[4]*point[1] + R_q[7]*point[2] + T_q[1];
-        point_C[2] = R_q[2]*point[0] + R_q[5]*point[1] + R_q[8]*point[2] + T_q[2];
+        point_C[0] = R_q[0]*T(X) + R_q[3]*T(Y) + R_q[6]*T(Z) + T_q[0];
+        point_C[1] = R_q[1]*T(X) + R_q[4]*T(Y) + R_q[7]*T(Z) + T_q[1];
+        point_C[2] = R_q[2]*T(X) + R_q[5]*T(Y) + R_q[8]*T(Z) + T_q[2];
 
         T reprojected_x = T(fx) * (point_C[0] / point_C[2]) + T(cx);
         T reprojected_y = T(fy) * (point_C[1] / point_C[2]) + T(cy);
@@ -151,16 +154,22 @@ struct ReprojectionError {
 
     static ceres::CostFunction *Create(const double x,
                                        const double y,
+                                       const double X,
+                                       const double Y,
+                                       const double Z,
                                        const double fx,
                                        const double fy,
                                        const double cx,
                                        const double cy) {
-        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 6, 3>(
-                new ReprojectionError(x, y, fx, fy, cx, cy)));
+        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 6>(
+                new ReprojectionError(x, y, X, Y, Z, fx, fy, cx, cy)));
     }
 
     double x;
     double y;
+    double X;
+    double Y;
+    double Z;
     double fx;
     double fy;
     double cx;
@@ -186,44 +195,40 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     double camera[6]{R[0], R[1], R[2], T_q[0], T_q[1], T_q[2]};
 
     auto r = functions::findSharedMatches(R_is, T_is, K_is, all_pts_q, all_pts_i);
+    auto t = double(r[0].second.size());
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    for (const auto & p : r) {
-        // if (p.second.size() < 10) break;
-        cv::Point2d pt (p.first.first, p.first.second);
+    for (const auto & p: r) {
+        if (double(p.second.size()) < .5 * t) break;
+        cv::Point2d pt(p.first.first, p.first.second);
         Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
         cv::Point2d reproj = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-        double dist = sqrt(pow(pt.x - reproj.x, 2.) + pow(pt.y - reproj.y, 2.));
-        if (dist <= error_thresh) {
+        double d = sqrt(pow(pt.x - reproj.x, 2.) + pow(pt.y - reproj.y, 2.));
+        if (d <= error_thresh) {
             points2d.push_back(pt);
             points3d.push_back(point3d);
-       }
-    }
-
-    auto points3D_array = new double[points3d.size()][3];
-    for (int i = 0; i < points3d.size(); i++) {
-        points3D_array[i][0] = points3d[i][0];
-        points3D_array[i][1] = points3d[i][1];
-        points3D_array[i][2] = points3d[i][2];
+        }
     }
 
     ceres::Problem problem;
-    ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
-
+    ceres::LossFunction *loss_function = new ceres::CauchyLoss(1.0);
     for (int i = 0; i < points2d.size(); i++) {
         auto cost_function = ReprojectionError::Create(points2d[i].x,
                                                        points2d[i].y,
+                                                       points3d[i][0],
+                                                       points3d[i][1],
+                                                       points3d[i][2],
                                                        K_q[2],
                                                        K_q[3],
                                                        K_q[0],
                                                        K_q[1]);
-        problem.AddResidualBlock(cost_function, loss_function, camera, points3D_array[i]);
+        problem.AddResidualBlock(cost_function, loss_function, camera);
     }
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-    // options.minimizer_progress_to_stdout = true;
+//    options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
 
     if (problem.NumResidualBlocks() > 0) {
@@ -231,7 +236,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     } else {
         cout << " Can't Adjust ";
     }
-    // std::cout << summary.FullReport() << "\n";
+//    std::cout << summary.FullReport() << "\n";
 
     R[0] = camera[0];
     R[1] = camera[1];
@@ -242,160 +247,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                           {R_adj[1], R_adj[4], R_adj[7]},
                           {R_adj[2], R_adj[5], R_adj[8]}};
     T_q = Eigen::Vector3d{camera[3], camera[4], camera[5]};
-
-    int x = 0;
 }
-
-
-void pose::estimate3DHelper(int i, int j, const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> * matches,
-                            mutex * mtx,
-                            vector<tuple<int, double, Eigen::Vector3d>> * result) {
-
-    auto info_i = (*matches)[i];
-    auto info_j = (*matches)[j];
-
-    Eigen::Matrix3d I{{1, 0, 0},
-                      {0, 1, 0},
-                      {0, 0, 1}};
-
-    Eigen::MatrixXd A(6, 3);
-    Eigen::MatrixXd b(6, 1);
-
-    Eigen::Vector3d pt_i{get<0>((*matches)[i]).first, get<0>((*matches)[i]).second, 1.};
-    Eigen::Vector3d pt_j{get<0>((*matches)[j]).first, get<0>((*matches)[j]).second, 1.};
-
-    Eigen::Matrix3d K_i{{get<3>((*matches)[i])[2], 0.,                       get<3>((*matches)[i])[0]},
-                        {0.,                       get<3>((*matches)[i])[3], get<3>((*matches)[i])[1]},
-                        {0.,                       0.,                       1.}};
-    Eigen::Matrix3d K_j{{get<3>((*matches)[j])[2], 0.,                       get<3>((*matches)[j])[0]},
-                        {0.,                       get<3>((*matches)[j])[3], get<3>((*matches)[j])[1]},
-                        {0.,                       0.,                       1.}};
-
-    Eigen::Vector3d ray_i = K_i.inverse() * pt_i;
-    ray_i.normalize();
-    Eigen::Vector3d ray_j = K_j.inverse() * pt_j;
-    ray_j.normalize();
-
-    Eigen::Matrix3d R_i = get<1>((*matches)[i]);
-    Eigen::Vector3d T_i = get<2>((*matches)[i]);
-
-    Eigen::Matrix3d R_j = get<1>((*matches)[j]);
-    Eigen::Vector3d T_j = get<2>((*matches)[j]);
-
-    Eigen::Vector3d c_i = -R_i.transpose() * T_i;
-    Eigen::Vector3d c_j = -R_j.transpose() * T_j;
-
-    Eigen::Matrix3d M_i = I - R_i.transpose() * ray_i * ray_i.transpose() * R_i;
-    Eigen::Matrix3d M_j = I - R_j.transpose() * ray_j * ray_j.transpose() * R_j;
-
-    A.block(0, 0, 3, 3) = M_i;
-    b.block(0, 0, 3, 1) = M_i * c_i;
-    A.block(3, 0, 3, 3) = M_j;
-    b.block(3, 0, 3, 1) = M_j * c_j;
-
-    Eigen::Vector3d h = A.colPivHouseholderQr().solve(b);
-
-    vector<Eigen::Matrix3d> M_ks{M_i, M_j};
-    vector<Eigen::Vector3d> Mc_ks{M_i * c_i, M_j * c_j};
-    size_t K = (*matches).size();
-    double score = 0;
-    int size = 2;
-    for (int k = 0; k < K; k++) {
-        if (k != i && k != j) {
-            Eigen::Vector3d pt_k{get<0>((*matches)[k]).first, get<0>((*matches)[k]).second, 1.};
-            Eigen::Matrix3d K_k{{get<3>((*matches)[k])[2], 0.,                       get<3>((*matches)[k])[0]},
-                                {0.,                       get<3>((*matches)[k])[3], get<3>((*matches)[k])[1]},
-                                {0.,                       0.,                       1.}};
-            Eigen::Matrix3d R_k = get<1>((*matches)[k]);
-            Eigen::Vector3d T_k = get<2>((*matches)[k]);
-            Eigen::Vector3d ray_k = K_k.inverse() * pt_k;
-            ray_k.normalize();
-
-            Eigen::Vector3d point3d_k = R_k * h + T_k;
-
-            double dist = functions::getAngleBetween(ray_k, point3d_k);
-            if (dist <= 1.) {
-                Eigen::Vector3d c_k = -R_k.transpose() * T_k;
-                Eigen::Matrix3d M_k = I - R_k.transpose() * ray_k * ray_k.transpose() * R_k;
-                Eigen::Vector3d Mc_k = M_k * c_k;
-                M_ks.push_back(M_k);
-                Mc_ks.push_back(Mc_k);
-                score += dist;
-                size++;
-            }
-        }
-    }
-
-    K = M_ks.size();
-    Eigen::MatrixXd A_final(K * 3, 3);
-    Eigen::MatrixXd b_final(K * 3, 1);
-    for (int k = 0; k < K; k++) {
-        A_final.block(k * 3, 0, 3, 3) = M_ks[k];
-        b_final.block(k * 3, 0, 3, 1) = Mc_ks[k];
-    }
-
-    Eigen::Vector3d point3d = A_final.colPivHouseholderQr().solve(b_final);
-
-    (*mtx).lock();
-    result->emplace_back(size, score, h);
-    (*mtx).unlock();
-
-}
-
-
-Eigen::Vector3d pose::estimate3DpointMT(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches) {
-
-    int K = int(matches.size());
-
-    int count = 0;
-    for (int i = 0; i < K - 1; i++) {
-        for (int j = i + 1; j < K; j++) {
-            count++;
-        }
-    }
-
-    std::thread threads[count];
-    mutex mtx;
-    count = 0;
-    vector<tuple<int, double, Eigen::Vector3d>> results;
-    for (int i = 0; i < K - 1; i++) {
-        for (int j = i + 1; j < K; j++) {
-            threads[count] = thread(pose::estimate3DHelper, i, j, &matches, &mtx, &results);
-            this_thread::sleep_for(std::chrono::nanoseconds (500));
-            count++;
-        }
-    }
-    for (auto &th: threads) th.join();
-
-    sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
-        return get<0>(a) > get<0>(b);
-    });
-
-    // Sort by lowest score
-    auto best_set = results.at(0);
-    int size = int(get<0>(best_set));
-    double best_score = get<1>(best_set);
-    int idx = 0;
-    while (true) {
-        try {
-            auto set = results.at(idx);
-            if (get<0>(set) != size) break;
-            if (get<1>(set) < best_score) {
-                best_score = get<1>(set);
-                best_set = set;
-            }
-        } catch (...) {
-            break;
-        }
-        idx++;
-    }
-
-    Eigen::Vector3d point3d = get<2>(best_set);
-
-    return point3d;
-
-}
-
 
 
 Eigen::Vector3d pose::estimate3Dpoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches) {
