@@ -190,15 +190,15 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
     for (const auto & p : r) {
-        if (p.second.size() < 5) break;
+        // if (p.second.size() < 10) break;
         cv::Point2d pt (p.first.first, p.first.second);
         Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
         cv::Point2d reproj = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
         double dist = sqrt(pow(pt.x - reproj.x, 2.) + pow(pt.y - reproj.y, 2.));
-//        if (dist <= error_thresh) {
+        if (dist <= error_thresh) {
             points2d.push_back(pt);
             points3d.push_back(point3d);
-//        }
+       }
     }
 
     auto points3D_array = new double[points3d.size()][3];
@@ -209,7 +209,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     }
 
     ceres::Problem problem;
-    ceres::LossFunction *loss_function = new ceres::CauchyLoss(1.0);
+    ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
 
     for (int i = 0; i < points2d.size(); i++) {
         auto cost_function = ReprojectionError::Create(points2d[i].x,
@@ -223,7 +223,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-    options.minimizer_progress_to_stdout = true;
+    // options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
 
     if (problem.NumResidualBlocks() > 0) {
@@ -231,7 +231,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     } else {
         cout << " Can't Adjust ";
     }
-    std::cout << summary.FullReport() << "\n";
+    // std::cout << summary.FullReport() << "\n";
 
     R[0] = camera[0];
     R[1] = camera[1];
