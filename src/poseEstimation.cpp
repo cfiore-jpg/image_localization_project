@@ -110,17 +110,14 @@
 struct ReprojectionError {
     ReprojectionError(double x,
                       double y,
-                      double X,
-                      double Y,
-                      double Z,
                       double fx,
                       double fy,
                       double cx,
                       double cy)
-                      : x(x), y(y), X(X), Y(Y), Z(Z), fx(fx), fy(fy), cx(cx), cy(cy) {}
+                      : x(x), y(y), fx(fx), fy(fy), cx(cx), cy(cy) {}
 
     template<typename T>
-    bool operator()(const T *const camera, T *residuals) const {
+    bool operator()(const T * const camera, const T * const point, T * residuals) const {
 
         T AA[3];
         AA[0] = camera[0];
@@ -136,9 +133,9 @@ struct ReprojectionError {
         T_q[2] = camera[5];
 
         T point_C[3];
-        point_C[0] = R_q[0] * T(X) + R_q[3] * T(Y) + R_q[6] * T(Z) + T_q[0];
-        point_C[1] = R_q[1] * T(X) + R_q[4] * T(Y) + R_q[7] * T(Z) + T_q[1];
-        point_C[2] = R_q[2] * T(X) + R_q[5] * T(Y) + R_q[8] * T(Z) + T_q[2];
+        point_C[0] = R_q[0]*point[0] + R_q[3]*point[1] + R_q[6]*point[2] + T_q[0];
+        point_C[1] = R_q[1]*point[0] + R_q[4]*point[1] + R_q[7]*point[2] + T_q[1];
+        point_C[2] = R_q[2]*point[0] + R_q[5]*point[1] + R_q[8]*point[2] + T_q[2];
 
         T reprojected_x = T(fx) * (point_C[0] / point_C[2]) + T(cx);
         T reprojected_y = T(fy) * (point_C[1] / point_C[2]) + T(cy);
@@ -154,22 +151,16 @@ struct ReprojectionError {
 
     static ceres::CostFunction *Create(const double x,
                                        const double y,
-                                       const double X,
-                                       const double Y,
-                                       const double Z,
                                        const double fx,
                                        const double fy,
                                        const double cx,
                                        const double cy) {
-        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 6>(
-                new ReprojectionError(x, y, X, Y, Z, fx, fy, cx, cy)));
+        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 6, 3>(
+                new ReprojectionError(x, y, fx, fy, cx, cy)));
     }
 
     double x;
     double y;
-    double X;
-    double Y;
-    double Z;
     double fx;
     double fy;
     double cx;
@@ -198,15 +189,23 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    for (const auto &p: r) {
-        cv::Point2d pt(p.first.first, p.first.second);
+    for (const auto & p : r) {
+        if (p.second.size() < 5) break;
+        cv::Point2d pt (p.first.first, p.first.second);
         Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
         cv::Point2d reproj = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
         double dist = sqrt(pow(pt.x - reproj.x, 2.) + pow(pt.y - reproj.y, 2.));
-        if (dist <= error_thresh) {
+//        if (dist <= error_thresh) {
             points2d.push_back(pt);
             points3d.push_back(point3d);
-        }
+//        }
+    }
+
+    auto points3D_array = new double[points3d.size()][3];
+    for (int i = 0; i < points3d.size(); i++) {
+        points3D_array[i][0] = points3d[i][0];
+        points3D_array[i][1] = points3d[i][1];
+        points3D_array[i][2] = points3d[i][2];
     }
 
     ceres::Problem problem;
@@ -215,14 +214,11 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     for (int i = 0; i < points2d.size(); i++) {
         auto cost_function = ReprojectionError::Create(points2d[i].x,
                                                        points2d[i].y,
-                                                       points3d[i][0],
-                                                       points3d[i][1],
-                                                       points3d[i][2],
                                                        K_q[2],
                                                        K_q[3],
                                                        K_q[0],
                                                        K_q[1]);
-        problem.AddResidualBlock(cost_function, loss_function, camera);
+        problem.AddResidualBlock(cost_function, loss_function, camera, points3D_array[i]);
     }
 
     ceres::Solver::Options options;
