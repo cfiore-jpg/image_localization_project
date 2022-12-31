@@ -200,7 +200,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
     for (const auto & p: r) {
-        if (double(p.second.size()) < .5 * t) break;
+        // if (double(p.second.size()) < .5 * t) break;
         cv::Point2d pt(p.first.first, p.first.second);
         Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
         cv::Point2d reproj = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
@@ -212,7 +212,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     }
 
     ceres::Problem problem;
-    ceres::LossFunction *loss_function = new ceres::CauchyLoss(1.0);
+    ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
     for (int i = 0; i < points2d.size(); i++) {
         auto cost_function = ReprojectionError::Create(points2d[i].x,
                                                        points2d[i].y,
