@@ -150,7 +150,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     for (const auto & p: r) {
         if (p.second.size() < 5) break;
         cv::Point2d pt(p.first.first, p.first.second);
-        Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
+        Eigen::Vector3d point3d = pose::get3DPoint(p.second);
         cv::Point2d reproj = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
         double d = sqrt(pow(pt.x - reproj.x, 2.) + pow(pt.y - reproj.y, 2.));
         if (d <= error_thresh) {
@@ -165,7 +165,9 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     for (int i = 0; i < points2d.size(); i++) {
         points2D_arr[i][0] = points2d[i].x;
         points2D_arr[i][1] = points2d[i].y;
-        auto cost_function = ReprojectionError::Create(points3d[i][0],
+        auto cost_function = ReprojectionError::Create(points2d[i].x,
+        points2d[i].y,
+            points3d[i][0],
                                                        points3d[i][1],
                                                        points3d[i][2],
                                                        K_q[2],
@@ -177,7 +179,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-    options.minimizer_progress_to_stdout = true;
+    // options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
 
     if (problem.NumResidualBlocks() > 0) {
@@ -185,7 +187,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     } else {
         cout << " Can't Adjust ";
     }
-    std::cout << summary.FullReport() << "\n";
+    // std::cout << summary.FullReport() << "\n";
 
     R[0] = camera[0];
     R[1] = camera[1];

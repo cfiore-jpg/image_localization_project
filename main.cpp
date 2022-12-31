@@ -66,7 +66,7 @@ void findInliers (double threshold,
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-//    vector<string> scenes = {"chess/"};
+//    vector<string> scenes = {"stairs/"};
 //   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
@@ -79,7 +79,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -197,67 +197,67 @@ int main() {
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
             pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
-//            pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
+        //    pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
-            auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+            // auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 //            auto r = functions::findSharedMatches(R_is, T_is, K_is, inliers_q, inliers_i);
 
-            string title;
-            cv::Mat im;
-            cv::Mat inc = cv::imread(dir + query);
-            cv::Mat ninc = cv::imread(dir + query);
-            for (const auto & p: r) {
+            // string title;
+            // cv::Mat im;
+            // cv::Mat inc = cv::imread(dir + query);
+            // cv::Mat ninc = cv::imread(dir + query);
+            // for (const auto & p: r) {
 
-                if (p.second.size() < 5) break;
-                cv::Point2d pt(p.first.first, p.first.second);
-                auto point3d = pose::get3DPoint(p.second);
+            //     if (p.second.size() < 3) break;
+            //     cv::Point2d pt(p.first.first, p.first.second);
+            //     auto point3d = pose::get3DPoint(p.second);
 
-                cv::Point2d reproj2DGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-                cv::Point2d reproj2DEST = pose::reproject3Dto2D(point3d, R_estimation, T_estimation, K_q);
-                cv::Point2d reproj2DAdj = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
+            //     cv::Point2d reproj2DGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
+            //     cv::Point2d reproj2DEST = pose::reproject3Dto2D(point3d, R_estimation, T_estimation, K_q);
+            //     cv::Point2d reproj2DAdj = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
 
-                if (sqrt(pow(pt.x - reproj2DEST.x, 2.) + pow(pt.y - reproj2DEST.y, 2.)) > adj_threshold) {
-                    title = "NOT INCLUDED";
-                    auto color = cv::Scalar(255, 0, 0);
-                    cv::circle(ninc, pt, 5, color, -1);
-                    cv::imshow(title, ninc);
-                    cv::waitKey(0);
-                    color = cv::Scalar(0, 255, 0);
-                    cv::circle(ninc, reproj2DGT, 5, color, -1);
-                    cv::imshow(title, ninc);
-                    cv::waitKey(0);
-                    color = cv::Scalar(0, 0, 255);
-                    cv::circle(ninc, reproj2DEST, 5, color, -1);
-                    cv::imshow(title, ninc);
-                    cv::waitKey(0);
-                    color = cv::Scalar(255, 0, 255);
-                    cv::circle(ninc, reproj2DAdj, 5, color, -1);
-                    cv::imshow(title, ninc);
-                    cv::waitKey(0);
+            //     if (sqrt(pow(pt.x - reproj2DEST.x, 2.) + pow(pt.y - reproj2DEST.y, 2.)) > adj_threshold) {
+            //         title = "NOT INCLUDED";
+            //         auto color = cv::Scalar(255, 0, 0);
+            //         cv::circle(ninc, pt, 5, color, -1);
+            //         cv::imshow(title, ninc);
+            //         cv::waitKey(0);
+            //         color = cv::Scalar(0, 255, 0);
+            //         cv::circle(ninc, reproj2DGT, 5, color, -1);
+            //         cv::imshow(title, ninc);
+            //         cv::waitKey(0);
+            //         color = cv::Scalar(0, 0, 255);
+            //         cv::circle(ninc, reproj2DEST, 5, color, -1);
+            //         cv::imshow(title, ninc);
+            //         cv::waitKey(0);
+            //         color = cv::Scalar(255, 0, 255);
+            //         cv::circle(ninc, reproj2DAdj, 5, color, -1);
+            //         cv::imshow(title, ninc);
+            //         cv::waitKey(0);
 
-                } else {
-                    title = "INCLUDED";
-                    auto color = cv::Scalar(255, 0, 0);
-                    cv::circle(inc, pt, 5, color, -1);
-                    cv::imshow(title, inc);
-                    cv::waitKey(0);
-                    color = cv::Scalar(0, 255, 0);
-                    cv::circle(inc, reproj2DGT, 5, color, -1);
-                    cv::imshow(title, inc);
-                    cv::waitKey(0);
-                    color = cv::Scalar(0, 0, 255);
-                    cv::circle(inc, reproj2DEST, 5, color, -1);
-                    cv::imshow(title, inc);
-                    cv::waitKey(0);
-                    color = cv::Scalar(255, 0, 255);
-                    cv::circle(inc, reproj2DAdj, 5, color, -1);
-                    cv::imshow(title, inc);
-                    cv::waitKey(0);
-                }
-            }
+            //     } else {
+            //         title = "INCLUDED";
+            //         auto color = cv::Scalar(255, 0, 0);
+            //         cv::circle(inc, pt, 5, color, -1);
+            //         cv::imshow(title, inc);
+            //         cv::waitKey(0);
+            //         color = cv::Scalar(0, 255, 0);
+            //         cv::circle(inc, reproj2DGT, 5, color, -1);
+            //         cv::imshow(title, inc);
+            //         cv::waitKey(0);
+            //         color = cv::Scalar(0, 0, 255);
+            //         cv::circle(inc, reproj2DEST, 5, color, -1);
+            //         cv::imshow(title, inc);
+            //         cv::waitKey(0);
+            //         color = cv::Scalar(255, 0, 255);
+            //         cv::circle(inc, reproj2DAdj, 5, color, -1);
+            //         cv::imshow(title, inc);
+            //         cv::waitKey(0);
+            //     }
+            // }
 
             line += " All_Pre_Adj " + to_string(R_error_estimation_all)
                     + " " + to_string(c_error_estimation_all)
