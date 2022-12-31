@@ -65,13 +65,13 @@ void findInliers (double threshold,
 
 int main() {
 
-    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+//    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
 //    vector<string> scenes = {"chess/"};
-   string dataset = "seven_scenes/";
+//   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-//     // vector<string> scenes = {"KingsCollege/"};
-//     string dataset = "cambridge/";
+      vector<string> scenes = {"KingsCollege/"};
+     string dataset = "cambridge/";
 
 
     string relpose_file = "relpose_SP";
@@ -79,14 +79,14 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        double threshold = 10.;
-        double adj_threshold = 15.;
+        double threshold = 5.;
+        double adj_threshold = 30.;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
@@ -183,7 +183,6 @@ int main() {
                 best_inliers_i.push_back(inliers_i[i]);
                 best_K_is.push_back(K_is[i]);
             }
-
             vector<Eigen::Matrix3d> rotations(best_R_is.size());
             for (int i = 0; i < best_R_is.size(); i++) {
                 rotations[i] = best_R_qis[i] * best_R_is[i];
@@ -191,62 +190,74 @@ int main() {
 
             Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
             Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
-
+            Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
             double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
             double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
 
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
-
-            pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold,
-                                   R_adjustment, T_adjustment);
+            pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
+//            pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
-
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
+            auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 //            auto r = functions::findSharedMatches(R_is, T_is, K_is, inliers_q, inliers_i);
-//            auto t = double(r[0].second.size());
-//
-//            string title = "REPROJECTION RESULTS";
-//            cv::Mat im = cv::imread(dir + query);
-//            for (const auto & p: r) {
-//                if (double(p.second.size()) < .5 * t) break;
-//
-//                cv::Point2d pt(p.first.first, p.first.second);
-//                Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
-//
-//                cv::Point2d reproj2DFromGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-//                cv::Point2d reproj2DFromEst = pose::reproject3Dto2D(point3d, R_estimation, -R_estimation * c_estimation,
-//                                                                    K_q);
-//                cv::Point2d reproj2DFromAdj = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
-//
-//                double d = sqrt(pow(pt.x - reproj2DFromEst.x, 2.) + pow(pt.y - reproj2DFromEst.y, 2.));
-//                if (d > adj_threshold) continue;
-//
-//
-//                auto color = cv::Scalar(255, 0, 0);
-//                cv::circle(im, pt, 5, color, -1);
-//                cv::imshow(title, im);
-////                cv::waitKey(0);
-//
-//                color = cv::Scalar(0, 255, 0);
-//                cv::circle(im, reproj2DFromGT, 5, color, -1);
-////                cv::imshow(title, im);
-////                cv::waitKey(0);
-//
-//                color = cv::Scalar(0, 0, 255);
-//                cv::circle(im, reproj2DFromEst, 5, color, -1);
-////                cv::imshow(title, im);
-////                cv::waitKey(0);
-//
-//                color = cv::Scalar(255, 0, 255);
-//                cv::circle(im, reproj2DFromAdj, 5, color, -1);
-////                cv::imshow(title, im);
-////                cv::waitKey(0);
-//            }
-//            cv::imshow(title, im);
-//            cv::waitKey(0);
+
+            string title;
+            cv::Mat im;
+            cv::Mat inc = cv::imread(dir + query);
+            cv::Mat ninc = cv::imread(dir + query);
+            for (const auto & p: r) {
+
+                if (p.second.size() < 5) break;
+                cv::Point2d pt(p.first.first, p.first.second);
+                auto point3d = pose::get3DPoint(p.second);
+
+                cv::Point2d reproj2DGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
+                cv::Point2d reproj2DEST = pose::reproject3Dto2D(point3d, R_estimation, T_estimation, K_q);
+                cv::Point2d reproj2DAdj = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
+
+                if (sqrt(pow(pt.x - reproj2DEST.x, 2.) + pow(pt.y - reproj2DEST.y, 2.)) > adj_threshold) {
+                    title = "NOT INCLUDED";
+                    auto color = cv::Scalar(255, 0, 0);
+                    cv::circle(ninc, pt, 5, color, -1);
+                    cv::imshow(title, ninc);
+                    cv::waitKey(0);
+                    color = cv::Scalar(0, 255, 0);
+                    cv::circle(ninc, reproj2DGT, 5, color, -1);
+                    cv::imshow(title, ninc);
+                    cv::waitKey(0);
+                    color = cv::Scalar(0, 0, 255);
+                    cv::circle(ninc, reproj2DEST, 5, color, -1);
+                    cv::imshow(title, ninc);
+                    cv::waitKey(0);
+                    color = cv::Scalar(255, 0, 255);
+                    cv::circle(ninc, reproj2DAdj, 5, color, -1);
+                    cv::imshow(title, ninc);
+                    cv::waitKey(0);
+
+                } else {
+                    title = "INCLUDED";
+                    auto color = cv::Scalar(255, 0, 0);
+                    cv::circle(inc, pt, 5, color, -1);
+                    cv::imshow(title, inc);
+                    cv::waitKey(0);
+                    color = cv::Scalar(0, 255, 0);
+                    cv::circle(inc, reproj2DGT, 5, color, -1);
+                    cv::imshow(title, inc);
+                    cv::waitKey(0);
+                    color = cv::Scalar(0, 0, 255);
+                    cv::circle(inc, reproj2DEST, 5, color, -1);
+                    cv::imshow(title, inc);
+                    cv::waitKey(0);
+                    color = cv::Scalar(255, 0, 255);
+                    cv::circle(inc, reproj2DAdj, 5, color, -1);
+                    cv::imshow(title, inc);
+                    cv::waitKey(0);
+                }
+            }
 
             line += " All_Pre_Adj " + to_string(R_error_estimation_all)
                     + " " + to_string(c_error_estimation_all)
