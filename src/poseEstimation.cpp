@@ -63,17 +63,19 @@ struct NView {
 
 
 struct ReprojectionError {
-    ReprojectionError(double X,
+    ReprojectionError(double x,
+                      double y,
+                      double X,
                       double Y,
                       double Z,
                       double fx,
                       double fy,
                       double cx,
                       double cy)
-            : X(X), Y(Y), Z(Z), fx(fx), fy(fy), cx(cx), cy(cy) {}
+            : x(x), y(y), X(X), Y(Y), Z(Z), fx(fx), fy(fy), cx(cx), cy(cy) {}
 
     template<typename T>
-    bool operator()(const T * const point2D, const T * const camera, T * residuals) const {
+    bool operator()(const T * const camera, T * residuals) const {
 
         T AA[3];
         AA[0] = camera[0];
@@ -96,8 +98,8 @@ struct ReprojectionError {
         T reprojected_x = T(fx) * (point_C[0] / point_C[2]) + T(cx);
         T reprojected_y = T(fy) * (point_C[1] / point_C[2]) + T(cy);
 
-        T error_x = reprojected_x - T(point2D[0]);
-        T error_y = reprojected_y - T(point2D[1]);
+        T error_x = reprojected_x - T(x);
+        T error_y = reprojected_y - T(y);
 
         residuals[0] = error_x;
         residuals[1] = error_y;
@@ -105,17 +107,21 @@ struct ReprojectionError {
         return true;
     }
 
-    static ceres::CostFunction *Create(const double X,
+    static ceres::CostFunction *Create(const double x,
+                                       const double y,
+                                       const double X,
                                        const double Y,
                                        const double Z,
                                        const double fx,
                                        const double fy,
                                        const double cx,
                                        const double cy) {
-        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 2, 6>(
-                new ReprojectionError(X, Y, Z, fx, fy, cx, cy)));
+        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 6>(
+                new ReprojectionError(x, y, X, Y, Z, fx, fy, cx, cy)));
     }
 
+    double x;
+    double y;
     double X;
     double Y;
     double Z;
@@ -159,22 +165,19 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         }
     }
 
-    auto points2D_arr = new double[int(points2d.size())][2];
     ceres::Problem problem;
     ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
     for (int i = 0; i < points2d.size(); i++) {
-        points2D_arr[i][0] = points2d[i].x;
-        points2D_arr[i][1] = points2d[i].y;
         auto cost_function = ReprojectionError::Create(points2d[i].x,
-        points2d[i].y,
-            points3d[i][0],
+                                                       points2d[i].y,
+                                                       points3d[i][0],
                                                        points3d[i][1],
                                                        points3d[i][2],
                                                        K_q[2],
                                                        K_q[3],
                                                        K_q[0],
                                                        K_q[1]);
-        problem.AddResidualBlock(cost_function, loss_function, points2D_arr[i], camera);
+        problem.AddResidualBlock(cost_function, loss_function, camera);
     }
 
     ceres::Solver::Options options;
