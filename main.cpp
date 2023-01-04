@@ -66,12 +66,12 @@ void findInliers (double threshold,
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-//     vector<string> scenes = {"stairs/"};
-//    string dataset = "seven_scenes/";
+    vector<string> scenes = {"stairs/"};
+   string dataset = "seven_scenes/";
 
 //   vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    vector<string> scenes = {"KingsCollege/"};
-    string dataset = "cambridge/";
+    // vector<string> scenes = {"KingsCollege/"};
+    // string dataset = "cambridge/";
 
 
     string relpose_file = "relpose_SP";
@@ -79,14 +79,14 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        double threshold = 3.;
-        double adj_threshold = 50.;
+        double threshold = 5.;
+        double adj_threshold = 25.;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
@@ -202,7 +202,7 @@ int main() {
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
-              auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+            //   auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 //            auto r = functions::findSharedMatches(R_is, T_is, K_is, inliers_q, inliers_i);
 
             // string title;
