@@ -154,7 +154,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
     for (const auto & p: r) {
-        if (p.second.size() < 5) break;
+        if (p.second.size() < 3) break;
         cv::Point2d pt(p.first.first, p.first.second);
         Eigen::Vector3d point3d = pose::get3DPoint(p.second);
         cv::Point2d reproj = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
