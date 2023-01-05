@@ -127,6 +127,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                              const vector<vector<cv::Point2d>> & all_pts_q,
                              const vector<vector<cv::Point2d>> & all_pts_i,
                              const double & pixel_mobility_radius,
+                             const double & thresh,
                              Eigen::Matrix3d & R_q,
                              Eigen::Vector3d & T_q) {
 
@@ -142,10 +143,11 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
     for (const auto & p: r) {
-        if (p.second.size() < 15) break;
+        if (p.second.size() < 5) break;
         cv::Point2d pt(p.first.first, p.first.second);
         auto p_and_s = pose::RANSAC3DPoint(p.second);
-        if (double(p_and_s.second.size()) / double(p.second.size()) < .8) continue;
+        cv::Point2d reproj = pose::reproject3Dto2D(p_and_s.first, R_q, T_q, K_q);
+        if (sqrt(pow(pt.x-reproj.x, 2.) + pow(pt.y-reproj.y, 2.)) > thresh) continue;
         points2d.push_back(pt);
         points3d.push_back(p_and_s.first);
     }
@@ -167,7 +169,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-//      options.minimizer_progress_to_stdout = true;
+      options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
 
     if (problem.NumResidualBlocks() > 0) {
@@ -175,7 +177,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     } else {
         cout << " Can't Adjust ";
     }
-//      std::cout << summary.FullReport() << "\n";
+      std::cout << summary.FullReport() << "\n";
 
     R[0] = camera[0];
     R[1] = camera[1];
@@ -250,7 +252,7 @@ pose::RANSAC3DPoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Ei
             if (k != i && k != j) {
                 auto reproj = pose::reproject3Dto2D(h, get<1>(matches[k]), get<2>(matches[k]), get<3>(matches[k]));
                 double d = sqrt(pow(get<0>(matches[k]).first - reproj.x, 2.) + pow(get<0>(matches[k]).second - reproj.y, 2.));
-                if (d <= 5) {
+                if (d <= 3) {
                     num_inliers++;
                     score += d;
                     set.push_back(matches[k]);

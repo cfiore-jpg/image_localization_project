@@ -49,7 +49,7 @@ void findInliers (double threshold,
             Eigen::Vector3d T_qk_h = -R_qk_h * ((*R_ks)[k] * c_h + (*T_ks)[k]);
             double T_angular_diff = functions::getAngleBetween(T_qk_h, (*T_qks)[k]);
             double R_angular_diff = functions::rotationDifference(R_qk_h, (*R_qks)[k]);
-            if (T_angular_diff <= threshold && R_angular_diff <= threshold / 2) {
+            if (T_angular_diff <= threshold && R_angular_diff <= threshold) {
                 indices.push_back(k);
                 score += R_angular_diff + T_angular_diff;
             }
@@ -67,12 +67,12 @@ void findInliers (double threshold,
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-    vector<string> scenes = {"stairs/"};
-    string dataset = "seven_scenes/";
+//    vector<string> scenes = {"stairs/"};
+//    string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-//    vector<string> scenes = {"KingsCollege/"};
-//    string dataset = "cambridge/";
+    vector<string> scenes = {"KingsCollege/"};
+    string dataset = "cambridge/";
 
 
     string relpose_file = "relpose_SP";
@@ -80,14 +80,15 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        double threshold = 10.;
-        double pixel_mobility_radius = 3.;
+        double threshold = 5.;
+        double pixel_mobility_radius = 2.;
+        double adj_thresh = 15;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
@@ -197,21 +198,28 @@ int main() {
 
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
-            pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, pixel_mobility_radius, R_adjustment, T_adjustment);
+            pose::adjustHypothesis(best_R_is,
+                                   best_T_is,
+                                   best_K_is,
+                                   K_q,
+                                   best_inliers_q,
+                                   best_inliers_i,
+                                   pixel_mobility_radius, adj_thresh, R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
-//            auto r = functions::findSharedMatches(R_is, T_is, K_is, inliers_q, inliers_i);
+//            auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 //            string title = "INCLUDED";
 //            cv::Mat im = cv::imread(dir + query);
 //            vector<double> v_GT, v_EST, v_ADJ;
 //            for (const auto &p: r) {
-//                if (p.second.size() < 15) break;
+//                if (p.second.size() < 5) break;
 //
 //                cv::Point2d pt(p.first.first, p.first.second);
 //                auto point_and_set = pose::RANSAC3DPoint(p.second);
-//                if (double(point_and_set.second.size()) / double(p.second.size()) < .7) continue;
+//                cv::Point2d reprojEST = pose::reproject3Dto2D(point_and_set.first, R_estimation, T_estimation, K_q);
+//                if (sqrt(pow(pt.x-reprojEST.x, 2.) + pow(pt.y-reprojEST.y, 2.)) > adj_thresh) continue;
 //
 //                cv::circle(im, pt, 3, cv::Scalar(0, 0, 0));
 //
@@ -221,7 +229,6 @@ int main() {
 //                cv::circle(im, reprojGT, 3, color, -1);
 //                cv::line(im, pt, reprojGT, color, 1);
 //
-//                cv::Point2d reprojEST = pose::reproject3Dto2D(point_and_set.first, R_estimation, T_estimation, K_q);
 //                v_EST.push_back(sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)));
 //                color = cv::Scalar(0, 0, 255);
 //                cv::circle(im, reprojEST, 3, color, -1);

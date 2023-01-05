@@ -113,6 +113,7 @@ namespace pose {
                             const vector<vector<cv::Point2d>> & all_pts_q,
                             const vector<vector<cv::Point2d>> & all_pts_i,
                             const double & pixel_mobility_radius,
+                            const double & thresh,
                             Eigen::Matrix3d & R_q,
                             Eigen::Vector3d & T_q);
 
