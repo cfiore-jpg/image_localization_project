@@ -34,6 +34,14 @@
 using namespace std;
 using namespace cv;
 
+pair<double, double> functions::mean_and_stdv(const vector<double> & v) {
+    double sum = std::accumulate(v.begin(), v.end(), 0.0);
+    double mean = sum / v.size();
+    double sq_sum = std::inner_product(v.begin(), v.end(), v.begin(), 0.0);
+    double stdev = std::sqrt(sq_sum / v.size() - mean * mean);
+    return {mean, stdev};
+}
+
 vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>>
 functions::findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
                              const vector<Eigen::Vector3d> & T_is,

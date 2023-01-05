@@ -25,15 +25,13 @@
 
 /// CERES COST FUNCTIONS
 struct NView {
-    NView(double x,
-          double y,
-          Eigen::Matrix3d R_,
+    NView(Eigen::Matrix3d R_,
           Eigen::Vector3d T_,
           vector<double> K_)
-          : x(x), y(y), R_(std::move(R_)), T_(std::move(T_)), K_(std::move(K_)) {}
+          : R_(std::move(R_)), T_(std::move(T_)), K_(std::move(K_)) {}
 
     template<typename T>
-    bool operator()(const T * const point3D, T *residuals) const {
+    bool operator()(const T * const point2D, const T * const point3D, T *residuals) const {
 
         T point_C[3];
         point_C[0] = T(R_(0, 0)) * point3D[0] + T(R_(0, 1)) * point3D[1] + T(R_(0, 2)) * point3D[2] + T(T_[0]);
@@ -43,8 +41,8 @@ struct NView {
         T reprojected_x = T(K_[2]) * (point_C[0] / point_C[2]) + T(K_[0]);
         T reprojected_y = T(K_[3]) * (point_C[1] / point_C[2]) + T(K_[1]);
 
-        T error_x = reprojected_x - T(x);
-        T error_y = reprojected_y - T(y);
+        T error_x = reprojected_x - T(point2D[0]);
+        T error_y = reprojected_y - T(point2D[1]);
 
         residuals[0] = error_x;
         residuals[1] = error_y;
@@ -52,16 +50,12 @@ struct NView {
         return true;
     }
 
-    static ceres::CostFunction * Create(const double &x,
-                                        const double &y,
-                                        const Eigen::Matrix3d &R_,
+    static ceres::CostFunction * Create(const Eigen::Matrix3d &R_,
                                         const Eigen::Vector3d &T_,
                                         const vector<double> &K_) {
-        return (new ceres::AutoDiffCostFunction<NView, 2, 3>(new NView(x, y, R_, T_, K_)));
+        return (new ceres::AutoDiffCostFunction<NView, 2, 2, 3>(new NView(R_, T_, K_)));
     }
 
-    double x;
-    double y;
     Eigen::Matrix3d R_;
     Eigen::Vector3d T_;
     vector<double> K_;
@@ -69,16 +63,15 @@ struct NView {
 
 
 struct ReprojectionError {
-    ReprojectionError(double x,
-                      double y,
+    ReprojectionError(Eigen::Vector3d point3D,
                       double fx,
                       double fy,
                       double cx,
                       double cy)
-            : x(x), y(y), fx(fx), fy(fy), cx(cx), cy(cy) {}
+            : point3D(move(point3D)), fx(fx), fy(fy), cx(cx), cy(cy) {}
 
     template<typename T>
-    bool operator()(const T * const point, const T * const camera, T * residuals) const {
+    bool operator()(const T *const point2D, const T *const camera, T *residuals) const {
 
         T AA[3];
         AA[0] = camera[0];
@@ -94,15 +87,15 @@ struct ReprojectionError {
         T_q[2] = camera[5];
 
         T point_C[3];
-        point_C[0] = R_q[0]*point[0] + R_q[3]*point[1] + R_q[6]*point[2] + T_q[0];
-        point_C[1] = R_q[1]*point[0] + R_q[4]*point[1] + R_q[7]*point[2] + T_q[1];
-        point_C[2] = R_q[2]*point[0] + R_q[5]*point[1] + R_q[8]*point[2] + T_q[2];
+        point_C[0] = R_q[0] * T(point3D[0]) + R_q[3] * T(point3D[1]) + R_q[6] * T(point3D[2]) + T_q[0];
+        point_C[1] = R_q[1] * T(point3D[0]) + R_q[4] * T(point3D[1]) + R_q[7] * T(point3D[2]) + T_q[1];
+        point_C[2] = R_q[2] * T(point3D[0]) + R_q[5] * T(point3D[1]) + R_q[8] * T(point3D[2]) + T_q[2];
 
         T reprojected_x = T(fx) * (point_C[0] / point_C[2]) + T(cx);
         T reprojected_y = T(fy) * (point_C[1] / point_C[2]) + T(cy);
 
-        T error_x = reprojected_x - T(x);
-        T error_y = reprojected_y - T(y);
+        T error_x = reprojected_x - T(point2D[0]);
+        T error_y = reprojected_y - T(point2D[1]);
 
         residuals[0] = error_x;
         residuals[1] = error_y;
@@ -110,18 +103,16 @@ struct ReprojectionError {
         return true;
     }
 
-    static ceres::CostFunction *Create(const double x,
-                                       const double y,
+    static ceres::CostFunction *Create(const Eigen::Vector3d &point3D,
                                        const double fx,
                                        const double fy,
                                        const double cx,
                                        const double cy) {
-        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 3, 6>(
-                new ReprojectionError(x, y, fx, fy, cx, cy)));
+        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 2, 6>(
+                new ReprojectionError(point3D, fx, fy, cx, cy)));
     }
 
-    double x;
-    double y;
+    Eigen::Vector3d point3D;
     double fx;
     double fy;
     double cx;
@@ -135,7 +126,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                              const vector<double> & K_q,
                              const vector<vector<cv::Point2d>> & all_pts_q,
                              const vector<vector<cv::Point2d>> & all_pts_i,
-                             const double & error_thresh,
+                             const double & pixel_mobility_radius,
                              Eigen::Matrix3d & R_q,
                              Eigen::Vector3d & T_q) {
 
@@ -150,40 +141,33 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    vector<vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>> info;
     for (const auto & p: r) {
-        if (p.second.size() < 2) break;
+        if (p.second.size() < 15) break;
         cv::Point2d pt(p.first.first, p.first.second);
-        Eigen::Vector3d point3d = pose::estimate3Dpoint(p.second);
-        cv::Point2d reproj = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-        double d = sqrt(pow(pt.x - reproj.x, 2.) + pow(pt.y - reproj.y, 2.));
-        if (d <= error_thresh) {
-            points2d.push_back(pt);
-            points3d.push_back(point3d);
-            info.push_back(p.second);
-        }
+        auto p_and_s = pose::RANSAC3DPoint(p.second);
+        if (double(p_and_s.second.size()) / double(p.second.size()) < .7) continue;
+        points2d.push_back(pt);
+        points3d.push_back(p_and_s.first);
     }
-    auto points_arr = new double[int(points2d.size())][3];
+    auto points2D_arr = new double[int(points2d.size())][2];
+
 
     ceres::Problem problem;
     ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
     for (int i = 0; i < points2d.size(); i++) {
-        points_arr[i][0] = points3d[i][0];
-        points_arr[i][1] = points3d[i][1];
-        points_arr[i][2] = points3d[i][2];
-        auto pose_cost = ReprojectionError::Create(points2d[i].x, points2d[i].y, K_q[2], K_q[3], K_q[0], K_q[1]);
-        problem.AddResidualBlock(pose_cost, loss_function,  points_arr[i], camera);
-        auto nv = info[i];
-        for (const auto & v : nv) {
-            auto point_cost = NView::Create(get<0>(v).first, get<0>(v).second, get<1>(v), get<2>(v), get<3>(v));
-            problem.AddResidualBlock(point_cost, loss_function,  points_arr[i]);
-        }
-
+        points2D_arr[i][0] = points2d[i].x;
+        points2D_arr[i][1] = points2d[i].y;
+        auto pose_cost = ReprojectionError::Create(points3d[i], K_q[2], K_q[3], K_q[0], K_q[1]);
+        problem.AddResidualBlock(pose_cost, loss_function, points2D_arr[i], camera);
+        problem.SetParameterLowerBound(points2D_arr[i], 0, points2d[i].x-pixel_mobility_radius);
+        problem.SetParameterUpperBound(points2D_arr[i], 0, points2d[i].x+pixel_mobility_radius);
+        problem.SetParameterLowerBound(points2D_arr[i], 1, points2d[i].y-pixel_mobility_radius);
+        problem.SetParameterUpperBound(points2D_arr[i], 1, points2d[i].y+pixel_mobility_radius);
     }
 
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-    //  options.minimizer_progress_to_stdout = true;
+//      options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
 
     if (problem.NumResidualBlocks() > 0) {
@@ -191,7 +175,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     } else {
         cout << " Can't Adjust ";
     }
-    //  std::cout << summary.FullReport() << "\n";
+//      std::cout << summary.FullReport() << "\n";
 
     R[0] = camera[0];
     R[1] = camera[1];
@@ -202,6 +186,8 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                           {R_adj[1], R_adj[4], R_adj[7]},
                           {R_adj[2], R_adj[5], R_adj[8]}};
     T_q = Eigen::Vector3d{camera[3], camera[4], camera[5]};
+
+    delete[] points2D_arr;
 }
 
 
@@ -233,6 +219,54 @@ Eigen::Vector3d pose::estimate3Dpoint(const vector<tuple<pair<double, double>, E
     return est;
 
 }
+
+
+pair<Eigen::Vector3d, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>
+pose::RANSAC3DPoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches) {
+
+    int K = int(matches.size());
+    vector<pair<int, int>> index_pairs;
+    for(int i = 0; i < K - 1; i++) {
+        for(int j = i + 1; j < K; j++) {
+            index_pairs.emplace_back(i, j);
+        }
+    }
+
+    random_device gen;
+    shuffle(index_pairs.begin(), index_pairs.end(), gen);
+
+    int most_inliers = 0;
+    double best_score = DBL_MAX;
+    vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> best_set;
+    for (int idx = 0; idx < min(int(index_pairs.size()), 50); idx++) {
+        auto p = index_pairs[idx];
+        int i = p.first;
+        int j = p.second;
+        int num_inliers = 2;
+        double score = 0;
+        vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> set {matches[i], matches[j]};
+        Eigen::Vector3d h = pose::estimate3Dpoint(set);
+        for (int k = 0; k < K; k++) {
+            if (k != i && k != j) {
+                auto reproj = pose::reproject3Dto2D(h, get<1>(matches[k]), get<2>(matches[k]), get<3>(matches[k]));
+                double d = sqrt(pow(get<0>(matches[k]).first - reproj.x, 2.) + pow(get<0>(matches[k]).second - reproj.y, 2.));
+                if (d <= 3) {
+                    num_inliers++;
+                    score += d;
+                    set.push_back(matches[k]);
+                }
+            }
+        }
+        if (num_inliers > most_inliers || (num_inliers == most_inliers && score < best_score)) {
+            most_inliers = num_inliers;
+            best_set = set;
+            best_score = score;
+        }
+    }
+    auto r = pose::estimate3Dpoint(best_set);
+    return {r, best_set};
+}
+
 
 
 cv::Point2d pose::reproject3Dto2D(const Eigen::Vector3d & point3d,

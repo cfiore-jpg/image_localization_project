@@ -32,14 +32,15 @@ void findInliers (double threshold,
 
     int K = int((*R_ks).size());
 
-    vector<Eigen::Matrix3d> set_R_ks {(*R_ks)[i], (*R_ks)[j]};
-    vector<Eigen::Vector3d> set_T_ks {(*T_ks)[i], (*T_ks)[j]};
-    vector<Eigen::Matrix3d> set_R_qks {(*R_qks)[i], (*R_qks)[j]};
-    vector<Eigen::Vector3d> set_T_qks {(*T_qks)[i], (*T_qks)[j]};
+    vector<Eigen::Matrix3d> set_R_ks{(*R_ks)[i], (*R_ks)[j]};
+    vector<Eigen::Vector3d> set_T_ks{(*T_ks)[i], (*T_ks)[j]};
+    vector<Eigen::Matrix3d> set_R_qks{(*R_qks)[i], (*R_qks)[j]};
+    vector<Eigen::Vector3d> set_T_qks{(*T_qks)[i], (*T_qks)[j]};
     vector<int> indices{i, j};
     double score = 0;
 
-    Eigen::Matrix3d R_h = pose::R_q_average(vector<Eigen::Matrix3d>{(*R_qks)[i] * (*R_ks)[i], (*R_qks)[j] * (*R_ks)[j]});
+    Eigen::Matrix3d R_h = pose::R_q_average(
+            vector<Eigen::Matrix3d>{(*R_qks)[i] * (*R_ks)[i], (*R_qks)[j] * (*R_ks)[j]});
     Eigen::Vector3d c_h = pose::c_q_closed_form(set_R_ks, set_T_ks, set_R_qks, set_T_qks);
 
     for (int k = 0; k < K; k++) {
@@ -48,7 +49,7 @@ void findInliers (double threshold,
             Eigen::Vector3d T_qk_h = -R_qk_h * ((*R_ks)[k] * c_h + (*T_ks)[k]);
             double T_angular_diff = functions::getAngleBetween(T_qk_h, (*T_qks)[k]);
             double R_angular_diff = functions::rotationDifference(R_qk_h, (*R_qks)[k]);
-            if (T_angular_diff <= threshold && R_angular_diff <= threshold) {
+            if (T_angular_diff <= threshold / 2 && R_angular_diff <= threshold) {
                 indices.push_back(k);
                 score += R_angular_diff + T_angular_diff;
             }
@@ -66,12 +67,12 @@ void findInliers (double threshold,
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-    vector<string> scenes = {"stairs/"};
-   string dataset = "seven_scenes/";
+    vector<string> scenes = {"chess/"};
+    string dataset = "seven_scenes/";
 
-//   vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    // vector<string> scenes = {"KingsCollege/"};
-    // string dataset = "cambridge/";
+//    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+//    vector<string> scenes = {"KingsCollege/"};
+//    string dataset = "cambridge/";
 
 
     string relpose_file = "relpose_SP";
@@ -79,14 +80,14 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        double threshold = 5.;
-        double adj_threshold = 25.;
+        double threshold = 10.;
+        double pixel_mobility_radius = 3.;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
@@ -196,68 +197,53 @@ int main() {
 
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
-            pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
-        //    pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, adj_threshold, R_adjustment, T_adjustment);
+//            pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i, adj_threshold, R_adjustment, T_adjustment);
+            pose::adjustHypothesis(R_is, T_is, K_is, K_q, inliers_q, inliers_i, pixel_mobility_radius, R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
-            //   auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+//               auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 //            auto r = functions::findSharedMatches(R_is, T_is, K_is, inliers_q, inliers_i);
 
-            // string title;
-            // cv::Mat im;
-            // cv::Mat inc = cv::imread(dir + query);
-            // cv::Mat ninc = cv::imread(dir + query);
-            // for (const auto & p: r) {
-
-            //     if (p.second.size() < 2) break;
-            //     cv::Point2d pt(p.first.first, p.first.second);
-            //     auto point3d = pose::get3DPoint(p.second);
-
-            //     cv::Point2d reproj2DGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-            //     cv::Point2d reproj2DEST = pose::reproject3Dto2D(point3d, R_estimation, T_estimation, K_q);
-            //     cv::Point2d reproj2DAdj = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
-
-            //     if (sqrt(pow(pt.x - reproj2DEST.x, 2.) + pow(pt.y - reproj2DEST.y, 2.)) > adj_threshold) {
-            //         title = "NOT INCLUDED";
-            //         auto color = cv::Scalar(255, 0, 0);
-            //         cv::circle(ninc, pt, 5, color, -1);
-            //         cv::imshow(title, ninc);
-            //         cv::waitKey(0);
-            //         color = cv::Scalar(0, 255, 0);
-            //         cv::circle(ninc, reproj2DGT, 5, color, -1);
-            //         cv::imshow(title, ninc);
-            //         cv::waitKey(0);
-            //         color = cv::Scalar(0, 0, 255);
-            //         cv::circle(ninc, reproj2DEST, 5, color, -1);
-            //         cv::imshow(title, ninc);
-            //         cv::waitKey(0);
-            //         color = cv::Scalar(255, 0, 255);
-            //         cv::circle(ninc, reproj2DAdj, 5, color, -1);
-            //         cv::imshow(title, ninc);
-            //         cv::waitKey(0);
-
-            //     } else {
-            //         title = "INCLUDED";
-            //         auto color = cv::Scalar(255, 0, 0);
-            //         cv::circle(inc, pt, 5, color, -1);
-            //         cv::imshow(title, inc);
-            //         cv::waitKey(0);
-            //         color = cv::Scalar(0, 255, 0);
-            //         cv::circle(inc, reproj2DGT, 5, color, -1);
-            //         cv::imshow(title, inc);
-            //         cv::waitKey(0);
-            //         color = cv::Scalar(0, 0, 255);
-            //         cv::circle(inc, reproj2DEST, 5, color, -1);
-            //         cv::imshow(title, inc);
-            //         cv::waitKey(0);
-            //         color = cv::Scalar(255, 0, 255);
-            //         cv::circle(inc, reproj2DAdj, 5, color, -1);
-            //         cv::imshow(title, inc);
-            //         cv::waitKey(0);
-            //     }
-            // }
+//            string title = "INCLUDED";
+//            cv::Mat im = cv::imread(dir + query);
+//            vector<double> v_GT, v_EST, v_ADJ;
+//            for (const auto &p: r) {
+//                if (p.second.size() < 15) break;
+//
+//                cv::Point2d pt(p.first.first, p.first.second);
+//                auto point_and_set = pose::RANSAC3DPoint(p.second);
+//                if (double(point_and_set.second.size()) / double(p.second.size()) < .7) continue;
+//
+//                cv::circle(im, pt, 3, cv::Scalar(0, 0, 0));
+//
+//                cv::Point2d reprojGT = pose::reproject3Dto2D(point_and_set.first, R_q, T_q, K_q);
+//                v_GT.push_back(sqrt(pow(pt.x - reprojGT.x, 2.) + pow(pt.y - reprojGT.y, 2.)));
+//                auto color = cv::Scalar(255, 0, 0);
+//                cv::circle(im, reprojGT, 3, color, -1);
+//                cv::line(im, pt, reprojGT, color, 1);
+//
+//                cv::Point2d reprojEST = pose::reproject3Dto2D(point_and_set.first, R_estimation, T_estimation, K_q);
+//                v_EST.push_back(sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)));
+//                color = cv::Scalar(0, 0, 255);
+//                cv::circle(im, reprojEST, 3, color, -1);
+//                cv::line(im, pt, reprojEST, color, 1);
+//
+//                cv::Point2d reprojADJ = pose::reproject3Dto2D(point_and_set.first, R_adjustment, T_adjustment, K_q);
+//                v_ADJ.push_back(sqrt(pow(pt.x - reprojADJ.x, 2.) + pow(pt.y - reprojADJ.y, 2.)));
+//                color = cv::Scalar(255, 0, 255);
+//                cv::circle(im, reprojADJ, 3, color, -1);
+//                cv::line(im, pt, reprojADJ, color, 1);
+//
+//            }
+//
+//            auto ms_GT = functions::mean_and_stdv(v_GT);
+//            auto ms_EST = functions::mean_and_stdv(v_EST);
+//            auto ms_ADJ = functions::mean_and_stdv(v_ADJ);
+//
+//            cv::imshow(title, im);
+//            cv::waitKey(0);
 
             line += " All_Pre_Adj " + to_string(R_error_estimation_all)
                     + " " + to_string(c_error_estimation_all)

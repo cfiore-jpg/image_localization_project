@@ -25,6 +25,9 @@ namespace pose {
 
     Eigen::Vector3d estimate3Dpoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
 
+    pair<Eigen::Vector3d, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>
+    RANSAC3DPoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
+
     cv::Point2d reproject3Dto2D(const Eigen::Vector3d & point3d,
                                 const Eigen::Matrix3d & R_q,
                                 const Eigen::Vector3d & T_q,
@@ -109,7 +112,7 @@ namespace pose {
                             const vector<double> & K_q,
                             const vector<vector<cv::Point2d>> & all_pts_q,
                             const vector<vector<cv::Point2d>> & all_pts_i,
-                            const double & error_thresh,
+                            const double & pixel_mobility_radius,
                             Eigen::Matrix3d & R_q,
                             Eigen::Vector3d & T_q);
 

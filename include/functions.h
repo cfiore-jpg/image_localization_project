@@ -20,6 +20,8 @@ using namespace std;
 
 namespace functions {
 
+    pair<double, double> mean_and_stdv(const vector<double> & v);
+
     vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>>
     findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
                       const vector<Eigen::Vector3d> & T_is,
