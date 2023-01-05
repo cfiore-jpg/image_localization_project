@@ -49,7 +49,7 @@ void findInliers (double threshold,
             Eigen::Vector3d T_qk_h = -R_qk_h * ((*R_ks)[k] * c_h + (*T_ks)[k]);
             double T_angular_diff = functions::getAngleBetween(T_qk_h, (*T_qks)[k]);
             double R_angular_diff = functions::rotationDifference(R_qk_h, (*R_qks)[k]);
-            if (T_angular_diff <= threshold / 2 && R_angular_diff <= threshold) {
+            if (T_angular_diff <= threshold && R_angular_diff <= threshold / 2) {
                 indices.push_back(k);
                 score += R_angular_diff + T_angular_diff;
             }
@@ -67,7 +67,7 @@ void findInliers (double threshold,
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-    vector<string> scenes = {"chess/"};
+    vector<string> scenes = {"stairs/"};
     string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
@@ -80,7 +80,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
