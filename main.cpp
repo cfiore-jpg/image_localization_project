@@ -67,12 +67,12 @@ void findInliers (double threshold,
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-   vector<string> scenes = {"stairs/"};
-   string dataset = "seven_scenes/";
+//    vector<string> scenes = {"stairs/"};
+//    string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    // vector<string> scenes = {"KingsCollege/"};
-    // string dataset = "cambridge/";
+     vector<string> scenes = {"KingsCollege/"};
+     string dataset = "cambridge/";
 
 
     string relpose_file = "relpose_SP";
@@ -80,15 +80,19 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        double threshold = 10.;
-        double pixel_mobility_radius = 3.;
-        double adj_thresh = 30;
+        double threshold = 5;
+        double adj_thresh = 10;
+
+        double total_GT = 0;
+        double total_EST = 0;
+        double total_ADJ = 0;
+        double c = 0;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
@@ -198,54 +202,56 @@ int main() {
 
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
-            pose::adjustHypothesis(best_R_is,
-                                   best_T_is,
-                                   best_K_is,
-                                   K_q,
-                                   best_inliers_q,
-                                   best_inliers_i,
-                                   pixel_mobility_radius, adj_thresh, R_adjustment, T_adjustment);
+            auto adj_points = pose::adjustHypothesis(best_R_is,
+                                                     best_T_is,
+                                                     best_K_is,
+                                                     K_q,
+                                                     best_inliers_q,
+                                                     best_inliers_i,
+                                                     adj_thresh, R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
-//            auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 //            string title = "INCLUDED";
 //            cv::Mat im = cv::imread(dir + query);
-//            vector<double> v_GT, v_EST, v_ADJ;
-//            for (const auto &p: r) {
-//                if (p.second.size() < 5) break;
-//
-//                cv::Point2d pt(p.first.first, p.first.second);
-//                auto point_and_set = pose::RANSAC3DPoint(p.second);
-//                cv::Point2d reprojEST = pose::reproject3Dto2D(point_and_set.first, R_estimation, T_estimation, K_q);
-//                if (sqrt(pow(pt.x-reprojEST.x, 2.) + pow(pt.y-reprojEST.y, 2.)) > adj_thresh) continue;
-//
+            vector<double> v_GT, v_EST, v_ADJ;
+            for (int i = 0; i < adj_points.first.size(); i++) {
+
+                cv::Point2d pt = adj_points.first[i];
+                Eigen::Vector3d point3d = adj_points.second[i];
+
+                cv::Point2d reprojGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
+                cv::Point2d reprojEST = pose::reproject3Dto2D(point3d, R_estimation, T_estimation, K_q);
+                cv::Point2d reprojADJ = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
+
 //                cv::circle(im, pt, 3, cv::Scalar(0, 0, 0));
-//
-//                cv::Point2d reprojGT = pose::reproject3Dto2D(point_and_set.first, R_q, T_q, K_q);
-//                v_GT.push_back(sqrt(pow(pt.x - reprojGT.x, 2.) + pow(pt.y - reprojGT.y, 2.)));
+
+                v_GT.push_back(sqrt(pow(pt.x - reprojGT.x, 2.) + pow(pt.y - reprojGT.y, 2.)));
 //                auto color = cv::Scalar(255, 0, 0);
 //                cv::circle(im, reprojGT, 3, color, -1);
 //                cv::line(im, pt, reprojGT, color, 1);
-//
-//                v_EST.push_back(sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)));
+
+                v_EST.push_back(sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)));
 //                color = cv::Scalar(0, 0, 255);
 //                cv::circle(im, reprojEST, 3, color, -1);
 //                cv::line(im, pt, reprojEST, color, 1);
-//
-//                cv::Point2d reprojADJ = pose::reproject3Dto2D(point_and_set.first, R_adjustment, T_adjustment, K_q);
-//                v_ADJ.push_back(sqrt(pow(pt.x - reprojADJ.x, 2.) + pow(pt.y - reprojADJ.y, 2.)));
+
+                v_ADJ.push_back(sqrt(pow(pt.x - reprojADJ.x, 2.) + pow(pt.y - reprojADJ.y, 2.)));
 //                color = cv::Scalar(255, 0, 255);
 //                cv::circle(im, reprojADJ, 3, color, -1);
 //                cv::line(im, pt, reprojADJ, color, 1);
-//
-//            }
-//
-//            auto ms_GT = functions::mean_and_stdv(v_GT);
-//            auto ms_EST = functions::mean_and_stdv(v_EST);
-//            auto ms_ADJ = functions::mean_and_stdv(v_ADJ);
-//
+            }
+
+            auto ms_GT = functions::mean_and_stdv(v_GT);
+            auto ms_EST = functions::mean_and_stdv(v_EST);
+            auto ms_ADJ = functions::mean_and_stdv(v_ADJ);
+
+            total_GT += ms_GT.first;
+            total_EST += ms_EST.first;
+            total_ADJ += ms_ADJ.first;
+            c++;
+
 //            cv::imshow(title, im);
 //            cv::waitKey(0);
 
@@ -256,6 +262,7 @@ int main() {
 
             error << line << endl;
             cout << line << endl;
+            cout << "GT: " << total_GT/c << ", EST: " << total_EST/c << ", ADJ: " << total_ADJ/c << endl;
             //--------------------------------------------------------------------------------------------------------------
         }
         error.close();
