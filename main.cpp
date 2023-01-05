@@ -67,12 +67,12 @@ void findInliers (double threshold,
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-//    vector<string> scenes = {"stairs/"};
-//    string dataset = "seven_scenes/";
+   vector<string> scenes = {"stairs/"};
+   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    vector<string> scenes = {"KingsCollege/"};
-    string dataset = "cambridge/";
+    // vector<string> scenes = {"KingsCollege/"};
+    // string dataset = "cambridge/";
 
 
     string relpose_file = "relpose_SP";
@@ -80,15 +80,15 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        double threshold = 5.;
-        double pixel_mobility_radius = 2.;
-        double adj_thresh = 15;
+        double threshold = 10.;
+        double pixel_mobility_radius = 3.;
+        double adj_thresh = 30;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
