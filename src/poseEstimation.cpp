@@ -145,7 +145,7 @@ void pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         if (p.second.size() < 15) break;
         cv::Point2d pt(p.first.first, p.first.second);
         auto p_and_s = pose::RANSAC3DPoint(p.second);
-        if (double(p_and_s.second.size()) / double(p.second.size()) < .7) continue;
+        if (double(p_and_s.second.size()) / double(p.second.size()) < .8) continue;
         points2d.push_back(pt);
         points3d.push_back(p_and_s.first);
     }
@@ -250,7 +250,7 @@ pose::RANSAC3DPoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Ei
             if (k != i && k != j) {
                 auto reproj = pose::reproject3Dto2D(h, get<1>(matches[k]), get<2>(matches[k]), get<3>(matches[k]));
                 double d = sqrt(pow(get<0>(matches[k]).first - reproj.x, 2.) + pow(get<0>(matches[k]).second - reproj.y, 2.));
-                if (d <= 3) {
+                if (d <= 5) {
                     num_inliers++;
                     score += d;
                     set.push_back(matches[k]);
