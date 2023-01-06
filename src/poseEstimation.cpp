@@ -136,10 +136,10 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     int K = int(R_is.size());
 
-    double R[3];
-    double R_arr[9]{R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
-    ceres::RotationMatrixToAngleAxis(R_arr, R);
-    double camera[6] {R[0], R[1], R[2], T_q[0], T_q[1], T_q[2]};
+    // double R[3];
+    // double R_arr[9]{R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
+    // ceres::RotationMatrixToAngleAxis(R_arr, R);
+    // double camera[6] {R[0], R[1], R[2], T_q[0], T_q[1], T_q[2]};
 
     auto r = functions::findSharedMatches(R_is, T_is, K_is, all_pts_q, all_pts_i);
 
@@ -147,42 +147,43 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     vector<Eigen::Vector3d> points3d;
     for (const auto & p : r) {
         if (p.second.size() < 5) break;
-        cv::Point2d pt(p.first.first, p.first.second);
         auto p_and_s = pose::RANSAC3DPoint(p.second);
+        if (p_and_s.second.size() / p.second.size() < .5) continue;
+        cv::Point2d pt(p.first.first, p.first.second);
         cv::Point2d reproj = pose::reproject3Dto2D(p_and_s.first, R_q, T_q, K_q);
         if (sqrt(pow(pt.x-reproj.x, 2.) + pow(pt.y-reproj.y, 2.)) > thresh) continue;
         points2d.push_back(pt);
         points3d.push_back(p_and_s.first);
     }
 
-    ceres::Problem problem;
-    ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
-    for (int i = 0; i < points2d.size(); i++) {
-        auto pose_cost = ReprojectionError::Create(points2d[i], points3d[i], K_q[2], K_q[3], K_q[0], K_q[1]);
-        problem.AddResidualBlock(pose_cost, loss_function, camera);
-    }
+    // ceres::Problem problem;
+    // ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
+    // for (int i = 0; i < points2d.size(); i++) {
+    //     auto pose_cost = ReprojectionError::Create(points2d[i], points3d[i], K_q[2], K_q[3], K_q[0], K_q[1]);
+    //     problem.AddResidualBlock(pose_cost, loss_function, camera);
+    // }
 
-    ceres::Solver::Options options;
-    options.linear_solver_type = ceres::DENSE_SCHUR;
-    //   options.minimizer_progress_to_stdout = true;
-    ceres::Solver::Summary summary;
+    // ceres::Solver::Options options;
+    // options.linear_solver_type = ceres::DENSE_SCHUR;
+    // //   options.minimizer_progress_to_stdout = true;
+    // ceres::Solver::Summary summary;
 
-    if (problem.NumResidualBlocks() > 0) {
-        ceres::Solve(options, &problem, &summary);
-    } else {
-        cout << " Can't Adjust ";
-    }
-    //   std::cout << summary.FullReport() << "\n";
+    // if (problem.NumResidualBlocks() > 0) {
+    //     ceres::Solve(options, &problem, &summary);
+    // } else {
+    //     cout << " Can't Adjust ";
+    // }
+    // //   std::cout << summary.FullReport() << "\n";
 
-    R[0] = camera[0];
-    R[1] = camera[1];
-    R[2] = camera[2];
-    double R_adj[9];
-    ceres::AngleAxisToRotationMatrix(R, R_adj);
-    R_q = Eigen::Matrix3d{{R_adj[0], R_adj[3], R_adj[6]},
-                          {R_adj[1], R_adj[4], R_adj[7]},
-                          {R_adj[2], R_adj[5], R_adj[8]}};
-    T_q = Eigen::Vector3d{camera[3], camera[4], camera[5]};
+    // R[0] = camera[0];
+    // R[1] = camera[1];
+    // R[2] = camera[2];
+    // double R_adj[9];
+    // ceres::AngleAxisToRotationMatrix(R, R_adj);
+    // R_q = Eigen::Matrix3d{{R_adj[0], R_adj[3], R_adj[6]},
+    //                       {R_adj[1], R_adj[4], R_adj[7]},
+    //                       {R_adj[2], R_adj[5], R_adj[8]}};
+    // T_q = Eigen::Vector3d{camera[3], camera[4], camera[5]};
 
     return {points2d, points3d};
 }

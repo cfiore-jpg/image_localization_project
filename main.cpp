@@ -67,12 +67,12 @@ void findInliers (double threshold,
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-//    vector<string> scenes = {"stairs/"};
-//    string dataset = "seven_scenes/";
+   vector<string> scenes = {"stairs/"};
+   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-     vector<string> scenes = {"KingsCollege/"};
-     string dataset = "cambridge/";
+    //  vector<string> scenes = {"KingsCollege/"};
+    //  string dataset = "cambridge/";
 
 
     string relpose_file = "relpose_SP";
@@ -80,18 +80,19 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        double threshold = 5;
-        double adj_thresh = 10;
+        double threshold = 10;
+        double adj_thresh = 30;
 
         double total_GT = 0;
         double total_EST = 0;
         double total_ADJ = 0;
+        double total_p = 0;
         double c = 0;
 
         int start = 0;
@@ -209,6 +210,13 @@ int main() {
                                                      best_inliers_q,
                                                      best_inliers_i,
                                                      adj_thresh, R_adjustment, T_adjustment);
+            // auto adj_points = pose::adjustHypothesis(R_is,
+            //                                          T_is,
+            //                                          K_is,
+            //                                          K_q,
+            //                                          inliers_q,
+            //                                          inliers_i,
+            //                                          adj_thresh, R_adjustment, T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
             double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
             double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
@@ -242,27 +250,28 @@ int main() {
 //                cv::circle(im, reprojADJ, 3, color, -1);
 //                cv::line(im, pt, reprojADJ, color, 1);
             }
-
-            auto ms_GT = functions::mean_and_stdv(v_GT);
-            auto ms_EST = functions::mean_and_stdv(v_EST);
-            auto ms_ADJ = functions::mean_and_stdv(v_ADJ);
-
-            total_GT += ms_GT.first;
-            total_EST += ms_EST.first;
-            total_ADJ += ms_ADJ.first;
-            c++;
+            if (v_GT.size() > 0) {
+                auto ms_GT = functions::mean_and_stdv(v_GT);
+                auto ms_EST = functions::mean_and_stdv(v_EST);
+                auto ms_ADJ = functions::mean_and_stdv(v_ADJ);
+                total_GT += ms_GT.first;
+                total_EST += ms_EST.first;
+                total_ADJ += ms_ADJ.first;
+                total_p += v_GT.size();
+                c++;
+            }
 
 //            cv::imshow(title, im);
 //            cv::waitKey(0);
 
-            line += " All_Pre_Adj " + to_string(R_error_estimation_all)
-                    + " " + to_string(c_error_estimation_all)
-                    + " All_Post_Adj " + to_string(R_error_adjustment_all)
-                    + " " + to_string(c_error_adjustment_all);
+            // line += " All_Pre_Adj " + to_string(R_error_estimation_all)
+            //         + " " + to_string(c_error_estimation_all)
+            //         + " All_Post_Adj " + to_string(R_error_adjustment_all)
+            //         + " " + to_string(c_error_adjustment_all);
 
-            error << line << endl;
-            cout << line << endl;
-            cout << "GT: " << total_GT/c << ", EST: " << total_EST/c << ", ADJ: " << total_ADJ/c << endl;
+            // error << line << endl;
+            // cout << line << endl;
+            cout << "GT: " << total_GT/c << ", EST: " << total_EST/c << ", ADJ: " << total_ADJ/c << ", Num: " << total_p/c << endl;
             //--------------------------------------------------------------------------------------------------------------
         }
         error.close();
