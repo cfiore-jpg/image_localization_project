@@ -147,7 +147,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     vector<Eigen::Vector3d> points3d;
     for (const auto & p : r) {
         if (p.second.size() < 5) break;
-        auto p_and_s = pose::RANSAC3DPoint(p.second);
+        auto p_and_s = pose::RANSAC3DPoint(3, p.second);
         if (p_and_s.second.size() / p.second.size() < .5) continue;
         cv::Point2d pt(p.first.first, p.first.second);
         cv::Point2d reproj = pose::reproject3Dto2D(p_and_s.first, R_q, T_q, K_q);
@@ -220,7 +220,7 @@ Eigen::Vector3d pose::estimate3Dpoint(const vector<tuple<pair<double, double>, E
 
 
 pair<Eigen::Vector3d, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>
-pose::RANSAC3DPoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches) {
+pose::RANSAC3DPoint(double inlier_thresh, const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches) {
 
     int K = int(matches.size());
     vector<pair<int, int>> index_pairs;
@@ -236,7 +236,7 @@ pose::RANSAC3DPoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Ei
     int most_inliers = 0;
     double best_score = DBL_MAX;
     vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> best_set;
-    for (int idx = 0; idx < min(int(index_pairs.size()), 50); idx++) {
+    for (int idx = 0; idx < min(int(index_pairs.size()), 25); idx++) {
         auto p = index_pairs[idx];
         int i = p.first;
         int j = p.second;
@@ -248,7 +248,7 @@ pose::RANSAC3DPoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Ei
             if (k != i && k != j) {
                 auto reproj = pose::reproject3Dto2D(h, get<1>(matches[k]), get<2>(matches[k]), get<3>(matches[k]));
                 double d = sqrt(pow(get<0>(matches[k]).first - reproj.x, 2.) + pow(get<0>(matches[k]).second - reproj.y, 2.));
-                if (d <= 3) {
+                if (d <= inlier_thresh) {
                     num_inliers++;
                     score += d;
                     set.push_back(matches[k]);

@@ -64,42 +64,85 @@ void findInliers (double threshold,
     mtx.unlock();
 }
 
+void calculation(double angle_thresh,
+                 double covis,
+                 double pixel_thresh,
+                 double post_ransac_percent,
+                 double reproj_radius,
+                 Eigen::Matrix3d * R_estimation,
+                 Eigen::Vector3d * T_estimation,
+                 Eigen::Matrix3d * R_q,
+                 Eigen::Vector3d * T_q,
+                 vector<double> * K_q,
+                 vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>> * r,
+                 map<tuple<double, double, double, double, double>, vector<tuple<double, double, double, double, double>>> * m) {
+
+    vector<double> v_GT, v_EST;
+    for (const auto & p : *r) {
+        if (p.second.size() < covis) break;
+        auto p_and_s = pose::RANSAC3DPoint(pixel_thresh, p.second);
+        if (p_and_s.second.size() / p.second.size() < post_ransac_percent) continue;
+        cv::Point2d pt(p.first.first, p.first.second);
+        Eigen::Vector3d point3d = p_and_s.first;
+        cv::Point2d reprojEST = pose::reproject3Dto2D(point3d, *R_estimation, *T_estimation, *K_q);
+        if (sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)) > reproj_radius) continue;
+        cv::Point2d reprojGT = pose::reproject3Dto2D(point3d, *R_q, *T_q, *K_q);
+        v_GT.push_back(sqrt(pow(pt.x - reprojGT.x, 2.) + pow(pt.y - reprojGT.y, 2.)));
+        v_EST.push_back(sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)));
+    }
+
+    if (!v_GT.empty()) {
+        auto gt = functions::mean_and_stdv(v_GT);
+        auto est = functions::mean_and_stdv(v_EST);
+        double m_GT = gt.first;
+        double m_EST = est.first;
+        double stdv_GT = gt.second;
+        double stdv_EST = est.second;
+
+        auto key = make_tuple(angle_thresh, covis, pixel_thresh, post_ransac_percent, reproj_radius);
+        auto t = make_tuple(m_GT, stdv_GT, m_EST, stdv_EST, double(v_GT.size()));
+
+        mtx.lock();
+        if((*m).find(key) != (*m).end()) {
+            (*m).at(key).push_back(t);
+        } else {
+            vector<tuple<double, double, double, double, double>> val = {t};
+            (*m).insert({key, val});
+        }
+        mtx.unlock();
+    }
+
+}
+
 int main() {
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-   vector<string> scenes = {"stairs/"};
-   string dataset = "seven_scenes/";
+//   vector<string> scenes = {"stairs/"};
+//   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    //  vector<string> scenes = {"KingsCollege/"};
-    //  string dataset = "cambridge/";
+      vector<string> scenes = {"KingsCollege/"};
+      string dataset = "cambridge/";
 
 
     string relpose_file = "relpose_SP";
-    string error_file = "error_SP_justransac";
+    string error_file = "hp_sweep";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
-    for (const auto &scene: scenes) {
+    for (const auto & scene: scenes) {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        double threshold = 10;
-        double adj_thresh = 30;
-
-        double total_GT = 0;
-        double total_EST = 0;
-        double total_ADJ = 0;
-        double total_p = 0;
-        double c = 0;
+        map<tuple<double, double, double, double, double>, vector<tuple<double, double, double, double, double>>> m;
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
         for (int q = start; q < queries.size(); q++) {
+            cout << q + 1 << "/" << queries.size();
 
-            cout << q + 1 << "/" << queries.size() << "..." << endl;
 
             string query = queries[q];
             string line = query;
@@ -116,163 +159,99 @@ int main() {
             auto K_is = get<9>(info);
             auto inliers_q = get<10>(info);
             auto inliers_i = get<11>(info);
-
+            Eigen::Vector3d c_q = -R_q.transpose() * T_q;
             int K = int(anchors.size());
 
-            Eigen::Vector3d c_q = -R_q.transpose() * T_q;
 
-            //        for (int i = 0; i < K; i++) {
-            //            Eigen::Matrix3d R_qi_real = R_q * R_is[i].transpose();
-            //            Eigen::Vector3d T_qi_real = T_q - R_qi_real * T_is[i];
-            //            T_qi_real.normalize();
-            //            double R_error = functions::rotationDifference(R_qi_real, R_qis[i]);
-            //            double T_error = functions::getAngleBetween(T_qi_real, T_qis[i]);
-            //            cout << R_error << ",  " << T_error << endl;
-            //            int check = 0;
-            //        }
+            for (double angle_thresh = 5.; angle_thresh < 21.; angle_thresh += 5.) {
 
-            // ALL K -------------------------------------------------------------------------------------------------------
-            int count = 0;
-            for (int i = 0; i < K - 1; i++) {
-                for (int j = i + 1; j < K; j++) {
-                    count++;
-                }
-            }
+                cout << " " << angle_thresh ;
 
-            std::thread threads_1[count];
-            count = 0;
-            vector<tuple<int, int, double, vector<int>>> results;
-            for (int i = 0; i < K - 1; i++) {
-                for (int j = i + 1; j < K; j++) {
-                    threads_1[count] = thread(findInliers, threshold, i, j, &R_is, &T_is, &R_qis, &T_qis, &results);
-                    this_thread::sleep_for(std::chrono::microseconds(1));
-                    count++;
-                }
-            }
 
-            // Sort by number of inliers
-            for (auto &th: threads_1) th.join();
-            sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
-                return get<3>(a).size() > get<3>(b).size();
-            });
-
-            // Sort by lowest score
-            auto best_set = results.at(0);
-            int size = int(get<3>(best_set).size());
-            double best_score = get<2>(best_set);
-            int idx = 0;
-            while (true) {
-                try {
-                    auto set = results.at(idx);
-                    if (get<3>(set).size() != size) break;
-                    if (get<2>(set) < best_score) {
-                        best_score = get<2>(set);
-                        best_set = set;
+                vector<thread> threads;
+                vector<tuple<int, int, double, vector<int>>> results;
+                for (int i = 0; i < K - 1; i++) {
+                    for (int j = i + 1; j < K; j++) {
+                        threads.emplace_back(thread(findInliers, angle_thresh, i, j, &R_is, &T_is, &R_qis, &T_qis, &results));
+                        this_thread::sleep_for(std::chrono::microseconds(1));
                     }
-                } catch (...) {
-                    break;
                 }
-                idx++;
+                for (auto & th: threads) th.join();
+
+                // Sort by number of inliers
+                sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
+                    return get<3>(a).size() > get<3>(b).size();
+                });
+
+                // Sort by lowest score
+                auto best_set = results.at(0);
+                int size = int(get<3>(best_set).size());
+                double best_score = get<2>(best_set);
+                int idx = 0;
+                while (true) {
+                    try {
+                        auto set = results.at(idx);
+                        if (get<3>(set).size() != size) break;
+                        if (get<2>(set) < best_score) {
+                            best_score = get<2>(set);
+                            best_set = set;
+                        }
+                    } catch (...) {
+                        break;
+                    }
+                    idx++;
+                }
+
+                vector<string> best_anchors;
+                vector<Eigen::Matrix3d> best_R_is, best_R_qis;
+                vector<Eigen::Vector3d> best_T_is, best_T_qis;
+                vector<vector<double>> best_K_is;
+                vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
+                for (const auto &i: get<3>(best_set)) {
+                    best_anchors.push_back(anchors[i]);
+                    best_R_is.push_back(R_is[i]);
+                    best_R_qis.push_back(R_qis[i]);
+                    best_T_is.push_back(T_is[i]);
+                    best_T_qis.push_back(T_qis[i]);
+                    best_inliers_q.push_back(inliers_q[i]);
+                    best_inliers_i.push_back(inliers_i[i]);
+                    best_K_is.push_back(K_is[i]);
+                }
+                vector<Eigen::Matrix3d> rotations(best_R_is.size());
+                for (int i = 0; i < best_R_is.size(); i++) {
+                    rotations[i] = best_R_qis[i] * best_R_is[i];
+                }
+
+                Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
+                Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
+                Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
+
+                auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+
+                vector<thread> thrs;
+                for (double covis = 5; covis < 22; covis += 5) {
+                    for (double pixel_thresh = 1; pixel_thresh < 12; pixel_thresh += 3) {
+                        for (double post_ransac_percent = .25; post_ransac_percent < 1.1; post_ransac_percent += .25) {
+                            for (double reproj_radius = 5; reproj_radius < 20; reproj_radius += 10) {
+                                thrs.emplace_back(thread(calculation, angle_thresh, covis, pixel_thresh,
+                                                         post_ransac_percent, reproj_radius, &R_estimation, &T_estimation,
+                                                         &R_q, &T_q, &K_q, &r, &m));
+                                this_thread::sleep_for(std::chrono::microseconds (1));
+                            }
+                        }
+                    }
+                }
+                for (auto & th: thrs) th.join();
+
             }
-
-            vector<string> best_anchors;
-            vector<Eigen::Matrix3d> best_R_is, best_R_qis;
-            vector<Eigen::Vector3d> best_T_is, best_T_qis;
-            vector<vector<double>> best_K_is;
-            vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
-            for (const auto &i: get<3>(best_set)) {
-                best_anchors.push_back(anchors[i]);
-                best_R_is.push_back(R_is[i]);
-                best_R_qis.push_back(R_qis[i]);
-                best_T_is.push_back(T_is[i]);
-                best_T_qis.push_back(T_qis[i]);
-                best_inliers_q.push_back(inliers_q[i]);
-                best_inliers_i.push_back(inliers_i[i]);
-                best_K_is.push_back(K_is[i]);
+            cout << endl;
+        }
+        for (const auto & p : m) {
+            error << get<0>(p.first) << " " << get<1>(p.first) << " " << get<2>(p.first) << " " << get<3>(p.first) << " " << get<4>(p.first);
+            for (const auto & t : p.second) {
+                error << " " << get<0>(t) << " " << get<1>(t) << " " << get<2>(t) << " " << get<3>(t) << " " << get<4>(t);
             }
-            vector<Eigen::Matrix3d> rotations(best_R_is.size());
-            for (int i = 0; i < best_R_is.size(); i++) {
-                rotations[i] = best_R_qis[i] * best_R_is[i];
-            }
-
-            Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
-            Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
-            Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
-            double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
-            double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
-
-            Eigen::Matrix3d R_adjustment = R_estimation;
-            Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
-            auto adj_points = pose::adjustHypothesis(best_R_is,
-                                                     best_T_is,
-                                                     best_K_is,
-                                                     K_q,
-                                                     best_inliers_q,
-                                                     best_inliers_i,
-                                                     adj_thresh, R_adjustment, T_adjustment);
-            // auto adj_points = pose::adjustHypothesis(R_is,
-            //                                          T_is,
-            //                                          K_is,
-            //                                          K_q,
-            //                                          inliers_q,
-            //                                          inliers_i,
-            //                                          adj_thresh, R_adjustment, T_adjustment);
-            Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
-            double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
-            double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
-
-//            string title = "INCLUDED";
-//            cv::Mat im = cv::imread(dir + query);
-            vector<double> v_GT, v_EST, v_ADJ;
-            for (int i = 0; i < adj_points.first.size(); i++) {
-
-                cv::Point2d pt = adj_points.first[i];
-                Eigen::Vector3d point3d = adj_points.second[i];
-
-                cv::Point2d reprojGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
-                cv::Point2d reprojEST = pose::reproject3Dto2D(point3d, R_estimation, T_estimation, K_q);
-                cv::Point2d reprojADJ = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
-
-//                cv::circle(im, pt, 3, cv::Scalar(0, 0, 0));
-
-                v_GT.push_back(sqrt(pow(pt.x - reprojGT.x, 2.) + pow(pt.y - reprojGT.y, 2.)));
-//                auto color = cv::Scalar(255, 0, 0);
-//                cv::circle(im, reprojGT, 3, color, -1);
-//                cv::line(im, pt, reprojGT, color, 1);
-
-                v_EST.push_back(sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)));
-//                color = cv::Scalar(0, 0, 255);
-//                cv::circle(im, reprojEST, 3, color, -1);
-//                cv::line(im, pt, reprojEST, color, 1);
-
-                v_ADJ.push_back(sqrt(pow(pt.x - reprojADJ.x, 2.) + pow(pt.y - reprojADJ.y, 2.)));
-//                color = cv::Scalar(255, 0, 255);
-//                cv::circle(im, reprojADJ, 3, color, -1);
-//                cv::line(im, pt, reprojADJ, color, 1);
-            }
-            if (v_GT.size() > 0) {
-                auto ms_GT = functions::mean_and_stdv(v_GT);
-                auto ms_EST = functions::mean_and_stdv(v_EST);
-                auto ms_ADJ = functions::mean_and_stdv(v_ADJ);
-                total_GT += ms_GT.first;
-                total_EST += ms_EST.first;
-                total_ADJ += ms_ADJ.first;
-                total_p += v_GT.size();
-                c++;
-            }
-
-//            cv::imshow(title, im);
-//            cv::waitKey(0);
-
-            // line += " All_Pre_Adj " + to_string(R_error_estimation_all)
-            //         + " " + to_string(c_error_estimation_all)
-            //         + " All_Post_Adj " + to_string(R_error_adjustment_all)
-            //         + " " + to_string(c_error_adjustment_all);
-
-            // error << line << endl;
-            // cout << line << endl;
-            cout << "GT: " << total_GT/c << ", EST: " << total_EST/c << ", ADJ: " << total_ADJ/c << ", Num: " << total_p/c << endl;
-            //--------------------------------------------------------------------------------------------------------------
+            error << endl;
         }
         error.close();
     }
