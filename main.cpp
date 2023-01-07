@@ -130,7 +130,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto & scene: scenes) {
         ofstream error;
@@ -163,7 +163,7 @@ int main() {
             int K = int(anchors.size());
 
 
-            for (double angle_thresh = 5.; angle_thresh < 21.; angle_thresh += 5.) {
+            for (double angle_thresh = 5.; angle_thresh < 6.; angle_thresh += 5.) {
 
                 cout << " " << angle_thresh ;
 
@@ -229,10 +229,10 @@ int main() {
                 auto r = functions::findSharedMatches(best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 
                 vector<thread> thrs;
-                for (double covis = 5; covis < 22; covis += 5) {
-                    for (double pixel_thresh = 1; pixel_thresh < 12; pixel_thresh += 3) {
-                        for (double post_ransac_percent = .25; post_ransac_percent < 1.1; post_ransac_percent += .25) {
-                            for (double reproj_radius = 5; reproj_radius < 20; reproj_radius += 10) {
+                for (double covis = 15; covis < 16; covis += 5) {
+                    for (double pixel_thresh = 5; pixel_thresh < 6; pixel_thresh += 3) {
+                        for (double post_ransac_percent = .75; post_ransac_percent < 8.; post_ransac_percent += .25) {
+                            for (double reproj_radius = 25; reproj_radius < 30; reproj_radius += 10) {
                                 thrs.emplace_back(thread(calculation, angle_thresh, covis, pixel_thresh,
                                                          post_ransac_percent, reproj_radius, &R_estimation, &T_estimation,
                                                          &R_q, &T_q, &K_q, &r, &m));
