@@ -107,15 +107,18 @@ namespace pose {
 
     //// FINAL POSE ADJUSTMENT
     pair<vector<cv::Point2d>, vector<Eigen::Vector3d>>
-    adjustHypothesis(const vector<Eigen::Matrix3d> & R_is,
-                     const vector<Eigen::Vector3d> & T_is,
-                     const vector<vector<double>> & K_is,
-                     const vector<double> & K_q,
-                     const vector<vector<cv::Point2d>> & all_pts_q,
-                     const vector<vector<cv::Point2d>> & all_pts_i,
-                     const double & thresh,
-                     Eigen::Matrix3d & R_q,
-                     Eigen::Vector3d & T_q);
+    adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
+                      const vector<Eigen::Vector3d> & T_is,
+                      const vector<vector<double>> & K_is,
+                      const vector<double> & K_q,
+                      const vector<vector<cv::Point2d>> & all_pts_q,
+                      const vector<vector<cv::Point2d>> & all_pts_i,
+                      double covis,
+                      double pixel_thresh,
+                      double post_ransac,
+                      double reproj_tolerance,
+                      Eigen::Matrix3d & R_q,
+                      Eigen::Vector3d & T_q);
 
 
     void visualizeRelpose(const string & query,
