@@ -64,55 +64,7 @@ void findInliers (double threshold,
     mtx.unlock();
 }
 
-void calculation(double angle_thresh,
-                 double covis,
-                 double pixel_thresh,
-                 double post_ransac_percent,
-                 double reproj_radius,
-                 Eigen::Matrix3d * R_estimation,
-                 Eigen::Vector3d * T_estimation,
-                 Eigen::Matrix3d * R_q,
-                 Eigen::Vector3d * T_q,
-                 vector<double> * K_q,
-                 vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>> * r,
-                 map<tuple<double, double, double, double, double>, vector<tuple<double, double, double, double, double>>> * m) {
 
-    vector<double> v_GT, v_EST;
-    for (const auto & p : *r) {
-        if (p.second.size() < covis) break;
-        auto p_and_s = pose::RANSAC3DPoint(pixel_thresh, p.second);
-        if (p_and_s.second.size() / p.second.size() < post_ransac_percent) continue;
-        cv::Point2d pt(p.first.first, p.first.second);
-        Eigen::Vector3d point3d = p_and_s.first;
-        cv::Point2d reprojEST = pose::reproject3Dto2D(point3d, *R_estimation, *T_estimation, *K_q);
-        if (sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)) > reproj_radius) continue;
-        cv::Point2d reprojGT = pose::reproject3Dto2D(point3d, *R_q, *T_q, *K_q);
-        v_GT.push_back(sqrt(pow(pt.x - reprojGT.x, 2.) + pow(pt.y - reprojGT.y, 2.)));
-        v_EST.push_back(sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)));
-    }
-
-    if (!v_GT.empty()) {
-        auto gt = functions::mean_and_stdv(v_GT);
-        auto est = functions::mean_and_stdv(v_EST);
-        double m_GT = gt.first;
-        double m_EST = est.first;
-        double stdv_GT = gt.second;
-        double stdv_EST = est.second;
-
-        auto key = make_tuple(angle_thresh, covis, pixel_thresh, post_ransac_percent, reproj_radius);
-        auto t = make_tuple(m_GT, stdv_GT, m_EST, stdv_EST, double(v_GT.size()));
-
-        mtx.lock();
-        if((*m).find(key) != (*m).end()) {
-            (*m).at(key).push_back(t);
-        } else {
-            vector<tuple<double, double, double, double, double>> val = {t};
-            (*m).insert({key, val});
-        }
-        mtx.unlock();
-    }
-
-}
 
 int main() {
 
@@ -129,13 +81,13 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     double angle_thresh = 5;
-    double covis = 15;
+    double covis = 10;
     double pixel_thresh = 5;
-    double post_ransac = .75;
-    double reproj_tolerance = 25;
+    double post_ransac = 0;
+    double reproj_tolerance = 10000;
 
     for (const auto &scene: scenes) {
         ofstream error;

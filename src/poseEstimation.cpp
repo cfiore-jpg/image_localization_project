@@ -160,7 +160,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     }
 
      ceres::Problem problem;
-     ceres::LossFunction *loss_function = new ceres::HuberLoss(1.0);
+     ceres::LossFunction *loss_function = new ceres::CauchyLoss(1.);
      for (int i = 0; i < points2d.size(); i++) {
          auto pose_cost = ReprojectionError::Create(points2d[i], points3d[i], K_q[2], K_q[3], K_q[0], K_q[1]);
          problem.AddResidualBlock(pose_cost, loss_function, camera);
@@ -171,7 +171,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
      //   options.minimizer_progress_to_stdout = true;
      ceres::Solver::Summary summary;
 
-     if (problem.NumResidualBlocks() >= 5) {
+     if (problem.NumResidualBlocks() >= 100) {
          ceres::Solve(options, &problem, &summary);
      } else {
          cout << " Can't Adjust ";
