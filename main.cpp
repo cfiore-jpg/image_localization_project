@@ -73,21 +73,23 @@ int main() {
 //   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    vector<string> scenes = {"KingsCollege/"};
-    string dataset = "cambridge/";
+//    vector<string> scenes = {"KingsCollege/"};
+//    string dataset = "cambridge/";
+    vector<string> scenes = {"query/"};
+    string dataset = "aachen/";
 
     string relpose_file = "relpose_SP";
-    string error_file = "error_SP_justransac";
+    string error_file = "Aachen_eval_MultiLoc";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     double angle_thresh = 5;
-    double covis = 10;
-    double pixel_thresh = 5;
-    double post_ransac = 0;
-    double reproj_tolerance = 10000;
+    double covis = 3;
+    double pixel_thresh = 6;
+    double post_ransac = -1;
+    double reproj_tolerance = 100000;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -99,7 +101,7 @@ int main() {
             cout << q + 1 << "/" << queries.size() << "..." << endl;
 
             string query = queries[q];
-            string line = query;
+//            string line = query;
 
             auto info = functions::parseRelposeFile(dir, query, relpose_file);
             auto R_q = get<1>(info);
@@ -174,8 +176,8 @@ int main() {
             Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
             Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
             Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
-            double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
-            double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
+//            double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
+//            double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
 
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
@@ -191,9 +193,12 @@ int main() {
                                                      reproj_tolerance,
                                                      R_adjustment,
                                                      T_adjustment);
-            Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
-            double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
-            double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
+//            Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
+//            double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
+//            double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
+
+            Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
+
 
 //            string title = "INCLUDED";
 //            cv::Mat im = cv::imread(dir + query);
@@ -228,10 +233,21 @@ int main() {
 //            cv::imshow(title, im);
 //            cv::waitKey(0);
 
-             line += " All_Pre_Adj " + to_string(R_error_estimation_all)
-                     + " " + to_string(c_error_estimation_all)
-                     + " All_Post_Adj " + to_string(R_error_adjustment_all)
-                     + " " + to_string(c_error_adjustment_all);
+            auto pos = query.find('/');
+            string name = query;
+            while (pos != string::npos) {
+                name = name.substr(pos+1);
+                pos = name.find('/');
+            }
+            string line = name;
+            line += " " + to_string(q_adj.w()) + " " + to_string(q_adj.x()) + " " + to_string(q_adj.y()) + " " +
+                    to_string(q_adj.z()) + " " + to_string(T_adjustment[0]) + " " + to_string(T_adjustment[1]) + " " +
+                    to_string(T_adjustment[2]);
+
+//             line += " All_Pre_Adj " + to_string(R_error_estimation_all)
+//                     + " " + to_string(c_error_estimation_all)
+//                     + " All_Post_Adj " + to_string(R_error_adjustment_all)
+//                     + " " + to_string(c_error_adjustment_all);
 
              error << line << endl;
              cout << line << endl;

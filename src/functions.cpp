@@ -137,13 +137,19 @@ tuple<string, Eigen::Matrix3d,Eigen::Vector3d, vector<double>,
                 } else if (count >= 1 && count <= 9) {
                     int row = (count - 1) / 3;
                     int col = (count - 1) % 3;
-                    R_q(row, col) = stod(it);
+                    if (it != "N/A") {
+                        R_q(row, col) = stod(it);
+                    }
                 } else if (count >= 10 && count <= 12) {
                     int row = count - 10;
-                    T_q(row) = stod(it);
+                    if (it != "N/A") {
+                        T_q(row) = stod(it);
+                    }
                 } else {
                     assert(count >= 13 && count <= 16);
-                    K_q.push_back(stod(it));
+                    if (it != "N/A") {
+                        K_q.push_back(stod(it));
+                    }
                 }
                 count++;
             }
