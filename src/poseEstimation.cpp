@@ -183,15 +183,15 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
      ceres::Solver::Options options;
      options.linear_solver_type = ceres::DENSE_SCHUR;
-//         options.minimizer_progress_to_stdout = true;
+    //  options.minimizer_progress_to_stdout = true;
      ceres::Solver::Summary summary;
 
-     if (problem.NumResidualBlocks() >= 25) {
+     if (problem.NumResidualBlocks() >= 100) {
          ceres::Solve(options, &problem, &summary);
      } else {
          cout << " Can't Adjust ";
      }
-//         std::cout << summary.FullReport() << "\n";
+    // std::cout << summary.FullReport() << "\n";
 
      R[0] = camera[0];
      R[1] = camera[1];

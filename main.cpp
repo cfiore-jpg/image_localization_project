@@ -73,18 +73,20 @@ int main() {
 //   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    vector<string> scenes = {"KingsCollege/"};
-    string dataset = "cambridge/";
+    // vector<string> scenes = {"KingsCollege/"};
+    // string dataset = "cambridge/";
 
-//    vector<string> scenes = {"query/"};
-//    string dataset = "aachen/";
+   vector<string> scenes = {"query/"};
+   string dataset = "aachen/";
 
     string relpose_file = "relpose_SP_r";
-    string error_file = "error_SP_justransac";
+
+    // string error_file = "error_SP_justransac";
+    string error_file = "Aachen_eval_MultiLoc";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     double angle_thresh = 5;
     double covis = 3;
@@ -96,7 +98,7 @@ int main() {
         ofstream error;
         error.open(dir + scene + error_file + ".txt");
 
-        int start = 0;
+        int start = 900;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
         for (int q = start; q < queries.size(); q++) {
             cout << q + 1 << "/" << queries.size() << " ";
@@ -197,7 +199,7 @@ int main() {
 
             cout << adj_points.first.size() << endl;
 
-//            Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
+           Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
 //
 //
 //            string title = "INCLUDED";
@@ -231,27 +233,25 @@ int main() {
 //            }
 //            auto msEST = functions::mean_and_stdv(v_EST);
 //            auto msADJ = functions::mean_and_stdv(v_EST);
-//
-//
 //            cv::imshow(title, im);
 //            cv::waitKey(0);
 //
-//            auto pos = query.find('/');
-//            string name = query;
-//            while (pos != string::npos) {
-//                name = name.substr(pos + 1);
-//                pos = name.find('/');
-//            }
-//            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " " << q_adj.y() << " " <<
-//                  q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " " << T_adjustment[2] << endl;
+           auto pos = query.find('/');
+           string name = query;
+           while (pos != string::npos) {
+               name = name.substr(pos + 1);
+               pos = name.find('/');
+           }
+           error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " " << q_adj.y() << " " <<
+                 q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " " << T_adjustment[2] << endl;
 
-             string line;
-             line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
-                     + " " + to_string(c_error_estimation_all)
-                     + " All_Post_Adj " + to_string(R_error_adjustment_all)
-                     + " " + to_string(c_error_adjustment_all);
-              error << line << endl;
-              cout << line << endl;
+            //  string line;
+            //  line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
+            //          + " " + to_string(c_error_estimation_all)
+            //          + " All_Post_Adj " + to_string(R_error_adjustment_all)
+            //          + " " + to_string(c_error_adjustment_all);
+            //   error << line << endl;
+            //   cout << line << endl;
         }
         error.close();
     }
