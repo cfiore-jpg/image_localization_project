@@ -29,9 +29,15 @@ namespace pose {
     RANSAC3DPoint(double inlier_thresh, const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
 
     cv::Point2d reproject3Dto2D(const Eigen::Vector3d & point3d,
-                                const Eigen::Matrix3d & R_q,
-                                const Eigen::Vector3d & T_q,
-                                const vector<double> & K_q);
+                                const Eigen::Matrix3d & R,
+                                const Eigen::Vector3d & T,
+                                const vector<double> & K);
+
+    double reprojError(const Eigen::Vector3d & point3d,
+                             const Eigen::Matrix3d & R,
+                             const Eigen::Vector3d & T,
+                             const vector<double> & K,
+                             double mx, double my);
 
     void estimatePose(const vector<Eigen::Matrix3d> & R_ks,
                       const vector<Eigen::Vector3d> & T_ks,

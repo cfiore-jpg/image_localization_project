@@ -73,22 +73,22 @@ int main() {
 //   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-//    vector<string> scenes = {"KingsCollege/"};
-//    string dataset = "cambridge/";
+    vector<string> scenes = {"KingsCollege/"};
+    string dataset = "cambridge/";
 
-    vector<string> scenes = {"query/"};
-    string dataset = "aachen/";
+//    vector<string> scenes = {"query/"};
+//    string dataset = "aachen/";
 
-    string relpose_file = "relpose_SP";
-    string error_file = "Aachen_eval_MultiLoc";
+    string relpose_file = "relpose_SP_r";
+    string error_file = "error_SP_justransac";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     double angle_thresh = 5;
     double covis = 3;
-    double pixel_thresh = 6;
+    double pixel_thresh = 3;
     double post_ransac = -1;
     double reproj_tolerance = 100000;
 
@@ -103,7 +103,7 @@ int main() {
 
             string query = queries[q];
 
-            auto info = functions::parseRelposeFile(dir, query, relpose_file);
+            auto info = functions::parseRelposeFile(dir, query, relpose_file, 1);
             auto R_q = get<1>(info);
             auto T_q = get<2>(info);
             auto K_q = get<3>(info);
@@ -128,13 +128,9 @@ int main() {
                 }
             }
             for (auto &th: threads) th.join();
-
-            // Sort by number of inliers
             sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
                 return get<3>(a).size() > get<3>(b).size();
             });
-
-            // Sort by lowest score
             auto best_set = results.at(0);
             int size = int(get<3>(best_set).size());
             double best_score = get<2>(best_set);
@@ -176,8 +172,8 @@ int main() {
             Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
             Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
             Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
-        //    double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
-        //    double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
+            double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
+            double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
 
             cout << best_R_is.size() << "/" << R_is.size() << " ";
 
@@ -195,65 +191,67 @@ int main() {
                                                      reproj_tolerance,
                                                      R_adjustment,
                                                      T_adjustment);
-           Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
-        //    double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
-        //    double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
+            Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
+            double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
+            double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
             cout << adj_points.first.size() << endl;
 
-            Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
-
-
+//            Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
+//
+//
 //            string title = "INCLUDED";
 //            cv::Mat im = cv::imread(dir + query);
 //            vector<double> v_GT, v_EST, v_ADJ;
 //            for (int i = 0; i < adj_points.first.size(); i++) {
-
+//
 //                cv::Point2d pt = adj_points.first[i];
 //                Eigen::Vector3d point3d = adj_points.second[i];
-//
-//                cv::Point2d reprojGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
+////
+////                cv::Point2d reprojGT = pose::reproject3Dto2D(point3d, R_q, T_q, K_q);
 //                cv::Point2d reprojEST = pose::reproject3Dto2D(point3d, R_estimation, T_estimation, K_q);
 //                cv::Point2d reprojADJ = pose::reproject3Dto2D(point3d, R_adjustment, T_adjustment, K_q);
-
+//
 //                cv::circle(im, pt, 3, cv::Scalar(0, 0, 0));
-
-//                v_GT.push_back(sqrt(pow(pt.x - reprojGT.x, 2.) + pow(pt.y - reprojGT.y, 2.)));
+//
+////                v_GT.push_back(sqrt(pow(pt.x - reprojGT.x, 2.) + pow(pt.y - reprojGT.y, 2.)));
 //                auto color = cv::Scalar(255, 0, 0);
-//                cv::circle(im, reprojGT, 3, color, -1);
-//                cv::line(im, pt, reprojGT, color, 1);
-
+////                cv::circle(im, reprojGT, 3, color, -1);
+////                cv::line(im, pt, reprojGT, color, 1);
+//
 //                v_EST.push_back(sqrt(pow(pt.x - reprojEST.x, 2.) + pow(pt.y - reprojEST.y, 2.)));
 //                color = cv::Scalar(0, 0, 255);
 //                cv::circle(im, reprojEST, 3, color, -1);
 //                cv::line(im, pt, reprojEST, color, 1);
-
+//
 //                v_ADJ.push_back(sqrt(pow(pt.x - reprojADJ.x, 2.) + pow(pt.y - reprojADJ.y, 2.)));
 //                color = cv::Scalar(255, 0, 255);
 //                cv::circle(im, reprojADJ, 3, color, -1);
 //                cv::line(im, pt, reprojADJ, color, 1);
 //            }
-
+//            auto msEST = functions::mean_and_stdv(v_EST);
+//            auto msADJ = functions::mean_and_stdv(v_EST);
+//
+//
 //            cv::imshow(title, im);
 //            cv::waitKey(0);
+//
+//            auto pos = query.find('/');
+//            string name = query;
+//            while (pos != string::npos) {
+//                name = name.substr(pos + 1);
+//                pos = name.find('/');
+//            }
+//            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " " << q_adj.y() << " " <<
+//                  q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " " << T_adjustment[2] << endl;
 
-            auto pos = query.find('/');
-            string name = query;
-            while (pos != string::npos) {
-                name = name.substr(pos+1);
-                pos = name.find('/');
-            }
-            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " " << q_adj.y() << " " <<
-            q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " " << T_adjustment[2] << endl;
-
-            // string line = " ";
-            // line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
-            //         + " " + to_string(c_error_estimation_all)
-            //         + " All_Post_Adj " + to_string(R_error_adjustment_all)
-            //         + " " + to_string(c_error_adjustment_all);
-            //  error << line << endl;
-            //  cout << line << endl;
-            //--------------------------------------------------------------------------------------------------------------
+             string line;
+             line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
+                     + " " + to_string(c_error_estimation_all)
+                     + " All_Post_Adj " + to_string(R_error_adjustment_all)
+                     + " " + to_string(c_error_adjustment_all);
+              error << line << endl;
+              cout << line << endl;
         }
         error.close();
     }

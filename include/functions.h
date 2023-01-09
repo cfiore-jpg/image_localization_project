@@ -37,7 +37,7 @@ namespace functions {
             vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>,
             vector<vector<double>>,
             vector<vector<cv::Point2d>>, vector<vector<cv::Point2d>>>
-          parseRelposeFile (const string & dir, const string & query, const string & fn);
+          parseRelposeFile (const string & dir, const string & query, const string & fn, int r);
 
 
     vector<int> optimizeSpacingZhou(const vector<Eigen::Vector3d> & old_centers,
