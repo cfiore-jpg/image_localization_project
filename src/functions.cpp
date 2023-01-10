@@ -104,7 +104,7 @@ vector<string> functions::getQueries(const string & queryList, const string & sc
     return queries;
 }
 
-tuple<string, Eigen::Matrix3d,Eigen::Vector3d, vector<double>,
+tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
         vector<string>,
         vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>,
         vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>,

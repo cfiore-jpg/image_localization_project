@@ -33,6 +33,8 @@ namespace pose {
                                 const Eigen::Vector3d & T,
                                 const vector<double> & K);
 
+    cv::Point2d undistort_point(const cv::Point2d & pt, double f, double cx, double cy, double rn);
+
     double reprojError(const Eigen::Vector3d & point3d,
                              const Eigen::Matrix3d & R,
                              const Eigen::Vector3d & T,

@@ -163,20 +163,21 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         double pr = double(p_and_s.second.size()) / double(p.second.size());
         if (pr < post_ransac) continue;
         cv::Point2d pt(p.first.first, p.first.second);
-//        cv::Point2d reproj = pose::reproject3Dto2D(p_and_s.first, R_q, T_q, K_q);
+        double d = pose::reprojError(p_and_s.first, R_q, T_q, K_q, pt.x, pt.y);
 //        if (sqrt(pow(pt.x-reproj.x, 2.) + pow(pt.y-reproj.y, 2.)) > reproj_tolerance) continue;
         points2d.push_back(pt);
         points3d.push_back(p_and_s.first);
     }
 
+    double r_ = 0;
+    double f_ = (K_q[2] + K_q[3]) / 2;
+    if (K_q.size() == 5) {
+        r_ = K_q[4] / (f_ * f_);
+    }
+
      ceres::Problem problem;
      ceres::LossFunction *loss_function = new ceres::CauchyLoss(5);
      for (int i = 0; i < points2d.size(); i++) {
-         double r_ = 0;
-         if (K_q.size() == 5) {
-             double f_ = (K_q[2] + K_q[3]) / 2;
-             r_ = K_q[4] / (f_ * f_);
-         }
          auto pose_cost = ReprojectionError::Create(points2d[i], points3d[i], r_, K_q[2], K_q[3], K_q[0], K_q[1]);
          problem.AddResidualBlock(pose_cost, loss_function, camera);
      }
@@ -186,7 +187,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     //  options.minimizer_progress_to_stdout = true;
      ceres::Solver::Summary summary;
 
-     if (problem.NumResidualBlocks() >= 100) {
+     if (problem.NumResidualBlocks() >= 3) {
          ceres::Solve(options, &problem, &summary);
      } else {
          cout << " Can't Adjust ";
@@ -300,7 +301,6 @@ pose::RANSAC3DPoint(double inlier_thresh, const vector<tuple<pair<double, double
 }
 
 
-
 cv::Point2d pose::reproject3Dto2D(const Eigen::Vector3d & point3d,
                                   const Eigen::Matrix3d & R,
                                   const Eigen::Vector3d & T,
@@ -311,6 +311,17 @@ cv::Point2d pose::reproject3Dto2D(const Eigen::Vector3d & point3d,
     Eigen::Vector3d p = K_q_eig * (R * point3d + T);
     cv::Point2d point2d(p[0] / p[2], p[1] / p[2]);
     return point2d;
+}
+
+cv::Point2d pose::undistort_point(const cv::Point2d & pt, double f, double cx, double cy, double rn) {
+    double r = rn / (f * f);
+    double mx_ = pt.x - cx;
+    double my_ = pt.y - cy;
+    double r2 = r * (mx_ * mx_ + my_ * my_);
+    double u = (1 + r2) * mx_;
+    double v = (1 + r2) * my_;
+    cv::Point2d r_new (u+cx, v+cy);
+    return r_new;
 }
 
 
@@ -335,6 +346,9 @@ double pose::reprojError(const Eigen::Vector3d & point3d,
     double d = sqrt(pow(u - reproj.x, 2.) + pow(v - reproj.y, 2.));
     return d;
 }
+
+
+
 
 
 
