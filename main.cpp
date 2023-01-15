@@ -83,68 +83,78 @@ int main() {
     string relpose_file = "relpose_SP";
 
     // string error_file = "error_SP_justransac";
-    string error_file = "Aachen_eval_MultiLoc";
+//    string error_file = "Aachen_eval_MultiLoc";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
-    double angle_thresh = 7.5;
+    double angle_thresh = 5;
     double covis = 2;
-    double pixel_thresh = 5;
-    double cauchy = 5;
+    double pixel_thresh = 2.5;
+    double cauchy = 1;
+    while (angle_thresh <= 20) {
+        while (covis <= 10) {
+            while (pixel_thresh <= 20) {
+                while (cauchy <= 20) {
+                    for (const auto & scene: scenes) {
+                        ostringstream ef;
+                        ef.precision(3);
+                        ef << angle_thresh << "_" << covis << "_" << pixel_thresh << "_" << cauchy;
+                        string error_file = "Aachen_eval_";
+                        error_file += ef.str();
+                        ofstream error;
+                        error.open(dir + scene + "hp/" + error_file + ".txt");
 
-    for (const auto &scene: scenes) {
-        ofstream error;
-        error.open(dir + scene + error_file + ".txt");
+                        int start = 0;
+                        vector<string> queries = functions::getQueries(dir + "q.txt", scene);
+//                        vector<string> queries_subset = {queries[11], queries[40], queries[46], queries[57], queries[102]};
+                        vector<string> queries_subset = {queries[0]};
+                        for (int q = start; q < queries_subset.size(); q++) {
+                            cout << "ANGLE: " << angle_thresh << "COVIS: " << covis << "PIXEL: " << pixel_thresh << "CAUCHY: " << cauchy;
 
-        int start = 0;
-        vector<string> queries = functions::getQueries(dir + "q.txt", scene);
-        vector<string> queries_subset = {queries[11], queries[40], queries[46], queries[57], queries[102]};
-        for (int q = start; q < queries_subset.size(); q++) {
-            cout << q + 1 << "/" << queries_subset.size() << " ";
+                            string query = queries_subset[q];
 
-            string query = queries_subset[q];
+                            auto info = functions::parseRelposeFile(dir, query, relpose_file);
+                            auto R_q = get<1>(info);
+                            auto T_q = get<2>(info);
+                            auto K_q = get<3>(info);
+                            Eigen::Vector3d c_q = -R_q.transpose() * T_q;
 
-            auto info = functions::parseRelposeFile(dir, query, relpose_file);
-            auto R_q = get<1>(info);
-            auto T_q = get<2>(info);
-            auto K_q = get<3>(info);
-            Eigen::Vector3d c_q = -R_q.transpose() * T_q;
+                            auto anchors = get<4>(info);
+                            auto R_is = get<5>(info);
+                            auto T_is = get<6>(info);
+                            auto R_qis = get<7>(info);
+                            auto T_qis = get<8>(info);
+                            auto K_is = get<9>(info);
+                            auto inliers_q = get<10>(info);
+                            auto inliers_i = get<11>(info);
+                            int K = int(anchors.size());
 
-            auto anchors = get<4>(info);
-            auto R_is = get<5>(info);
-            auto T_is = get<6>(info);
-            auto R_qis = get<7>(info);
-            auto T_qis = get<8>(info);
-            auto K_is = get<9>(info);
-            auto inliers_q = get<10>(info);
-            auto inliers_i = get<11>(info);
-            int K = int(anchors.size());
-
-            vector<thread> threads;
-            vector<tuple<int, int, double, vector<int>>> results;
-            for (int i = 0; i < K - 1; i++) {
-                for (int j = i + 1; j < K; j++) {
-                    threads.emplace_back(
-                            thread(findInliers, angle_thresh, i, j, &R_is, &T_is, &R_qis, &T_qis, &inliers_q, &results));
-                    this_thread::sleep_for(std::chrono::microseconds(1));
-                }
-            }
-            for (auto &th: threads) th.join();
-            sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
-                return get<3>(a).size() > get<3>(b).size();
-            });
-            vector<tuple<int, int, double, vector<int>>> results_trimmed;
-            for(int i = 0; i < results.size(); i++) {
-                if (get<3>(results[i]).size() == get<3>(results[0]).size()) {
-                    results_trimmed.push_back(results[i]);
-                }
-            }
-            sort(results_trimmed.begin(), results_trimmed.end(), [](const auto &a, const auto &b) {
-                return get<2>(a) > get<2>(b);
-            });
-            tuple<int, int, double, vector<int>> best_set = results_trimmed[0];
+                            vector<thread> threads;
+                            vector<tuple<int, int, double, vector<int>>> results;
+                            for (int i = 0; i < K - 1; i++) {
+                                for (int j = i + 1; j < K; j++) {
+                                    threads.emplace_back(
+                                            thread(findInliers, angle_thresh, i, j, &R_is, &T_is, &R_qis, &T_qis,
+                                                   &inliers_q, &results));
+                                    this_thread::sleep_for(std::chrono::microseconds(1));
+                                }
+                            }
+                            for (auto &th: threads) th.join();
+                            sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
+                                return get<3>(a).size() > get<3>(b).size();
+                            });
+                            vector<tuple<int, int, double, vector<int>>> results_trimmed;
+                            for (int i = 0; i < results.size(); i++) {
+                                if (get<3>(results[i]).size() == get<3>(results[0]).size()) {
+                                    results_trimmed.push_back(results[i]);
+                                }
+                            }
+                            sort(results_trimmed.begin(), results_trimmed.end(), [](const auto &a, const auto &b) {
+                                return get<2>(a) > get<2>(b);
+                            });
+                            tuple<int, int, double, vector<int>> best_set = results_trimmed[0];
 
 
 //            cv::Mat q_im = cv::imread(dir+query);
@@ -169,56 +179,57 @@ int main() {
 //            }
 
 
-            vector<string> best_anchors;
-            vector<Eigen::Matrix3d> best_R_is, best_R_qis;
-            vector<Eigen::Vector3d> best_T_is, best_T_qis;
-            vector<vector<double>> best_K_is;
-            vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
-            for (const auto &i: get<3>(best_set)) {
-                best_anchors.push_back(anchors[i]);
-                best_R_is.push_back(R_is[i]);
-                best_R_qis.push_back(R_qis[i]);
-                best_T_is.push_back(T_is[i]);
-                best_T_qis.push_back(T_qis[i]);
-                best_inliers_q.push_back(inliers_q[i]);
-                best_inliers_i.push_back(inliers_i[i]);
-                best_K_is.push_back(K_is[i]);
-            }
-            vector<Eigen::Matrix3d> rotations(best_R_is.size());
-            for (int i = 0; i < best_R_is.size(); i++) {
-                rotations[i] = best_R_qis[i] * best_R_is[i];
-            }
+                            vector<string> best_anchors;
+                            vector<Eigen::Matrix3d> best_R_is, best_R_qis;
+                            vector<Eigen::Vector3d> best_T_is, best_T_qis;
+                            vector<vector<double>> best_K_is;
+                            vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
+                            for (const auto &i: get<3>(best_set)) {
+                                best_anchors.push_back(anchors[i]);
+                                best_R_is.push_back(R_is[i]);
+                                best_R_qis.push_back(R_qis[i]);
+                                best_T_is.push_back(T_is[i]);
+                                best_T_qis.push_back(T_qis[i]);
+                                best_inliers_q.push_back(inliers_q[i]);
+                                best_inliers_i.push_back(inliers_i[i]);
+                                best_K_is.push_back(K_is[i]);
+                            }
+                            vector<Eigen::Matrix3d> rotations(best_R_is.size());
+                            for (int i = 0; i < best_R_is.size(); i++) {
+                                rotations[i] = best_R_qis[i] * best_R_is[i];
+                            }
 
-            Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
-            Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
-            Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
-            double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
-            double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
+                            Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis,
+                                                                                 best_T_qis);
+                            Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
+                            Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
+                            double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
+                            double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
 
-            cout << best_R_is.size() << "/" << R_is.size() << " ";
+                            cout << best_R_is.size() << "/" << R_is.size() << " ";
 
-            Eigen::Matrix3d R_adjustment = R_estimation;
-            Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
-            auto adj_points = pose::adjustHypothesis(best_R_is,
-                                                     best_T_is,
-                                                     best_K_is,
-                                                     K_q,
-                                                     best_inliers_q,
-                                                     best_inliers_i,
-                                                     covis,
-                                                     pixel_thresh,
-                                                     -1,
-                                                     -1,
-                                                     cauchy,
-                                                     R_adjustment,
-                                                     T_adjustment);
-            Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
-            double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
-            double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
+                            Eigen::Matrix3d R_adjustment = R_estimation;
+                            Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
+                            auto adj_points = pose::adjustHypothesis(best_R_is,
+                                                                     best_T_is,
+                                                                     best_K_is,
+                                                                     K_q,
+                                                                     best_inliers_q,
+                                                                     best_inliers_i,
+                                                                     covis,
+                                                                     pixel_thresh,
+                                                                     -1,
+                                                                     -1,
+                                                                     cauchy,
+                                                                     R_adjustment,
+                                                                     T_adjustment);
+                            Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
+                            double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
+                            double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
-            cout << adj_points.first.size() << endl;
+                            cout << adj_points.first.size() << endl;
 
-            Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
+                            Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
 //            Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_estimation);
 //
 //
@@ -255,26 +266,36 @@ int main() {
 //            auto msEST = functions::mean_and_stdv(v_EST);
 //            auto msADJ = functions::mean_and_stdv(v_ADJ);
 
-            auto pos = query.find('/');
-            string name = query;
-            while (pos != string::npos) {
-                name = name.substr(pos + 1);
-                pos = name.find('/');
-            }
-            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " " << q_adj.y() << " " <<
-                  q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " " << T_adjustment[2] << endl;
+                            auto pos = query.find('/');
+                            string name = query;
+                            while (pos != string::npos) {
+                                name = name.substr(pos + 1);
+                                pos = name.find('/');
+                            }
+                            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
+                                  << q_adj.y() << " " <<
+                                  q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
+                                  << T_adjustment[2] << endl;
 //            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " " << q_adj.y() << " " <<
 //                  q_adj.z() << " " << T_estimation[0] << " " << T_estimation[1] << " " << T_estimation[2] << endl;
 
-            //  string line;
-            //  line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
-            //          + " " + to_string(c_error_estimation_all)
-            //          + " All_Post_Adj " + to_string(R_error_adjustment_all)
-            //          + " " + to_string(c_error_adjustment_all);
-            //   error << line << endl;
-            //   cout << line << endl;
+                            //  string line;
+                            //  line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
+                            //          + " " + to_string(c_error_estimation_all)
+                            //          + " All_Post_Adj " + to_string(R_error_adjustment_all)
+                            //          + " " + to_string(c_error_adjustment_all);
+                            //   error << line << endl;
+                            //   cout << line << endl;
+                        }
+                        error.close();
+                    }
+                    cauchy += 2.5;
+                }
+                pixel_thresh += 2.5;
+            }
+            covis += 1;
         }
-        error.close();
+        angle_thresh += 2.5;
     }
     return 0;
 }
