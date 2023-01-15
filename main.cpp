@@ -73,27 +73,28 @@ int main() {
 //   vector<string> scenes = {"stairs/"};
 //   string dataset = "seven_scenes/";
 
-//    vector<string> scenes = {"KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    // vector<string> scenes = {"KingsCollege/"};
-    // string dataset = "cambridge/";
+//    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+//     // vector<string> scenes = {"OldHospital/"};
+//     string dataset = "cambridge/";
 
     vector<string> scenes = {"query/"};
     string dataset = "aachen/";
 
-    string relpose_file = "relpose_SP_r";
+    string relpose_file = "relpose_SP";
 
     // string error_file = "error_SP_justransac";
     string error_file = "Aachen_eval_MultiLoc";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
-    double angle_thresh = 5;
-    double covis = 2;
-    double pixel_thresh = 5;
+    double angle_thresh = 8;
+    double covis = 3;
+    double pixel_thresh = 6;
     double post_ransac = -1;
-    double reproj_tolerance = 100000;
+    double reproj_tolerance = -1;
+    double cauchy = 6;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -101,12 +102,12 @@ int main() {
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
-        for (int q = start; q < start+1; q++) {
+        for (int q = start; q < queries.size(); q++) {
             cout << q + 1 << "/" << queries.size() << " ";
 
             string query = queries[q];
 
-            auto info = functions::parseRelposeFile(dir, query, relpose_file, 1);
+            auto info = functions::parseRelposeFile(dir, query, relpose_file);
             auto R_q = get<1>(info);
             auto T_q = get<2>(info);
             auto K_q = get<3>(info);
@@ -207,8 +208,9 @@ int main() {
                                                      best_inliers_i,
                                                      covis,
                                                      pixel_thresh,
-                                                     post_ransac,
-                                                     reproj_tolerance,
+                                                     -1,
+                                                     -1,
+                                                     cauchy,
                                                      R_adjustment,
                                                      T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;

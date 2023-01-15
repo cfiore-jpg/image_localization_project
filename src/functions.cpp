@@ -110,7 +110,7 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
         vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>,
         vector<vector<double>>,
         vector<vector<cv::Point2d>>, vector<vector<cv::Point2d>>>
-        functions::parseRelposeFile (const string & dir, const string & query, const string & fn, int r) {
+        functions::parseRelposeFile (const string & dir, const string & query, const string & fn) {
 
     string query_id = query.substr(0, query.find('.'));
     Eigen::Matrix3d R_q;
@@ -146,7 +146,7 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
                         T_q(row) = stod(it);
                     }
                 } else {
-                    assert(count >= 13 && count <= 16+r);
+                    assert(count >= 13 && count <= 17);
                     if (it != "N/A") {
                         K_q.push_back(stod(it));
                     }
@@ -182,17 +182,17 @@ tuple<string, Eigen::Matrix3d, Eigen::Vector3d, vector<double>,
                 } else if (count >= 10 && count <= 12) {
                     int row = count - 10;
                     T_i(row) = stod(it);
-                } else if (count >= 13 && count <= 16+r) {
+                } else if (count >= 13 && count <= 17) {
                     K_i.push_back(stod(it));
-                } else if(count >= 17+r && count <= 25+r){
-                    int row = (count - (17+r)) / 3;
-                    int col = (count - (17+r)) % 3;
+                } else if(count >= 18 && count <= 26){
+                    int row = (count - (18)) / 3;
+                    int col = (count - (18)) % 3;
                     R_qi(row, col) = stod(it);
-                } else if (count >= 26+r && count <= 28+r) {
-                    int row = count - (26+r);
+                } else if (count >= 27 && count <= 29) {
+                    int row = count - (27);
                     T_qi(row) = stod(it);
                 } else {
-                    assert(count >= 29+r);
+                    assert(count >= 30);
                     assert(round(stod(it)) - stod(it) == 0);
                     if (inner == 0) {
                         q_x = stod(it);

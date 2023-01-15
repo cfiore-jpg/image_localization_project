@@ -143,6 +143,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                         double pixel_thresh,
                         double post_ransac,
                         double reproj_tolerance,
+                        double cauchy,
                         Eigen::Matrix3d & R_q,
                         Eigen::Vector3d & T_q) {
 
@@ -160,23 +161,20 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     for (const auto & p : r) {
         if (int(p.second.size()) < covis) break;
         auto p_and_s = pose::RANSAC3DPoint(pixel_thresh, p.second);
-        double pr = double(p_and_s.second.size()) / double(p.second.size());
-        if (pr < post_ransac) continue;
+        // double pr = double(p_and_s.second.size()) / double(p.second.size());
+        // if (pr < post_ransac) continue;
         cv::Point2d pt(p.first.first, p.first.second);
-        double d = pose::reprojError(p_and_s.first, R_q, T_q, K_q, pt.x, pt.y);
-//        if (sqrt(pow(pt.x-reproj.x, 2.) + pow(pt.y-reproj.y, 2.)) > reproj_tolerance) continue;
+        // double d = pose::reprojError(p_and_s.first, R_q, T_q, K_q, pt.x, pt.y);
+        // if (sqrt(pow(pt.x-reproj.x, 2.) + pow(pt.y-reproj.y, 2.)) > reproj_tolerance) continue;
         points2d.push_back(pt);
         points3d.push_back(p_and_s.first);
     }
 
-    double r_ = 0;
     double f_ = (K_q[2] + K_q[3]) / 2;
-    if (K_q.size() == 5) {
-        r_ = K_q[4] / (f_ * f_);
-    }
+    double r_ = K_q[4] / (f_ * f_);
 
      ceres::Problem problem;
-     ceres::LossFunction *loss_function = new ceres::CauchyLoss(5);
+     ceres::LossFunction *loss_function = new ceres::CauchyLoss(cauchy);
      for (int i = 0; i < points2d.size(); i++) {
          auto pose_cost = ReprojectionError::Create(points2d[i], points3d[i], r_, K_q[2], K_q[3], K_q[0], K_q[1]);
          problem.AddResidualBlock(pose_cost, loss_function, camera);
@@ -219,10 +217,7 @@ Eigen::Vector3d pose::estimate3Dpoint(const vector<tuple<pair<double, double>, E
     for (int i = 0; i < K; i++) {
 
         double f = (get<3>(matches[i])[2] + get<3>(matches[i])[3]) / 2;
-        double r = 0;
-        if (get<3>(matches[i]).size() == 5) {
-            r = get<3>(matches[i])[4] / (f * f);
-        }
+        double r = get<3>(matches[i])[4] / (f * f);
         double mx = get<0>(matches[i]).first - get<3>(matches[i])[0];
         double my = get<0>(matches[i]).second - get<3>(matches[i])[1];
         double r2 = r * (mx * mx + my * my);
@@ -272,9 +267,21 @@ pose::RANSAC3DPoint(double inlier_thresh, const vector<tuple<pair<double, double
         int i = p.first;
         int j = p.second;
         int num_inliers = 2;
-        double score = 0;
         vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> set{matches[i], matches[j]};
         Eigen::Vector3d h = pose::estimate3Dpoint(set);
+        double di = pose::reprojError(h,
+                                      get<1>(matches[i]),
+                                      get<2>(matches[i]),
+                                      get<3>(matches[i]), 
+                                      get<0>(matches[i]).first,
+                                      get<0>(matches[i]).second);
+        double dj = pose::reprojError(h,
+                                      get<1>(matches[j]),
+                                      get<2>(matches[j]),
+                                      get<3>(matches[j]), 
+                                      get<0>(matches[j]).first,
+                                      get<0>(matches[j]).second);
+        double score = di + dj;
         for (int k = 0; k < K; k++) {
             if (k != i && k != j) {
                 double d = pose::reprojError(h,
@@ -334,10 +341,7 @@ double pose::reprojError(const Eigen::Vector3d & point3d,
     vector<double> K_wo_pp = {0, 0, K[2], K[3]};
     cv::Point2d reproj = pose::reproject3Dto2D(point3d, R, T, K_wo_pp);
     double f = (K[2] + K[3]) / 2;
-    double r = 0;
-    if (K.size() == 5) {
-        r = K[4] / (f * f);
-    }
+    double r = K[4] / (f * f);
     double mx_ = mx - K[0];
     double my_ = my - K[1];
     double r2 = r * (mx_ * mx_ + my_ * my_);
