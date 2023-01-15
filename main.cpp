@@ -89,12 +89,10 @@ int main() {
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
     string dir = ccv_dir;
 
-    double angle_thresh = 8;
-    double covis = 3;
-    double pixel_thresh = 6;
-    double post_ransac = -1;
-    double reproj_tolerance = -1;
-    double cauchy = 6;
+    double angle_thresh = 7.5;
+    double covis = 2;
+    double pixel_thresh = 5;
+    double cauchy = 5;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -102,10 +100,11 @@ int main() {
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
-        for (int q = start; q < queries.size(); q++) {
-            cout << q + 1 << "/" << queries.size() << " ";
+        vector<string> queries_subset = {queries[11], queries[40], queries[46], queries[57], queries[102]};
+        for (int q = start; q < queries_subset.size(); q++) {
+            cout << q + 1 << "/" << queries_subset.size() << " ";
 
-            string query = queries[q];
+            string query = queries_subset[q];
 
             auto info = functions::parseRelposeFile(dir, query, relpose_file);
             auto R_q = get<1>(info);
