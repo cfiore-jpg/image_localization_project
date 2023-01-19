@@ -125,7 +125,7 @@ namespace pose {
                       double pixel_thresh,
                       double post_ransac,
                       double reproj_tolerance,
-                      double cauchy,
+                      double a,
                       Eigen::Matrix3d & R_q,
                       Eigen::Vector3d & T_q);
 

@@ -1,3 +1,50 @@
+Aachen - SIFT
+Day: 42.0/50.7/69.5
+Night: 4.1/8.2/14.3
+
+
+Cambridge - SIFT
+Great Court: 0.11/0.22
+KingsCollege: 0.12/0.08
+OldHospital: 0.66/0.40
+ShopFacade: 0.14/0.03
+StMarysChurch/: 0.17/0.05
+
+7Scenes - SIFT
+{'chess/': {'SIFT_SFM_justransac': {'All_Post_Adj': (0.745837,
+                                                     0.023220499999999998),
+                                    'All_Pre_Adj': (0.692617, 0.0226035)}},
+ 'fire/': {'SIFT_SFM_justransac': {'All_Post_Adj': (0.9606245, 0.0235865),
+                                   'All_Pre_Adj': (0.7993405, 0.0202335)}},
+ 'heads/': {'SIFT_SFM_justransac': {'All_Post_Adj': (0.8965885, 0.013152),
+                                    'All_Pre_Adj': (0.8138455,
+                                                    0.012819500000000001)}},
+ 'office/': {'SIFT_SFM_justransac': {'All_Post_Adj': (0.894287, 0.0302425),
+                                     'All_Pre_Adj': (0.80957, 0.031831)}},
+ 'pumpkin/': {'SIFT_SFM_justransac': {'All_Post_Adj': (1.4153414999999998,
+                                                       0.0528475),
+                                      'All_Pre_Adj': (1.1456430000000002,
+                                                      0.045663999999999996)}},
+ 'redkitchen/': {'SIFT_SFM_justransac': {'All_Post_Adj': (1.3814600000000001,
+                                                          0.0433485),
+                                         'All_Pre_Adj': (1.237088, 0.0381875)}},
+ 'stairs/': {'SIFT_SFM_justransac': {'All_Post_Adj': (2.1445035, 0.081174),
+                                     'All_Pre_Adj': (2.037194, 0.1114935)}}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //   Stairs   //

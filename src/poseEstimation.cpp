@@ -143,7 +143,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                         double pixel_thresh,
                         double post_ransac,
                         double reproj_tolerance,
-                        double cauchy,
+                        double a,
                         Eigen::Matrix3d & R_q,
                         Eigen::Vector3d & T_q) {
 
@@ -174,7 +174,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     double r_ = K_q[4] / (f_ * f_);
 
      ceres::Problem problem;
-     ceres::LossFunction *loss_function = new ceres::CauchyLoss(cauchy);
+     ceres::LossFunction *loss_function = new ceres::CauchyLoss(a);
      for (int i = 0; i < points2d.size(); i++) {
          auto pose_cost = ReprojectionError::Create(points2d[i], points3d[i], r_, K_q[2], K_q[3], K_q[0], K_q[1]);
          problem.AddResidualBlock(pose_cost, loss_function, camera);
