@@ -45,7 +45,10 @@ struct NView {
         T mx = T(pt.x) - T(K_[0]);
         T my = T(pt.y) - T(K_[1]);
 
-        T r2 = T(K_[4]) * (mx * mx + my * my);
+        T f = (T(K_[2]) + T(K_[3])) / T(2);
+        T r = K_[4] / (f * f);
+
+        T r2 = r * (mx * mx + my * my);
         T u = (T(1) + r2) * mx;
         T v = (T(1) + r2) * my;
 
@@ -168,14 +171,10 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    for (const auto &p: r) {
+    for (const auto & p : r) {
         if (int(p.second.size()) < covis) break;
         Eigen::Vector3d pt3D = pose::nview(p.second);
-        // double pr = double(p_and_s.second.size()) / double(p.second.size());
-        // if (pr < post_ransac) continue;
         cv::Point2d pt2D (p.first.first, p.first.second);
-        // double d = pose::reprojError(p_and_s.first, R_q, T_q, K_q, pt.x, pt.y);
-        // if (sqrt(pow(pt.x-reproj.x, 2.) + pow(pt.y-reproj.y, 2.)) > reproj_tolerance) continue;
         points2d.push_back(pt2D);
         points3d.push_back(pt3D);
     }
@@ -256,18 +255,18 @@ Eigen::Vector3d pose::nview(const vector<tuple<pair<double, double>, Eigen::Matr
     double pt3D_arr [3] {pt3D[0], pt3D[1], pt3D[2]};
 
     ceres::Problem problem;
-    ceres::LossFunction *loss = new ceres::HuberLoss(1);
+    ceres::LossFunction *loss = new ceres::CauchyLoss(1);
     for(const auto & m : matches) {
         cv::Point2d pt2D (get<0>(m).first, get<0>(m).second);
         auto cost = NView::Create(get<1>(m), get<2>(m), get<3>(m), pt2D);
-        problem.AddResidualBlock(cost, nullptr, pt3D_arr);
+        problem.AddResidualBlock(cost, loss, pt3D_arr);
     }
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-    // options.minimizer_progress_to_stdout = true;
+//     options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
     ceres::Solve(options, &problem, &summary);
-    // std::cout << summary.FullReport() << "\n";
+//     std::cout << summary.FullReport() << "\n";
 
     Eigen::Vector3d pt3D_new {pt3D_arr[0], pt3D_arr[1], pt3D_arr[2]};
 

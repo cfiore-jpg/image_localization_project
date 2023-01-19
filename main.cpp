@@ -69,13 +69,13 @@ void findInliers (double threshold,
 
 int main() {
 
-//    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
 //   vector<string> scenes = {"stairs/"};
-//   string dataset = "seven_scenes/";
+   string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    vector<string> scenes = {"KingsCollege/"};
-    string dataset = "cambridge/";
+//    vector<string> scenes = {"KingsCollege/"};
+//    string dataset = "cambridge/";
 
     // vector<string> scenes = {"query/"};
     // string dataset = "aachen/";
@@ -87,11 +87,10 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
-    double angle_thresh = 5;
+    double angle_thresh = 10;
     double covis = 2;
-    double pixel_thresh = 5;
     double cauchy = 5;
 
     for (const auto & scene: scenes) {
@@ -192,7 +191,7 @@ int main() {
                                                         best_inliers_q,
                                                         best_inliers_i,
                                                         covis,
-                                                        pixel_thresh,
+                                                        -1,
                                                         -1,
                                                         -1,
                                                         cauchy,
