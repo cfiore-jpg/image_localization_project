@@ -256,18 +256,18 @@ Eigen::Vector3d pose::nview(const vector<tuple<pair<double, double>, Eigen::Matr
     double pt3D_arr [3] {pt3D[0], pt3D[1], pt3D[2]};
 
     ceres::Problem problem;
-    ceres::LossFunction *loss = new ceres::CauchyLoss(1);
+    ceres::LossFunction *loss = new ceres::HuberLoss(1);
     for(const auto & m : matches) {
         cv::Point2d pt2D (get<0>(m).first, get<0>(m).second);
         auto cost = NView::Create(get<1>(m), get<2>(m), get<3>(m), pt2D);
-        problem.AddResidualBlock(cost, loss, pt3D_arr);
+        problem.AddResidualBlock(cost, nullptr, pt3D_arr);
     }
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-    options.minimizer_progress_to_stdout = true;
+    // options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
     ceres::Solve(options, &problem, &summary);
-    std::cout << summary.FullReport() << "\n";
+    // std::cout << summary.FullReport() << "\n";
 
     Eigen::Vector3d pt3D_new {pt3D_arr[0], pt3D_arr[1], pt3D_arr[2]};
 
