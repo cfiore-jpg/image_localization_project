@@ -25,6 +25,8 @@ namespace pose {
 
     Eigen::Vector3d estimate3Dpoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
 
+    Eigen::Vector3d nview(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
+
     pair<Eigen::Vector3d, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>
     RANSAC3DPoint(double inlier_thresh, const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
 

@@ -87,7 +87,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     double angle_thresh = 10;
     double covis = 2;
