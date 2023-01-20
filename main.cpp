@@ -73,8 +73,8 @@ int main() {
 //   vector<string> scenes = {"stairs/"};
 //    string dataset = "seven_scenes/";
 
-//    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    vector<string> scenes = {"KingsCollege/"};
+   vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+    // vector<string> scenes = {"KingsCollege/"};
     string dataset = "cambridge/";
 
 //    vector<string> scenes = {"query/"};
@@ -116,9 +116,8 @@ int main() {
             int K = int(anchors.size());
 
             tuple<int, int, double, vector<int>> best_set;
-            double angle_thresh = 5;
-            int tries = 1;
-            while (true) {
+            double angle_thresh = 7.;
+            // while (true) {
                 int s = 0;
                 for (int i = 0; i < K - 1; i++) {
                     for (int j = i + 1; j < K; j++) {
@@ -153,13 +152,12 @@ int main() {
                     return get<2>(a) > get<2>(b);
                 });
                 best_set = results_trimmed[0];
-                if (double(get<3>(best_set).size()) >= .1 * K || tries == 3) {
-                    break;
-                } else {
-                    angle_thresh *= 2;
-                    tries++;
-                }
-            }
+            //     if (double(get<3>(best_set).size()) >= 5 || angle_thresh == 10.) {
+            //         break;
+            //     } else {
+            //         angle_thresh += 1;
+            //     }
+            // }
 
             vector<string> best_anchors;
             vector<Eigen::Matrix3d> best_R_is, best_R_qis;
@@ -208,17 +206,17 @@ int main() {
 
             Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
 
-//            auto pos = query.find('/');
-//            string name = query;
-//            while (pos != string::npos) {
-//                name = name.substr(pos + 1);
-//                pos = name.find('/');
-//            }
-//
-//            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
-//                    << q_adj.y() << " " <<
-//                    q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
-//                    << T_adjustment[2] << endl;
+        //    auto pos = query.find('/');
+        //    string name = query;
+        //    while (pos != string::npos) {
+        //        name = name.substr(pos + 1);
+        //        pos = name.find('/');
+        //    }
+
+        //    error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
+        //            << q_adj.y() << " " <<
+        //            q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
+        //            << T_adjustment[2] << endl;
 
               string line;
               line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
