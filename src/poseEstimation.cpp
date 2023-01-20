@@ -183,7 +183,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     double r_ = K_q[4] / (f_ * f_);
 
     ceres::Problem problem;
-    ceres::LossFunction *loss_function = new ceres::HuberLoss(.01);
+    ceres::LossFunction *loss_function = new ceres::CauchyLoss(3);
     for (int i = 0; i < points2d.size(); i++) {
         auto pose_cost = ReprojectionError::Create(points2d[i], points3d[i], r_, K_q[2], K_q[3], K_q[0], K_q[1]);
         problem.AddResidualBlock(pose_cost, loss_function, camera);
@@ -255,7 +255,7 @@ Eigen::Vector3d pose::nview(const vector<tuple<pair<double, double>, Eigen::Matr
     double pt3D_arr [3] {pt3D[0], pt3D[1], pt3D[2]};
 
     ceres::Problem problem;
-    ceres::LossFunction *loss = new ceres::HuberLoss(.01);
+    ceres::LossFunction *loss = new ceres::CauchyLoss(.1);
     for(const auto & m : matches) {
         cv::Point2d pt2D (get<0>(m).first, get<0>(m).second);
         auto cost = NView::Create(get<1>(m), get<2>(m), get<3>(m), pt2D);
