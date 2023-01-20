@@ -74,24 +74,20 @@ int main() {
 //    string dataset = "seven_scenes/";
 
 //    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-//    vector<string> scenes = {"KingsCollege/"};
-//    string dataset = "cambridge/";
+    vector<string> scenes = {"KingsCollege/"};
+    string dataset = "cambridge/";
 
-    vector<string> scenes = {"query/"};
-    string dataset = "aachen/";
+//    vector<string> scenes = {"query/"};
+//    string dataset = "aachen/";
 
     string relpose_file = "relpose_SP";
 
-    // string error_file = "error_SP_justransac";
-   string error_file = "Aachen_eval_MultiLoc";
+     string error_file = "error_SP_justransac";
+//   string error_file = "Aachen_eval_MultiLoc";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
     string dir = ccv_dir;
-
-    double angle_thresh = 5;
-    double covis = 2;
-    double cauchy = 5;
 
     for (const auto & scene: scenes) {
         ofstream error;
@@ -119,39 +115,51 @@ int main() {
             auto inliers_i = get<11>(info);
             int K = int(anchors.size());
 
-            int s = 0;
-            for (int i = 0; i < K - 1; i++) {
-                for (int j = i + 1; j < K; j++) {
-                    s++;
+            tuple<int, int, double, vector<int>> best_set;
+            double angle_thresh = 5;
+            int tries = 1;
+            while (true) {
+                int s = 0;
+                for (int i = 0; i < K - 1; i++) {
+                    for (int j = i + 1; j < K; j++) {
+                        s++;
+                    }
                 }
-            }
-            int idx = 0;
-            vector<thread> threads(s);
-            vector<tuple<int, int, double, vector<int>>> results;
-            for (int i = 0; i < K - 1; i++) {
-                for (int j = i + 1; j < K; j++) {
-                    threads[idx] = thread(findInliers, angle_thresh, i, j, &R_is, &T_is, &R_qis, &T_qis, &inliers_q, &results);
-                    idx++;
+                int idx = 0;
+                vector<thread> threads(s);
+                vector<tuple<int, int, double, vector<int>>> results;
+                for (int i = 0; i < K - 1; i++) {
+                    for (int j = i + 1; j < K; j++) {
+                        threads[idx] = thread(findInliers, angle_thresh, i, j, &R_is, &T_is, &R_qis, &T_qis, &inliers_q,
+                                              &results);
+                        idx++;
+                    }
                 }
-            }
-            for (auto & th: threads) {
-                th.join();
-            }
-            sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
-                return get<3>(a).size() > get<3>(b).size();
-            });
-            vector<tuple<int, int, double, vector<int>>> results_trimmed;
-            for (int i = 0; i < results.size(); i++) {
-                if (get<3>(results[i]).size() == get<3>(results[0]).size()) {
-                    results_trimmed.push_back(results[i]);
-                } else {
+                for (auto &th: threads) {
+                    th.join();
+                }
+                sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
+                    return get<3>(a).size() > get<3>(b).size();
+                });
+                vector<tuple<int, int, double, vector<int>>> results_trimmed;
+                for (int i = 0; i < results.size(); i++) {
+                    if (get<3>(results[i]).size() == get<3>(results[0]).size()) {
+                        results_trimmed.push_back(results[i]);
+                    } else {
+                        break;
+                    }
+                }
+                sort(results_trimmed.begin(), results_trimmed.end(), [](const auto &a, const auto &b) {
+                    return get<2>(a) > get<2>(b);
+                });
+                best_set = results_trimmed[0];
+                if (double(get<3>(best_set).size()) >= .1 * K || tries == 3) {
                     break;
+                } else {
+                    angle_thresh *= 2;
+                    tries++;
                 }
             }
-            sort(results_trimmed.begin(), results_trimmed.end(), [](const auto &a, const auto &b) {
-                return get<2>(a) > get<2>(b);
-            });
-            tuple<int, int, double, vector<int>> best_set = results_trimmed[0];
 
             vector<string> best_anchors;
             vector<Eigen::Matrix3d> best_R_is, best_R_qis;
@@ -180,7 +188,7 @@ int main() {
             double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
             double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
 
-            cout << " " << best_R_is.size() << "/" << R_is.size() << " ";
+            cout << " thresh: " << angle_thresh << " " << best_R_is.size() << "/" << R_is.size() << " ";
 
             Eigen::Matrix3d R_adjustment = R_estimation;
             Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
@@ -190,11 +198,6 @@ int main() {
                                                         K_q,
                                                         best_inliers_q,
                                                         best_inliers_i,
-                                                        covis,
-                                                        -1,
-                                                        -1,
-                                                        -1,
-                                                        cauchy,
                                                         R_adjustment,
                                                         T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
@@ -205,25 +208,25 @@ int main() {
 
             Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
 
-            auto pos = query.find('/');
-            string name = query;
-            while (pos != string::npos) {
-                name = name.substr(pos + 1);
-                pos = name.find('/');
-            }
-            
-            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
-                    << q_adj.y() << " " <<
-                    q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
-                    << T_adjustment[2] << endl;
+//            auto pos = query.find('/');
+//            string name = query;
+//            while (pos != string::npos) {
+//                name = name.substr(pos + 1);
+//                pos = name.find('/');
+//            }
+//
+//            error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
+//                    << q_adj.y() << " " <<
+//                    q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
+//                    << T_adjustment[2] << endl;
 
-            //  string line;
-            //  line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
-            //          + " " + to_string(c_error_estimation_all)
-            //          + " All_Post_Adj " + to_string(R_error_adjustment_all)
-            //          + " " + to_string(c_error_adjustment_all);
-            //   error << line << endl;
-            //   cout << line << endl;
+              string line;
+              line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
+                      + " " + to_string(c_error_estimation_all)
+                      + " All_Post_Adj " + to_string(R_error_adjustment_all)
+                      + " " + to_string(c_error_adjustment_all);
+               error << line << endl;
+               cout << line << endl;
         }
         error.close();
     }

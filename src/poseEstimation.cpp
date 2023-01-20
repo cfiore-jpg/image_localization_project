@@ -152,11 +152,6 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
                         const vector<double> & K_q,
                         const vector<vector<cv::Point2d>> & all_pts_q,
                         const vector<vector<cv::Point2d>> & all_pts_i,
-                        double covis,
-                        double pixel_thresh,
-                        double post_ransac,
-                        double reproj_tolerance,
-                        double a,
                         Eigen::Matrix3d & R_q,
                         Eigen::Vector3d & T_q) {
 
@@ -172,7 +167,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
     for (const auto & p : r) {
-        if (int(p.second.size()) < covis) break;
+        if (int(p.second.size()) < 2) break;
         Eigen::Vector3d pt3D = pose::nview(p.second);
         cv::Point2d pt2D (p.first.first, p.first.second);
         points2d.push_back(pt2D);
@@ -183,7 +178,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     double r_ = K_q[4] / (f_ * f_);
 
     ceres::Problem problem;
-    ceres::LossFunction *loss_function = new ceres::CauchyLoss(3);
+    ceres::LossFunction *loss_function = new ceres::CauchyLoss(1);
     for (int i = 0; i < points2d.size(); i++) {
         auto pose_cost = ReprojectionError::Create(points2d[i], points3d[i], r_, K_q[2], K_q[3], K_q[0], K_q[1]);
         problem.AddResidualBlock(pose_cost, loss_function, camera);
@@ -255,7 +250,7 @@ Eigen::Vector3d pose::nview(const vector<tuple<pair<double, double>, Eigen::Matr
     double pt3D_arr [3] {pt3D[0], pt3D[1], pt3D[2]};
 
     ceres::Problem problem;
-    ceres::LossFunction *loss = new ceres::CauchyLoss(.1);
+    ceres::LossFunction *loss = new ceres::CauchyLoss(1);
     for(const auto & m : matches) {
         cv::Point2d pt2D (get<0>(m).first, get<0>(m).second);
         auto cost = NView::Create(get<1>(m), get<2>(m), get<3>(m), pt2D);

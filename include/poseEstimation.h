@@ -123,11 +123,6 @@ namespace pose {
                       const vector<double> & K_q,
                       const vector<vector<cv::Point2d>> & all_pts_q,
                       const vector<vector<cv::Point2d>> & all_pts_i,
-                      double covis,
-                      double pixel_thresh,
-                      double post_ransac,
-                      double reproj_tolerance,
-                      double a,
                       Eigen::Matrix3d & R_q,
                       Eigen::Vector3d & T_q);
 
