@@ -74,7 +74,7 @@ functions::findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
 
     vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>> result;
     for (const auto & it : m) {
-        result.push_back(it);
+        result.emplace_back(it);
     }
 
     sort(result.begin(), result.end(), [](auto & lhs, auto & rhs) {
