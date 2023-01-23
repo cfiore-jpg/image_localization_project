@@ -152,10 +152,12 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     double camera[6]{AA[0], AA[1], AA[2], T_q[0], T_q[1], T_q[2]};
 
     ceres::Problem problem;
-    ceres::LossFunction *loss = new ceres::CauchyLoss(1);
+    ceres::LossFunction *point_loss = new ceres::CauchyLoss(5);
+    ceres::LossFunction *pose_loss = new ceres::CauchyLoss(15);
+
 
     auto all_matches = functions::findSharedMatches(R_is, T_is, K_is, all_pts_q, all_pts_i);
-    auto points3D = new double [all_matches.size()][3];
+    double points3D [all_matches.size()][3];
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
@@ -171,26 +173,25 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         for(const auto & m : p.second) {
             cv::Point2d observation (get<0>(m).first, get<0>(m).second);
             auto point_cost = NView::Create(get<1>(m), get<2>(m), get<3>(m), observation);
-            problem.AddResidualBlock(point_cost, loss, points3D[i]);
+            problem.AddResidualBlock(point_cost, point_loss, points3D[i]);
         }
 
         cv::Point2d pt2D (p.first.first, p.first.second);
         points2d.push_back(pt2D);
         auto pose_cost = ReprojectionError::Create(pt2D, K_q);
-        problem.AddResidualBlock(pose_cost, loss, camera, points3D[i]);
+        problem.AddResidualBlock(pose_cost, pose_loss, camera, points3D[i]);
     }
 
     ceres::Solver::Options options;
-//    options.linear_solver_type = ceres::DENSE_SCHUR;
-    options.minimizer_progress_to_stdout = true;
-//    ceres::Solver::Summary summary;
-
-    if (problem.NumResidualBlocks() >= 3) {
+   options.linear_solver_type = ceres::DENSE_SCHUR;
+    // options.minimizer_progress_to_stdout = true;
+   ceres::Solver::Summary summary;
+    if (problem.NumResidualBlocks() > 0) {
         ceres::Solve(options, &problem, &summary);
     } else {
         cout << " Can't Adjust ";
     }
-     std::cout << summary.FullReport() << "\n";
+    //  std::cout << summary.FullReport() << "\n";
 
     double AA_adj[3] {camera[0], camera[1], camera[2]};
     double R_adj[9];
@@ -204,7 +205,6 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         Eigen::Vector3d pt3D {points3D[i][0], points3D[i][1], points3D[i][2]};
         points3d.push_back(pt3D);
     }
-    delete[] points3D;
 
     return {points2d, points3d};
 }

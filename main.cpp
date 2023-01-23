@@ -46,14 +46,16 @@ void findInliers (double rot_thresh,
 
     for (int k = 0; k < K; k++) {
         if (k != i && k != j) {
-            double rot_diff = functions::rotationDifference(R_q, (*R_qks)[k]*(*R_ks)[k]);
-            double center_diff = functions::getAngleBetween((*R_ks)[k]*c_q+(*T_ks)[k], -(*R_qks)[k].transpose()*(*T_qks)[k]);
+            double rot_diff = functions::rotationDifference(R_q*(*R_ks)[k].transpose(), (*R_qks)[k]);
+            double center_diff = functions::getAngleBetween(-(*R_qks)[k]*((*R_ks)[k]*c_q+(*T_ks)[k]), (*T_qks)[k]);
             if (rot_diff <= rot_thresh && center_diff <= center_thresh) {
                 indices.push_back(k);
                 score += int((*match_num)[k].size());
             }
         }
     }
+
+
 
     auto t = make_tuple(i, j, score, indices);
 
@@ -67,28 +69,34 @@ void findInliers (double rot_thresh,
 
 int main() {
 
-    // vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-//   vector<string> scenes = {"stairs/"};
+//     vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+// //   vector<string> scenes = {"stairs/"};
 //    string dataset = "seven_scenes/";
+//    string error_file = "error_SP_justransac";
 
-//   vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-      vector<string> scenes = {"KingsCollege/"};
+  vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+    //   vector<string> scenes = {"KingsCollege/"};
      string dataset = "cambridge/";
+       string error_file = "error_SP_justransac";
+
+    // vector<string> scenes = {"query/"};
+    // string dataset = "aachen/";
+    // string error_file = "Aachen_eval_MultiLoc";
+    // int cutoff = 3;
 
 //   vector<string> scenes = {"query/"};
-//   string dataset = "aachen/";
+//   string dataset = "robotcar/";
+//   string error_file = "Robotcar_eval_MultiLoc";
+//   int cutoff = 2;
 
     string relpose_file = "relpose_SP";
 
-      string error_file = "error_SP_justransac";
-//   string error_file = "Aachen_eval_MultiLoc";
-
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
-    double rot_thresh = 5.;
-    double center_thresh = 5.;
+    double rot_thresh = 5;
+    double center_thresh = 5;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -97,6 +105,7 @@ int main() {
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
         for (int q = start; q < queries.size(); q++) {
+
             cout << q + 1 << "/" << queries.size();
             string query = queries[q];
 
@@ -116,6 +125,21 @@ int main() {
             auto inliers_i = get<11>(info);
             int K = int(anchors.size());
 
+            Eigen::Matrix3d R_adjustment;
+            Eigen::Vector3d T_adjustment;
+            double c_error_estimation_all;
+            double R_error_estimation_all;
+            double c_error_adjustment_all;
+            double R_error_adjustment_all;
+            if (K == 0) {
+                R_adjustment << 1.,0.,0.,0.,1.,0.,0.,0.,1.;
+                T_adjustment << 0.,0.,0.;
+                cout << endl;
+            } else if (K == 1) {
+                R_adjustment = R_is[0];
+                T_adjustment = T_is[0];
+                cout << endl;
+            } else {
             int s = 0;
             for (int i = 0; i < K - 1; i++) {
                 for (int j = i + 1; j < K; j++) {
@@ -151,7 +175,6 @@ int main() {
             });
             tuple<int, int, double, vector<int>> best_set = results_trimmed[0];
 
-
             vector<string> best_anchors;
             vector<Eigen::Matrix3d> best_R_is, best_R_qis;
             vector<Eigen::Vector3d> best_T_is, best_T_qis;
@@ -175,13 +198,13 @@ int main() {
             Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
             Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
             Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
-            double c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
-            double R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
+            c_error_estimation_all = functions::getDistBetween(c_q, c_estimation);
+            R_error_estimation_all = functions::rotationDifference(R_q, R_estimation);
 
             cout << " " << best_R_is.size() << "/" << R_is.size();
 
-            Eigen::Matrix3d R_adjustment = R_estimation;
-            Eigen::Vector3d T_adjustment = -R_estimation * c_estimation;
+            R_adjustment = R_estimation;
+            T_adjustment = -R_estimation * c_estimation;
             auto adj_points = pose::adjustHypothesis(best_R_is,
                                                      best_T_is,
                                                      best_K_is,
@@ -191,24 +214,24 @@ int main() {
                                                      R_adjustment,
                                                      T_adjustment);
             Eigen::Vector3d c_adjustment = -R_adjustment.transpose() * T_adjustment;
-            double c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
-            double R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
+            c_error_adjustment_all = functions::getDistBetween(c_q, c_adjustment);
+            R_error_adjustment_all = functions::rotationDifference(R_q, R_adjustment);
 
             cout << " " << adj_points.first.size() << endl;
+            }
 
             Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
 
-//               auto pos = query.find('/');
-//               string name = query;
-//               while (pos != string::npos) {
-//                   name = name.substr(pos + 1);
-//                   pos = name.find('/');
-//               }
-//
-//               error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
-//                       << q_adj.y() << " " <<
-//                       q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
-//                       << T_adjustment[2] << endl;
+        //     auto pos = query.find('/');
+        //     string name = query;
+        //    for(int c = 0; c < cutoff; c++) {
+        //        name = name.substr(pos + 1);                   
+        //        pos = name.find('/');
+        //     }
+        //       error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
+        //               << q_adj.y() << " " <<
+        //               q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
+        //               << T_adjustment[2] << endl;
 
              string line;
              line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
