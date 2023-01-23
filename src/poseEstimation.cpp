@@ -76,12 +76,13 @@ struct NView {
 
 
 struct ReprojectionError {
-    ReprojectionError(cv::Point2d pt,
+    ReprojectionError(cv::Point2d pt2D,
+                      Eigen::Vector3d pt3D,
                       vector<double> K_)
-            : pt(std::move(pt)), K_(std::move(K_)) {}
+            : pt2D(std::move(pt2D)), pt3D(std::move(pt3D)), K_(std::move(K_)) {}
 
     template<typename T>
-    bool operator()(const T * const camera, const T * const point3D, T *residuals) const {
+    bool operator()(const T * const camera, T *residuals) const {
 
         T AA[3];
         AA[0] = camera[0];
@@ -97,15 +98,15 @@ struct ReprojectionError {
         T_q[2] = camera[5];
 
         T point_C[3];
-        point_C[0] = R_q[0]*point3D[0] + R_q[3]*point3D[1] + R_q[6]*point3D[2] + T_q[0];
-        point_C[1] = R_q[1]*point3D[0] + R_q[4]*point3D[1] + R_q[7]*point3D[2] + T_q[1];
-        point_C[2] = R_q[2]*point3D[0] + R_q[5]*point3D[1] + R_q[8]*point3D[2] + T_q[2];
+        point_C[0] = R_q[0]*T(pt3D[0]) + R_q[3]*T(pt3D[1]) + R_q[6]*T(pt3D[2]) + T_q[0];
+        point_C[1] = R_q[1]*T(pt3D[0]) + R_q[4]*T(pt3D[1]) + R_q[7]*T(pt3D[2]) + T_q[1];
+        point_C[2] = R_q[2]*T(pt3D[0]) + R_q[5]*T(pt3D[1]) + R_q[8]*T(pt3D[2]) + T_q[2];
 
         T reprojected_x = T(K_[2]) * (point_C[0] / point_C[2]);
         T reprojected_y = T(K_[3]) * (point_C[1] / point_C[2]);
 
-        T mx = T(pt.x) - T(K_[0]);
-        T my = T(pt.y) - T(K_[1]);
+        T mx = T(pt2D.x) - T(K_[0]);
+        T my = T(pt2D.y) - T(K_[1]);
 
         T f = (T(K_[2]) + T(K_[3])) / T(2);
         T r = K_[4] / (f * f);
@@ -123,13 +124,15 @@ struct ReprojectionError {
         return true;
     }
 
-    static ceres::CostFunction *Create(const cv::Point2d & pt,
+    static ceres::CostFunction *Create(const cv::Point2d & pt2D,
+                                       const Eigen::Vector3d & pt3D,
                                        const vector<double> & K_) {
-        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 6, 3>(
-                new ReprojectionError(pt, K_)));
+        return (new ceres::AutoDiffCostFunction<ReprojectionError, 2, 6>(
+                new ReprojectionError(pt2D, pt3D, K_)));
     }
 
-    cv::Point2d pt;
+    cv::Point2d pt2D;
+    Eigen::Vector3d pt3D;
     vector<double> K_;
 };
 
@@ -151,41 +154,31 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     ceres::RotationMatrixToAngleAxis(R_arr, AA);
     double camera[6]{AA[0], AA[1], AA[2], T_q[0], T_q[1], T_q[2]};
 
-    ceres::Problem problem;
-    ceres::LossFunction *point_loss = new ceres::CauchyLoss(5);
-    ceres::LossFunction *pose_loss = new ceres::CauchyLoss(15);
-
-
     auto all_matches = functions::findSharedMatches(R_is, T_is, K_is, all_pts_q, all_pts_i);
-    double points3D [all_matches.size()][3];
+
+    ceres::Problem problem;
+    ceres::LossFunction *loss = new ceres::CauchyLoss(5);
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    for (int i = 0; i < all_matches.size(); i++) {
-        auto p = all_matches[i];
-
+    for (const auto &p: all_matches) {
         if (int(p.second.size()) < 2) break;
 
-        Eigen::Vector3d pt3D = pose::estimate3Dpoint(p.second);
-        points3D[i][0] = pt3D[0];
-        points3D[i][1] = pt3D[1];
-        points3D[i][2] = pt3D[2];
-        for(const auto & m : p.second) {
-            cv::Point2d observation (get<0>(m).first, get<0>(m).second);
-            auto point_cost = NView::Create(get<1>(m), get<2>(m), get<3>(m), observation);
-            problem.AddResidualBlock(point_cost, point_loss, points3D[i]);
-        }
+        cv::Point2d pt2D(p.first.first, p.first.second);
+        Eigen::Vector3d pt3D = pose::nview(p.second);
 
-        cv::Point2d pt2D (p.first.first, p.first.second);
+        auto cost = ReprojectionError::Create(pt2D, pt3D, K_q);
+        problem.AddResidualBlock(cost, loss, camera);
+
         points2d.push_back(pt2D);
-        auto pose_cost = ReprojectionError::Create(pt2D, K_q);
-        problem.AddResidualBlock(pose_cost, pose_loss, camera, points3D[i]);
+        points3d.push_back(pt3D);
     }
 
+
     ceres::Solver::Options options;
-   options.linear_solver_type = ceres::DENSE_SCHUR;
+    options.linear_solver_type = ceres::DENSE_SCHUR;
     // options.minimizer_progress_to_stdout = true;
-   ceres::Solver::Summary summary;
+    ceres::Solver::Summary summary;
     if (problem.NumResidualBlocks() > 0) {
         ceres::Solve(options, &problem, &summary);
     } else {
@@ -193,18 +186,13 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     }
     //  std::cout << summary.FullReport() << "\n";
 
-    double AA_adj[3] {camera[0], camera[1], camera[2]};
+    double AA_adj[3]{camera[0], camera[1], camera[2]};
     double R_adj[9];
     ceres::AngleAxisToRotationMatrix(AA_adj, R_adj);
     R_q = Eigen::Matrix3d{{R_adj[0], R_adj[3], R_adj[6]},
                           {R_adj[1], R_adj[4], R_adj[7]},
                           {R_adj[2], R_adj[5], R_adj[8]}};
     T_q = Eigen::Vector3d{camera[3], camera[4], camera[5]};
-
-    for(int i = 0; i < points2d.size(); i++) {
-        Eigen::Vector3d pt3D {points3D[i][0], points3D[i][1], points3D[i][2]};
-        points3d.push_back(pt3D);
-    }
 
     return {points2d, points3d};
 }
@@ -250,7 +238,7 @@ Eigen::Vector3d pose::nview(const vector<tuple<pair<double, double>, Eigen::Matr
     double pt3D_arr [3] {pt3D[0], pt3D[1], pt3D[2]};
 
     ceres::Problem problem;
-    ceres::LossFunction *loss = new ceres::CauchyLoss(1);
+    ceres::LossFunction *loss = new ceres::CauchyLoss(5);
     for(const auto & m : matches) {
         cv::Point2d pt2D (get<0>(m).first, get<0>(m).second);
         auto cost = NView::Create(get<1>(m), get<2>(m), get<3>(m), pt2D);
