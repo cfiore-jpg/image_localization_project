@@ -21,8 +21,7 @@ using namespace chrono;
 
 mutex mtx;
 
-void findInliers (double rot_thresh,
-                  double center_thresh,
+void findInliers (double thresh,
                   int i,
                   int j,
                   const vector<Eigen::Matrix3d> * R_ks,
@@ -48,7 +47,7 @@ void findInliers (double rot_thresh,
         if (k != i && k != j) {
             double rot_diff = functions::rotationDifference(R_q*(*R_ks)[k].transpose(), (*R_qks)[k]);
             double center_diff = functions::getAngleBetween(-(*R_qks)[k]*((*R_ks)[k]*c_q+(*T_ks)[k]), (*T_qks)[k]);
-            if (rot_diff <= rot_thresh && center_diff <= center_thresh) {
+            if (rot_diff <= thresh && center_diff <= thresh) {
                 indices.push_back(k);
                 score += int((*match_num)[k].size());
             }
@@ -72,22 +71,22 @@ int main() {
 //     vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
 // //   vector<string> scenes = {"stairs/"};
 //    string dataset = "seven_scenes/";
-//    string error_file = "error_SP_justransac";
+//    string error_file = "error_SP_SFM_justransac";
 
-    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    //   vector<string> scenes = {"KingsCollege/"};
-    string dataset = "cambridge/";
-    string error_file = "error_SP_justransac";
+    // vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+    // //   vector<string> scenes = {"KingsCollege/"};
+    // string dataset = "cambridge/";
+    // string error_file = "error_SP_justransac";
 
     // vector<string> scenes = {"query/"};
     // string dataset = "aachen/";
     // string error_file = "Aachen_eval_MultiLoc";
     // int cutoff = 3;
 
-//   vector<string> scenes = {"query/"};
-//   string dataset = "robotcar/";
-//   string error_file = "Robotcar_eval_MultiLoc";
-//   int cutoff = 2;
+  vector<string> scenes = {"query/"};
+  string dataset = "robotcar/";
+  string error_file = "Robotcar_eval_MultiLoc";
+  int cutoff = 2;
 
     string relpose_file = "relpose_SP";
 
@@ -95,8 +94,7 @@ int main() {
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
     string dir = ccv_dir;
 
-    double rot_thresh = 5;
-    double center_thresh = 5;
+    double thresh = 5;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -151,7 +149,7 @@ int main() {
                 vector<tuple<int, int, double, vector<int>>> results;
                 for (int i = 0; i < K - 1; i++) {
                     for (int j = i + 1; j < K; j++) {
-                        threads[idx] = thread(findInliers, rot_thresh, center_thresh, i, j, &R_is, &T_is, &R_qis,
+                        threads[idx] = thread(findInliers, thresh, i, j, &R_is, &T_is, &R_qis,
                                               &T_qis, &inliers_q,
                                               &results);
                         idx++;
@@ -223,24 +221,24 @@ int main() {
 
             Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
 
-            //     auto pos = query.find('/');
-            //     string name = query;
-            //    for(int c = 0; c < cutoff; c++) {
-            //        name = name.substr(pos + 1);
-            //        pos = name.find('/');
-            //     }
-            //       error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
-            //               << q_adj.y() << " " <<
-            //               q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
-            //               << T_adjustment[2] << endl;
+                auto pos = query.find('/');
+                string name = query;
+               for(int c = 0; c < cutoff; c++) {
+                   name = name.substr(pos + 1);
+                   pos = name.find('/');
+                }
+                  error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
+                          << q_adj.y() << " " <<
+                          q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
+                          << T_adjustment[2] << endl;
 
-            string line;
-            line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
-                    + " " + to_string(c_error_estimation_all)
-                    + " All_Post_Adj " + to_string(R_error_adjustment_all)
-                    + " " + to_string(c_error_adjustment_all);
-            error << line << endl;
-            cout << line << endl;
+            // string line;
+            // line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
+            //         + " " + to_string(c_error_estimation_all)
+            //         + " All_Post_Adj " + to_string(R_error_adjustment_all)
+            //         + " " + to_string(c_error_adjustment_all);
+            // error << line << endl;
+            // cout << line << endl;
         }
         error.close();
     }
