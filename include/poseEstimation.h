@@ -23,31 +23,41 @@
 
 namespace pose {
 
-    Eigen::Vector3d estimate3Dpoint(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
+    Eigen::Vector3d estimate3Dpoint(const vector<pair<int, int>> &matches,
+                                    const vector<Eigen::Matrix3d> &R_is,
+                                    const vector<Eigen::Vector3d> &T_is,
+                                    const vector<vector<double>> &K_is,
+                                    const vector<vector<cv::Point2d>> &all_pts_i);
 
-    Eigen::Vector3d nview(const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
+    Eigen::Vector3d
+    nview(const vector<pair<int, int>> &matches,
+          const vector<Eigen::Matrix3d> &R_is,
+          const vector<Eigen::Vector3d> &T_is,
+          const vector<vector<double>> &K_is,
+          const vector<vector<cv::Point2d>> &all_pts_i);
 
     pair<Eigen::Vector3d, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>
-    RANSAC3DPoint(double inlier_thresh, const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches);
+    RANSAC3DPoint(double inlier_thresh,
+                  const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> &matches);
 
-    cv::Point2d reproject3Dto2D(const Eigen::Vector3d & point3d,
-                                const Eigen::Matrix3d & R,
-                                const Eigen::Vector3d & T,
-                                const vector<double> & K);
+    cv::Point2d reproject3Dto2D(const Eigen::Vector3d &point3d,
+                                const Eigen::Matrix3d &R,
+                                const Eigen::Vector3d &T,
+                                const vector<double> &K);
 
-    cv::Point2d undistort_point(const cv::Point2d & pt, double f, double cx, double cy, double rn);
+    cv::Point2d undistort_point(const cv::Point2d &pt, double f, double cx, double cy, double rn);
 
-    double reprojError(const Eigen::Vector3d & point3d,
-                             const Eigen::Matrix3d & R,
-                             const Eigen::Vector3d & T,
-                             const vector<double> & K,
-                             double mx, double my);
+    double reprojError(const Eigen::Vector3d &point3d,
+                       const Eigen::Matrix3d &R,
+                       const Eigen::Vector3d &T,
+                       const vector<double> &K,
+                       double mx, double my);
 
-    void estimatePose(const vector<Eigen::Matrix3d> & R_ks,
-                      const vector<Eigen::Vector3d> & T_ks,
-                      const vector<Eigen::Vector3d> & T_qks,
-                      Eigen::Matrix3d & R_q,
-                      Eigen::Vector3d & c_q);
+    void estimatePose(const vector<Eigen::Matrix3d> &R_ks,
+                      const vector<Eigen::Vector3d> &T_ks,
+                      const vector<Eigen::Vector3d> &T_qks,
+                      Eigen::Matrix3d &R_q,
+                      Eigen::Vector3d &c_q);
 
     /// BUNDLE ADJUSTMENT
     void sceneBundleAdjust(int num_ims, const double K[4],
@@ -61,7 +71,7 @@ namespace pose {
                                     const vector<string> &anchors, const vector<Eigen::Matrix3d> &R_ks,
                                     const vector<Eigen::Vector3d> &T_ks);
 
-    double tripletCircles(const double K[4], const vector<pair<cv::Mat, vector<cv::KeyPoint>>> & desc_kp_anchors);
+    double tripletCircles(const double K[4], const vector<pair<cv::Mat, vector<cv::KeyPoint>>> &desc_kp_anchors);
 
 
     /// CENTER HYPOTHESIS
@@ -76,10 +86,10 @@ namespace pose {
                                 const vector<Eigen::Matrix3d> &R_qks,
                                 const vector<Eigen::Vector3d> &T_qks);
 
-    pair<Eigen::Vector3d, Eigen::Vector3d> T_q_closed_form (const vector<Eigen::Matrix3d> & R_ks,
-                                                            const vector<Eigen::Vector3d> & T_ks,
-                                                            const vector<Eigen::Matrix3d> & R_qks,
-                                                            const vector<Eigen::Vector3d> & T_qks);
+    pair<Eigen::Vector3d, Eigen::Vector3d> T_q_closed_form(const vector<Eigen::Matrix3d> &R_ks,
+                                                           const vector<Eigen::Vector3d> &T_ks,
+                                                           const vector<Eigen::Matrix3d> &R_qks,
+                                                           const vector<Eigen::Vector3d> &T_qks);
 
 
     //// ROTATION HYPOTHESIS
@@ -108,37 +118,49 @@ namespace pose {
 //            Eigen::Matrix3d,
 //            Eigen::Matrix3d,
             vector<int>>
-            hypothesizeRANSAC(double threshold,
-                      const vector<Eigen::Matrix3d> & R_ks,
-                      const vector<Eigen::Vector3d> & T_ks,
-                      const vector<Eigen::Matrix3d> & R_qks,
-                      const vector<Eigen::Vector3d> & T_qks);
+    hypothesizeRANSAC(double threshold,
+                      const vector<Eigen::Matrix3d> &R_ks,
+                      const vector<Eigen::Vector3d> &T_ks,
+                      const vector<Eigen::Matrix3d> &R_qks,
+                      const vector<Eigen::Vector3d> &T_qks);
 
 
     //// FINAL POSE ADJUSTMENT
     pair<vector<cv::Point2d>, vector<Eigen::Vector3d>>
-    adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
-                      const vector<Eigen::Vector3d> & T_is,
-                      const vector<vector<double>> & K_is,
-                      const vector<double> & K_q,
-                      const vector<vector<cv::Point2d>> & all_pts_q,
-                      const vector<vector<cv::Point2d>> & all_pts_i,
-                      Eigen::Matrix3d & R_q,
-                      Eigen::Vector3d & T_q);
+    adjustHypothesis(const vector<Eigen::Matrix3d> &R_is,
+                     const vector<Eigen::Vector3d> &T_is,
+                     const vector<vector<double>> &K_is,
+                     const vector<double> &K_q,
+                     const vector<vector<cv::Point2d>> &all_pts_q,
+                     const vector<vector<cv::Point2d>> &all_pts_i,
+                     Eigen::Matrix3d &R_q,
+                     Eigen::Vector3d &T_q);
+
+    tuple<vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>, vector<double>>
+    study(const vector<Eigen::Matrix3d> & R_is,
+          const vector<Eigen::Vector3d> & T_is,
+          const vector<vector<double>> & K_is,
+          const vector<double> & K_q,
+          const vector<vector<cv::Point2d>> & all_pts_q,
+          const vector<vector<cv::Point2d>> & all_pts_i,
+          const Eigen::Matrix3d & R_q_real,
+          const Eigen::Vector3d & c_q_real,
+          const Eigen::Matrix3d & R_q_init,
+          const Eigen::Vector3d & T_q_int);
 
 
-    void visualizeRelpose(const string & query,
-                          const vector<string> & anchors,
-                          const vector<Eigen::Matrix3d> & R_is,
-                          const vector<Eigen::Vector3d> & T_is,
-                          const vector<Eigen::Matrix3d> & R_qis,
-                          const vector<Eigen::Vector3d> & T_qis,
-                          const vector<vector<double>> & K_is,
-                          const vector<double> & K_q,
-                          const vector<vector<cv::Point2d>> & all_pts_q,
-                          const vector<vector<cv::Point2d>> & all_pts_i,
-                          const Eigen::Matrix3d & R_q_before,
-                          const Eigen::Vector3d & T_q_before,
-                          const Eigen::Matrix3d & R_q_after,
-                          const Eigen::Vector3d & T_q_after);
+    void visualizeRelpose(const string &query,
+                          const vector<string> &anchors,
+                          const vector<Eigen::Matrix3d> &R_is,
+                          const vector<Eigen::Vector3d> &T_is,
+                          const vector<Eigen::Matrix3d> &R_qis,
+                          const vector<Eigen::Vector3d> &T_qis,
+                          const vector<vector<double>> &K_is,
+                          const vector<double> &K_q,
+                          const vector<vector<cv::Point2d>> &all_pts_q,
+                          const vector<vector<cv::Point2d>> &all_pts_i,
+                          const Eigen::Matrix3d &R_q_before,
+                          const Eigen::Vector3d &T_q_before,
+                          const Eigen::Matrix3d &R_q_after,
+                          const Eigen::Vector3d &T_q_after);
 }

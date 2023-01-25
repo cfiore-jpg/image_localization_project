@@ -42,7 +42,7 @@ pair<double, double> functions::mean_and_stdv(const vector<double> & v) {
     return {mean, stdev};
 }
 
-vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>>
+vector<pair<pair<double, double>, vector<pair<int, int>>>>
 functions::findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
                              const vector<Eigen::Vector3d> & T_is,
                              const vector<vector<double>> & K_is,
@@ -52,29 +52,25 @@ functions::findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
     size_t K = R_is.size();
     assert(R_is.size() == K && T_is.size() == K && K_is.size() == K && all_pts_q.size() == K);
 
-    map<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>> m;
-
+    map<pair<double, double>, vector<pair<int, int>>> m;
     for (int i = 0; i < K; i++) {
-        auto R_i = R_is[i];
-        auto T_i = T_is[i];
-        auto K_i = K_is[i];
-        auto pts_i = all_pts_i[i];
-        auto pts_q = all_pts_q[i];
-        for (int j = 0; j < pts_i.size(); j++) {
-            auto pt_q = make_pair(pts_q[j].x, pts_q[j].y);
-            auto t = make_tuple(make_pair(pts_i[j].x, pts_i[j].y), R_i, T_i, K_i);
+        for (int j = 0; j < all_pts_i[i].size(); j++) {
+            auto pt_q = make_pair(all_pts_q[i][j].x, all_pts_q[i][j].y);
+            auto p = make_pair(i, j);
             if(m.find(pt_q) != m.end()) {
-                m.at(pt_q).push_back(t);
+                m.at(pt_q).push_back(p);
             } else {
-                vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> v = {t};
+                vector<pair<int, int>> v = {p};
                 m.insert({pt_q, v});
             }
         }
     }
 
-    vector<pair<pair<double, double>, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>> result;
+    vector<pair<pair<double, double>, vector<pair<int, int>>>> result;
     for (const auto & it : m) {
-        result.emplace_back(it);
+        if(it.second.size() >= 2) {
+            result.emplace_back(it);
+        }
     }
 
     sort(result.begin(), result.end(), [](auto & lhs, auto & rhs) {
