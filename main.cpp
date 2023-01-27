@@ -68,14 +68,14 @@ void findInliers (double thresh,
 
 int main() {
 
-//     vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-     vector<string> scenes = {"KingsCollege/"};
-     string dataset = "cambridge/";
-     string error_file = "error_adjustment_study";
+    // vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+    // //  vector<string> scenes = {"KingsCollege/"};
+    //  string dataset = "cambridge/";
+    //  string error_file = "error_adjustment_study";
 
-//    vector<string> scenes = {"query/"};
-//    string dataset = "aachen/";
-//    string error_file = "error_adjustment_study";
+   vector<string> scenes = {"query/"};
+   string dataset = "aachen/";
+   string error_file = "error_adjustment_study";
 
     int cutoff = 3;
 
@@ -83,7 +83,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     double thresh = 5;
 
@@ -109,7 +109,7 @@ int main() {
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
         for (int q = start; q < queries.size(); q++) {
 
-            cout << q + 1 << "/" << queries.size();
+            cout << q + 1 << "/" << queries.size() << endl;
             string query = queries[q];
 
             auto info = functions::parseRelposeFile(dir, query, relpose_file);
