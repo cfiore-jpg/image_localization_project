@@ -68,8 +68,8 @@ void findInliers (double thresh,
 
 int main() {
 
-//     vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    vector<string> scenes = {"KingsCollege/"};
+    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+    // vector<string> scenes = {"KingsCollege/"};
       string dataset = "cambridge/";
       string error_file = "study_k_sweep";
 
@@ -77,7 +77,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     double thresh = 5;
 
@@ -108,7 +108,10 @@ int main() {
             auto inliers_i = get<11>(info);
 
 
-            for(int K = 5; K < anchors.size(); K+=5) {
+            for(int N = 5; N <= 150; N+=5) {
+
+                int K = min(N, int(anchors.size()));
+
                 vector<string> anchors_sub (K);
                 vector<Eigen::Matrix3d> R_is_sub (K);
                 vector<Eigen::Vector3d> T_is_sub (K);
@@ -197,8 +200,8 @@ int main() {
                 double c_error_adj = functions::getDistBetween(c_q, c_adjusted);
                 double r_error_adj = functions::rotationDifference(R_q, R_adjusted);
 
-                cout << K << " " << c_error_est << " " << r_error_est << " " << c_error_adj << " " << r_error_adj << " ";
-                error << K << " " << c_error_est << " " << r_error_est << " " << c_error_adj << " " << r_error_adj << " ";
+                cout << N << " " << c_error_est << " " << r_error_est << " " << c_error_adj << " " << r_error_adj << " ";
+                error << N << " " << c_error_est << " " << r_error_est << " " << c_error_adj << " " << r_error_adj << " ";
             }
             cout << endl;
             error << endl;
