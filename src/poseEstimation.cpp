@@ -222,28 +222,20 @@ struct ReprojectionErrorWithPoint {
      vector<Eigen::Vector3d> points3d;
      for (const auto & p: all_matches) {
          cv::Point2d pt2D(p.first.first, p.first.second);
-
          Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
-
          auto cost = ReprojectionError::Create(pt2D, pt3D, K_q);
-
          problem.AddResidualBlock(cost, loss, camera);
-
          points2d.push_back(pt2D);
          points3d.push_back(pt3D);
      }
-
-
      ceres::Solver::Options options;
      options.linear_solver_type = ceres::DENSE_SCHUR;
-     // options.minimizer_progress_to_stdout = true;
      ceres::Solver::Summary summary;
      if (problem.NumResidualBlocks() > 0) {
          ceres::Solve(options, &problem, &summary);
      } else {
          cout << " Can't Adjust ";
      }
-     //  std::cout << summary.FullReport() << "\n";
 
      double AA_adj[3]{camera[0], camera[1], camera[2]};
      double R_adj[9];
@@ -644,78 +636,13 @@ Eigen::Vector3d pose::nview(const vector<pair<int, int>> & matches,
     }
     ceres::Solver::Options options;
     options.linear_solver_type = ceres::DENSE_SCHUR;
-//     options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
     ceres::Solve(options, &problem, &summary);
-//     std::cout << summary.FullReport() << "\n";
 
     Eigen::Vector3d pt3D_new {pt3D_arr[0], pt3D_arr[1], pt3D_arr[2]};
 
     return pt3D_new;
 }
-
-
-//pair<Eigen::Vector3d, vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>>>
-//pose::RANSAC3DPoint(double inlier_thresh, const vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> & matches) {
-//
-//    int K = int(matches.size());
-//    vector<pair<int, int>> index_pairs;
-//    for (int i = 0; i < K - 1; i++) {
-//        for (int j = i + 1; j < K; j++) {
-//            index_pairs.emplace_back(i, j);
-//        }
-//    }
-//
-//    random_device gen;
-//    shuffle(index_pairs.begin(), index_pairs.end(), gen);
-//
-//    int most_inliers = 0;
-//    double best_score = DBL_MAX;
-//    vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> best_set;
-//    for (int idx = 0; idx < min(int(index_pairs.size()), 50); idx++) {
-//        auto p = index_pairs[idx];
-//        int i = p.first;
-//        int j = p.second;
-//        int num_inliers = 2;
-//        vector<tuple<pair<double, double>, Eigen::Matrix3d, Eigen::Vector3d, vector<double>>> set{matches[i], matches[j]};
-//        Eigen::Vector3d h = pose::estimate3Dpoint(set);
-//        double di = pose::reprojError(h,
-//                                      get<1>(matches[i]),
-//                                      get<2>(matches[i]),
-//                                      get<3>(matches[i]),
-//                                      get<0>(matches[i]).first,
-//                                      get<0>(matches[i]).second);
-//        double dj = pose::reprojError(h,
-//                                      get<1>(matches[j]),
-//                                      get<2>(matches[j]),
-//                                      get<3>(matches[j]),
-//                                      get<0>(matches[j]).first,
-//                                      get<0>(matches[j]).second);
-//        double score = di + dj;
-//        for (int k = 0; k < K; k++) {
-//            if (k != i && k != j) {
-//                double d = pose::reprojError(h,
-//                                             get<1>(matches[k]),
-//                                             get<2>(matches[k]),
-//                                             get<3>(matches[k]),
-//                                             get<0>(matches[k]).first,
-//                                             get<0>(matches[k]).second);
-//                if (d <= inlier_thresh) {
-//                    num_inliers++;
-//                    score += d;
-//                    set.push_back(matches[k]);
-//                }
-//            }
-//        }
-//        if (num_inliers > most_inliers || (num_inliers == most_inliers && score < best_score)) {
-//            most_inliers = num_inliers;
-//            best_set = set;
-//            best_score = score;
-//        }
-//    }
-//    auto r = pose::estimate3Dpoint(best_set);
-//    return {r, best_set};
-//}
 
 
 cv::Point2d pose::reproject3Dto2D(const Eigen::Vector3d & point3d,

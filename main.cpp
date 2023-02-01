@@ -32,17 +32,14 @@ void findInliers (double thresh,
                   vector<tuple<int, int, double, vector<int>>> * results) {
 
     int K = int((*R_ks).size());
-
     vector<Eigen::Matrix3d> set_R_ks{(*R_ks)[i], (*R_ks)[j]};
     vector<Eigen::Vector3d> set_T_ks{(*T_ks)[i], (*T_ks)[j]};
     vector<Eigen::Matrix3d> set_R_qks{(*R_qks)[i], (*R_qks)[j]};
     vector<Eigen::Vector3d> set_T_qks{(*T_qks)[i], (*T_qks)[j]};
     vector<int> indices{i, j};
     int score = int((*match_num)[i].size()) + int((*match_num)[j].size());
-
     Eigen::Matrix3d R_q = pose::R_q_average(vector<Eigen::Matrix3d>{(*R_qks)[i] * (*R_ks)[i], (*R_qks)[j] * (*R_ks)[j]});
     Eigen::Vector3d c_q = pose::c_q_closed_form(set_R_ks, set_T_ks, set_R_qks, set_T_qks);
-
     for (int k = 0; k < K; k++) {
         if (k != i && k != j) {
             double rot_diff = functions::rotationDifference(R_q*(*R_ks)[k].transpose(), (*R_qks)[k]);
@@ -53,14 +50,9 @@ void findInliers (double thresh,
             }
         }
     }
-
-
-
     auto t = make_tuple(i, j, score, indices);
-
     mtx.lock();
     results->push_back(t);
-//    cout << i << ", " << j << " finished." << endl;
     mtx.unlock();
 }
 
@@ -68,18 +60,33 @@ void findInliers (double thresh,
 
 int main() {
 
-    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    // vector<string> scenes = {"KingsCollege/"};
-      string dataset = "cambridge/";
-      string error_file = "study_k_sweep";
+    double thresh = 5;
+
+    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+    string dataset = "seven_scenes/";
+    string error_file = "error_SP_SFM";
+    int cutoff = -1;
+
+    // vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+    // string dataset = "cambridge/";
+    // string error_file = "error_SP";
+//    int cutoff = -1;
+
+    // vector<string> scenes = {"query/"};
+    // string dataset = "aachen/";
+    // string error_file = "Aachen_eval_MultiLoc";
+    // int cutoff = 3;
+
+//    vector<string> scenes = {"query/"};
+//    string dataset = "robotcar/";
+//    string error_file = "Robotcar_eval_MultiLoc";
+//    int cutoff = 2;
 
     string relpose_file = "relpose_SP";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
     string dir = ccv_dir;
-
-    double thresh = 5;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -89,7 +96,7 @@ int main() {
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
         for (int q = start; q < queries.size(); q++) {
 
-            cout << q + 1 << "/" << queries.size() << endl;
+            cout << q + 1 << "/" << queries.size();
             string query = queries[q];
 
             auto info = functions::parseRelposeFile(dir, query, relpose_file);
@@ -106,30 +113,23 @@ int main() {
             auto K_is = get<9>(info);
             auto inliers_q = get<10>(info);
             auto inliers_i = get<11>(info);
+            int K = int(anchors.size());
 
-
-            for(int N = 5; N <= 150; N+=5) {
-
-                int K = min(N, int(anchors.size()));
-
-                vector<string> anchors_sub (K);
-                vector<Eigen::Matrix3d> R_is_sub (K);
-                vector<Eigen::Vector3d> T_is_sub (K);
-                vector<Eigen::Matrix3d> R_qis_sub (K);
-                vector<Eigen::Vector3d> T_qis_sub (K);
-                vector<vector<double>> K_is_sub (K);
-                vector<vector<cv::Point2d>> inliers_q_sub (K);
-                vector<vector<cv::Point2d>> inliers_i_sub (K);
-                for(int i = 0; i < K; i++) {
-                    anchors_sub[i] = anchors[i];
-                    R_is_sub[i] = R_is[i];
-                    T_is_sub[i] = T_is[i];
-                    R_qis_sub[i] = R_qis[i];
-                    T_qis_sub[i] = T_qis[i];
-                    K_is_sub[i] = K_is[i];
-                    inliers_q_sub[i] = inliers_q[i];
-                    inliers_i_sub[i] = inliers_i[i];
-                }
+            Eigen::Matrix3d R_adjustment;
+            Eigen::Vector3d T_adjustment;
+            double c_error_estimation_all;
+            double R_error_estimation_all;
+            double c_error_adjustment_all;
+            double R_error_adjustment_all;
+            if (K == 0) {
+                R_adjustment << 1., 0., 0., 0., 1., 0., 0., 0., 1.;
+                T_adjustment << 0., 0., 0.;
+                cout << endl;
+            } else if (K == 1) {
+                R_adjustment = R_is[0];
+                T_adjustment = T_is[0];
+                cout << endl;
+            } else {
 
                 int s = 0;
                 for (int i = 0; i < K - 1; i++) {
@@ -142,7 +142,8 @@ int main() {
                 vector<tuple<int, int, double, vector<int>>> results;
                 for (int i = 0; i < K - 1; i++) {
                     for (int j = i + 1; j < K; j++) {
-                        threads[idx] = thread(findInliers, thresh, i, j, &R_is_sub, &T_is_sub, &R_qis_sub, &T_qis_sub, &inliers_q_sub, &results);
+                        threads[idx] = thread(findInliers, thresh, i, j, &R_is, &T_is, &R_qis, &T_qis,
+                                              &inliers_q, &results);
                         idx++;
                     }
                 }
@@ -171,14 +172,14 @@ int main() {
                 vector<vector<double>> best_K_is;
                 vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
                 for (const auto &i: get<3>(best_set)) {
-                    best_anchors.push_back(anchors_sub[i]);
-                    best_R_is.push_back(R_is_sub[i]);
-                    best_R_qis.push_back(R_qis_sub[i]);
-                    best_T_is.push_back(T_is_sub[i]);
-                    best_T_qis.push_back(T_qis_sub[i]);
-                    best_inliers_q.push_back(inliers_q_sub[i]);
-                    best_inliers_i.push_back(inliers_i_sub[i]);
-                    best_K_is.push_back(K_is_sub[i]);
+                    best_anchors.push_back(anchors[i]);
+                    best_R_is.push_back(R_is[i]);
+                    best_R_qis.push_back(R_qis[i]);
+                    best_T_is.push_back(T_is[i]);
+                    best_T_qis.push_back(T_qis[i]);
+                    best_inliers_q.push_back(inliers_q[i]);
+                    best_inliers_i.push_back(inliers_i[i]);
+                    best_K_is.push_back(K_is[i]);
                 }
                 vector<Eigen::Matrix3d> rotations(best_R_is.size());
                 for (int i = 0; i < best_R_is.size(); i++) {
@@ -191,20 +192,41 @@ int main() {
                 double c_error_est = functions::getDistBetween(c_q, c_estimation);
                 double r_error_est = functions::rotationDifference(R_q, R_estimation);
 
+                cout << " " << best_R_is.size() << "/" << R_is.size();
 
                 Eigen::Matrix3d R_adjusted = R_estimation;
                 Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
-                auto points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q, best_inliers_i,
-                                                     R_adjusted, T_adjusted);
+                auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
+                                                         best_inliers_i,
+                                                         R_adjusted, T_adjusted);
                 Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
                 double c_error_adj = functions::getDistBetween(c_q, c_adjusted);
                 double r_error_adj = functions::rotationDifference(R_q, R_adjusted);
 
-                cout << N << " " << c_error_est << " " << r_error_est << " " << c_error_adj << " " << r_error_adj << " ";
-                error << N << " " << c_error_est << " " << r_error_est << " " << c_error_adj << " " << r_error_adj << " ";
+                cout << " " << adj_points.first.size() << endl;
             }
-            cout << endl;
-            error << endl;
+
+            if (dataset == "aachen/" || dataset == "robotcar/") {
+                Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
+                auto pos = query.find('/');
+                string name = query;
+                for (int c = 0; c < cutoff; c++) {
+                    name = name.substr(pos + 1);
+                    pos = name.find('/');
+                }
+                error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
+                      << q_adj.y() << " " <<
+                      q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
+                      << T_adjustment[2] << endl;
+            } else {
+                string line;
+                line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
+                        + " " + to_string(c_error_estimation_all)
+                        + " All_Post_Adj " + to_string(R_error_adjustment_all)
+                        + " " + to_string(c_error_adjustment_all);
+                error << line << endl;
+                cout << line << endl;
+            }
         }
         error.close();
     }
