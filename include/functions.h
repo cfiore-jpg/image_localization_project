@@ -142,7 +142,7 @@ namespace functions {
 
 //// Visualization
 
-    void showTop(int rows, int cols,
+    cv::Mat showTop(int rows, int cols,
                  const string & query_image, const vector<string> & returned,
                  const string & ext, const string & title);
 

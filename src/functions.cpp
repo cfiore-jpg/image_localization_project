@@ -1459,9 +1459,9 @@ map<string, tuple<Eigen::Matrix3d, Eigen::Vector3d, vector<double>, vector<doubl
 
 // Visualize
 
-void functions::showTop(int rows, int cols,
+cv::Mat functions::showTop(int rows, int cols,
                         const string & query_image, const vector<string> & returned,
-                        const string & ext, const string & title) {\
+                        const string & ext, const string & title) {
 
     int num = int(returned.size());
 
@@ -1515,13 +1515,7 @@ void functions::showTop(int rows, int cols,
             // Determine Highlight
             Rect roi_color(x_color, y_color, resizeWidth[k] + edgeThickness, resizeHeight + edgeThickness);
             Size s_color = canvasImage(roi_color).size();
-            Mat target_ROI_color;
-            string this_scene = getScene(vecMat[k].second, "");
-            if (this_scene != scene) {
-                target_ROI_color = Mat (s_color, CV_8UC3, Scalar(0., 0., 255.));
-            } else {
-                target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 0., 0.));
-            }
+            Mat target_ROI_color = Mat(s_color, CV_8UC3, Scalar(0., 0., 0.));
             target_ROI_color.copyTo(canvasImage(roi_color));
 
             // Draw Image
@@ -1544,8 +1538,10 @@ void functions::showTop(int rows, int cols,
             x_end += resizeWidth[k] + edgeThickness;
         }
     }
-    imshow(title, canvasImage);
-    waitKey();
+//    imshow(title, canvasImage);
+//    waitKey();
+
+    return canvasImage;
 }
 
 void functions::showSpaced(const string & query_image, const vector<string> & spaced, const string & ext) {
