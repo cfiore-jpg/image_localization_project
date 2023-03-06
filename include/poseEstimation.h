@@ -98,6 +98,12 @@ namespace pose {
 
     Eigen::Matrix3d R_q_average(const vector<Eigen::Matrix3d> &rotations);
 
+    Eigen::Matrix3d R_q_average_govindu(const vector<Eigen::Matrix3d> & R_qis, const vector<Eigen::Matrix3d> & R_is);
+
+
+
+
+
     Eigen::Matrix3d R_q_closed_form(bool use_Rqk, bool normalize, bool version,
                                     const Eigen::Vector3d &c_q,
                                     const vector<Eigen::Matrix3d> &R_ks,

@@ -1369,6 +1369,39 @@ Eigen::Matrix3d pose::R_q_average (const vector<Eigen::Matrix3d> & rotations) {
 
 }
 
+Eigen::Matrix3d pose::R_q_average_govindu(const vector<Eigen::Matrix3d> & R_qis, const vector<Eigen::Matrix3d> & R_is) {
+
+    size_t K = R_is.size();
+    Eigen::MatrixXd A (K * 4, 4);
+    Eigen::MatrixXd b (K * 4, 1);
+
+    for (int i = 0; i < K; i++) {
+        Eigen::Matrix3d R_qi = R_qis[i];
+        Eigen::Matrix3d R_i = R_is[i];
+
+        Eigen::Quaterniond q_ri (R_is[i]);
+        Eigen::Vector4d a {q_ri.w(), q_ri.x(), q_ri.y(), q_ri.z()};
+
+        Eigen::Matrix3d R_qi_T = R_qis[i].transpose();
+        Eigen::Quaterniond q (R_qi_T);
+
+        Eigen::Matrix4d Q {{q.w(), -q.x(), -q.y(), -q.z()},
+                            {q.x(), q.w(), -q.z(), q.y()},
+                            {q.y(), q.z(), q.w(), -q.x()},
+                            {q.z(), -q.y(), q.x(), q.w()}};
+
+        A.block(i * 4, 0, 4, 4) = Q;
+        b.block(i * 4, 0, 4, 1) = a;
+    }
+
+    Eigen::Vector4d sol = A.colPivHouseholderQr().solve(b);
+
+    Eigen::Quaterniond q_q (sol[0], sol[1], sol[2], sol[3]);
+    Eigen::Matrix3d R_q = q_q.toRotationMatrix();
+
+    return R_q;
+}
+
 Eigen::Matrix3d pose::R_q_closed_form (bool use_Rqk, bool normalize, bool version,
                                        const Eigen::Vector3d & c_q,
                                        const vector<Eigen::Matrix3d> & R_ks,
