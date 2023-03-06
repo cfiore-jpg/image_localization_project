@@ -189,6 +189,7 @@ int main() {
                     best_K_is.push_back(K_is[i]);
                 }
                 vector<Eigen::Matrix3d> rotations(best_R_is.size());
+                vector<Eigen::Matrix3d> R_qis_real(best_R_is.size());
                 for (int i = 0; i < best_R_is.size(); i++) {
                     rotations[i] = best_R_qis[i] * best_R_is[i];
                 }
@@ -237,6 +238,7 @@ int main() {
 //                        + " " + to_string(c_error_adj);
 //                error << line << endl;
 //                cout << line << endl;
+                cout << endl;
             }
         }
         error.close();
