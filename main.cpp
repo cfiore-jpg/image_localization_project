@@ -60,29 +60,34 @@ void findInliers (double thresh,
 
 int main() {
 
-    double thresh = 5;
-
-    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-    string dataset = "seven_scenes/";
-    string error_file = "error_SP_SFM";
-    int cutoff = -1;
+    // vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+    // // vector<string> scenes = {"stairs/"};
+    // string dataset = "seven_scenes/";
+    // string error_file = "error_SP_SFM";
+    // int cutoff = -1;
+    // double thresh = 10;
+    // string relpose_file = "relpose_SP_SFM";
 
     // vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
     // string dataset = "cambridge/";
     // string error_file = "error_SP";
-//    int cutoff = -1;
+    // int cutoff = -1;
+    // double thresh = 5;
+    // string relpose_file = "relpose_SP";
 
     // vector<string> scenes = {"query/"};
     // string dataset = "aachen/";
     // string error_file = "Aachen_eval_MultiLoc";
     // int cutoff = 3;
+    // double thresh = 5;
+    // string relpose_file = "relpose_SP";
 
-//    vector<string> scenes = {"query/"};
-//    string dataset = "robotcar/";
-//    string error_file = "Robotcar_eval_MultiLoc";
-//    int cutoff = 2;
-
-    string relpose_file = "relpose_SP";
+    vector<string> scenes = {"query/"};
+    string dataset = "robotcar/";
+    string error_file = "Robotcar_eval_MultiLoc";
+    int cutoff = 2;
+    double thresh = 5;
+    string relpose_file = "relpose_SP_v2";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
@@ -115,19 +120,19 @@ int main() {
             auto inliers_i = get<11>(info);
             int K = int(anchors.size());
 
-            Eigen::Matrix3d R_adjustment;
-            Eigen::Vector3d T_adjustment;
-            double c_error_estimation_all;
-            double R_error_estimation_all;
-            double c_error_adjustment_all;
-            double R_error_adjustment_all;
+            Eigen::Matrix3d R_adjusted;
+            Eigen::Vector3d T_adjusted;
+            double c_error_est;
+            double r_error_est;
+            double c_error_adj;
+            double r_error_adj;
             if (K == 0) {
-                R_adjustment << 1., 0., 0., 0., 1., 0., 0., 0., 1.;
-                T_adjustment << 0., 0., 0.;
+                R_adjusted << 1., 0., 0., 0., 1., 0., 0., 0., 1.;
+                T_adjusted << 0., 0., 0.;
                 cout << endl;
             } else if (K == 1) {
-                R_adjustment = R_is[0];
-                T_adjustment = T_is[0];
+                R_adjusted = R_is[0];
+                T_adjusted = T_is[0];
                 cout << endl;
             } else {
 
@@ -189,25 +194,25 @@ int main() {
                 Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
                 Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
                 Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
-                double c_error_est = functions::getDistBetween(c_q, c_estimation);
-                double r_error_est = functions::rotationDifference(R_q, R_estimation);
+                c_error_est = functions::getDistBetween(c_q, c_estimation);
+                r_error_est = functions::rotationDifference(R_q, R_estimation);
 
                 cout << " " << best_R_is.size() << "/" << R_is.size();
 
-                Eigen::Matrix3d R_adjusted = R_estimation;
-                Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
+                R_adjusted = R_estimation;
+                T_adjusted = -R_estimation * c_estimation;
                 auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
                                                          best_inliers_i,
                                                          R_adjusted, T_adjusted);
                 Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
-                double c_error_adj = functions::getDistBetween(c_q, c_adjusted);
-                double r_error_adj = functions::rotationDifference(R_q, R_adjusted);
+                c_error_adj = functions::getDistBetween(c_q, c_adjusted);
+                r_error_adj = functions::rotationDifference(R_q, R_adjusted);
 
                 cout << " " << adj_points.first.size() << endl;
             }
 
             if (dataset == "aachen/" || dataset == "robotcar/") {
-                Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjustment);
+                Eigen::Quaterniond q_adj = Eigen::Quaterniond(R_adjusted);
                 auto pos = query.find('/');
                 string name = query;
                 for (int c = 0; c < cutoff; c++) {
@@ -216,14 +221,14 @@ int main() {
                 }
                 error << name << setprecision(17) << " " << q_adj.w() << " " << q_adj.x() << " "
                       << q_adj.y() << " " <<
-                      q_adj.z() << " " << T_adjustment[0] << " " << T_adjustment[1] << " "
-                      << T_adjustment[2] << endl;
+                      q_adj.z() << " " << T_adjusted[0] << " " << T_adjusted[1] << " "
+                      << T_adjusted[2] << endl;
             } else {
                 string line;
-                line += query + " All_Pre_Adj " + to_string(R_error_estimation_all)
-                        + " " + to_string(c_error_estimation_all)
-                        + " All_Post_Adj " + to_string(R_error_adjustment_all)
-                        + " " + to_string(c_error_adjustment_all);
+                line += query + " All_Pre_Adj " + to_string(r_error_est)
+                        + " " + to_string(c_error_est)
+                        + " All_Post_Adj " + to_string(r_error_adj)
+                        + " " + to_string(c_error_adj);
                 error << line << endl;
                 cout << line << endl;
             }

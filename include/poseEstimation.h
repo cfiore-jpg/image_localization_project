@@ -136,18 +136,6 @@ namespace pose {
                      Eigen::Matrix3d &R_q,
                      Eigen::Vector3d &T_q);
 
-    tuple<vector<Eigen::Matrix3d>, vector<Eigen::Vector3d>, vector<double>>
-    study(const vector<Eigen::Matrix3d> & R_is,
-          const vector<Eigen::Vector3d> & T_is,
-          const vector<vector<double>> & K_is,
-          const vector<double> & K_q,
-          const vector<vector<cv::Point2d>> & all_pts_q,
-          const vector<vector<cv::Point2d>> & all_pts_i,
-          const Eigen::Matrix3d & R_q_real,
-          const Eigen::Vector3d & c_q_real,
-          const Eigen::Matrix3d & R_q_init,
-          const Eigen::Vector3d & T_q_int);
-
 
     void visualizeRelpose(const string &query,
                           const vector<string> &anchors,
