@@ -60,22 +60,21 @@ void findInliers (double thresh,
 
 int main() {
 
-    // vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
-    // // vector<string> scenes = {"stairs/"};
-    // string dataset = "seven_scenes/";
+    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+    string dataset = "seven_scenes/";
     // string error_file = "error_SP_SFM";
-    // int cutoff = -1;
-    // double thresh = 10;
-    // string relpose_file = "relpose_SP_SFM";
-
-//    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-    vector<string> scenes = {"KingsCollege/"};
-    string dataset = "cambridge/";
-//     string error_file = "error_SP";
     string error_file = "matches_histo_info";
     int cutoff = -1;
-    double thresh = 5;
-    string relpose_file = "relpose_SP";
+    double thresh = 10;
+    string relpose_file = "relpose_SP_SFM";
+
+//    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
+//     string dataset = "cambridge/";
+////     string error_file = "error_SP";
+//     string error_file = "matches_histo_info";
+//     int cutoff = -1;
+//     double thresh = 5;
+//     string relpose_file = "relpose_SP";
 
     // vector<string> scenes = {"query/"};
     // string dataset = "aachen/";
