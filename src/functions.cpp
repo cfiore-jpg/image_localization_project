@@ -1480,7 +1480,7 @@ cv::Mat functions::showTop(int rows, int cols,
 
     // Get window parameters
     int nRows = rows;
-    int windowHeight = 6000;
+    int windowHeight = 2500;
     int edgeThickness = 20;
     int imagesPerRow = cols;
     int resizeHeight = int (floor(2.0 * ((floor(double(windowHeight - edgeThickness) / nRows)) / 2.0))) - edgeThickness;

@@ -1396,6 +1396,8 @@ Eigen::Matrix3d pose::R_q_average_govindu(const vector<Eigen::Matrix3d> & R_qis,
 
     Eigen::Vector4d sol = A.colPivHouseholderQr().solve(b);
 
+    sol.normalize();
+
     Eigen::Quaterniond q_q (sol[0], sol[1], sol[2], sol[3]);
     Eigen::Matrix3d R_q = q_q.toRotationMatrix();
 

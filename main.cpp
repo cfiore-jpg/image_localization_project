@@ -1,3 +1,4 @@
+
 #include "include/aachen.h"
 #include "include/sevenScenes.h"
 #include "include/synthetic.h"
@@ -60,9 +61,9 @@ void findInliers (double thresh,
 
 int main() {
 
-    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+    // vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
+    vector<string> scenes = {"chess/"};
     string dataset = "seven_scenes/";
-    // string error_file = "error_SP_SFM";
     string error_file = "matches_histo_info";
     int cutoff = -1;
     double thresh = 10;
@@ -70,7 +71,7 @@ int main() {
 
 //    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
 //     string dataset = "cambridge/";
-////     string error_file = "error_SP";
+// //     string error_file = "error_SP";
 //     string error_file = "matches_histo_info";
 //     int cutoff = -1;
 //     double thresh = 5;
@@ -100,9 +101,7 @@ int main() {
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
-//        for (int q = start; q < queries.size(); q++) {
-        for (int q = start; q < start + 1; q++) {
-
+        for (int q = start; q < queries.size(); q++) {
 
             cout << q + 1 << "/" << queries.size();
             string query = queries[q];
@@ -114,103 +113,94 @@ int main() {
             Eigen::Vector3d c_q = -R_q.transpose() * T_q;
 
             auto anchors = get<4>(info);
+            auto R_is = get<5>(info);
+            auto T_is = get<6>(info);
+            auto R_qis = get<7>(info);
+            auto T_qis = get<8>(info);
+            auto K_is = get<9>(info);
+            auto inliers_q = get<10>(info);
+            auto inliers_i = get<11>(info);
+            int K = int(anchors.size());
 
-            cv::Mat im = functions::showTop(100, 150, query, anchors, "", "top 150");
+            Eigen::Matrix3d R_adjusted;
+            Eigen::Vector3d T_adjusted;
+            double c_error_est;
+            double r_error_est;
+            double c_error_adj;
+            double r_error_adj;
+            if (K == 0) {
+                R_adjusted << 1., 0., 0., 0., 1., 0., 0., 0., 1.;
+                T_adjusted << 0., 0., 0.;
+                cout << endl;
+            } else if (K == 1) {
+                R_adjusted = R_is[0];
+                T_adjusted = T_is[0];
+                cout << endl;
+            } else {
 
-            cv::imwrite(dir + scene + "top150.txt", im);
+                int s = 0;
+                for (int i = 0; i < K - 1; i++) {
+                    for (int j = i + 1; j < K; j++) {
+                        s++;
+                    }
+                }
+                int idx = 0;
+                vector<thread> threads(s);
+                vector<tuple<int, int, double, vector<int>>> results;
+                for (int i = 0; i < K - 1; i++) {
+                    for (int j = i + 1; j < K; j++) {
+                        threads[idx] = thread(findInliers, thresh, i, j, &R_is, &T_is, &R_qis, &T_qis,
+                                              &inliers_q, &results);
+                        idx++;
+                    }
+                }
+                for (auto &th: threads) {
+                    th.join();
+                }
+                sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
+                    return get<3>(a).size() > get<3>(b).size();
+                });
+                vector<tuple<int, int, double, vector<int>>> results_trimmed;
+                for (int i = 0; i < results.size(); i++) {
+                    if (get<3>(results[i]).size() == get<3>(results[0]).size()) {
+                        results_trimmed.push_back(results[i]);
+                    } else {
+                        break;
+                    }
+                }
+                sort(results_trimmed.begin(), results_trimmed.end(), [](const auto &a, const auto &b) {
+                    return get<2>(a) > get<2>(b);
+                });
+                tuple<int, int, double, vector<int>> best_set = results_trimmed[0];
 
+                vector<string> best_anchors;
+                vector<Eigen::Matrix3d> best_R_is, best_R_qis;
+                vector<Eigen::Vector3d> best_T_is, best_T_qis;
+                vector<vector<double>> best_K_is;
+                vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
+                for (const auto &i: get<3>(best_set)) {
+                    best_anchors.push_back(anchors[i]);
+                    best_R_is.push_back(R_is[i]);
+                    best_R_qis.push_back(R_qis[i]);
+                    best_T_is.push_back(T_is[i]);
+                    best_T_qis.push_back(T_qis[i]);
+                    best_inliers_q.push_back(inliers_q[i]);
+                    best_inliers_i.push_back(inliers_i[i]);
+                    best_K_is.push_back(K_is[i]);
+                }
+                vector<Eigen::Matrix3d> rotations(best_R_is.size());
+                vector<Eigen::Matrix3d> R_qis_real(best_R_is.size());
+                for (int i = 0; i < best_R_is.size(); i++) {
+                    rotations[i] = best_R_qis[i] * best_R_is[i];
+                }
 
-
-
-
-//            auto R_is = get<5>(info);
-//            auto T_is = get<6>(info);
-//            auto R_qis = get<7>(info);
-//            auto T_qis = get<8>(info);
-//            auto K_is = get<9>(info);
-//            auto inliers_q = get<10>(info);
-//            auto inliers_i = get<11>(info);
-//            int K = int(anchors.size());
-//
-//            Eigen::Matrix3d R_adjusted;
-//            Eigen::Vector3d T_adjusted;
-//            double c_error_est;
-//            double r_error_est;
-//            double c_error_adj;
-//            double r_error_adj;
-//            if (K == 0) {
-//                R_adjusted << 1., 0., 0., 0., 1., 0., 0., 0., 1.;
-//                T_adjusted << 0., 0., 0.;
-//                cout << endl;
-//            } else if (K == 1) {
-//                R_adjusted = R_is[0];
-//                T_adjusted = T_is[0];
-//                cout << endl;
-//            } else {
-//
-//                int s = 0;
-//                for (int i = 0; i < K - 1; i++) {
-//                    for (int j = i + 1; j < K; j++) {
-//                        s++;
-//                    }
-//                }
-//                int idx = 0;
-//                vector<thread> threads(s);
-//                vector<tuple<int, int, double, vector<int>>> results;
-//                for (int i = 0; i < K - 1; i++) {
-//                    for (int j = i + 1; j < K; j++) {
-//                        threads[idx] = thread(findInliers, thresh, i, j, &R_is, &T_is, &R_qis, &T_qis,
-//                                              &inliers_q, &results);
-//                        idx++;
-//                    }
-//                }
-//                for (auto &th: threads) {
-//                    th.join();
-//                }
-//                sort(results.begin(), results.end(), [](const auto &a, const auto &b) {
-//                    return get<3>(a).size() > get<3>(b).size();
-//                });
-//                vector<tuple<int, int, double, vector<int>>> results_trimmed;
-//                for (int i = 0; i < results.size(); i++) {
-//                    if (get<3>(results[i]).size() == get<3>(results[0]).size()) {
-//                        results_trimmed.push_back(results[i]);
-//                    } else {
-//                        break;
-//                    }
-//                }
-//                sort(results_trimmed.begin(), results_trimmed.end(), [](const auto &a, const auto &b) {
-//                    return get<2>(a) > get<2>(b);
-//                });
-//                tuple<int, int, double, vector<int>> best_set = results_trimmed[0];
-//
-//                vector<string> best_anchors;
-//                vector<Eigen::Matrix3d> best_R_is, best_R_qis;
-//                vector<Eigen::Vector3d> best_T_is, best_T_qis;
-//                vector<vector<double>> best_K_is;
-//                vector<vector<cv::Point2d>> best_inliers_q, best_inliers_i;
-//                for (const auto &i: get<3>(best_set)) {
-//                    best_anchors.push_back(anchors[i]);
-//                    best_R_is.push_back(R_is[i]);
-//                    best_R_qis.push_back(R_qis[i]);
-//                    best_T_is.push_back(T_is[i]);
-//                    best_T_qis.push_back(T_qis[i]);
-//                    best_inliers_q.push_back(inliers_q[i]);
-//                    best_inliers_i.push_back(inliers_i[i]);
-//                    best_K_is.push_back(K_is[i]);
-//                }
-//                vector<Eigen::Matrix3d> rotations(best_R_is.size());
-//                vector<Eigen::Matrix3d> R_qis_real(best_R_is.size());
-//                for (int i = 0; i < best_R_is.size(); i++) {
-//                    rotations[i] = best_R_qis[i] * best_R_is[i];
-//                }
-//
-//                vector<pair<pair<double, double>, vector<pair<int, int>>>> all_matches = functions::findSharedMatches(
-//                        best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
-//                error << int(best_R_is.size()) << " ";
-//                for (const auto & p : all_matches) {
-//                    error << int(p.second.size()) << " ";
-//                }
-//                error << endl;
+                vector<pair<pair<double, double>, vector<pair<int, int>>>> all_matches = functions::findSharedMatches(
+                        best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+                error << int(best_R_is.size()) << " ";
+                for (const auto & p : all_matches) {
+                    error << int(p.second.size()) << " ";
+                }
+                error << endl;
 
 //                Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
 //                Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
@@ -252,10 +242,10 @@ int main() {
 //                        + " " + to_string(c_error_adj);
 //                error << line << endl;
 //                cout << line << endl;
-//                cout << endl;
-//            }
+                cout << endl;
+            }
         }
-        error.close();
+    error.close();
     }
     return 0;
 }
