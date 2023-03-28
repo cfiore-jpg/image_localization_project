@@ -70,18 +70,17 @@ int main() {
 
 //    vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
 //     string dataset = "cambridge/";
-//     string error_file = "error_SP";
 //    string error_file = "good_recovered";
 //     int cutoff = -1;
 //     double thresh = 5;
 //     string relpose_file = "relpose_SP";
 
-    // vector<string> scenes = {"query/"};
-    // string dataset = "aachen/";
+//     vector<string> scenes = {"query/"};
+//     string dataset = "aachen/";
 //    string error_file = "good_recovered";
-    // int cutoff = 3;
-    // double thresh = 5;
-    // string relpose_file = "relpose_SP";
+//     int cutoff = 3;
+//     double thresh = 5;
+//     string relpose_file = "relpose_SP";
 
 //    vector<string> scenes = {"query/"};
 //    string dataset = "robotcar/";
@@ -123,7 +122,7 @@ int main() {
 
             int num_good = 0;
             for(const auto & points : inliers_q) {
-                if (points.size() >= 50) num_good++;
+                if (points.size() >= 30) num_good++;
             }
             error << num_good << endl;
         }
