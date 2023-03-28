@@ -2063,6 +2063,21 @@ cv::Mat functions::showAllImages(const string & query, const vector<string> & im
     return canvasImage;
 }
 
+vector<double> functions::eulerFromRotMat(const Eigen::Matrix3d & R) {
+
+    double roll = asin(-R(2, 0));
+
+    double yaw = acos(R(0, 0) / cos(roll));
+
+    double yaw2 = asin(R(1, 0) / cos(roll));
+
+    double pitch = asin(R(2, 1) / cos(roll));
+
+    double pitch2 = acos(R(2, 2) / cos(roll));
+
+    return {pitch, roll, yaw};
+}
+
 
 
 

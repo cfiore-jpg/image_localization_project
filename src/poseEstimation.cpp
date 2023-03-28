@@ -24,6 +24,321 @@
 
 
 /// CERES COST FUNCTIONS
+struct Top2 {
+    Top2 (vector<double> K,
+          cv::Point2d pt2D,
+          Eigen::Vector3d pt3D)
+          : K(std::move(K)), pt2D(std::move(pt2D)), pt3D(std::move(pt3D)) {}
+
+    template<typename T>
+    bool operator()(
+            const T * const lambda,
+            const T * const mu,
+            const T * const E_q,
+            const T * const T_q,
+            T * residuals) const {
+
+        T R_q[9];
+        ceres::AngleAxisToRotationMatrix(E_q, R_q);
+
+        T A[3];
+        A[0] = R_q[0] * T(pt3D(0)) + R_q[3] * T(pt3D(1)) + R_q[6] * T(pt3D(2)) + T_q[0];
+        A[1] = R_q[1] * T(pt3D(0)) + R_q[4] * T(pt3D(1)) + R_q[7] * T(pt3D(2)) + T_q[1];
+        A[2] = R_q[2] * T(pt3D(0)) + R_q[5] * T(pt3D(1)) + R_q[8] * T(pt3D(2)) + T_q[2];
+
+        T B[3];
+        B[0] = T(K[2]) * A[0] + T(K[0]) * A[2];
+        B[1] = T(K[3]) * A[1] + T(K[1]) * A[2];
+        B[2] = A[2];
+
+        T mx = T(pt2D.x) - T(K[0]);
+        T my = T(pt2D.y) - T(K[1]);
+        T f = (T(K[2]) + T(K[3])) / T(2);
+        T r = T(K[4]) / (f * f);
+        T r2 = r * (mx * mx + my * my);
+        T xi = (T(1)+r2)*mx + T(K[0]);
+        T eta = (T(1)+r2)*my + T(K[1]);
+
+        T left1 = 0.5 * B[2] * B[2] * lambda[0];
+        T right1 = xi * B[2] - B[0];
+        T res0 = left1 - right1;
+        residuals[0] = res0;
+
+        T left2 = 0.5 * B[2] * B[2] * mu[0];
+        T right2 = eta * B[2] - B[1];
+        T res1 = left2 - right2;
+        residuals[1] = res1;
+
+        return true;
+    }
+
+    static ceres::CostFunction * Create(const vector<double> & K,
+                                        const cv::Point2d & pt2D,
+                                        const Eigen::Vector3d & pt3D) {
+        return (new ceres::AutoDiffCostFunction<Top2, 2, 1, 1, 3, 3> (new Top2(K, pt2D, pt3D)));
+    }
+
+    vector<double> K;
+    cv::Point2d pt2D;
+    Eigen::Vector3d pt3D;
+};
+
+
+struct Bottom2 {
+    Bottom2 (vector<double> K,
+          cv::Point2d pt2D,
+          Eigen::Vector3d pt3D)
+          : K(std::move(K)), pt2D(std::move(pt2D)), pt3D(std::move(pt3D)) {}
+
+    template<typename T>
+    bool operator()(
+            const T * const lambda,
+            const T * const mu,
+            const T * const A_q,
+            const T * const delta_gamma,
+            T * residuals) const {
+
+        T a1 = A_q[0];
+        T a2 = A_q[1];
+        T a3 = A_q[2];
+
+        T r_16 = a1*a1 + a2*a2 + a3*a3;
+        T r_15 = cos(sqrt(r_16)) - T(1);
+        T r_14 = sin(sqrt(r_16))/sqrt(r_16);
+        T r_13 = (a1 * a2 * cos(sqrt(r_16))) / r_16;
+        T r_12 = (a1 * a3 * cos(sqrt(r_16))) / r_16;
+        T r_11 = (a1 * a1 * cos(sqrt(r_16))) / r_16;
+        T r_10 = (T(2) * a1 * a2 * a3 * r_15) / (r_16 * r_16);
+        T r_9 = (T(2) * a1 * a1 * a2 * r_15) / (r_16 * r_16);
+        T r_8 = (T(2) * a1 * a1 * a3 * r_15) / (r_16 * r_16);
+        T r_7 = (a1 * a2 * sin(sqrt(r_16)))/sqrt(r_16 * r_16 * r_16);
+        T r_6 = (a1 * a3 * sin(sqrt(r_16)))/sqrt(r_16 * r_16 * r_16);
+        T r_5 = (a1 * a1 * sin(sqrt(r_16)))/sqrt(r_16 * r_16 * r_16);
+        T r_4 = (a1 * a2 * a3 * sin(sqrt(r_16)))/sqrt(r_16 * r_16 * r_16);
+        T r_3 = (a1 * a1 * a2 * sin(sqrt(r_16)))/sqrt(r_16 * r_16 * r_16);
+        T r_2 = (a1 * a1 * a3 * sin(sqrt(r_16)))/sqrt(r_16 * r_16 * r_16);
+        T r_1 = (a1 * sin(sqrt(r_16)))/sqrt(r_16);
+
+        T dR_d1[9];
+        dR_d1[0] = (a1*a1*a1*sin(sqrt(r_16)))/sqrt(r_16*r_16*r_16) - (T(2)*a1*r_15)/(r_16) - (r_1) + (T(2)*a1*a1*a1*r_15)/(r_16*r_16);
+        dR_d1[1] = r_9 - (a2*r_15)/r_16 + r_12 - r_6 + r_3;
+        dR_d1[2] = r_8 - (a3*r_15)/r_16 - r_13 + r_7 + r_2;
+        dR_d1[3] = r_9 - (a2*r_15)/r_16 - r_12 + r_6 + r_3;
+        dR_d1[4] = (T(2)*a1*a2*a2*r_15)/(r_16*r_16) - r_1 + (a1*a2*a2*sin(sqrt(r_16)))/sqrt(r_16*r_16*r_16);
+        dR_d1[5] = r_14 + r_11 - r_5 + r_10 + r_4;
+        dR_d1[6] = r_8 - (a3*r_15)/r_16 + r_13 - r_7 + r_2;
+        dR_d1[7] = r_5 - r_11 - r_14 + r_10 + r_4;
+        dR_d1[8] = (T(2)*a1*a3*a3*r_15)/(r_16*r_16) - r_1 + (a1*a3*a3*sin(sqrt(r_16)))/sqrt(r_16*r_16*r_16);
+
+
+
+        T s_16 = a1*a1 + a2*a2 + a3*a3;
+        T s_15 = cos(sqrt(s_16)) - T(1);
+        T s_14 = sin(sqrt(s_16))/sqrt(s_16);
+        T s_13 = (a1 * a2 * cos(sqrt(s_16))) / s_16;
+        T s_12 = (a2 * a3 * cos(sqrt(s_16))) / s_16;
+        T s_11 = (a2 * a2 * cos(sqrt(s_16))) / s_16;
+        T s_10 = (T(2) * a1 * a2 * a3 * s_15) / (s_16 * s_16);
+        T s_9 = (T(2) * a1 * a2 * a2 * s_15) / (s_16 * s_16);
+        T s_8 = (T(2) * a2 * a2 * a3 * s_15) / (s_16 * s_16);
+        T s_7 = (a1 * a2 * sin(sqrt(s_16)))/sqrt(s_16 * s_16 * s_16);
+        T s_6 = (a2 * a3 * sin(sqrt(s_16)))/sqrt(s_16 * s_16 * s_16);
+        T s_5 = (a2 * a2 * sin(sqrt(s_16)))/sqrt(s_16 * s_16 * s_16);
+        T s_4 = (a1 * a2 * a3 * sin(sqrt(s_16)))/sqrt(s_16 * s_16 * s_16);
+        T s_3 = (a1 * a2 * a2 * sin(sqrt(s_16)))/sqrt(s_16 * s_16 * s_16);
+        T s_2 = (a2 * a2 * a3 * sin(sqrt(s_16)))/sqrt(s_16 * s_16 * s_16);
+        T s_1 = (a2 * sin(sqrt(s_16)))/sqrt(s_16);
+
+        T dR_d2[9];
+        dR_d2[0] = (T(2)*a1*a1*a2*s_15)/(s_16*s_16) - s_1 + (a1*a1*a2*sin(sqrt(s_16)))/sqrt(s_16*s_16*s_16);
+        dR_d2[1] = s_9 - (a1*s_15)/s_16 + s_12 - s_6 + s_3;
+        dR_d2[2] = s_5 - s_11 - s_14 + s_10 + s_4;
+        dR_d2[3] = s_9 - (a1*s_15)/s_16 - s_12 + s_6 + s_3;
+        dR_d2[4] = (a2*a2*a2*sin(sqrt(s_16)))/sqrt(s_16*s_16*s_16) - (T(2)*a2*s_15)/(s_16) - (s_1) + (T(2)*a2*a2*a2*s_15)/(s_16*s_16);
+        dR_d2[5] = s_8 - (a3*s_15)/s_16 + s_13 - s_7 + s_2;
+        dR_d2[6] = s_14 + s_11 - s_5 + s_10 + s_4;
+        dR_d2[7] = s_8 - (a3*s_15)/s_16 - s_13 + s_7 + s_2;
+        dR_d2[8] = (T(2)*a2*a3*a3*s_15)/(s_16*s_16) - s_1 + (a2*a3*a3*sin(sqrt(s_16)))/sqrt(s_16*s_16*s_16);
+
+
+
+        T t_16 = a1*a1 + a2*a2 + a3*a3;
+        T t_15 = cos(sqrt(t_16)) - T(1);
+        T t_14 = sin(sqrt(t_16))/sqrt(t_16);
+        T t_13 = (a1 * a3 * cos(sqrt(t_16))) / t_16;
+        T t_12 = (a2 * a3 * cos(sqrt(t_16))) / t_16;
+        T t_11 = (a3 * a3 * cos(sqrt(t_16))) / t_16;
+        T t_10 = (T(2) * a1 * a2 * a3 * t_15) / (t_16 * t_16);
+        T t_9 = (T(2) * a1 * a3 * a3 * t_15) / (t_16 * t_16);
+        T t_8 = (T(2) * a2 * a3 * a3 * t_15) / (t_16 * t_16);
+        T t_7 = (a1 * a3 * sin(sqrt(t_16)))/sqrt(t_16 * t_16 * t_16);
+        T t_6 = (a2 * a3 * sin(sqrt(t_16)))/sqrt(t_16 * t_16 * t_16);
+        T t_5 = (a3 * a3 * sin(sqrt(t_16)))/sqrt(t_16 * t_16 * t_16);
+        T t_4 = (a1 * a2 * a3 * sin(sqrt(t_16)))/sqrt(t_16 * t_16 * t_16);
+        T t_3 = (a1 * a3 * a3 * sin(sqrt(t_16)))/sqrt(t_16 * t_16 * t_16);
+        T t_2 = (a2 * a3 * a3 * sin(sqrt(t_16)))/sqrt(t_16 * t_16 * t_16);
+        T t_1 = (a3 * sin(sqrt(t_16)))/sqrt(t_16);
+
+        T dR_d3[9];
+        dR_d3[0] = (T(2)*a1*a1*a3*t_15)/(t_16*t_16) - t_1 + (a1*a1*a3*sin(sqrt(t_16)))/sqrt(t_16*t_16*t_16);
+        dR_d3[1] = t_14 + t_11 - t_5 + t_10 + t_4;
+        dR_d3[2] = t_9 - (a1*t_15)/t_16 - t_12 + t_6 + t_3;
+        dR_d3[3] = t_5 - t_11 - t_14 + t_10 + t_4;
+        dR_d3[4] = (T(2)*a2*a2*a3*t_15)/(t_16*t_16) - t_1 + (a2*a2*a3*sin(sqrt(t_16)))/sqrt(t_16*t_16*t_16);
+        dR_d3[5] = t_8 - (a2*t_15)/t_16 + t_13 - t_7 + t_2;
+        dR_d3[6] = t_9 - (a1*t_15)/t_16 + t_12 - t_6 + t_3;
+        dR_d3[7] = t_8 - (a2*t_15)/t_16 - t_13 + t_7 + t_2;
+        dR_d3[8] = (a3*a3*a3*sin(sqrt(t_16)))/sqrt(t_16*t_16*t_16) - (T(2)*a3*t_15)/(t_16) - (t_1) + (T(2)*a3*a3*a3*t_15)/(t_16*t_16);
+
+
+        T mx = T(pt2D.x) - T(K[0]);
+        T my = T(pt2D.y) - T(K[1]);
+        T f = (T(K[2]) + T(K[3])) / T(2);
+        T r = K[4] / (f * f);
+        T r2 = r * (mx * mx + my * my);
+        T xi = (T(1)+r2)*mx + T(K[0]);
+        T eta = (T(1)+r2)*my + T(K[1]);
+
+        T fx = T(K[2]);
+        T fy = T(K[3]);
+        T cx = T(K[0]);
+        T cy = T(K[1]);
+
+        T res0 = lambda[0] * fx;
+        residuals[0] = res0;
+        T res1 = mu[0] * fy;
+        residuals[1] = res1;
+        T res2 = lambda[0] * (cx - (xi - delta_gamma[0])) + mu[0] * (cy - (eta - delta_gamma[1]));
+        residuals[2] = res2;
+
+        T A1[3];
+        A1[0] = dR_d1[0] * T(pt3D[0]) + dR_d1[3] * T(pt3D[1]) + dR_d1[6] * T(pt3D[2]);
+        A1[1] = dR_d1[1] * T(pt3D[0]) + dR_d1[4] * T(pt3D[1]) + dR_d1[7] * T(pt3D[2]);
+        A1[2] = dR_d1[2] * T(pt3D[0]) + dR_d1[5] * T(pt3D[1]) + dR_d1[8] * T(pt3D[2]);
+
+        T B1[3];
+        B1[0] = fx * A1[0]              + cx * A1[2];
+        B1[1] =              fy * A1[1] + cy * A1[2];
+        B1[2] =                                A1[2];
+
+        T res3 = lambda[0] * (B1[0] - (xi - delta_gamma[0])*B1[2]) + mu[0] * (B1[1] - (eta - delta_gamma[1]) * B1[2]);
+        residuals[3] = res3;
+
+        T A2[3];
+        A2[0] = dR_d2[0] * T(pt3D[0]) + dR_d2[3] * T(pt3D[1]) + dR_d2[6] * T(pt3D[2]);
+        A2[1] = dR_d2[1] * T(pt3D[0]) + dR_d2[4] * T(pt3D[1]) + dR_d2[7] * T(pt3D[2]);
+        A2[2] = dR_d2[2] * T(pt3D[0]) + dR_d2[5] * T(pt3D[1]) + dR_d2[8] * T(pt3D[2]);
+
+        T B2[3];
+        B2[0] = fx * A2[0]              + cx * A2[2];
+        B2[1] =              fy * A2[1] + cy * A2[2];
+        B2[2] =                                A2[2];
+
+        T res4 = lambda[0] * (B2[0] - (xi - delta_gamma[0])*B2[2]) + mu[0] * (B2[1] - (eta - delta_gamma[1]) * B2[2]);
+        residuals[4] = res4;
+
+        T A3[3];
+        A3[0] = dR_d3[0] * T(pt3D[0]) + dR_d3[3] * T(pt3D[1]) + dR_d3[6] * T(pt3D[2]);
+        A3[1] = dR_d3[1] * T(pt3D[0]) + dR_d3[4] * T(pt3D[1]) + dR_d3[7] * T(pt3D[2]);
+        A3[2] = dR_d3[2] * T(pt3D[0]) + dR_d3[5] * T(pt3D[1]) + dR_d3[8] * T(pt3D[2]);
+
+        T B3[3];
+        B3[0] = fx * A3[0]              + cx * A3[2];
+        B3[1] =              fy * A3[1] + cy * A3[2];
+        B3[2] =                                A3[2];
+
+        T res5 = lambda[0] * (B3[0] - (xi - delta_gamma[0])*B3[2]) + mu[0] * (B3[1] - (eta - delta_gamma[1]) * B3[2]);
+        residuals[5] = res5;
+
+        return true;
+    }
+
+    static ceres::CostFunction * Create(const vector<double> & K,
+                                        const cv::Point2d & pt2D,
+                                        const Eigen::Vector3d & pt3D) {
+        return (new ceres::AutoDiffCostFunction<Bottom2, 6, 1, 1, 3, 2> (new Bottom2(K, pt2D, pt3D)));
+    }
+
+    vector<double> K;
+    cv::Point2d pt2D;
+    Eigen::Vector3d pt3D;
+};
+
+pair<vector<cv::Point2d>, vector<Eigen::Vector3d>>
+pose::num_sys_solution (const vector<Eigen::Matrix3d> & R_is,
+                        const vector<Eigen::Vector3d> & T_is,
+                        const vector<vector<double>> & K_is,
+                        const vector<double> & K_q,
+                        const vector<vector<cv::Point2d>> & all_pts_q,
+                        const vector<vector<cv::Point2d>> & all_pts_i,
+                        Eigen::Matrix3d & R_q,
+                        Eigen::Vector3d & T_q) {
+
+    int K = int(R_is.size());
+
+    double A[3];
+    double R[9]{R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
+    ceres::RotationMatrixToAngleAxis(R, A);
+    double T[3] {T_q[0], T_q[1], T_q[2]};
+
+    double lambdas[10000][1];
+    double mus[10000][1];
+    double delta_gammas[10000][2];
+
+
+    vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(R_is, T_is, K_is, all_pts_q, all_pts_i);
+
+    ceres::Problem problem;
+    ceres::LossFunction *loss1 = new ceres::CauchyLoss(1);
+    ceres::LossFunction *loss2 = new ceres::CauchyLoss(1);
+
+    vector<cv::Point2d> points2d;
+    vector<Eigen::Vector3d> points3d;
+    for (int i = 0; i < all_matches.size(); i++) {
+        auto p = all_matches[i];
+        cv::Point2d pt2D(p.first.first, p.first.second);
+        Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
+
+        lambdas[i][0] = 0.01;
+        mus[i][0] = 0.01;
+
+        auto top2 = Top2::Create(K_q, pt2D, pt3D);
+        problem.AddResidualBlock(top2, loss1, lambdas[i], mus[i], A, T);
+
+        cv::Point2d dg = pose::delta_g(pt3D, pt2D, R_q, T_q, K_q);
+        delta_gammas[i][0] = dg.x;
+        delta_gammas[i][1] = dg.y;
+
+        auto bottom2 = Bottom2::Create(K_q, pt2D, pt3D);
+        problem.AddResidualBlock(bottom2, loss2, lambdas[i], mus[i], A, delta_gammas[i]);
+
+        points2d.push_back(pt2D);
+        points3d.push_back(pt3D);
+    }
+    ceres::Solver::Options options;
+    options.linear_solver_type = ceres::DENSE_SCHUR;
+    ceres::Solver::Summary summary;
+    if (problem.NumResidualBlocks() > 0) {
+        ceres::Solve(options, &problem, &summary);
+    } else {
+        cout << " Can't Adjust ";
+    }
+
+    double R_adj[9];
+    ceres::AngleAxisToRotationMatrix(A, R_adj);
+    R_q = Eigen::Matrix3d{{R_adj[0], R_adj[3], R_adj[6]},
+                          {R_adj[1], R_adj[4], R_adj[7]},
+                          {R_adj[2], R_adj[5], R_adj[8]}};
+    T_q = Eigen::Vector3d{T[0], T[1], T[2]};
+
+    return {points2d, points3d};
+}
+
+
+
+
+
+
 struct NView {
     NView(Eigen::Matrix3d R_,
           Eigen::Vector3d T_,
@@ -367,6 +682,35 @@ double pose::reprojError(const Eigen::Vector3d & point3d,
     double d = sqrt(pow(u - reproj.x, 2.) + pow(v - reproj.y, 2.));
     return d;
 }
+
+cv::Point2d pose::delta_g(const Eigen::Vector3d & point3d,
+                     const cv::Point2d & point2d,
+                     const Eigen::Matrix3d & R,
+                     const Eigen::Vector3d & T,
+                     const vector<double> & K) {
+
+    cv::Point2d reproj = pose::reproject3Dto2D(point3d, R, T, K);
+
+    double f = (K[2] + K[3]) / 2;
+    double r = K[4] / (f * f);
+    double x = point2d.x - K[0];
+    double y = point2d.y - K[1];
+    double r2 = r * (x * x + y * y);
+
+    x = (1 + r2)*x + K[0];
+    y = (1 + r2)*y + K[1];
+
+    double u = x - reproj.x;
+    double v = y - reproj.y;
+
+    cv::Point2d dg (u, v);
+
+    return dg;
+}
+
+
+
+
 
 
 

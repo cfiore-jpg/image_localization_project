@@ -53,6 +53,12 @@ namespace pose {
                        const vector<double> &K,
                        double mx, double my);
 
+    cv::Point2d delta_g(const Eigen::Vector3d &point3d,
+                        const cv::Point2d &point2d,
+                        const Eigen::Matrix3d &R,
+                        const Eigen::Vector3d &T,
+                        const vector<double> &K);
+
     void estimatePose(const vector<Eigen::Matrix3d> &R_ks,
                       const vector<Eigen::Vector3d> &T_ks,
                       const vector<Eigen::Vector3d> &T_qks,
@@ -98,10 +104,7 @@ namespace pose {
 
     Eigen::Matrix3d R_q_average(const vector<Eigen::Matrix3d> &rotations);
 
-    Eigen::Matrix3d R_q_average_govindu(const vector<Eigen::Matrix3d> & R_qis, const vector<Eigen::Matrix3d> & R_is);
-
-
-
+    Eigen::Matrix3d R_q_average_govindu(const vector<Eigen::Matrix3d> &R_qis, const vector<Eigen::Matrix3d> &R_is);
 
 
     Eigen::Matrix3d R_q_closed_form(bool use_Rqk, bool normalize, bool version,
@@ -134,6 +137,16 @@ namespace pose {
     //// FINAL POSE ADJUSTMENT
     pair<vector<cv::Point2d>, vector<Eigen::Vector3d>>
     adjustHypothesis(const vector<Eigen::Matrix3d> &R_is,
+                     const vector<Eigen::Vector3d> &T_is,
+                     const vector<vector<double>> &K_is,
+                     const vector<double> &K_q,
+                     const vector<vector<cv::Point2d>> &all_pts_q,
+                     const vector<vector<cv::Point2d>> &all_pts_i,
+                     Eigen::Matrix3d &R_q,
+                     Eigen::Vector3d &T_q);
+
+    pair<vector<cv::Point2d>, vector<Eigen::Vector3d>>
+    num_sys_solution(const vector<Eigen::Matrix3d> &R_is,
                      const vector<Eigen::Vector3d> &T_is,
                      const vector<vector<double>> &K_is,
                      const vector<double> &K_q,

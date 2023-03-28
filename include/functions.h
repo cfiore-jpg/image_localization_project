@@ -171,4 +171,6 @@ namespace functions {
                           const unordered_set<string> & unincluded_top1000,
                           const string & Title);
 
+    vector<double> eulerFromRotMat(const Eigen::Matrix3d & R);
+
 }
