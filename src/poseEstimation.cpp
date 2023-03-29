@@ -316,6 +316,7 @@ pose::num_sys_solution (const vector<Eigen::Matrix3d> & R_is,
         points3d.push_back(pt3D);
     }
     ceres::Solver::Options options;
+    options.minimizer_progress_to_stdout = true;
     options.linear_solver_type = ceres::DENSE_SCHUR;
     ceres::Solver::Summary summary;
     if (problem.NumResidualBlocks() > 0) {

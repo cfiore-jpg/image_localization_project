@@ -87,7 +87,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -225,7 +225,7 @@ int main() {
                         + " " + to_string(c_error_est)
                         + " Post_Adj " + to_string(r_error_adj)
                         + " " + to_string(c_error_adj);
-                error << line << endl;
+                // error << line << endl;
                 cout << line << endl;
             }
         }
