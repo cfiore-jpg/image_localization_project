@@ -23,7 +23,8 @@ namespace functions {
     pair<double, double> mean_and_stdv(const vector<double> & v);
 
     vector<pair<pair<double, double>, vector<pair<int, int>>>>
-    findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
+    findSharedMatches(int min_views,
+                      const vector<Eigen::Matrix3d> & R_is,
                       const vector<Eigen::Vector3d> & T_is,
                       const vector<vector<double>> & K_is,
                       const vector<vector<cv::Point2d>> & all_pts_q,

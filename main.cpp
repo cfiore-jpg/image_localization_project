@@ -87,7 +87,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -193,7 +193,7 @@ int main() {
                 c_error_est = functions::getDistBetween(c_q, c_estimation);
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
 
-                cout << " " << best_R_is.size() << "/" << R_is.size();
+                cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
 
                 Eigen::Matrix3d R_adjusted = R_estimation;
                 Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;

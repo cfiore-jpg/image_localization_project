@@ -43,7 +43,8 @@ pair<double, double> functions::mean_and_stdv(const vector<double> & v) {
 }
 
 vector<pair<pair<double, double>, vector<pair<int, int>>>>
-functions::findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
+functions::findSharedMatches(int min_views,
+                             const vector<Eigen::Matrix3d> & R_is,
                              const vector<Eigen::Vector3d> & T_is,
                              const vector<vector<double>> & K_is,
                              const vector<vector<cv::Point2d>> & all_pts_q,
@@ -68,7 +69,7 @@ functions::findSharedMatches(const vector<Eigen::Matrix3d> & R_is,
 
     vector<pair<pair<double, double>, vector<pair<int, int>>>> result;
     for (const auto & it : m) {
-        if(it.second.size() >= 2) {
+        if(it.second.size() >= min_views) {
             result.emplace_back(it);
         }
     }
