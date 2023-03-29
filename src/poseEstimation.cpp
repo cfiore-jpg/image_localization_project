@@ -307,7 +307,7 @@ pose::num_sys_solution (const vector<Eigen::Matrix3d> & R_is,
     vector<Eigen::Vector3d> points3d;
     vector<double *> parameters {A};
 
-    for(int i = 0; i < 500; i++) {
+    for(int i = 0; i < 1000; i++) {
 
             auto p = all_matches[i];
             cv::Point2d pt2D(p.first.first, p.first.second);

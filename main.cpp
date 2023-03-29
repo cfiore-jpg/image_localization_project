@@ -122,6 +122,8 @@ int main() {
             double r_error_est;
             double c_error_adj;
             double r_error_adj;
+            double c_error_num;
+            double r_error_num;
             if (K == 0) {
                 R_adjustment << 1., 0., 0., 0., 1., 0., 0., 0., 1.;
                 T_adjustment << 0., 0., 0.;
@@ -197,12 +199,21 @@ int main() {
 
                 Eigen::Matrix3d R_adjusted = R_estimation;
                 Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
-                auto adj_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
+                auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
                                                          best_inliers_i,
                                                          R_adjusted, T_adjusted);
                 Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
                 c_error_adj = functions::getDistBetween(c_q, c_adjusted);
                 r_error_adj = functions::rotationDifference(R_q, R_adjusted);
+
+                Eigen::Matrix3d R_numerical = R_adjusted;
+                Eigen::Vector3d T_numerical = T_adjusted;
+                auto numerical_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
+                                                               best_inliers_i,
+                                                               R_numerical, T_numerical);
+                Eigen::Vector3d c_numerical = -R_numerical.transpose() * T_numerical;
+                c_error_num = functions::getDistBetween(c_q, c_numerical);
+                r_error_num = functions::rotationDifference(R_q, R_numerical);
 
                 cout << " " << adj_points.first.size() << endl;
             }
@@ -224,7 +235,9 @@ int main() {
                 line += query + " Pre_Adj " + to_string(r_error_est)
                         + " " + to_string(c_error_est)
                         + " Post_Adj " + to_string(r_error_adj)
-                        + " " + to_string(c_error_adj);
+                        + " " + to_string(c_error_adj)
+                        + " Post_Numerical " + to_string(r_error_num)
+                        + " " + to_string(c_error_num);
                 // error << line << endl;
                 cout << line << endl;
             }
