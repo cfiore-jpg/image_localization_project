@@ -206,8 +206,8 @@ int main() {
                 c_error_adj = functions::getDistBetween(c_q, c_adjusted);
                 r_error_adj = functions::rotationDifference(R_q, R_adjusted);
 
-                Eigen::Matrix3d R_numerical = R_adjusted;
-                Eigen::Vector3d T_numerical = T_adjusted;
+                Eigen::Matrix3d R_numerical = R_estimation;
+                Eigen::Vector3d T_numerical = T_estimation;
                 auto numerical_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
                                                                best_inliers_i,
                                                                R_numerical, T_numerical);
