@@ -24,6 +24,135 @@
 
 
 /// CERES COST FUNCTIONS
+struct F1 {
+    template <typename T>
+    bool operator()(const T* const x1, const T* const x2, T* residual) const {
+        residual[0] = x1[0] + 10.0 * x2[0];
+        return true;
+    }
+};
+struct F2 {
+    template <typename T>
+    bool operator()(const T* const x3, const T* const x4, T* residual) const {
+        residual[0] = sqrt(5.0) * (x3[0] - x4[0]);
+        return true;
+    }
+};
+struct F3 {
+    template <typename T>
+    bool operator()(const T* const x2, const T* const x3, T* residual) const {
+        residual[0] = (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]);
+        return true;
+    }
+};
+struct F4 {
+    template <typename T>
+    bool operator()(const T* const x1, const T* const x4, T* residual) const {
+        residual[0] = sqrt(10.0) * (x1[0] - x4[0]) * (x1[0] - x4[0]);
+        return true;
+    }
+};
+
+struct Deriv {
+    template<typename T>
+    bool operator()(const T* const x1, const T* const x2, const T* const x3, const T* const x4, T * residuals) const {
+        residuals[0] = 2.0 * (x1[0] + 10.0 * x2[0]) + 40.0 * (x1[0] - x4[0]) * (x1[0] - x4[0]) * (x1[0] - x4[0]);
+        residuals[1] = 20.0 * (x1[0] + 10.0 * x2[0]) + 4.0 * (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]);
+        residuals[2] = 10.0 * (x3[0] - x4[0]) - 8.0 * (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]);
+        residuals[3] = -10.0 * (x3[0] - x4[0]) - 40.0 * (x1[0] - x4[0]) * (x1[0] - x4[0]) * (x1[0] - x4[0]);
+        return true;
+    }
+};
+
+void pose::solution_tester() {
+
+    double x1 = 1.0;
+    double x2 = 1.0;
+    double x3 = 1.0;
+    double x4 = 1.0;
+    ceres::Problem problem_0;
+    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F1, 1, 1, 1>(new F1), nullptr, &x1, &x2);
+    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F2, 1, 1, 1>(new F2), nullptr, &x3, &x4);
+    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F3, 1, 1, 1>(new F3), nullptr, &x2, &x3);
+    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F4, 1, 1, 1>(new F4), nullptr, &x1, &x4);
+    ceres::Solver::Options options_0;
+    options_0.linear_solver_type = ceres::DENSE_SCHUR;
+    ceres::Solver::Summary summary_0;
+    auto start_0 = chrono::high_resolution_clock::now();
+    ceres::Solve(options_0, &problem_0, &summary_0);
+    auto stop_0 = chrono::high_resolution_clock::now();
+    auto duration_0 = chrono::duration_cast<chrono::microseconds>(stop_0 - start_0);
+
+
+    x1 = 1.0;
+    x2 = 1.0;
+    x3 = 1.0;
+    x4 = 1.0;
+    ceres::Problem problem_1;
+    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F1, 1, 1, 1>(new F1), nullptr, &x1, &x2);
+    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F2, 1, 1, 1>(new F2), nullptr, &x3, &x4);
+    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F3, 1, 1, 1>(new F3), nullptr, &x2, &x3);
+    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F4, 1, 1, 1>(new F4), nullptr, &x1, &x4);
+
+    ceres::Solver::Options options_1;
+    options_1.linear_solver_type = ceres::DENSE_SCHUR;
+    ceres::Solver::Summary summary_1;
+    auto start_1 = chrono::high_resolution_clock::now();
+    ceres::Solve(options_1, &problem_1, &summary_1);
+    auto stop_1 = chrono::high_resolution_clock::now();
+    auto duration_1 = chrono::duration_cast<chrono::microseconds>(stop_1 - start_1);
+    cout << "Time taken to minimize function : " << duration_1.count() << " microseconds" << endl;
+    cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << ", x4=" << x4 << endl;
+    double poly = pow(x1 + 10 * x2, 2)
+                  + pow(sqrt(5) * (x3 - x4), 2)
+                  + pow(pow(x2 - 2 * x3, 2), 2)
+                  + pow(sqrt(10) * pow(x1 - x4, 2), 2);
+    cout << "function = " << poly << endl;
+    double d1 = 2 * (x1 + 10 * x2) + 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
+    double d2 = 20 * (x1 + 10 * x2) + 4 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
+    double d3 = 10 * (x3 - x4) - 8 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
+    double d4 = -10 * (x3 - x4) - 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
+    cout << "deriv1=" << d1 << ", deriv2=" << d2 << ", deriv3=" << d3 << ", deriv4=" << d4 << endl << endl;
+
+
+
+
+    x1 = 1.0;
+    x2 = 1.0;
+    x3 = 1.0;
+    x4 = 1.0;
+    ceres::Problem problem_2;
+    problem_2.AddResidualBlock(new ceres::AutoDiffCostFunction<Deriv, 4, 1, 1, 1, 1>(new Deriv), nullptr, &x1, &x2, &x3, &x4);
+
+    ceres::Solver::Options options_2;
+    options_2.linear_solver_type = ceres::DENSE_SCHUR;
+    ceres::Solver::Summary summary_2;
+    auto start_2 = chrono::high_resolution_clock::now();
+    ceres::Solve(options_2, &problem_2, &summary_2);
+    auto stop_2 = chrono::high_resolution_clock::now();
+    auto duration_2 = chrono::duration_cast<chrono::microseconds>(stop_2 - start_2);
+    cout << "Time taken to minimize derivatives squared : " << duration_2.count() << " microseconds" << endl;
+    cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << ", x4=" << x4 << endl;
+    poly = pow(x1 + 10 * x2, 2)
+                  + pow(sqrt(5) * (x3 - x4), 2)
+                  + pow(pow(x2 - 2 * x3, 2), 2)
+                  + pow(sqrt(10) * pow(x1 - x4, 2), 2);
+    cout << "function = " << poly << endl;
+    d1 = 2 * (x1 + 10 * x2) + 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
+    d2 = 20 * (x1 + 10 * x2) + 4 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
+    d3 = 10 * (x3 - x4) - 8 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
+    d4 = -10 * (x3 - x4) - 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
+    cout << "deriv1=" << d1 << ", deriv2=" << d2 << ", deriv3=" << d3 << ", deriv4=" << d4 << endl << endl;
+
+}
+
+
+
+
+
+
+
+
 struct Top2 {
     Top2 (vector<double> K,
           cv::Point2d pt2D,
@@ -64,12 +193,12 @@ struct Top2 {
         T left1 = 0.5 * B[2] * B[2] * lambda;
         T right1 = xi * B[2] - B[0];
         T res0 = left1 - right1;
-        residuals[0] = res0 * res0;
+        residuals[0] = res0;
 
         T left2 = 0.5 * B[2] * B[2] * mu;
         T right2 = eta * B[2] - B[1];
         T res1 = left2 - right2;
-        residuals[1] = res1 * res1;
+        residuals[1] = res1;
 
         return true;
     }
@@ -251,12 +380,12 @@ struct Bottom2 {
             res5 += lambda * (B3[0] - (xi - u) * B3[2]) + mu * (B3[1] - (eta - v) * B3[2]);
         }
 
-        residuals[0] = res0 * res0;
-        residuals[1] = res1 * res1;
-        residuals[2] = res2 * res2;
-        residuals[3] = res3 * res3;
-        residuals[4] = res4 * res4;
-        residuals[5] = res5 * res5;
+        residuals[0] = res0;
+        residuals[1] = res1;
+        residuals[2] = res2;
+        residuals[3] = res3;
+        residuals[4] = res4;
+        residuals[5] = res5;
 
         return true;
     }
@@ -280,14 +409,14 @@ struct Bottom2 {
 };
 
 pair<vector<cv::Point2d>, vector<Eigen::Vector3d>>
-pose::num_sys_solution (const vector<Eigen::Matrix3d> & R_is,
-                        const vector<Eigen::Vector3d> & T_is,
-                        const vector<vector<double>> & K_is,
-                        const vector<double> & K_q,
-                        const vector<vector<cv::Point2d>> & all_pts_q,
-                        const vector<vector<cv::Point2d>> & all_pts_i,
-                        Eigen::Matrix3d & R_q,
-                        Eigen::Vector3d & T_q) {
+pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
+                       const vector<Eigen::Vector3d> & T_is,
+                       const vector<vector<double>> & K_is,
+                       const vector<double> & K_q,
+                       const vector<vector<cv::Point2d>> & all_pts_q,
+                       const vector<vector<cv::Point2d>> & all_pts_i,
+                       Eigen::Matrix3d & R_q,
+                       Eigen::Vector3d & T_q) {
 
     int K = int(R_is.size());
 
@@ -331,7 +460,8 @@ pose::num_sys_solution (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Solver::Options options;
     options.minimizer_progress_to_stdout = true;
-    options.linear_solver_type = ceres::DENSE_SCHUR;
+    options.linear_solver_type = ceres::ITERATIVE_SCHUR;
+    options.preconditioner_type = ceres::SCHUR_JACOBI;
     ceres::Solver::Summary summary;
     if (problem.NumResidualBlocks() > 0) {
         ceres::Solve(options, &problem, &summary);

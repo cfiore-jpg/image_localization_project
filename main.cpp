@@ -59,7 +59,6 @@ void findInliers (double thresh,
 
 
 int main() {
-
     double thresh = 5;
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};

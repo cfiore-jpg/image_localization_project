@@ -23,6 +23,8 @@
 
 namespace pose {
 
+    void solution_tester();
+
     Eigen::Vector3d estimate3Dpoint(const vector<pair<int, int>> &matches,
                                     const vector<Eigen::Matrix3d> &R_is,
                                     const vector<Eigen::Vector3d> &T_is,
