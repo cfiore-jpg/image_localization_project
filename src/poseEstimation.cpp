@@ -426,7 +426,7 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
     double T[3] {T_q[0], T_q[1], T_q[2]};
     double lmuvs[10000][4];
 
-    vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(5, R_is, T_is, K_is, all_pts_q, all_pts_i);
+    vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(2, R_is, T_is, K_is, all_pts_q, all_pts_i);
 
     ceres::Problem problem;
     ceres::LossFunction *loss1 = new ceres::CauchyLoss(1);
@@ -683,7 +683,8 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    for (const auto & p: all_matches) {
+    for (int i = 0; i < 1000; i++) {
+        auto p = all_matches[i];
         cv::Point2d pt2D(p.first.first, p.first.second);
         Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
         auto cost = ReprojectionError::Create(pt2D, pt3D, K_q);
