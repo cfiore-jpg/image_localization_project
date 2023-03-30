@@ -436,7 +436,7 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
     vector<Eigen::Vector3d> points3d;
     vector<double *> parameters {A};
 
-    for(int i = 0; i < 1000; i++) {
+    for(int i = 0; i < min(int(all_matches.size()), 1500); i++) {
 
         auto p = all_matches[i];
         cv::Point2d pt2D(p.first.first, p.first.second);
@@ -444,8 +444,8 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
         points2d.push_back(pt2D);
         points3d.push_back(pt3D);
 
-        lmuvs[i][0] = 0.0001;
-        lmuvs[i][1] = 0.0001;
+        lmuvs[i][0] = 0.000001;
+        lmuvs[i][1] = 0.000001;
         cv::Point2d dg = pose::delta_g(pt3D, pt2D, R_q, T_q, K_q);
         lmuvs[i][2] = dg.x;
         lmuvs[i][3] = dg.y;
@@ -683,7 +683,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < all_matches.size(); i++) {
         auto p = all_matches[i];
         cv::Point2d pt2D(p.first.first, p.first.second);
         Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
