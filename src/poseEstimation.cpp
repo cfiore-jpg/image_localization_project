@@ -134,9 +134,9 @@ void pose::solution_tester() {
     cout << "Time taken to minimize derivatives squared : " << duration_2.count() << " microseconds" << endl;
     cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << ", x4=" << x4 << endl;
     poly = pow(x1 + 10 * x2, 2)
-                  + pow(sqrt(5) * (x3 - x4), 2)
-                  + pow(pow(x2 - 2 * x3, 2), 2)
-                  + pow(sqrt(10) * pow(x1 - x4, 2), 2);
+           + pow(sqrt(5) * (x3 - x4), 2)
+           + pow(pow(x2 - 2 * x3, 2), 2)
+           + pow(sqrt(10) * pow(x1 - x4, 2), 2);
     cout << "function = " << poly << endl;
     d1 = 2 * (x1 + 10 * x2) + 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
     d2 = 20 * (x1 + 10 * x2) + 4 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
@@ -157,7 +157,7 @@ struct Top2 {
     Top2 (vector<double> K,
           cv::Point2d pt2D,
           Eigen::Vector3d pt3D)
-          : K(std::move(K)), pt2D(std::move(pt2D)), pt3D(std::move(pt3D)) {}
+            : K(std::move(K)), pt2D(std::move(pt2D)), pt3D(std::move(pt3D)) {}
 
     template<typename T>
     bool operator()(
@@ -438,22 +438,22 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
 
     for(int i = 0; i < 1000; i++) {
 
-            auto p = all_matches[i];
-            cv::Point2d pt2D(p.first.first, p.first.second);
-            Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
-            points2d.push_back(pt2D);
-            points3d.push_back(pt3D);
+        auto p = all_matches[i];
+        cv::Point2d pt2D(p.first.first, p.first.second);
+        Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
+        points2d.push_back(pt2D);
+        points3d.push_back(pt3D);
 
-            lmuvs[i][0] = 0.0001;
-            lmuvs[i][1] = 0.0001;
-            cv::Point2d dg = pose::delta_g(pt3D, pt2D, R_q, T_q, K_q);
-            lmuvs[i][2] = dg.x;
-            lmuvs[i][3] = dg.y;
+        lmuvs[i][0] = 0.0001;
+        lmuvs[i][1] = 0.0001;
+        cv::Point2d dg = pose::delta_g(pt3D, pt2D, R_q, T_q, K_q);
+        lmuvs[i][2] = dg.x;
+        lmuvs[i][3] = dg.y;
 
-            auto top2 = Top2::Create(K_q, pt2D, pt3D);
-            problem.AddResidualBlock(top2, loss1, lmuvs[i], A, T);
+        auto top2 = Top2::Create(K_q, pt2D, pt3D);
+        problem.AddResidualBlock(top2, loss1, lmuvs[i], A, T);
 
-            parameters.push_back(lmuvs[i]);
+        parameters.push_back(lmuvs[i]);
     }
     auto bottom2 = Bottom2::Create(K_q, points2d, points3d);
     problem.AddResidualBlock(bottom2, loss2, parameters);
