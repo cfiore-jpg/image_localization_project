@@ -24,42 +24,48 @@
 
 
 /// CERES COST FUNCTIONS
+
+
+// E = (x1 + 10)^2 + (x2*x2 - 9.0)^2 + (x2*x3 - 12.0)^2 + (x3*x3 - 16.0)^2
+// dE/dx1 = 2 * (x1 + 10.0);
+// dE/dx2 = 4 * x2 * (x2*x2 -  9.0) + 2.0 * x3 * (x2*x3 - 12.0);
+// dE/dx3 = 4 * x3 * (x3*x3 - 16.0) + 2.0 * x2 * (x2*x3 - 12.0);
+
 struct F1 {
     template <typename T>
-    bool operator()(const T* const x1, const T* const x2, T* residual) const {
-        residual[0] = x1[0] + 10.0 * x2[0];
+    bool operator()(const T* const x1, T* residual) const {
+        residual[0] = x1[0] + 10.0;
         return true;
     }
 };
 struct F2 {
     template <typename T>
-    bool operator()(const T* const x3, const T* const x4, T* residual) const {
-        residual[0] = sqrt(5.0) * (x3[0] - x4[0]);
+    bool operator()(const T* const x2, T* residual) const {
+        residual[0] = x2[0]*x2[0] - 9.0;
         return true;
     }
 };
 struct F3 {
     template <typename T>
     bool operator()(const T* const x2, const T* const x3, T* residual) const {
-        residual[0] = (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]);
+        residual[0] = x2[0]*x3[0] - 12.0;
         return true;
     }
 };
 struct F4 {
     template <typename T>
-    bool operator()(const T* const x1, const T* const x4, T* residual) const {
-        residual[0] = sqrt(10.0) * (x1[0] - x4[0]) * (x1[0] - x4[0]);
+    bool operator()(const T* const x3, T* residual) const {
+        residual[0] = x3[0]*x3[0] - 16.0;
         return true;
     }
 };
 
 struct Deriv {
     template<typename T>
-    bool operator()(const T* const x1, const T* const x2, const T* const x3, const T* const x4, T * residuals) const {
-        residuals[0] = 2.0 * (x1[0] + 10.0 * x2[0]) + 40.0 * (x1[0] - x4[0]) * (x1[0] - x4[0]) * (x1[0] - x4[0]);
-        residuals[1] = 20.0 * (x1[0] + 10.0 * x2[0]) + 4.0 * (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]);
-        residuals[2] = 10.0 * (x3[0] - x4[0]) - 8.0 * (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]) * (x2[0] - 2.0 * x3[0]);
-        residuals[3] = -10.0 * (x3[0] - x4[0]) - 40.0 * (x1[0] - x4[0]) * (x1[0] - x4[0]) * (x1[0] - x4[0]);
+    bool operator()(const T* const x1, const T* const x2, const T* const x3, T * residuals) const {
+        residuals[0] = 2.0 * (x1[0] + 10.0);
+        residuals[1] = 4.0 * x2[0] * (x2[0]*x2[0] -  9.0) + 2.0 * x3[0] * (x2[0]*x3[0] - 12.0);
+        residuals[2] = 4.0 * x3[0] * (x3[0]*x3[0] - 16.0) + 2.0 * x2[0] * (x2[0]*x3[0] - 12.0);
         return true;
     }
 };
@@ -67,14 +73,13 @@ struct Deriv {
 void pose::solution_tester() {
 
     double x1 = 1.0;
-    double x2 = 1.0;
-    double x3 = 1.0;
-    double x4 = 1.0;
+    double x2 = -3;
+    double x3 = -4;
     ceres::Problem problem_0;
-    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F1, 1, 1, 1>(new F1), nullptr, &x1, &x2);
-    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F2, 1, 1, 1>(new F2), nullptr, &x3, &x4);
+    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F1, 1, 1>(new F1), nullptr, &x1);
+    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F2, 1, 1>(new F2), nullptr, &x2);
     problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F3, 1, 1, 1>(new F3), nullptr, &x2, &x3);
-    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F4, 1, 1, 1>(new F4), nullptr, &x1, &x4);
+    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F4, 1, 1>(new F4), nullptr, &x3);
     ceres::Solver::Options options_0;
     options_0.linear_solver_type = ceres::DENSE_SCHUR;
     ceres::Solver::Summary summary_0;
@@ -84,16 +89,14 @@ void pose::solution_tester() {
     auto duration_0 = chrono::duration_cast<chrono::microseconds>(stop_0 - start_0);
 
 
-    x1 = 1.0;
-    x2 = 1.0;
-    x3 = 1.0;
-    x4 = 1.0;
+    x1 = -9;
+    x2 = 2;
+    x3 = 5;
     ceres::Problem problem_1;
-    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F1, 1, 1, 1>(new F1), nullptr, &x1, &x2);
-    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F2, 1, 1, 1>(new F2), nullptr, &x3, &x4);
+    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F1, 1, 1>(new F1), nullptr, &x1);
+    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F2, 1, 1>(new F2), nullptr, &x2);
     problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F3, 1, 1, 1>(new F3), nullptr, &x2, &x3);
-    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F4, 1, 1, 1>(new F4), nullptr, &x1, &x4);
-
+    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F4, 1, 1>(new F4), nullptr, &x3);
     ceres::Solver::Options options_1;
     options_1.linear_solver_type = ceres::DENSE_SCHUR;
     ceres::Solver::Summary summary_1;
@@ -102,28 +105,22 @@ void pose::solution_tester() {
     auto stop_1 = chrono::high_resolution_clock::now();
     auto duration_1 = chrono::duration_cast<chrono::microseconds>(stop_1 - start_1);
     cout << "Time taken to minimize function : " << duration_1.count() << " microseconds" << endl;
-    cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << ", x4=" << x4 << endl;
-    double poly = pow(x1 + 10 * x2, 2)
-                  + pow(sqrt(5) * (x3 - x4), 2)
-                  + pow(pow(x2 - 2 * x3, 2), 2)
-                  + pow(sqrt(10) * pow(x1 - x4, 2), 2);
+    cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << endl;
+    double poly = pow(x1 + 10, 2) + pow(x2*x2 - 9, 2) + pow(x2*x3 - 12, 2) + pow(x3*x3 -16, 2);
     cout << "function = " << poly << endl;
-    double d1 = 2 * (x1 + 10 * x2) + 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
-    double d2 = 20 * (x1 + 10 * x2) + 4 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
-    double d3 = 10 * (x3 - x4) - 8 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
-    double d4 = -10 * (x3 - x4) - 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
-    cout << "deriv1=" << d1 << ", deriv2=" << d2 << ", deriv3=" << d3 << ", deriv4=" << d4 << endl << endl;
+    double d1 = 2.0 * (x1 + 10.0);
+    double d2 = 4.0 * x2 * (x2*x2 -  9.0) + 2.0 * x3 * (x2*x3 - 12.0);
+    double d3 = 4.0 * x3 * (x3*x3 - 16.0) + 2.0 * x2 * (x2*x3 - 12.0);
+    cout << "deriv1=" << d1 << ", deriv2=" << d2 << ", deriv3=" << d3 << endl << endl;
 
 
 
 
-    x1 = 1.0;
-    x2 = 1.0;
-    x3 = 1.0;
-    x4 = 1.0;
+    x1 = -9;
+    x2 = 2;
+    x3 = 5;
     ceres::Problem problem_2;
-    problem_2.AddResidualBlock(new ceres::AutoDiffCostFunction<Deriv, 4, 1, 1, 1, 1>(new Deriv), nullptr, &x1, &x2, &x3, &x4);
-
+    problem_2.AddResidualBlock(new ceres::AutoDiffCostFunction<Deriv, 3, 1, 1, 1>(new Deriv), nullptr, &x1, &x2, &x3);
     ceres::Solver::Options options_2;
     options_2.linear_solver_type = ceres::DENSE_SCHUR;
     ceres::Solver::Summary summary_2;
@@ -132,17 +129,14 @@ void pose::solution_tester() {
     auto stop_2 = chrono::high_resolution_clock::now();
     auto duration_2 = chrono::duration_cast<chrono::microseconds>(stop_2 - start_2);
     cout << "Time taken to minimize derivatives squared : " << duration_2.count() << " microseconds" << endl;
-    cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << ", x4=" << x4 << endl;
-    poly = pow(x1 + 10 * x2, 2)
-           + pow(sqrt(5) * (x3 - x4), 2)
-           + pow(pow(x2 - 2 * x3, 2), 2)
-           + pow(sqrt(10) * pow(x1 - x4, 2), 2);
+    cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << endl;
+    poly = pow(x1 + 10, 2) + pow(x2*x2 - 9, 2) + pow(x2*x3 - 12, 2) + pow(x3*x3 -16, 2);
     cout << "function = " << poly << endl;
-    d1 = 2 * (x1 + 10 * x2) + 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
-    d2 = 20 * (x1 + 10 * x2) + 4 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
-    d3 = 10 * (x3 - x4) - 8 * (x2 - 2 * x3) * (x2 - 2 * x3) * (x2 - 2 * x3);
-    d4 = -10 * (x3 - x4) - 40 * (x1 - x4) * (x1 - x4) * (x1 - x4);
-    cout << "deriv1=" << d1 << ", deriv2=" << d2 << ", deriv3=" << d3 << ", deriv4=" << d4 << endl << endl;
+    d1 = 2.0 * (x1 + 10.0);
+    d2 = 4.0 * x2 * (x2*x2 -  9.0) + 2.0 * x3 * (x2*x3 - 12.0);
+    d3 = 4.0 * x3 * (x3*x3 - 16.0) + 2.0 * x2 * (x2*x3 - 12.0);
+    cout << "deriv1=" << d1 << ", deriv2=" << d2 << ", deriv3=" << d3 << endl;
+
 
 }
 
@@ -161,16 +155,16 @@ struct Top2 {
 
     template<typename T>
     bool operator()(
-            const T * const lmuv,
-            const T * const E_q,
+            const T * const lm,
+            const T * const A_q,
             const T * const T_q,
             T * residuals) const {
 
         T R_q[9];
-        ceres::AngleAxisToRotationMatrix(E_q, R_q);
+        ceres::AngleAxisToRotationMatrix(A_q, R_q);
 
-        T lambda = lmuv[0];
-        T mu = lmuv[1];
+        T lambda = lm[0];
+        T mu = lm[1];
 
         T A[3];
         A[0] = R_q[0] * T(pt3D(0)) + R_q[3] * T(pt3D(1)) + R_q[6] * T(pt3D(2)) + T_q[0];
@@ -206,7 +200,7 @@ struct Top2 {
     static ceres::CostFunction * Create(const vector<double> & K,
                                         const cv::Point2d & pt2D,
                                         const Eigen::Vector3d & pt3D) {
-        return (new ceres::AutoDiffCostFunction<Top2, 2, 4, 3, 3> (new Top2(K, pt2D, pt3D)));
+        return (new ceres::AutoDiffCostFunction<Top2, 2, 2, 3, 3> (new Top2(K, pt2D, pt3D)));
     }
 
     vector<double> K;
@@ -316,6 +310,19 @@ struct Bottom2 {
         dR_d3[8] = (a3 * a3 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16) - (T(2) * a3 * t_15) / (t_16) - (t_1) +
                    (T(2) * a3 * a3 * a3 * t_15) / (t_16 * t_16);
 
+        T A_q[3];
+        A_q[0] = parameters[0][0];
+        A_q[1] = parameters[0][1];
+        A_q[2] = parameters[0][2];
+
+        T R_q[9];
+        ceres::AngleAxisToRotationMatrix(A_q, R_q);
+
+        T T_q[3];
+        T_q[0] = parameters[1][0];
+        T_q[1] = parameters[1][1];
+        T_q[2] = parameters[1][2];
+
         T res0 = T(0);
         T res1 = T(0);
         T res2 = T(0);
@@ -327,10 +334,18 @@ struct Bottom2 {
             cv::Point2d pt2D = pts2D[i];
             Eigen::Vector3d pt3D = pts3D[i];
 
+            T A0[3];
+            A0[0] = R_q[0] * T(pt3D(0)) + R_q[3] * T(pt3D(1)) + R_q[6] * T(pt3D(2)) + T_q[0];
+            A0[1] = R_q[1] * T(pt3D(0)) + R_q[4] * T(pt3D(1)) + R_q[7] * T(pt3D(2)) + T_q[1];
+            A0[2] = R_q[2] * T(pt3D(0)) + R_q[5] * T(pt3D(1)) + R_q[8] * T(pt3D(2)) + T_q[2];
+
+            T B0[3];
+            B0[0] = T(K[2]) * A0[0] + T(K[0]) * A0[2];
+            B0[1] = T(K[3]) * A0[1] + T(K[1]) * A0[2];
+            B0[2] = A0[2];
+
             T lambda = parameters[i + 1][0];
             T mu = parameters[i + 1][1];
-            T u = parameters[i + 1][2];
-            T v = parameters[i + 1][3];
 
             T mx = T(pt2D.x) - T(K[0]);
             T my = T(pt2D.y) - T(K[1]);
@@ -347,7 +362,7 @@ struct Bottom2 {
 
             res0 += lambda * fx;
             res1 += mu * fy;
-            res2 += lambda * (cx - (xi - u)) + mu * (cy - (eta - v));
+            res2 += lambda * cx + mu * cy + ((0.5 * lambda * lambda + 0.5 * mu * mu) * B0[2] - lambda * xi - mu * eta);
 
             T A1[3];
             A1[0] = dR_d1[0] * T(pt3D[0]) + dR_d1[3] * T(pt3D[1]) + dR_d1[6] * T(pt3D[2]);
@@ -357,7 +372,7 @@ struct Bottom2 {
             B1[0] = fx * A1[0] + cx * A1[2];
             B1[1] = fy * A1[1] + cy * A1[2];
             B1[2] = A1[2];
-            res3 += lambda * (B1[0] - (xi - u) * B1[2]) + mu * (B1[1] - (eta - v) * B1[2]);
+            res3 += lambda * B1[0] + mu * B1[1] + ((0.5 * lambda * lambda + 0.5 * mu * mu) * B0[2] - lambda * xi - mu * eta) * B1[2];
 
             T A2[3];
             A2[0] = dR_d2[0] * T(pt3D[0]) + dR_d2[3] * T(pt3D[1]) + dR_d2[6] * T(pt3D[2]);
@@ -367,7 +382,7 @@ struct Bottom2 {
             B2[0] = fx * A2[0] + cx * A2[2];
             B2[1] = fy * A2[1] + cy * A2[2];
             B2[2] = A2[2];
-            res4 += lambda * (B2[0] - (xi - u) * B2[2]) + mu * (B2[1] - (eta - v) * B2[2]);
+            res4 += lambda * B2[0] + mu * B2[1] + ((0.5 * lambda * lambda + 0.5 * mu * mu) * B0[2] - lambda * xi - mu * eta) * B2[2];
 
             T A3[3];
             A3[0] = dR_d3[0] * T(pt3D[0]) + dR_d3[3] * T(pt3D[1]) + dR_d3[6] * T(pt3D[2]);
@@ -377,7 +392,7 @@ struct Bottom2 {
             B3[0] = fx * A3[0] + cx * A3[2];
             B3[1] = fy * A3[1] + cy * A3[2];
             B3[2] = A3[2];
-            res5 += lambda * (B3[0] - (xi - u) * B3[2]) + mu * (B3[1] - (eta - v) * B3[2]);
+            res5 += lambda * B3[0] + mu * B3[1] + ((0.5 * lambda * lambda + 0.5 * mu * mu) * B0[2] - lambda * xi - mu * eta) * B3[2];
         }
 
         residuals[0] = res0;
@@ -396,8 +411,9 @@ struct Bottom2 {
 
         auto cf = new ceres::DynamicAutoDiffCostFunction<Bottom2, 5> (new Bottom2(K, pts2D, pts3D));
         cf->AddParameterBlock(3);
+        cf->AddParameterBlock(3);
         for (int i = 0; i < pts2D.size(); i++) {
-            cf->AddParameterBlock(4);
+            cf->AddParameterBlock(2);
         }
         cf->SetNumResiduals(6);
         return (cf);
@@ -424,7 +440,7 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
     double R[9]{R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
     ceres::RotationMatrixToAngleAxis(R, A);
     double T[3] {T_q[0], T_q[1], T_q[2]};
-    double lmuvs[10000][4];
+    double lms[10000][2];
 
     vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(2, R_is, T_is, K_is, all_pts_q, all_pts_i);
 
@@ -434,7 +450,7 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    vector<double *> parameters {A};
+    vector<double *> parameters {A, T};
 
     for(int i = 0; i < min(int(all_matches.size()), 1500); i++) {
 
@@ -444,16 +460,13 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
         points2d.push_back(pt2D);
         points3d.push_back(pt3D);
 
-        lmuvs[i][0] = 0.000001;
-        lmuvs[i][1] = 0.000001;
-        cv::Point2d dg = pose::delta_g(pt3D, pt2D, R_q, T_q, K_q);
-        lmuvs[i][2] = dg.x;
-        lmuvs[i][3] = dg.y;
+        lms[i][0] = 0.000001;
+        lms[i][1] = 0.000001;
 
         auto top2 = Top2::Create(K_q, pt2D, pt3D);
-        problem.AddResidualBlock(top2, loss1, lmuvs[i], A, T);
+        problem.AddResidualBlock(top2, loss1, lms[i], A, T);
 
-        parameters.push_back(lmuvs[i]);
+        parameters.push_back(lms[i]);
     }
     auto bottom2 = Bottom2::Create(K_q, points2d, points3d);
     problem.AddResidualBlock(bottom2, loss2, parameters);

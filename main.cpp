@@ -59,6 +59,12 @@ void findInliers (double thresh,
 
 
 int main() {
+
+//    pose::solution_tester();
+//
+//
+//
+//    exit(0);
     double thresh = 5;
 
 //    vector<string> scenes = {"chess/", "fire/", "heads/", "office/", "pumpkin/", "redkitchen/", "stairs/"};
