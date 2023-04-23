@@ -33,111 +33,179 @@
 
 struct F1 {
     template <typename T>
-    bool operator()(const T* const x1, T* residual) const {
-        residual[0] = x1[0] + 10.0;
+    bool operator()(const T* const delta, T* residual) const {
+        residual[0] = delta[0];
         return true;
     }
-};
-struct F2 {
-    template <typename T>
-    bool operator()(const T* const x2, T* residual) const {
-        residual[0] = x2[0]*x2[0] - 9.0;
-        return true;
-    }
-};
-struct F3 {
-    template <typename T>
-    bool operator()(const T* const x2, const T* const x3, T* residual) const {
-        residual[0] = x2[0]*x3[0] - 12.0;
-        return true;
-    }
-};
-struct F4 {
-    template <typename T>
-    bool operator()(const T* const x3, T* residual) const {
-        residual[0] = x3[0]*x3[0] - 16.0;
-        return true;
+    static ceres::CostFunction * Create() {
+        return (new ceres::AutoDiffCostFunction<F1, 1, 1> (new F1));
     }
 };
 
-struct Deriv {
+struct F2 {
+    F2 (double a, double b, double c, double d)
+        : a(a), b(b), c(c), d(d) {}
     template<typename T>
-    bool operator()(const T* const x1, const T* const x2, const T* const x3, T * residuals) const {
-        residuals[0] = 2.0 * (x1[0] + 10.0);
-        residuals[1] = 4.0 * x2[0] * (x2[0]*x2[0] -  9.0) + 2.0 * x3[0] * (x2[0]*x3[0] - 12.0);
-        residuals[2] = 4.0 * x3[0] * (x3[0]*x3[0] - 16.0) + 2.0 * x2[0] * (x2[0]*x3[0] - 12.0);
+    bool operator()(const T * const r, const T * const t, const T * const delta, T* residual) const {
+        residual[0] = T(a)*r[0] + T(b)*t[0] + T(c)*delta[0] + T(d);
         return true;
     }
+    static ceres::CostFunction * Create(double a, double b, double c, double d) {
+        return (new ceres::AutoDiffCostFunction<F2, 1, 1, 1, 1> (new F2(a, b, c, d)));
+    }
+    double a;
+    double b;
+    double c;
+    double d;
+};
+
+struct Derivs {
+    Derivs (vector<double> as,
+            vector<double> bs,
+            vector<double> cs,
+            vector<double> ds)
+            : as(std::move(as)), bs(std::move(bs)), cs(std::move(cs)), ds(std::move(ds)) {}
+
+    template<typename T>
+    bool operator()(const T * const r, const T * const t, const T * const deltas, T* residual) const {
+
+        T r_total = T(0);
+        T t_total = T(0);
+        for(int i = 0; i < as.size(); i++) {
+            r_total += 2. * T(as[i]) * (T(as[i])*r[0] + T(bs[i])*t[0] + T(cs[i])*deltas[i] + T(ds[i]));
+            t_total += 2. * T(bs[i]) * (T(as[i])*r[0] + T(bs[i])*t[0] + T(cs[i])*deltas[i] + T(ds[i]));
+
+            residual[i] = 2. * deltas[i] + 2. * T(cs[i]) * (T(as[i])*r[0] + T(bs[i])*t[0] + T(cs[i])*deltas[i] + T(ds[i]));
+        }
+        residual[1000] = r_total;
+        residual[1001] = t_total;
+
+        return true;
+    }
+
+    static ceres::CostFunction * Create(const vector<double> & as,
+                                        const vector<double> & bs,
+                                        const vector<double> & cs,
+                                        const vector<double> & ds) {
+        return (new ceres::AutoDiffCostFunction<Derivs, 1002, 1, 1, 1000> (new Derivs(as, bs, cs, ds)));
+    }
+
+    vector<double> as;
+    vector<double> bs;
+    vector<double> cs;
+    vector<double> ds;
 };
 
 void pose::solution_tester() {
 
-    double x1 = 1.0;
-    double x2 = -3;
-    double x3 = -4;
-    ceres::Problem problem_0;
-    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F1, 1, 1>(new F1), nullptr, &x1);
-    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F2, 1, 1>(new F2), nullptr, &x2);
-    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F3, 1, 1, 1>(new F3), nullptr, &x2, &x3);
-    problem_0.AddResidualBlock(new ceres::AutoDiffCostFunction<F4, 1, 1>(new F4), nullptr, &x3);
-    ceres::Solver::Options options_0;
-    options_0.linear_solver_type = ceres::DENSE_SCHUR;
-    ceres::Solver::Summary summary_0;
-    auto start_0 = chrono::high_resolution_clock::now();
-    ceres::Solve(options_0, &problem_0, &summary_0);
-    auto stop_0 = chrono::high_resolution_clock::now();
-    auto duration_0 = chrono::duration_cast<chrono::microseconds>(stop_0 - start_0);
+    int size = 1000;
 
+    std::random_device dev;
+    std::uniform_real_distribution<double> distribution(-100, 100);
+    std::uniform_real_distribution<double> distribution2(-10000, 10000);
 
-    x1 = -9;
-    x2 = 2;
-    x3 = 5;
-    ceres::Problem problem_1;
-    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F1, 1, 1>(new F1), nullptr, &x1);
-    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F2, 1, 1>(new F2), nullptr, &x2);
-    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F3, 1, 1, 1>(new F3), nullptr, &x2, &x3);
-    problem_1.AddResidualBlock(new ceres::AutoDiffCostFunction<F4, 1, 1>(new F4), nullptr, &x3);
-    ceres::Solver::Options options_1;
-    options_1.linear_solver_type = ceres::DENSE_SCHUR;
-    ceres::Solver::Summary summary_1;
-    auto start_1 = chrono::high_resolution_clock::now();
-    ceres::Solve(options_1, &problem_1, &summary_1);
-    auto stop_1 = chrono::high_resolution_clock::now();
-    auto duration_1 = chrono::duration_cast<chrono::microseconds>(stop_1 - start_1);
-    cout << "Time taken to minimize function : " << duration_1.count() << " microseconds" << endl;
-    cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << endl;
-    double poly = pow(x1 + 10, 2) + pow(x2*x2 - 9, 2) + pow(x2*x3 - 12, 2) + pow(x3*x3 -16, 2);
-    cout << "function = " << poly << endl;
-    double d1 = 2.0 * (x1 + 10.0);
-    double d2 = 4.0 * x2 * (x2*x2 -  9.0) + 2.0 * x3 * (x2*x3 - 12.0);
-    double d3 = 4.0 * x3 * (x3*x3 - 16.0) + 2.0 * x2 * (x2*x3 - 12.0);
-    cout << "deriv1=" << d1 << ", deriv2=" << d2 << ", deriv3=" << d3 << endl << endl;
+    vector<double> as(size), bs(size), cs(size), ds(size);
+    for(int i = 0; i < size; i++) {
+        as[i] = distribution(dev);
+        bs[i] = distribution(dev);
+        cs[i] = distribution(dev);
+        ds[i] = distribution(dev);
+    }
 
 
 
+    ceres::Problem poly;
+    double r_poly[1] {distribution2(dev)};
+    double t_poly[1] {distribution2(dev)};
+    double deltas_poly[1000][1];
+    for(int i = 0; i < size; i++) {
+        deltas_poly[i][0] = distribution2(dev);
 
-    x1 = -9;
-    x2 = 2;
-    x3 = 5;
-    ceres::Problem problem_2;
-    problem_2.AddResidualBlock(new ceres::AutoDiffCostFunction<Deriv, 3, 1, 1, 1>(new Deriv), nullptr, &x1, &x2, &x3);
-    ceres::Solver::Options options_2;
-    options_2.linear_solver_type = ceres::DENSE_SCHUR;
-    ceres::Solver::Summary summary_2;
-    auto start_2 = chrono::high_resolution_clock::now();
-    ceres::Solve(options_2, &problem_2, &summary_2);
-    auto stop_2 = chrono::high_resolution_clock::now();
-    auto duration_2 = chrono::duration_cast<chrono::microseconds>(stop_2 - start_2);
-    cout << "Time taken to minimize derivatives squared : " << duration_2.count() << " microseconds" << endl;
-    cout << "Solution: x1=" << x1 << ", x2=" << x2 << ", x3=" << x3 << endl;
-    poly = pow(x1 + 10, 2) + pow(x2*x2 - 9, 2) + pow(x2*x3 - 12, 2) + pow(x3*x3 -16, 2);
-    cout << "function = " << poly << endl;
-    d1 = 2.0 * (x1 + 10.0);
-    d2 = 4.0 * x2 * (x2*x2 -  9.0) + 2.0 * x3 * (x2*x3 - 12.0);
-    d3 = 4.0 * x3 * (x3*x3 - 16.0) + 2.0 * x2 * (x2*x3 - 12.0);
-    cout << "deriv1=" << d1 << ", deriv2=" << d2 << ", deriv3=" << d3 << endl;
+        auto term1 = F1::Create();
+        poly.AddResidualBlock(term1, nullptr, deltas_poly[i]);
+
+        auto term2 = F2::Create(as[i], bs[i], cs[i], ds[i]);
+        poly.AddResidualBlock(term2, nullptr, r_poly, t_poly, deltas_poly[i]);
+    }
+    ceres::Solver::Options options_poly;
+    options_poly.function_tolerance = 1e-30;
+//    options_poly.minimizer_progress_to_stdout = true;
+    options_poly.linear_solver_type = ceres::DENSE_SCHUR;
+    ceres::Solver::Summary summary_poly;
+    auto start_poly = chrono::high_resolution_clock::now();
+    ceres::Solve(options_poly, &poly, &summary_poly);
+    auto stop_poly = chrono::high_resolution_clock::now();
+    auto duration_poly = chrono::duration_cast<chrono::milliseconds>(stop_poly - start_poly);
+//    cout << summary_poly.FullReport() << endl;
+
+    double value_poly = 0;
+    for(int i = 0; i < size; i++) {
+        value_poly += pow(deltas_poly[i][0],2.) + pow(as[i]*r_poly[0] + bs[i]*t_poly[0] + cs[i]*deltas_poly[i][0] + ds[i],2.);
+    }
+    double sum_delta_derivs_poly = 0, r_deriv_poly = 0, t_deriv_poly = 0;
+    for(int i = 0; i < size; i++) {
+        sum_delta_derivs_poly += abs(2. * deltas_poly[i][0] + 2. * cs[i] * (as[i]*r_poly[0] + bs[i]*t_poly[0] + cs[i]*deltas_poly[i][0] + ds[i]));
+        r_deriv_poly += 2. * as[i] * (as[i]*r_poly[0] + bs[i]*t_poly[0] + cs[i]*deltas_poly[i][0] + ds[i]);
+        t_deriv_poly += 2. * bs[i] * (as[i]*r_poly[0] + bs[i]*t_poly[0] + cs[i]*deltas_poly[i][0] + ds[i]);
+
+    }
+    cout << "Time for gradient descent method: " << duration_poly.count() << " milliseconds" << endl;
+    cout << "Poly value after gradient descent: " << setprecision(15) << value_poly << endl;
+    cout << "Derivatives values after gradient descent: " << endl;
+    cout << "      - Sum of delta derivatives: " << setprecision(3) << sum_delta_derivs_poly << endl;
+    cout << "      - r derivative: " << setprecision(3) << r_deriv_poly << endl;
+    cout << "      - t derivative: " << setprecision(3) << t_deriv_poly << endl;
+    cout << "r: " << setprecision(15) << r_poly[0] << endl;
+    cout << "t: " << setprecision(15) << t_poly[0] << endl << endl << endl << endl;
 
 
+
+
+
+    ceres::Problem deriv;
+//    double r_deriv[1] {distribution2(dev)};
+//    double t_deriv[1] {distribution2(dev)};
+//    double deltas_deriv[1000];
+//    for(int i = 0; i < size; i++) {
+//        deltas_deriv[i] = distribution2(dev);
+//    }
+    double r_deriv[1] {r_poly[0]};
+    double t_deriv[1] {t_poly[0]};
+    double deltas_deriv[1000];
+    for(int i = 0; i < size; i++) {
+        deltas_deriv[i] = deltas_poly[i][0];
+    }
+    auto cost_deriv = Derivs::Create(as,bs,cs,ds);
+    deriv.AddResidualBlock(cost_deriv, nullptr, r_deriv, t_deriv, deltas_deriv);
+    ceres::Solver::Options options_deriv;
+//    options_deriv.minimizer_progress_to_stdout = true;
+    options_deriv.linear_solver_type = ceres::DENSE_SCHUR;
+    ceres::Solver::Summary summary_deriv;
+    auto start_deriv = chrono::high_resolution_clock::now();
+    ceres::Solve(options_deriv, &deriv, &summary_deriv);
+    auto stop_deriv = chrono::high_resolution_clock::now();
+    auto duration_deriv = chrono::duration_cast<chrono::milliseconds>(stop_deriv - start_deriv);
+//    cout << summary_deriv.FullReport() << endl << endl;
+
+    double value_deriv = 0;
+    for(int i = 0; i < size; i++) {
+        value_deriv += pow(deltas_deriv[i],2.) + pow(as[i]*r_deriv[0] + bs[i]*t_deriv[0] + cs[i]*deltas_deriv[i] + ds[i],2.);
+    }
+    double sum_delta_derivs_deriv = 0, r_deriv_deriv = 0, t_deriv_deriv = 0;
+    for(int i = 0; i < size; i++) {
+        sum_delta_derivs_deriv += abs(2. * deltas_deriv[i] + 2. * cs[i] * (as[i]*r_deriv[0] + bs[i]*t_deriv[0] + cs[i]*deltas_deriv[i] + ds[i]));
+        r_deriv_deriv += 2. * as[i] * (as[i]*r_deriv[0] + bs[i]*t_deriv[0] + cs[i]*deltas_deriv[i] + ds[i]);
+        t_deriv_deriv += 2. * bs[i] * (as[i]*r_deriv[0] + bs[i]*t_deriv[0] + cs[i]*deltas_deriv[i] + ds[i]);
+
+    }
+    cout << "Time to set derivatives to 0: " << duration_deriv.count() << " milliseconds" << endl;
+    cout << "Poly value after derivatives set to 0: " << setprecision(15) << value_deriv << endl;
+    cout << "Derivatives values after derivatives set to 0: " << endl;
+    cout << "      - Sum of delta derivatives: " << setprecision(3) << sum_delta_derivs_deriv << endl;
+    cout << "      - r derivative: " << setprecision(3) << r_deriv_deriv << endl;
+    cout << "      - t derivative: " << setprecision(3) << t_deriv_deriv << endl;
+    cout << "r: " << setprecision(15) << r_deriv[0] << endl;
+    cout << "t: " << setprecision(15) << t_deriv[0] << endl << endl << endl << endl;
 }
 
 
@@ -170,7 +238,6 @@ struct Top2 {
         A[0] = R_q[0] * T(pt3D(0)) + R_q[3] * T(pt3D(1)) + R_q[6] * T(pt3D(2)) + T_q[0];
         A[1] = R_q[1] * T(pt3D(0)) + R_q[4] * T(pt3D(1)) + R_q[7] * T(pt3D(2)) + T_q[1];
         A[2] = R_q[2] * T(pt3D(0)) + R_q[5] * T(pt3D(1)) + R_q[8] * T(pt3D(2)) + T_q[2];
-
         T B[3];
         B[0] = T(K[2]) * A[0] + T(K[0]) * A[2];
         B[1] = T(K[3]) * A[1] + T(K[1]) * A[2];
@@ -338,14 +405,13 @@ struct Bottom2 {
             A0[0] = R_q[0] * T(pt3D(0)) + R_q[3] * T(pt3D(1)) + R_q[6] * T(pt3D(2)) + T_q[0];
             A0[1] = R_q[1] * T(pt3D(0)) + R_q[4] * T(pt3D(1)) + R_q[7] * T(pt3D(2)) + T_q[1];
             A0[2] = R_q[2] * T(pt3D(0)) + R_q[5] * T(pt3D(1)) + R_q[8] * T(pt3D(2)) + T_q[2];
-
             T B0[3];
             B0[0] = T(K[2]) * A0[0] + T(K[0]) * A0[2];
             B0[1] = T(K[3]) * A0[1] + T(K[1]) * A0[2];
             B0[2] = A0[2];
 
-            T lambda = parameters[i + 1][0];
-            T mu = parameters[i + 1][1];
+            T lambda = parameters[i + 2][0];
+            T mu = parameters[i + 2][1];
 
             T mx = T(pt2D.x) - T(K[0]);
             T my = T(pt2D.y) - T(K[1]);
@@ -360,9 +426,14 @@ struct Bottom2 {
             T cx = T(K[0]);
             T cy = T(K[1]);
 
-            res0 += lambda * fx;
-            res1 += mu * fy;
-            res2 += lambda * cx + mu * cy + ((0.5 * lambda * lambda + 0.5 * mu * mu) * B0[2] - lambda * xi - mu * eta);
+            T v[3];
+            v[0] = lambda;
+            v[1] = mu;
+            v[2] = lambda * (xi - 0.5 * lambda * B0[2]) + mu * (eta - 0.5 * mu * B0[2]);
+
+            res0 += v[0];
+            res1 += v[1];
+            res2 += v[2];
 
             T A1[3];
             A1[0] = dR_d1[0] * T(pt3D[0]) + dR_d1[3] * T(pt3D[1]) + dR_d1[6] * T(pt3D[2]);
@@ -372,7 +443,7 @@ struct Bottom2 {
             B1[0] = fx * A1[0] + cx * A1[2];
             B1[1] = fy * A1[1] + cy * A1[2];
             B1[2] = A1[2];
-            res3 += lambda * B1[0] + mu * B1[1] + ((0.5 * lambda * lambda + 0.5 * mu * mu) * B0[2] - lambda * xi - mu * eta) * B1[2];
+            res3 += v[0] * B1[0] + v[1] * B1[1] + v[2] * B1[2];
 
             T A2[3];
             A2[0] = dR_d2[0] * T(pt3D[0]) + dR_d2[3] * T(pt3D[1]) + dR_d2[6] * T(pt3D[2]);
@@ -382,7 +453,7 @@ struct Bottom2 {
             B2[0] = fx * A2[0] + cx * A2[2];
             B2[1] = fy * A2[1] + cy * A2[2];
             B2[2] = A2[2];
-            res4 += lambda * B2[0] + mu * B2[1] + ((0.5 * lambda * lambda + 0.5 * mu * mu) * B0[2] - lambda * xi - mu * eta) * B2[2];
+            res4 += v[0] * B2[0] + v[1] * B2[1] + v[2] * B2[2];
 
             T A3[3];
             A3[0] = dR_d3[0] * T(pt3D[0]) + dR_d3[3] * T(pt3D[1]) + dR_d3[6] * T(pt3D[2]);
@@ -392,7 +463,7 @@ struct Bottom2 {
             B3[0] = fx * A3[0] + cx * A3[2];
             B3[1] = fy * A3[1] + cy * A3[2];
             B3[2] = A3[2];
-            res5 += lambda * B3[0] + mu * B3[1] + ((0.5 * lambda * lambda + 0.5 * mu * mu) * B0[2] - lambda * xi - mu * eta) * B3[2];
+            res5 += v[0] * B3[0] + v[1] * B3[1] + v[2] * B3[2];
         }
 
         residuals[0] = res0;
@@ -445,9 +516,7 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
     vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(2, R_is, T_is, K_is, all_pts_q, all_pts_i);
 
     ceres::Problem problem;
-    ceres::LossFunction *loss1 = new ceres::CauchyLoss(1);
-    ceres::LossFunction *loss2 = new ceres::CauchyLoss(1);
-
+    ceres::LossFunction *loss = new ceres::CauchyLoss(1);
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
     vector<double *> parameters {A, T};
@@ -464,12 +533,12 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
         lms[i][1] = 0.000001;
 
         auto top2 = Top2::Create(K_q, pt2D, pt3D);
-        problem.AddResidualBlock(top2, loss1, lms[i], A, T);
+        problem.AddResidualBlock(top2, loss, lms[i], A, T);
 
         parameters.push_back(lms[i]);
     }
     auto bottom2 = Bottom2::Create(K_q, points2d, points3d);
-    problem.AddResidualBlock(bottom2, loss2, parameters);
+    problem.AddResidualBlock(bottom2, loss, parameters);
 
     ceres::Solver::Options options;
     options.minimizer_progress_to_stdout = true;
