@@ -75,7 +75,7 @@ int main() {
 //     vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
      vector<string> scenes = {"KingsCollege/"};
      string dataset = "cambridge/";
-     string error_file = "error_SP";
+     string error_file = "error_translation";
      int cutoff = -1;
 
     // vector<string> scenes = {"query/"};
@@ -92,7 +92,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = ccv_dir;
+    string dir = home_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -121,6 +121,7 @@ int main() {
             auto inliers_i = get<11>(info);
             int K = int(anchors.size());
 
+
             Eigen::Matrix3d R_adjustment;
             Eigen::Vector3d T_adjustment;
             double c_error_est;
@@ -129,6 +130,8 @@ int main() {
             double r_error_adj;
             double c_error_num;
             double r_error_num;
+
+            double t_error_est;
             if (K == 0) {
                 R_adjustment << 1., 0., 0., 0., 1., 0., 0., 0., 1.;
                 T_adjustment << 0., 0., 0.;
@@ -145,6 +148,7 @@ int main() {
                         s++;
                     }
                 }
+
                 int idx = 0;
                 vector<thread> threads(s);
                 vector<tuple<int, int, double, vector<int>>> results;
@@ -195,32 +199,40 @@ int main() {
                 }
 
                 Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
-                Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
+                Eigen::Matrix3d R_estimation = pose::R_q_closed_form (true, true, false,
+                                                                      c_estimation,
+                                                                      best_R_is,
+                                                                      best_T_is,
+                                                                      best_R_qis,
+                                                                      best_T_qis);
                 Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
                 c_error_est = functions::getDistBetween(c_q, c_estimation);
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
 
-                cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
+                Eigen::Vector3d T_est_gov = pose::T_q_govindu(best_T_is, best_R_qis, best_T_qis);
+                t_error_est = functions::getDistBetween(T_q, T_est_gov);
 
-                Eigen::Matrix3d R_adjusted = R_estimation;
-                Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
-                auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
-                                                         best_inliers_i,
-                                                         R_adjusted, T_adjusted);
-                Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
-                c_error_adj = functions::getDistBetween(c_q, c_adjusted);
-                r_error_adj = functions::rotationDifference(R_q, R_adjusted);
-
-                Eigen::Matrix3d R_numerical = R_adjusted;
-                Eigen::Vector3d T_numerical = T_adjusted;
-                auto numerical_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
-                                                               best_inliers_i,
-                                                               R_numerical, T_numerical);
-                Eigen::Vector3d c_numerical = -R_numerical.transpose() * T_numerical;
-                c_error_num = functions::getDistBetween(c_q, c_numerical);
-                r_error_num = functions::rotationDifference(R_q, R_numerical);
-
-                cout << " " << adj_points.first.size() << endl;
+//                cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
+//
+//                Eigen::Matrix3d R_adjusted = R_estimation;
+//                Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
+//                auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
+//                                                         best_inliers_i,
+//                                                         R_adjusted, T_adjusted);
+//                Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
+//                c_error_adj = functions::getDistBetween(c_q, c_adjusted);
+//                r_error_adj = functions::rotationDifference(R_q, R_adjusted);
+//
+//                Eigen::Matrix3d R_numerical = R_adjusted;
+//                Eigen::Vector3d T_numerical = T_adjusted;
+//                auto numerical_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
+//                                                               best_inliers_i,
+//                                                               R_numerical, T_numerical);
+//                Eigen::Vector3d c_numerical = -R_numerical.transpose() * T_numerical;
+//                c_error_num = functions::getDistBetween(c_q, c_numerical);
+//                r_error_num = functions::rotationDifference(R_q, R_numerical);
+//
+//                cout << " " << adj_points.first.size() << endl;
             }
 
             if (dataset == "aachen/" || dataset == "robotcar/") {
@@ -237,13 +249,15 @@ int main() {
                       << T_adjustment[2] << endl;
             } else {
                 string line;
-                line += query + " Pre_Adj " + to_string(r_error_est)
-                        + " " + to_string(c_error_est)
-                        + " Post_Adj " + to_string(r_error_adj)
-                        + " " + to_string(c_error_adj)
-                        + " Post_Numerical " + to_string(r_error_num)
-                        + " " + to_string(c_error_num);
-                // error << line << endl;
+                line += query + " T " + to_string(t_error_est)
+                              + " C " + to_string(c_error_est);
+//                line += query + " Pre_Adj " + to_string(r_error_est)
+//                        + " " + to_string(c_error_est)
+//                        + " Post_Adj " + to_string(r_error_adj)
+//                        + " " + to_string(c_error_adj)
+//                        + " Post_Numerical " + to_string(r_error_num)
+//                        + " " + to_string(c_error_num);
+                error << line << endl;
                 cout << line << endl;
             }
         }

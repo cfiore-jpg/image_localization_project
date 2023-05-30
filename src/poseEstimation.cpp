@@ -1829,9 +1829,12 @@ Eigen::Vector3d pose::T_q_govindu(const vector<Eigen::Vector3d> & T_ks,
 
             Eigen::MatrixXd t_ij_x(3,3);
             t_ij_x.setZero();
-            t_ij_x(0,1) = -T12(2,0); t_ij_x(1,0) = T12(2,0);
-            t_ij_x(0,2) = T12(1,0); t_ij_x(2,0) = -T12(1,0);
-            t_ij_x(1,2) = -T12(0,0); t_ij_x(2,1) = T12(0,0);
+            t_ij_x(0,1) = -T12(2,0);
+            t_ij_x(1,0) = T12(2,0);
+            t_ij_x(0,2) = T12(1,0);
+            t_ij_x(2,0) = -T12(1,0);
+            t_ij_x(1,2) = -T12(0,0);
+            t_ij_x(2,1) = T12(0,0);
 
             A.block(i*3,0,3,3) = lambda[i] * t_ij_x * R12;
             b.block(i*3,0,3,1) = lambda[i] * t_ij_x * T2;
@@ -1840,13 +1843,13 @@ Eigen::Vector3d pose::T_q_govindu(const vector<Eigen::Vector3d> & T_ks,
         results_curr = A.colPivHouseholderQr().solve(b);
 
         //Update weights
-//        for (int i = 0; i < nImgs; i++)
-//        {
-//            Eigen::Matrix<double,3,3> R12 = R_qks[i];
-//            Eigen::Matrix<double,3,1> T2 = T_ks[i];
-//
-//            lambda[i] = 1 / ((T2 - R12 * results_curr).norm());
-//        }
+        for (int i = 0; i < nImgs; i++)
+        {
+            Eigen::Matrix<double,3,3> R12 = R_qks[i];
+            Eigen::Matrix<double,3,1> T2 = T_ks[i];
+
+            lambda[i] = 1 / ((T2 - R12 * results_curr).norm());
+        }
     }
 
     return results_curr;
