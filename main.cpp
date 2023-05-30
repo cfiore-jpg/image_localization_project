@@ -200,12 +200,7 @@ int main() {
                 cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
 
                 Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
-                Eigen::Matrix3d R_estimation = pose::R_q_closed_form (true, true, false,
-                                                                      c_estimation,
-                                                                      best_R_is,
-                                                                      best_T_is,
-                                                                      best_R_qis,
-                                                                      best_T_qis);
+                Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
                 Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
                 c_error_est = functions::getDistBetween(c_q, c_estimation);
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
