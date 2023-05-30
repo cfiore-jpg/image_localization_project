@@ -131,7 +131,6 @@ int main() {
             double c_error_num;
             double r_error_num;
 
-            double t_error_est;
             if (K == 0) {
                 R_adjustment << 1., 0., 0., 0., 1., 0., 0., 0., 1.;
                 T_adjustment << 0., 0., 0.;
@@ -198,6 +197,8 @@ int main() {
                     rotations[i] = best_R_qis[i] * best_R_is[i];
                 }
 
+                cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
+
                 Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
                 Eigen::Matrix3d R_estimation = pose::R_q_closed_form (true, true, false,
                                                                       c_estimation,
@@ -209,11 +210,6 @@ int main() {
                 c_error_est = functions::getDistBetween(c_q, c_estimation);
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
 
-                Eigen::Vector3d T_est_gov = pose::T_q_closed_form(best_T_is, best_R_qis, best_T_qis);
-                t_error_est = functions::getDistBetween(c_q, -R_estimation.transpose() * T_est_gov);
-
-//                cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
-//
 //                Eigen::Matrix3d R_adjusted = R_estimation;
 //                Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
 //                auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
@@ -222,16 +218,16 @@ int main() {
 //                Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
 //                c_error_adj = functions::getDistBetween(c_q, c_adjusted);
 //                r_error_adj = functions::rotationDifference(R_q, R_adjusted);
-//
-//                Eigen::Matrix3d R_numerical = R_adjusted;
-//                Eigen::Vector3d T_numerical = T_adjusted;
-//                auto numerical_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
-//                                                               best_inliers_i,
-//                                                               R_numerical, T_numerical);
-//                Eigen::Vector3d c_numerical = -R_numerical.transpose() * T_numerical;
-//                c_error_num = functions::getDistBetween(c_q, c_numerical);
-//                r_error_num = functions::rotationDifference(R_q, R_numerical);
-//
+
+                Eigen::Matrix3d R_numerical = R_estimation;
+                Eigen::Vector3d T_numerical = T_estimation;
+                auto numerical_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
+                                                               best_inliers_i,
+                                                               R_numerical, T_numerical);
+                Eigen::Vector3d c_numerical = -R_numerical.transpose() * T_numerical;
+                c_error_num = functions::getDistBetween(c_q, c_numerical);
+                r_error_num = functions::rotationDifference(R_q, R_numerical);
+
 //                cout << " " << adj_points.first.size() << endl;
             }
 
@@ -249,15 +245,13 @@ int main() {
                       << T_adjustment[2] << endl;
             } else {
                 string line;
-                line += query + " T " + to_string(t_error_est)
-                              + " C " + to_string(c_error_est);
-//                line += query + " Pre_Adj " + to_string(r_error_est)
-//                        + " " + to_string(c_error_est)
-//                        + " Post_Adj " + to_string(r_error_adj)
-//                        + " " + to_string(c_error_adj)
-//                        + " Post_Numerical " + to_string(r_error_num)
-//                        + " " + to_string(c_error_num);
-                error << line << endl;
+                line += query + " Pre_Adj " + to_string(r_error_est)
+                        + " " + to_string(c_error_est)
+                        + " Post_Adj " + to_string(r_error_adj)
+                        + " " + to_string(c_error_adj)
+                        + " Post_Numerical " + to_string(r_error_num)
+                        + " " + to_string(c_error_num);
+//                error << line << endl;
                 cout << line << endl;
             }
         }

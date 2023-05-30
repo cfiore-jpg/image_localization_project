@@ -25,196 +25,6 @@
 
 /// CERES COST FUNCTIONS
 
-
-// E = (x1 + 10)^2 + (x2*x2 - 9.0)^2 + (x2*x3 - 12.0)^2 + (x3*x3 - 16.0)^2
-// dE/dx1 = 2 * (x1 + 10.0);
-// dE/dx2 = 4 * x2 * (x2*x2 -  9.0) + 2.0 * x3 * (x2*x3 - 12.0);
-// dE/dx3 = 4 * x3 * (x3*x3 - 16.0) + 2.0 * x2 * (x2*x3 - 12.0);
-
-struct F1 {
-    template <typename T>
-    bool operator()(const T* const delta, T* residual) const {
-        residual[0] = delta[0];
-        return true;
-    }
-    static ceres::CostFunction * Create() {
-        return (new ceres::AutoDiffCostFunction<F1, 1, 1> (new F1));
-    }
-};
-
-struct F2 {
-    F2 (double a, double b, double c, double d)
-        : a(a), b(b), c(c), d(d) {}
-    template<typename T>
-    bool operator()(const T * const r, const T * const t, const T * const delta, T* residual) const {
-        residual[0] = T(a)*r[0] + T(b)*t[0] + T(c)*delta[0] + T(d);
-        return true;
-    }
-    static ceres::CostFunction * Create(double a, double b, double c, double d) {
-        return (new ceres::AutoDiffCostFunction<F2, 1, 1, 1, 1> (new F2(a, b, c, d)));
-    }
-    double a;
-    double b;
-    double c;
-    double d;
-};
-
-struct Derivs {
-    Derivs (vector<double> as,
-            vector<double> bs,
-            vector<double> cs,
-            vector<double> ds)
-            : as(std::move(as)), bs(std::move(bs)), cs(std::move(cs)), ds(std::move(ds)) {}
-
-    template<typename T>
-    bool operator()(const T * const r, const T * const t, const T * const deltas, T* residual) const {
-
-        T r_total = T(0);
-        T t_total = T(0);
-        for(int i = 0; i < as.size(); i++) {
-            r_total += 2. * T(as[i]) * (T(as[i])*r[0] + T(bs[i])*t[0] + T(cs[i])*deltas[i] + T(ds[i]));
-            t_total += 2. * T(bs[i]) * (T(as[i])*r[0] + T(bs[i])*t[0] + T(cs[i])*deltas[i] + T(ds[i]));
-
-            residual[i] = 2. * deltas[i] + 2. * T(cs[i]) * (T(as[i])*r[0] + T(bs[i])*t[0] + T(cs[i])*deltas[i] + T(ds[i]));
-        }
-        residual[1000] = r_total;
-        residual[1001] = t_total;
-
-        return true;
-    }
-
-    static ceres::CostFunction * Create(const vector<double> & as,
-                                        const vector<double> & bs,
-                                        const vector<double> & cs,
-                                        const vector<double> & ds) {
-        return (new ceres::AutoDiffCostFunction<Derivs, 1002, 1, 1, 1000> (new Derivs(as, bs, cs, ds)));
-    }
-
-    vector<double> as;
-    vector<double> bs;
-    vector<double> cs;
-    vector<double> ds;
-};
-
-void pose::solution_tester() {
-
-    int size = 1000;
-
-    std::random_device dev;
-    std::uniform_real_distribution<double> distribution(-100, 100);
-    std::uniform_real_distribution<double> distribution2(-10000, 10000);
-
-    vector<double> as(size), bs(size), cs(size), ds(size);
-    for(int i = 0; i < size; i++) {
-        as[i] = distribution(dev);
-        bs[i] = distribution(dev);
-        cs[i] = distribution(dev);
-        ds[i] = distribution(dev);
-    }
-
-
-
-    ceres::Problem poly;
-    double r_poly[1] {distribution2(dev)};
-    double t_poly[1] {distribution2(dev)};
-    double deltas_poly[1000][1];
-    for(int i = 0; i < size; i++) {
-        deltas_poly[i][0] = distribution2(dev);
-
-        auto term1 = F1::Create();
-        poly.AddResidualBlock(term1, nullptr, deltas_poly[i]);
-
-        auto term2 = F2::Create(as[i], bs[i], cs[i], ds[i]);
-        poly.AddResidualBlock(term2, nullptr, r_poly, t_poly, deltas_poly[i]);
-    }
-    ceres::Solver::Options options_poly;
-    options_poly.function_tolerance = 1e-30;
-//    options_poly.minimizer_progress_to_stdout = true;
-    options_poly.linear_solver_type = ceres::DENSE_SCHUR;
-    ceres::Solver::Summary summary_poly;
-    auto start_poly = chrono::high_resolution_clock::now();
-    ceres::Solve(options_poly, &poly, &summary_poly);
-    auto stop_poly = chrono::high_resolution_clock::now();
-    auto duration_poly = chrono::duration_cast<chrono::milliseconds>(stop_poly - start_poly);
-//    cout << summary_poly.FullReport() << endl;
-
-    double value_poly = 0;
-    for(int i = 0; i < size; i++) {
-        value_poly += pow(deltas_poly[i][0],2.) + pow(as[i]*r_poly[0] + bs[i]*t_poly[0] + cs[i]*deltas_poly[i][0] + ds[i],2.);
-    }
-    double sum_delta_derivs_poly = 0, r_deriv_poly = 0, t_deriv_poly = 0;
-    for(int i = 0; i < size; i++) {
-        sum_delta_derivs_poly += abs(2. * deltas_poly[i][0] + 2. * cs[i] * (as[i]*r_poly[0] + bs[i]*t_poly[0] + cs[i]*deltas_poly[i][0] + ds[i]));
-        r_deriv_poly += 2. * as[i] * (as[i]*r_poly[0] + bs[i]*t_poly[0] + cs[i]*deltas_poly[i][0] + ds[i]);
-        t_deriv_poly += 2. * bs[i] * (as[i]*r_poly[0] + bs[i]*t_poly[0] + cs[i]*deltas_poly[i][0] + ds[i]);
-
-    }
-    cout << "Time for gradient descent method: " << duration_poly.count() << " milliseconds" << endl;
-    cout << "Poly value after gradient descent: " << setprecision(15) << value_poly << endl;
-    cout << "Derivatives values after gradient descent: " << endl;
-    cout << "      - Sum of delta derivatives: " << setprecision(3) << sum_delta_derivs_poly << endl;
-    cout << "      - r derivative: " << setprecision(3) << r_deriv_poly << endl;
-    cout << "      - t derivative: " << setprecision(3) << t_deriv_poly << endl;
-    cout << "r: " << setprecision(15) << r_poly[0] << endl;
-    cout << "t: " << setprecision(15) << t_poly[0] << endl << endl << endl << endl;
-
-
-
-
-
-    ceres::Problem deriv;
-//    double r_deriv[1] {distribution2(dev)};
-//    double t_deriv[1] {distribution2(dev)};
-//    double deltas_deriv[1000];
-//    for(int i = 0; i < size; i++) {
-//        deltas_deriv[i] = distribution2(dev);
-//    }
-    double r_deriv[1] {r_poly[0]};
-    double t_deriv[1] {t_poly[0]};
-    double deltas_deriv[1000];
-    for(int i = 0; i < size; i++) {
-        deltas_deriv[i] = deltas_poly[i][0];
-    }
-    auto cost_deriv = Derivs::Create(as,bs,cs,ds);
-    deriv.AddResidualBlock(cost_deriv, nullptr, r_deriv, t_deriv, deltas_deriv);
-    ceres::Solver::Options options_deriv;
-//    options_deriv.minimizer_progress_to_stdout = true;
-    options_deriv.linear_solver_type = ceres::DENSE_SCHUR;
-    ceres::Solver::Summary summary_deriv;
-    auto start_deriv = chrono::high_resolution_clock::now();
-    ceres::Solve(options_deriv, &deriv, &summary_deriv);
-    auto stop_deriv = chrono::high_resolution_clock::now();
-    auto duration_deriv = chrono::duration_cast<chrono::milliseconds>(stop_deriv - start_deriv);
-//    cout << summary_deriv.FullReport() << endl << endl;
-
-    double value_deriv = 0;
-    for(int i = 0; i < size; i++) {
-        value_deriv += pow(deltas_deriv[i],2.) + pow(as[i]*r_deriv[0] + bs[i]*t_deriv[0] + cs[i]*deltas_deriv[i] + ds[i],2.);
-    }
-    double sum_delta_derivs_deriv = 0, r_deriv_deriv = 0, t_deriv_deriv = 0;
-    for(int i = 0; i < size; i++) {
-        sum_delta_derivs_deriv += abs(2. * deltas_deriv[i] + 2. * cs[i] * (as[i]*r_deriv[0] + bs[i]*t_deriv[0] + cs[i]*deltas_deriv[i] + ds[i]));
-        r_deriv_deriv += 2. * as[i] * (as[i]*r_deriv[0] + bs[i]*t_deriv[0] + cs[i]*deltas_deriv[i] + ds[i]);
-        t_deriv_deriv += 2. * bs[i] * (as[i]*r_deriv[0] + bs[i]*t_deriv[0] + cs[i]*deltas_deriv[i] + ds[i]);
-
-    }
-    cout << "Time to set derivatives to 0: " << duration_deriv.count() << " milliseconds" << endl;
-    cout << "Poly value after derivatives set to 0: " << setprecision(15) << value_deriv << endl;
-    cout << "Derivatives values after derivatives set to 0: " << endl;
-    cout << "      - Sum of delta derivatives: " << setprecision(3) << sum_delta_derivs_deriv << endl;
-    cout << "      - r derivative: " << setprecision(3) << r_deriv_deriv << endl;
-    cout << "      - t derivative: " << setprecision(3) << t_deriv_deriv << endl;
-    cout << "r: " << setprecision(15) << r_deriv[0] << endl;
-    cout << "t: " << setprecision(15) << t_deriv[0] << endl << endl << endl << endl;
-}
-
-
-
-
-
-
-
-
 struct Top2 {
     Top2 (vector<double> K,
           cv::Point2d pt2D,
@@ -285,97 +95,14 @@ struct Bottom2 {
     template<typename T>
     bool operator()(T const * const * parameters, T * residuals) const {
 
-        T a1 = parameters[0][0];
-        T a2 = parameters[0][1];
-        T a3 = parameters[0][2];
-
-        T r_16 = a1 * a1 + a2 * a2 + a3 * a3;
-        T r_15 = cos(sqrt(r_16)) - T(1);
-        T r_14 = sin(sqrt(r_16)) / sqrt(r_16);
-        T r_13 = (a1 * a2 * cos(sqrt(r_16))) / r_16;
-        T r_12 = (a1 * a3 * cos(sqrt(r_16))) / r_16;
-        T r_11 = (a1 * a1 * cos(sqrt(r_16))) / r_16;
-        T r_10 = (T(2) * a1 * a2 * a3 * r_15) / (r_16 * r_16);
-        T r_9 = (T(2) * a1 * a1 * a2 * r_15) / (r_16 * r_16);
-        T r_8 = (T(2) * a1 * a1 * a3 * r_15) / (r_16 * r_16);
-        T r_7 = (a1 * a2 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16);
-        T r_6 = (a1 * a3 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16);
-        T r_5 = (a1 * a1 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16);
-        T r_4 = (a1 * a2 * a3 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16);
-        T r_3 = (a1 * a1 * a2 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16);
-        T r_2 = (a1 * a1 * a3 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16);
-        T r_1 = (a1 * sin(sqrt(r_16))) / sqrt(r_16);
         T dR_d1[9];
-        dR_d1[0] = (a1 * a1 * a1 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16) - (T(2) * a1 * r_15) / (r_16) - (r_1) +
-                   (T(2) * a1 * a1 * a1 * r_15) / (r_16 * r_16);
-        dR_d1[1] = r_9 - (a2 * r_15) / r_16 + r_12 - r_6 + r_3;
-        dR_d1[2] = r_8 - (a3 * r_15) / r_16 - r_13 + r_7 + r_2;
-        dR_d1[3] = r_9 - (a2 * r_15) / r_16 - r_12 + r_6 + r_3;
-        dR_d1[4] = (T(2) * a1 * a2 * a2 * r_15) / (r_16 * r_16) - r_1 +
-                   (a1 * a2 * a2 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16);
-        dR_d1[5] = r_14 + r_11 - r_5 + r_10 + r_4;
-        dR_d1[6] = r_8 - (a3 * r_15) / r_16 + r_13 - r_7 + r_2;
-        dR_d1[7] = r_5 - r_11 - r_14 + r_10 + r_4;
-        dR_d1[8] = (T(2) * a1 * a3 * a3 * r_15) / (r_16 * r_16) - r_1 +
-                   (a1 * a3 * a3 * sin(sqrt(r_16))) / sqrt(r_16 * r_16 * r_16);
-        T s_16 = a1 * a1 + a2 * a2 + a3 * a3;
-        T s_15 = cos(sqrt(s_16)) - T(1);
-        T s_14 = sin(sqrt(s_16)) / sqrt(s_16);
-        T s_13 = (a1 * a2 * cos(sqrt(s_16))) / s_16;
-        T s_12 = (a2 * a3 * cos(sqrt(s_16))) / s_16;
-        T s_11 = (a2 * a2 * cos(sqrt(s_16))) / s_16;
-        T s_10 = (T(2) * a1 * a2 * a3 * s_15) / (s_16 * s_16);
-        T s_9 = (T(2) * a1 * a2 * a2 * s_15) / (s_16 * s_16);
-        T s_8 = (T(2) * a2 * a2 * a3 * s_15) / (s_16 * s_16);
-        T s_7 = (a1 * a2 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16);
-        T s_6 = (a2 * a3 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16);
-        T s_5 = (a2 * a2 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16);
-        T s_4 = (a1 * a2 * a3 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16);
-        T s_3 = (a1 * a2 * a2 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16);
-        T s_2 = (a2 * a2 * a3 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16);
-        T s_1 = (a2 * sin(sqrt(s_16))) / sqrt(s_16);
+        R_deriv1(parameters[0], dR_d1);
+
         T dR_d2[9];
-        dR_d2[0] = (T(2) * a1 * a1 * a2 * s_15) / (s_16 * s_16) - s_1 +
-                   (a1 * a1 * a2 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16);
-        dR_d2[1] = s_9 - (a1 * s_15) / s_16 + s_12 - s_6 + s_3;
-        dR_d2[2] = s_5 - s_11 - s_14 + s_10 + s_4;
-        dR_d2[3] = s_9 - (a1 * s_15) / s_16 - s_12 + s_6 + s_3;
-        dR_d2[4] = (a2 * a2 * a2 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16) - (T(2) * a2 * s_15) / (s_16) - (s_1) +
-                   (T(2) * a2 * a2 * a2 * s_15) / (s_16 * s_16);
-        dR_d2[5] = s_8 - (a3 * s_15) / s_16 + s_13 - s_7 + s_2;
-        dR_d2[6] = s_14 + s_11 - s_5 + s_10 + s_4;
-        dR_d2[7] = s_8 - (a3 * s_15) / s_16 - s_13 + s_7 + s_2;
-        dR_d2[8] = (T(2) * a2 * a3 * a3 * s_15) / (s_16 * s_16) - s_1 +
-                   (a2 * a3 * a3 * sin(sqrt(s_16))) / sqrt(s_16 * s_16 * s_16);
-        T t_16 = a1 * a1 + a2 * a2 + a3 * a3;
-        T t_15 = cos(sqrt(t_16)) - T(1);
-        T t_14 = sin(sqrt(t_16)) / sqrt(t_16);
-        T t_13 = (a1 * a3 * cos(sqrt(t_16))) / t_16;
-        T t_12 = (a2 * a3 * cos(sqrt(t_16))) / t_16;
-        T t_11 = (a3 * a3 * cos(sqrt(t_16))) / t_16;
-        T t_10 = (T(2) * a1 * a2 * a3 * t_15) / (t_16 * t_16);
-        T t_9 = (T(2) * a1 * a3 * a3 * t_15) / (t_16 * t_16);
-        T t_8 = (T(2) * a2 * a3 * a3 * t_15) / (t_16 * t_16);
-        T t_7 = (a1 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16);
-        T t_6 = (a2 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16);
-        T t_5 = (a3 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16);
-        T t_4 = (a1 * a2 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16);
-        T t_3 = (a1 * a3 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16);
-        T t_2 = (a2 * a3 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16);
-        T t_1 = (a3 * sin(sqrt(t_16))) / sqrt(t_16);
+        R_deriv2(parameters[0], dR_d2);
+
         T dR_d3[9];
-        dR_d3[0] = (T(2) * a1 * a1 * a3 * t_15) / (t_16 * t_16) - t_1 +
-                   (a1 * a1 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16);
-        dR_d3[1] = t_14 + t_11 - t_5 + t_10 + t_4;
-        dR_d3[2] = t_9 - (a1 * t_15) / t_16 - t_12 + t_6 + t_3;
-        dR_d3[3] = t_5 - t_11 - t_14 + t_10 + t_4;
-        dR_d3[4] = (T(2) * a2 * a2 * a3 * t_15) / (t_16 * t_16) - t_1 +
-                   (a2 * a2 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16);
-        dR_d3[5] = t_8 - (a2 * t_15) / t_16 + t_13 - t_7 + t_2;
-        dR_d3[6] = t_9 - (a1 * t_15) / t_16 + t_12 - t_6 + t_3;
-        dR_d3[7] = t_8 - (a2 * t_15) / t_16 - t_13 + t_7 + t_2;
-        dR_d3[8] = (a3 * a3 * a3 * sin(sqrt(t_16))) / sqrt(t_16 * t_16 * t_16) - (T(2) * a3 * t_15) / (t_16) - (t_1) +
-                   (T(2) * a3 * a3 * a3 * t_15) / (t_16 * t_16);
+        R_deriv3(parameters[0], dR_d3);
 
         T A_q[3];
         A_q[0] = parameters[0][0];
@@ -476,11 +203,113 @@ struct Bottom2 {
         return true;
     }
 
+    template<typename T>
+    void R_deriv1(const T* aa, T* dR_d1) const {
+        T a1 = aa[0];
+        T a2 = aa[1];
+        T a3 = aa[2];
+
+        T sigma16 = a1 * a1 + a2 * a2 + a3 * a3;
+        T sigma15 = cos(sqrt(sigma16)) - T(1);
+        T sigma14 = sin(sqrt(sigma16)) / sqrt(sigma16);
+        T sigma13 = (a1 * a2 * cos(sqrt(sigma16))) / sigma16;
+        T sigma12 = (a1 * a3 * cos(sqrt(sigma16))) / sigma16;
+        T sigma11 = (a1 * a1 * cos(sqrt(sigma16))) / sigma16;
+        T sigma10 = (T(2) * a1 * a2 * a3 * sigma15) / (sigma16 * sigma16);
+        T sigma9 = (T(2) * a1 * a1 * a2 * sigma15) / (sigma16 * sigma16);
+        T sigma8 = (T(2) * a1 * a1 * a3 * sigma15) / (sigma16 * sigma16);
+        T sigma7 = (a1 * a2 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma6 = (a1 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma5 = (a1 * a1 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma4 = (a1 * a2 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma3 = (a1 * a1 * a2 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma2 = (a1 * a1 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma1 = (a1 * sin(sqrt(sigma16))) / sqrt(sigma16);
+
+        dR_d1[0] = (a1 * a1 * a1 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16) - (T(2) * a1 * sigma15) / (sigma16) - (sigma1) + (T(2) * a1 * a1 * a1 * sigma15) / (sigma16 * sigma16);
+        dR_d1[1] = sigma9 - (a2 * sigma15) / sigma16 + sigma12 - sigma6 + sigma3;
+        dR_d1[2] = sigma8 - (a3 * sigma15) / sigma16 - sigma13 + sigma7 + sigma2;
+        dR_d1[3] = sigma9 - (a2 * sigma15) / sigma16 - sigma12 + sigma6 + sigma3;
+        dR_d1[4] = (T(2) * a1 * a2 * a2 * sigma15) / (sigma16 * sigma16) - sigma1 + (a1 * a2 * a2 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        dR_d1[5] = sigma14 + sigma11 - sigma5 + sigma10 + sigma4;
+        dR_d1[6] = sigma8 - (a3 * sigma15) / sigma16 + sigma13 - sigma7 + sigma2;
+        dR_d1[7] = sigma5 - sigma11 - sigma14 + sigma10 + sigma4;
+        dR_d1[8] = (T(2) * a1 * a3 * a3 * sigma15) / (sigma16 * sigma16) - sigma1 + (a1 * a3 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+    }
+
+    template<typename T>
+    void R_deriv2(const T* aa, T* dR_d2) const {
+        T a1 = aa[0];
+        T a2 = aa[1];
+        T a3 = aa[2];
+
+        T sigma16 = a1 * a1 + a2 * a2 + a3 * a3;
+        T sigma15 = cos(sqrt(sigma16)) - T(1);
+        T sigma14 = sin(sqrt(sigma16)) / sqrt(sigma16);
+        T sigma13 = (a1 * a2 * cos(sqrt(sigma16))) / sigma16;
+        T sigma12 = (a2 * a3 * cos(sqrt(sigma16))) / sigma16;
+        T sigma11 = (a2 * a2 * cos(sqrt(sigma16))) / sigma16;
+        T sigma10 = (T(2) * a1 * a2 * a3 * sigma15) / (sigma16 * sigma16);
+        T sigma9 = (T(2) * a1 * a2 * a2 * sigma15) / (sigma16 * sigma16);
+        T sigma8 = (T(2) * a2 * a2 * a3 * sigma15) / (sigma16 * sigma16);
+        T sigma7 = (a1 * a2 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma6 = (a2 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma5 = (a2 * a2 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma4 = (a1 * a2 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma3 = (a1 * a2 * a2 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma2 = (a2 * a2 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma1 = (a2 * sin(sqrt(sigma16))) / sqrt(sigma16);
+
+        dR_d2[0] = (T(2) * a1 * a1 * a2 * sigma15) / (sigma16 * sigma16) - sigma1 + (a1 * a1 * a2 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        dR_d2[1] = sigma9 - (a1 * sigma15) / sigma16 + sigma12 - sigma6 + sigma3;
+        dR_d2[2] = sigma5 - sigma11 - sigma14 + sigma10 + sigma4;
+        dR_d2[3] = sigma9 - (a1 * sigma15) / sigma16 - sigma12 + sigma6 + sigma3;
+        dR_d2[4] = (a2 * a2 * a2 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16) - (T(2) * a2 * sigma15) / (sigma16) - (sigma1) + (T(2) * a2 * a2 * a2 * sigma15) / (sigma16 * sigma16);
+        dR_d2[5] = sigma8 - (a3 * sigma15) / sigma16 + sigma13 - sigma7 + sigma2;
+        dR_d2[6] = sigma14 + sigma11 - sigma5 + sigma10 + sigma4;
+        dR_d2[7] = sigma8 - (a3 * sigma15) / sigma16 - sigma13 + sigma7 + sigma2;
+        dR_d2[8] = (T(2) * a2 * a3 * a3 * sigma15) / (sigma16 * sigma16) - sigma1 + (a2 * a3 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+    }
+
+    template<typename T>
+    void R_deriv3(const T* aa, T* dR_d3) const {
+        T a1 = aa[0];
+        T a2 = aa[1];
+        T a3 = aa[2];
+
+        T sigma16 = a1 * a1 + a2 * a2 + a3 * a3;
+        T sigma15 = cos(sqrt(sigma16)) - T(1);
+        T sigma14 = sin(sqrt(sigma16)) / sqrt(sigma16);
+        T sigma13 = (a1 * a3 * cos(sqrt(sigma16))) / sigma16;
+        T sigma12 = (a2 * a3 * cos(sqrt(sigma16))) / sigma16;
+        T sigma11 = (a3 * a3 * cos(sqrt(sigma16))) / sigma16;
+        T sigma10 = (T(2) * a1 * a2 * a3 * sigma15) / (sigma16 * sigma16);
+        T sigma9 = (T(2) * a1 * a3 * a3 * sigma15) / (sigma16 * sigma16);
+        T sigma8 = (T(2) * a2 * a3 * a3 * sigma15) / (sigma16 * sigma16);
+        T sigma7 = (a1 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma6 = (a2 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma5 = (a3 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma4 = (a1 * a2 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma3 = (a1 * a3 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma2 = (a2 * a3 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        T sigma1 = (a3 * sin(sqrt(sigma16))) / sqrt(sigma16);
+
+        dR_d3[0] = (T(2) * a1 * a1 * a3 * sigma15) / (sigma16 * sigma16) - sigma1 + (a1 * a1 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        dR_d3[1] = sigma14 + sigma11 - sigma5 + sigma10 + sigma4;
+        dR_d3[2] = sigma9 - (a1 * sigma15) / sigma16 - sigma12 + sigma6 + sigma3;
+        dR_d3[3] = sigma5 - sigma11 - sigma14 + sigma10 + sigma4;
+        dR_d3[4] = (T(2) * a2 * a2 * a3 * sigma15) / (sigma16 * sigma16) - sigma1 + (a2 * a2 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16);
+        dR_d3[5] = sigma8 - (a2 * sigma15) / sigma16 + sigma13 - sigma7 + sigma2;
+        dR_d3[6] = sigma9 - (a1 * sigma15) / sigma16 + sigma12 - sigma6 + sigma3;
+        dR_d3[7] = sigma8 - (a2 * sigma15) / sigma16 - sigma13 + sigma7 + sigma2;
+        dR_d3[8] = (a3 * a3 * a3 * sin(sqrt(sigma16))) / sqrt(sigma16 * sigma16 * sigma16) - (T(2) * a3 * sigma15) / (sigma16) - (sigma1) + (T(2) * a3 * a3 * a3 * sigma15) / (sigma16 * sigma16);
+    }
+
     static ceres::CostFunction * Create(const vector<double> & K,
                                         const vector<cv::Point2d> & pts2D,
                                         const vector<Eigen::Vector3d> & pts3D) {
 
-        auto cf = new ceres::DynamicAutoDiffCostFunction<Bottom2, 5> (new Bottom2(K, pts2D, pts3D));
+        auto cf = new ceres::DynamicAutoDiffCostFunction<Bottom2, 3> (new Bottom2(K, pts2D, pts3D));
         cf->AddParameterBlock(3);
         cf->AddParameterBlock(3);
         for (int i = 0; i < pts2D.size(); i++) {
@@ -510,18 +339,21 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
     double A[3];
     double R[9]{R_q(0, 0), R_q(1, 0), R_q(2, 0), R_q(0, 1), R_q(1, 1), R_q(2, 1), R_q(0, 2), R_q(1, 2), R_q(2, 2)};
     ceres::RotationMatrixToAngleAxis(R, A);
-    double T[3] {T_q[0], T_q[1], T_q[2]};
+    double T[3]{T_q[0], T_q[1], T_q[2]};
     double lms[10000][2];
 
-    vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(2, R_is, T_is, K_is, all_pts_q, all_pts_i);
+    vector<pair<pair<double, double>, vector<pair<int, int>>>> all_matches = functions::findSharedMatches(2, R_is, T_is,
+                                                                                                          K_is,
+                                                                                                          all_pts_q,
+                                                                                                          all_pts_i);
 
     ceres::Problem problem;
     ceres::LossFunction *loss = new ceres::CauchyLoss(1);
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    vector<double *> parameters {A, T};
+    vector<double *> parameters{A, T};
 
-    for(int i = 0; i < min(int(all_matches.size()), 1500); i++) {
+    for (int i = 0; i < min(int(all_matches.size()), 1500); i++) {
 
         auto p = all_matches[i];
         cv::Point2d pt2D(p.first.first, p.first.second);
@@ -529,8 +361,18 @@ pose::num_sys_solution(const vector<Eigen::Matrix3d> & R_is,
         points2d.push_back(pt2D);
         points3d.push_back(pt3D);
 
-        lms[i][0] = 0.000001;
-        lms[i][1] = 0.000001;
+        Eigen::Matrix3d K_{{K_q[2], 0,      K_q[0]},
+                           {0,      K_q[3], K_q[1]},
+                           {0,      0,      1}};
+        Eigen::Vector3d B = K_ * (R_q * pt3D + T_q);
+
+        cv::Point2d undist = pose::undistort_point(pt2D, (K_q[2] + K_q[3]) / 2., K_q[0], K_q[1], K_q[4]);
+
+        double xi = undist.x;
+        double eta = undist.y;
+
+        lms[i][0] = (xi * B[2] - B[0]) / (0.5 * B[2] * B[2]);
+        lms[i][1] = (eta * B[2] - B[1]) / (0.5 * B[2] * B[2]);
 
         auto top2 = Top2::Create(K_q, pt2D, pt3D);
         problem.AddResidualBlock(top2, loss, lms[i], A, T);
@@ -1188,7 +1030,7 @@ struct ReprojectionErrorBA{
 
 struct TripletErrorBA{
     TripletErrorBA(cv::Point2d pt_c, cv::Point2d pt_l, cv::Point2d pt_r, Eigen::Matrix3d K_eig)
-            : pt_c(pt_c), pt_l(pt_l), pt_r(pt_r), K_eig(move(K_eig)) {}
+            : pt_c(pt_c), pt_l(pt_l), pt_r(pt_r), K_eig(std::move(K_eig)) {}
 
     template<typename T>
     bool operator()(const T * const camera_c, const T * const camera_l, const T * const camera_r, T * residuals) const {
@@ -1332,7 +1174,7 @@ struct RotationError {
     RotationError(Eigen::Vector3d c_k,
                   Eigen::Vector3d c_q,
                   Eigen::Vector3d t_qk)
-            : c_k(move(c_k)), c_q(move(c_q)), t_qk(move(t_qk)) {}
+            : c_k(std::move(c_k)), c_q(std::move(c_q)), t_qk(std::move(t_qk)) {}
 
     template<typename T>
     bool operator()(const T * const R, const T * const lambda, T * residuals) const {
@@ -1388,7 +1230,7 @@ struct RotationError {
 struct SimultaneousEstimation {
     SimultaneousEstimation(Eigen::Vector3d c_k,
                            Eigen::Vector3d t_qk)
-            : c_k(move(c_k)), t_qk(move(t_qk)) {}
+            : c_k(std::move(c_k)), t_qk(std::move(t_qk)) {}
 
     template<typename T>
     bool operator()(const T * const c_q, const T * const r_q, const T * const lambda, T * residuals) const {
@@ -1452,7 +1294,7 @@ void pose::estimatePose(const vector<Eigen::Matrix3d> & R_ks,
     ceres::Solver::Summary summary;
     ceres::Solve(options, &problem, &summary);
 
-//    std::cout << summary.FullReport() << "\n";
+//    cout << summary.FullReport() << "\n";
 
     ceres::AngleAxisToRotationMatrix(AA_arr, R_arr);
     R = Eigen::Matrix3d {{R_arr[0], R_arr[3], R_arr[6]},
@@ -1602,7 +1444,7 @@ void pose::sceneBundleAdjust(const int num_ims, const double K[4],
     options.minimizer_progress_to_stdout = true;
     ceres::Solver::Summary summary;
     ceres::Solve(options, &problem, &summary);
-    std::cout << summary.FullReport() << "\n";
+    cout << summary.FullReport() << "\n";
 
     cout << endl << "Writing Bundle Adjusted Pose Files..." << endl;
     for (int i = 0; i < num_ims; i++) {
@@ -1892,7 +1734,7 @@ template<typename DataType, typename ForwardIterator>
 Eigen::Quaternion<DataType> pose::averageQuaternions(ForwardIterator const & begin, ForwardIterator const & end) {
 
     if (begin == end) {
-        throw std::logic_error("Cannot average orientations over an empty range.");
+        throw logic_error("Cannot average orientations over an empty range.");
     }
 
     Eigen::Matrix<DataType, 4, 4> A = Eigen::Matrix<DataType, 4, 4>::Zero();
@@ -1911,7 +1753,7 @@ Eigen::Quaternion<DataType> pose::averageQuaternions(ForwardIterator const & beg
 
     Eigen::EigenSolver<Eigen::Matrix<DataType, 4, 4>> es(A);
 
-    Eigen::Matrix<std::complex<DataType>, 4, 1> mat(es.eigenvalues());
+    Eigen::Matrix<complex<DataType>, 4, 1> mat(es.eigenvalues());
     int index;
     mat.real().maxCoeff(&index);
     Eigen::Matrix<DataType, 4, 1> largest_ev(es.eigenvectors().real().block(0, index, 4, 1));
