@@ -209,8 +209,8 @@ int main() {
                 c_error_est = functions::getDistBetween(c_q, c_estimation);
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
 
-                Eigen::Vector3d T_est_gov = pose::T_q_govindu(best_T_is, best_R_qis, best_T_qis);
-                t_error_est = functions::getDistBetween(T_q, T_est_gov);
+                Eigen::Vector3d T_est_gov = pose::T_q_closed_form(best_T_is, best_R_qis, best_T_qis);
+                t_error_est = functions::getDistBetween(c_q, -R_estimation.transpose() * T_est_gov);
 
 //                cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
 //

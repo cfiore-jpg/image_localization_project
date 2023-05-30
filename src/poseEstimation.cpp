@@ -1855,51 +1855,34 @@ Eigen::Vector3d pose::T_q_govindu(const vector<Eigen::Vector3d> & T_ks,
     return results_curr;
 }
 
-pair<Eigen::Vector3d, Eigen::Vector3d> pose::T_q_closed_form (const vector<Eigen::Matrix3d> & R_ks,
-                                                              const vector<Eigen::Vector3d> & T_ks,
-                                                              const vector<Eigen::Matrix3d> & R_qks,
-                                                              const vector<Eigen::Vector3d> & T_qks) {
+Eigen::Vector3d pose::T_q_closed_form (const vector<Eigen::Vector3d> & T_ks,
+                                       const vector<Eigen::Matrix3d> & R_qks,
+                                       const vector<Eigen::Vector3d> & T_qks) {
 
-    size_t K = R_ks.size();
+    size_t K = T_ks.size();
 
     Eigen::Matrix3d I {{1, 0, 0},
                        {0, 1, 0},
                        {0, 0, 1}};
 
-    Eigen::MatrixXd A_10 {{0, 0, 0},
-                          {0, 0, 0},
-                          {0, 0, 0}};
-    Eigen::Vector3d b_10 {0, 0, 0};
-    Eigen::MatrixXd A_14 {{0, 0, 0},
-                          {0, 0, 0},
-                          {0, 0, 0}};
-    Eigen::Vector3d b_14 {0, 0, 0};
+    Eigen::MatrixXd A(K*3,3);
+    Eigen::MatrixXd b(K*3,1);
 
     for (int i = 0; i < K; i++) {
 
-        Eigen::Matrix3d R_k = R_ks[i];
-        Eigen::Vector3d T_k = T_ks[i];
-        Eigen::Matrix3d R_qk = R_qks[i];
-        Eigen::Vector3d T_qk = T_qks[i];
+        const Eigen::Vector3d& T_k = T_ks[i];
+        const Eigen::Matrix3d& R_qk = R_qks[i];
+        const Eigen::Vector3d& T_qk = T_qks[i];
 
-        Eigen::Matrix3d R_kq = R_qk.transpose();
-        Eigen::Vector3d T_kq = -R_qk.transpose() * T_qk;
+        Eigen::Matrix3d M = I - T_qk * T_qk.transpose();
 
-        Eigen::Matrix3d N = I - T_qk * T_qk.transpose();
-        Eigen::Matrix3d M = I - T_kq * T_kq.transpose();
-
-        A_10 += N;
-        b_10 += R_kq.transpose() * M * T_k;
-
-        A_14 += N;
-        b_14 += N * R_qk * T_k;
+        A.block(i*3,0,3,3) = M;
+        b.block(i*3,0,3,1) = M * R_qk * T_k;
 
     }
 
-    Eigen::Vector3d T_q_10 = A_10.colPivHouseholderQr().solve(b_10);
-    Eigen::Vector3d T_q_14 = A_14.colPivHouseholderQr().solve(b_14);
-
-    return {T_q_10, T_q_14};
+    Eigen::Vector3d T_q = A.colPivHouseholderQr().solve(b);
+    return T_q;
 }
 
 
