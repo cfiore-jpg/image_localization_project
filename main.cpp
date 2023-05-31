@@ -75,7 +75,7 @@ int main() {
 //     vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
      vector<string> scenes = {"KingsCollege/"};
      string dataset = "cambridge/";
-     string error_file = "error_translation";
+     string error_file = "error_top_2";
      int cutoff = -1;
 
     // vector<string> scenes = {"query/"};
@@ -192,36 +192,58 @@ int main() {
                     best_inliers_i.push_back(inliers_i[i]);
                     best_K_is.push_back(K_is[i]);
                 }
-                vector<Eigen::Matrix3d> rotations(best_R_is.size());
-                for (int i = 0; i < best_R_is.size(); i++) {
-                    rotations[i] = best_R_qis[i] * best_R_is[i];
-                }
-
                 cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
 
-                Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
+                int i = get<0>(best_set);
+                int j = get<1>(best_set);
+                vector<string> two_anchors {anchors[i], anchors[j]};
+                vector<Eigen::Matrix3d> two_R_is {R_is[i], R_is[j]};
+                vector<Eigen::Matrix3d> two_R_qis {R_qis[i], R_qis[j]};
+                vector<Eigen::Vector3d> two_T_is {T_is[i], T_is[j]};
+                vector<Eigen::Vector3d> two_T_qis {T_qis[i], T_qis[j]};
+                vector<vector<double>> two_K_is {K_is[i], K_is[j]};
+                vector<vector<cv::Point2d>> two_inliers_q {inliers_q[i], inliers_q[j]};
+                vector<vector<cv::Point2d>> two_inliers_i {inliers_i[i], inliers_i[j]};
+
+
+//                vector<Eigen::Matrix3d> rotations(best_R_is.size());
+//                for (int r = 0; r < best_R_is.size(); r++) {
+//                    rotations[r] = best_R_qis[r] * best_R_is[r];
+//                }
+//                Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
+//                Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
+//                Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
+//                c_error_est = functions::getDistBetween(c_q, c_estimation);
+//                r_error_est = functions::rotationDifference(R_q, R_estimation);
+
+
+                vector<Eigen::Matrix3d> rotations(two_R_is.size());
+                for (int r = 0; r < two_R_is.size(); r++) {
+                    rotations[r] = two_R_qis[r] * two_R_is[r];
+                }
+                Eigen::Vector3d c_estimation = pose::c_q_closed_form(two_R_is, two_T_is, two_R_qis, two_T_qis);
                 Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
                 Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
                 c_error_est = functions::getDistBetween(c_q, c_estimation);
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
 
-//                Eigen::Matrix3d R_adjusted = R_estimation;
-//                Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
-//                auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
-//                                                         best_inliers_i,
-//                                                         R_adjusted, T_adjusted);
-//                Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
-//                c_error_adj = functions::getDistBetween(c_q, c_adjusted);
-//                r_error_adj = functions::rotationDifference(R_q, R_adjusted);
+                Eigen::Matrix3d R_adjusted = R_estimation;
+                Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
+                auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
+                                                         best_inliers_i,
+                                                         R_adjusted, T_adjusted);
+                Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
+                c_error_adj = functions::getDistBetween(c_q, c_adjusted);
+                r_error_adj = functions::rotationDifference(R_q, R_adjusted);
 
-                Eigen::Matrix3d R_numerical = R_estimation;
-                Eigen::Vector3d T_numerical = T_estimation;
-                auto numerical_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
-                                                               best_inliers_i,
-                                                               R_numerical, T_numerical);
-                Eigen::Vector3d c_numerical = -R_numerical.transpose() * T_numerical;
-                c_error_num = functions::getDistBetween(c_q, c_numerical);
-                r_error_num = functions::rotationDifference(R_q, R_numerical);
+//                Eigen::Matrix3d R_numerical = R_q;
+//                Eigen::Vector3d T_numerical = T_q;
+//                auto numerical_points = pose::num_sys_solution(best_R_is, best_T_is, best_K_is, K_q, best_inliers_q,
+//                                                               best_inliers_i,
+//                                                               R_numerical, T_numerical);
+//                Eigen::Vector3d c_numerical = -R_numerical.transpose() * T_numerical;
+//                c_error_num = functions::getDistBetween(c_q, c_numerical);
+//                r_error_num = functions::rotationDifference(R_q, R_numerical);
 
 //                cout << " " << adj_points.first.size() << endl;
             }
@@ -243,10 +265,8 @@ int main() {
                 line += query + " Pre_Adj " + to_string(r_error_est)
                         + " " + to_string(c_error_est)
                         + " Post_Adj " + to_string(r_error_adj)
-                        + " " + to_string(c_error_adj)
-                        + " Post_Numerical " + to_string(r_error_num)
-                        + " " + to_string(c_error_num);
-//                error << line << endl;
+                        + " " + to_string(c_error_adj);
+                error << line << endl;
                 cout << line << endl;
             }
         }
