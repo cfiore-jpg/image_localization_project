@@ -20,6 +20,16 @@ using namespace std;
 
 namespace functions {
 
+    void filter_points(double thresh,
+                       const vector<double> &K_q,
+                       const Eigen::Matrix3d &R_q,
+                       const Eigen::Vector3d &T_q,
+                       const vector<vector<double>> &K_ks,
+                       const vector<Eigen::Matrix3d> &R_ks,
+                       const vector<Eigen::Vector3d> &T_ks,
+                       vector<vector<cv::Point2d>> &pts_q,
+                       vector<vector<cv::Point2d>> &pts_k);
+
     pair<double, double> mean_and_stdv(const vector<double> & v);
 
     vector<pair<pair<double, double>, vector<pair<int, int>>>>

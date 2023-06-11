@@ -34,6 +34,68 @@
 using namespace std;
 using namespace cv;
 
+
+void functions::filter_points(double thresh,
+                              const vector<double> &K_q,
+                              const Eigen::Matrix3d &R_q,
+                              const Eigen::Vector3d &T_q,
+                              const vector<vector<double>> &K_ks,
+                              const vector<Eigen::Matrix3d> &R_ks,
+                              const vector<Eigen::Vector3d> &T_ks,
+                              vector<vector<cv::Point2d>> &pts_q,
+                              vector<vector<cv::Point2d>> &pts_k) {
+
+
+    Eigen::Matrix3d K_q_eig {{K_q[2], 0, K_q[0]},
+                             {0, K_q[3], K_q[1]},
+                             {0, 0, 1}};
+
+    vector<vector<cv::Point2d>> pts_q_ = pts_q;
+    vector<vector<cv::Point2d>> pts_k_ = pts_k;
+    pts_q.clear();
+    pts_k.clear();
+
+    for (int i = 0; i < R_ks.size(); i++) {
+
+        vector<double> K_k = K_ks[i];
+        Eigen::Matrix3d K_k_eig {{K_k[2], 0, K_k[0]},
+                                 {0, K_k[3], K_k[1]},
+                                 {0, 0, 1}};
+
+        Eigen::Matrix3d R_qk = R_q * R_ks[i].transpose();
+        Eigen::Vector3d T_qk = T_q - R_qk * T_ks[i];
+        T_qk.normalize();
+        Eigen::Matrix3d T_qk_cross{{0,        -T_qk(2),  T_qk(1)},
+                                   {T_qk(2),  0,        -T_qk(0)},
+                                   {-T_qk(1), T_qk(0),  0}};
+        Eigen::Matrix3d E_qk = T_qk_cross * R_qk;
+        Eigen::Matrix3d F_qk = K_q_eig.inverse().transpose() * E_qk * K_k_eig.inverse();
+
+        vector<cv::Point2d> pt_ks_ = pts_k_[i], pt_qs_ = pts_q_[i];
+
+        vector<cv::Point2d> pt_ks, pt_qs;
+        for (int k = 0; k < pt_ks_.size(); k++) {
+            Eigen::Vector3d pt_k {pt_ks_[k].x, pt_ks_[k].y, 1.};
+            Eigen::Vector3d pt_q {pt_qs_[k].x, pt_qs_[k].y, 1.};
+
+            Eigen::Vector3d epiline = F_qk * pt_k;
+
+            double error = abs(epiline[0] * pt_q[0] + epiline[1] * pt_q[1] + epiline[2]) /
+                           sqrt(epiline[0] * epiline[0] + epiline[1] * epiline[1]);
+
+            if (error <= thresh) {
+                pt_ks.push_back(pt_ks_[k]);
+                pt_qs.push_back(pt_qs_[k]);
+            }
+        }
+        pts_q.push_back(pt_qs);
+        pts_k.push_back(pt_ks);
+    }
+}
+
+
+
+
 pair<double, double> functions::mean_and_stdv(const vector<double> & v) {
     double sum = std::accumulate(v.begin(), v.end(), 0.0);
     double mean = sum / v.size();

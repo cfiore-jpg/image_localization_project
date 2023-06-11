@@ -75,7 +75,7 @@ int main() {
 //     vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
      vector<string> scenes = {"KingsCollege/"};
      string dataset = "cambridge/";
-     string error_file = "error_top_2";
+     string error_file = "error_filtered";
      int cutoff = -1;
 
     // vector<string> scenes = {"query/"};
@@ -88,7 +88,7 @@ int main() {
 //    string error_file = "Robotcar_eval_MultiLoc";
 //    int cutoff = 2;
 
-    string relpose_file = "relpose_SP";
+    string relpose_file = "relpose_SP_all";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
@@ -117,10 +117,9 @@ int main() {
             auto R_qis = get<7>(info);
             auto T_qis = get<8>(info);
             auto K_is = get<9>(info);
-            auto inliers_q = get<10>(info);
-            auto inliers_i = get<11>(info);
+            auto pts_q = get<10>(info);
+            auto pts_i = get<11>(info);
             int K = int(anchors.size());
-
 
             Eigen::Matrix3d R_adjustment;
             Eigen::Vector3d T_adjustment;
@@ -154,7 +153,7 @@ int main() {
                 for (int i = 0; i < K - 1; i++) {
                     for (int j = i + 1; j < K; j++) {
                         threads[idx] = thread(findInliers, thresh, i, j, &R_is, &T_is, &R_qis, &T_qis,
-                                              &inliers_q, &results);
+                                              &pts_q, &results);
                         idx++;
                     }
                 }
@@ -188,44 +187,31 @@ int main() {
                     best_R_qis.push_back(R_qis[i]);
                     best_T_is.push_back(T_is[i]);
                     best_T_qis.push_back(T_qis[i]);
-                    best_inliers_q.push_back(inliers_q[i]);
-                    best_inliers_i.push_back(inliers_i[i]);
+                    best_inliers_q.push_back(pts_q[i]);
+                    best_inliers_i.push_back(pts_i[i]);
                     best_K_is.push_back(K_is[i]);
                 }
                 cout << " " << best_R_is.size() << "/" << R_is.size() << endl;
 
-                int i = get<0>(best_set);
-                int j = get<1>(best_set);
-                vector<string> two_anchors {anchors[i], anchors[j]};
-                vector<Eigen::Matrix3d> two_R_is {R_is[i], R_is[j]};
-                vector<Eigen::Matrix3d> two_R_qis {R_qis[i], R_qis[j]};
-                vector<Eigen::Vector3d> two_T_is {T_is[i], T_is[j]};
-                vector<Eigen::Vector3d> two_T_qis {T_qis[i], T_qis[j]};
-                vector<vector<double>> two_K_is {K_is[i], K_is[j]};
-                vector<vector<cv::Point2d>> two_inliers_q {inliers_q[i], inliers_q[j]};
-                vector<vector<cv::Point2d>> two_inliers_i {inliers_i[i], inliers_i[j]};
 
-
-//                vector<Eigen::Matrix3d> rotations(best_R_is.size());
-//                for (int r = 0; r < best_R_is.size(); r++) {
-//                    rotations[r] = best_R_qis[r] * best_R_is[r];
-//                }
-//                Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
-//                Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
-//                Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
-//                c_error_est = functions::getDistBetween(c_q, c_estimation);
-//                r_error_est = functions::rotationDifference(R_q, R_estimation);
-
-
-                vector<Eigen::Matrix3d> rotations(two_R_is.size());
-                for (int r = 0; r < two_R_is.size(); r++) {
-                    rotations[r] = two_R_qis[r] * two_R_is[r];
+                vector<Eigen::Matrix3d> rotations(best_R_is.size());
+                for (int r = 0; r < best_R_is.size(); r++) {
+                    rotations[r] = best_R_qis[r] * best_R_is[r];
                 }
-                Eigen::Vector3d c_estimation = pose::c_q_closed_form(two_R_is, two_T_is, two_R_qis, two_T_qis);
+                Eigen::Vector3d c_estimation = pose::c_q_closed_form(best_R_is, best_T_is, best_R_qis, best_T_qis);
                 Eigen::Matrix3d R_estimation = pose::R_q_average(rotations);
                 Eigen::Vector3d T_estimation = -R_estimation * c_estimation;
                 c_error_est = functions::getDistBetween(c_q, c_estimation);
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
+
+
+                vector<vector<cv::Point2d>> filtered_q, filtered_i;
+                functions::filter_points(1.,
+                                         K_q, R_estimation, T_estimation,
+                                         best_K_is, best_R_is, best_T_is,
+                                         best_inliers_q, best_inliers_i);
+
+
 
                 Eigen::Matrix3d R_adjusted = R_estimation;
                 Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
@@ -235,6 +221,8 @@ int main() {
                 Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
                 c_error_adj = functions::getDistBetween(c_q, c_adjusted);
                 r_error_adj = functions::rotationDifference(R_q, R_adjusted);
+
+                int stop = 0;
 
 //                Eigen::Matrix3d R_numerical = R_q;
 //                Eigen::Vector3d T_numerical = T_q;
