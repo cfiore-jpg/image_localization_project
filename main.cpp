@@ -205,12 +205,30 @@ int main() {
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
 
 
-                vector<vector<cv::Point2d>> filtered_q, filtered_i;
-                functions::filter_points(1.,
+                functions::filter_points(2.,
                                          K_q, R_estimation, T_estimation,
                                          best_K_is, best_R_is, best_T_is,
                                          best_inliers_q, best_inliers_i);
 
+
+//                vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(2, best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
+//                cv::Mat qIm = cv::imread(dir+query);
+//                for (int i = 0; i < all_matches.size(); i++) {
+//                    auto p = all_matches[i];
+//                    cv::Point2d pt2D(p.first.first, p.first.second);
+//                    Eigen::Vector3d pt3D = pose::nview(p.second, best_R_is, best_T_is, best_K_is, best_inliers_i);
+//                    cv::Point2d reprojected2Dpt = pose::reproject3Dto2D(pt3D, R_estimation, T_estimation, K_q);
+//
+//
+//                    cv::circle(qIm, pt2D, 5., {0,0,255}, -1);
+//                    cv::circle(qIm, reprojected2Dpt, 5., {0,255,0});
+//
+//
+//                    int pause = 0;
+//
+//                }
+//                cv::imshow("final-pose-level filtering", qIm);
+//                cv::waitKey();
 
 
                 Eigen::Matrix3d R_adjusted = R_estimation;
