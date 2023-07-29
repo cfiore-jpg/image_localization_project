@@ -112,8 +112,8 @@ int main() {
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
 
-        vector<double> estimate_times; estimate_times.reserve(queries.size());
-        vector<double> adjustment_times; adjustment_times.reserve(queries.size());
+        vector<int> estimate_times; estimate_times.reserve(queries.size());
+        vector<int> adjustment_times; adjustment_times.reserve(queries.size());
 
         for (int q = start; q < queries.size(); q++) {
 
@@ -182,7 +182,7 @@ int main() {
                 auto startTime = std::chrono::high_resolution_clock::now();
 
 
-    
+
                 int idx = 0;
                 vector<thread> threads(s);
                 vector<tuple<int, int, double, vector<int>>> results;
@@ -240,12 +240,12 @@ int main() {
 
                 auto endTime = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
-                estimate_times[q] = int(duration);
+                estimate_times.push_back(int(duration));
 
-                
+
 
                 startTime = std::chrono::high_resolution_clock::now();
-                
+
                 functions::filter_points(15., K_q, R_estimation, T_estimation,
                                          K_is, R_is, T_is,
                                          pts_q, pts_i);
@@ -283,7 +283,7 @@ int main() {
 
                 endTime = std::chrono::high_resolution_clock::now();
                 duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
-                adjustment_times[q] = int(duration);
+                adjustment_times.push_back(int(duration));
 
 
 //                Eigen::Matrix3d R_numerical = R_q;
@@ -321,6 +321,36 @@ int main() {
             }
         }
         error.close();
+
+        double estimate_time_med;
+        double adjustment_time_med;
+        if (estimate_times.size() % 2 == 0) {
+            int r_idx = int(estimate_times.size()) / 2;
+            int l_idx = r_idx - 1;
+            estimate_time_med = double(estimate_times[l_idx] + estimate_times[r_idx]) / 2.;
+            adjustment_time_med = double(adjustment_times[l_idx] + adjustment_times[r_idx]) / 2.;
+        } else {
+            int idx = int((adjustment_times.size() - 1) / 2);
+            estimate_time_med = estimate_times[idx];
+            adjustment_time_med = adjustment_times[idx];
+        }
+
+
+        double estimate_time_avg = 0;
+        double adjustment_time_avg = 0;
+        for(int i = 0; i < estimate_times.size(); i++) {
+            estimate_time_avg += estimate_times[i];
+            adjustment_time_avg += adjustment_times[i];
+        }
+        estimate_time_avg /= int(estimate_times.size());
+        adjustment_time_avg /= int(adjustment_times.size());
+
+        cout << "Median estimation time: " << estimate_time_med << endl <<
+                "Average estimation time: " << estimate_time_avg << endl <<
+                "Median adjustment time: " << adjustment_time_med << endl <<
+                "Average adjustment time: " << adjustment_time_avg << endl;
+
+
     }
     return 0;
 }
