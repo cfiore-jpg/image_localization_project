@@ -111,6 +111,10 @@ int main() {
 
         int start = 0;
         vector<string> queries = functions::getQueries(dir + "q.txt", scene);
+
+        vector<double> estimate_times; estimate_times.reserve(queries.size());
+        vector<double> adjustment_times; adjustment_times.reserve(queries.size());
+
         for (int q = start; q < queries.size(); q++) {
 
             cout << q + 1 << "/" << queries.size();
@@ -173,6 +177,12 @@ int main() {
                     }
                 }
 
+
+
+                auto startTime = std::chrono::high_resolution_clock::now();
+
+
+    
                 int idx = 0;
                 vector<thread> threads(s);
                 vector<tuple<int, int, double, vector<int>>> results;
@@ -228,6 +238,14 @@ int main() {
                 r_error_est = functions::rotationDifference(R_q, R_estimation);
 
 
+                auto endTime = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+                estimate_times[q] = int(duration);
+
+                
+
+                startTime = std::chrono::high_resolution_clock::now();
+                
                 functions::filter_points(15., K_q, R_estimation, T_estimation,
                                          K_is, R_is, T_is,
                                          pts_q, pts_i);
@@ -262,12 +280,11 @@ int main() {
                 c_error_adj = functions::getDistBetween(c_q, c_adjusted);
                 r_error_adj = functions::rotationDifference(R_q, R_adjusted);
 
-                cout << c_error_adj << endl;
-                cout << r_error_adj << endl;
 
-                exit(0);
+                endTime = std::chrono::high_resolution_clock::now();
+                duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+                adjustment_times[q] = int(duration);
 
-                int stop = 0;
 
 //                Eigen::Matrix3d R_numerical = R_q;
 //                Eigen::Vector3d T_numerical = T_q;
