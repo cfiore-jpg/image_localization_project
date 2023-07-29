@@ -612,27 +612,27 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(2, R_is, T_is, K_is, all_pts_q, all_pts_i);
 
     ceres::Problem problem;
-//    ceres::LossFunction *loss = new ceres::CauchyLoss(1);
-    ceres::LossFunction *loss = nullptr;
+    ceres::LossFunction *loss = new ceres::CauchyLoss(1);
+//    ceres::LossFunction *loss = nullptr;
 
 
     vector<cv::Point2d> points2d;
     vector<Eigen::Vector3d> points3d;
-    for (int i = 0; i < all_matches.size(); i++) {
-        auto p = all_matches[i];
+    for (auto p : all_matches) {
         cv::Point2d pt2D(p.first.first, p.first.second);
         Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
 
-        double rep_error = pose::reprojError(pt3D, R_q, T_q, K_q, pt2D.x, pt2D.y);
+        auto cost = ReprojectionError::Create(pt2D, pt3D, K_q);
+        problem.AddResidualBlock(cost, loss, camera);
+        points2d.push_back(pt2D);
+        points3d.push_back(pt3D);
 
-        if (rep_error <= 15.) {
-            auto cost = ReprojectionError::Create(pt2D, pt3D, K_q);
-            problem.AddResidualBlock(cost, loss, camera);
-            points2d.push_back(pt2D);
-            points3d.push_back(pt3D);
-        }
     }
+
     ceres::Solver::Options options;
+    options.minimizer_progress_to_stdout = true;
+    options.function_tolerance = 1e-12;
+    options.gradient_tolerance = 1e-12;
     options.linear_solver_type = ceres::DENSE_SCHUR;
     ceres::Solver::Summary summary;
     if (problem.NumResidualBlocks() > 0) {
@@ -640,6 +640,8 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     } else {
         cout << " Can't Adjust ";
     }
+
+    cout << summary.FullReport() << endl;
 
     double AA_adj[3]{camera[0], camera[1], camera[2]};
     double R_adj[9];
