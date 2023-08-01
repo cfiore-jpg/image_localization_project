@@ -115,7 +115,9 @@ int main() {
         vector<int> estimate_times; estimate_times.reserve(queries.size());
         vector<int> adjustment_times; adjustment_times.reserve(queries.size());
 
-        for (int q = start; q < queries.size(); q++) {
+//        for (int q = start; q < queries.size(); q++) {
+        for (int q = start; q < 1; q++) {
+
 
             cout << q + 1 << "/" << queries.size();
             string query = queries[q];
@@ -249,7 +251,6 @@ int main() {
                 functions::filter_points(15., K_q, R_estimation, T_estimation,
                                          K_is, R_is, T_is,
                                          pts_q, pts_i);
-
 
 //                vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(2, best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 //                cv::Mat qIm = cv::imread(dir+query);

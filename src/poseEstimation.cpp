@@ -613,12 +613,15 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Problem problem;
     ceres::LossFunction *loss = new ceres::CauchyLoss(1);
-//    ceres::LossFunction *loss = nullptr;
-
 
     vector<cv::Point2d> points2d;
+    points2d.reserve(all_matches.size());
     vector<Eigen::Vector3d> points3d;
-    for (auto p : all_matches) {
+    points3d.reserve(all_matches.size());
+
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+    for (const auto& p : all_matches) {
         cv::Point2d pt2D(p.first.first, p.first.second);
         Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
 
@@ -629,10 +632,15 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     }
 
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+
+    cout << duration << endl;
+
     ceres::Solver::Options options;
-    options.minimizer_progress_to_stdout = true;
-    options.function_tolerance = 1e-12;
-    options.gradient_tolerance = 1e-12;
+//    options.minimizer_progress_to_stdout = true;
+//    options.function_tolerance = 1e-12;
+//    options.gradient_tolerance = 1e-12;
     options.linear_solver_type = ceres::DENSE_SCHUR;
     ceres::Solver::Summary summary;
     if (problem.NumResidualBlocks() > 0) {
@@ -641,7 +649,7 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
         cout << " Can't Adjust ";
     }
 
-    cout << summary.FullReport() << endl;
+//    cout << summary.FullReport() << endl;
 
     double AA_adj[3]{camera[0], camera[1], camera[2]};
     double R_adj[9];
