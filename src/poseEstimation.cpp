@@ -615,27 +615,40 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
     ceres::LossFunction *loss = new ceres::CauchyLoss(1);
 
     vector<cv::Point2d> points2d;
-    points2d.reserve(all_matches.size());
+//    points2d.reserve(all_matches.size());
     vector<Eigen::Vector3d> points3d;
-    points3d.reserve(all_matches.size());
+//    points3d.reserve(all_matches.size());
 
-    auto startTime = std::chrono::high_resolution_clock::now();
+//    double points3d_adj[10000][3];
+//    auto startTime = std::chrono::high_resolution_clock::now();
+//    double total = 0;
 
-    for (const auto& p : all_matches) {
+    for (auto p : all_matches) {
         cv::Point2d pt2D(p.first.first, p.first.second);
-        Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
+        Eigen::Vector3d pt3D = pose::estimate3Dpoint(p.second, R_is, T_is, K_is, all_pts_i);
+
+//        if (pose::reprojError(pt3D, R_q, T_q, K_q, pt2D.x, pt2D.y) > 20) continue;
+//
+//        points3d_adj[i][0] = pt3D[0];
+//        points3d_adj[i][1] = pt3D[1];
+//        points3d_adj[i][2] = pt3D[2];
+//
+//        for(const auto & m : p.second) {
+//            auto cost = NView::Create(R_is[m.first], T_is[m.first], K_is[m.first], pt2D);
+//            problem.AddResidualBlock(cost, loss, points3d_adj[i]);
+//        }
 
         auto cost = ReprojectionError::Create(pt2D, pt3D, K_q);
         problem.AddResidualBlock(cost, loss, camera);
-        points2d.push_back(pt2D);
-        points3d.push_back(pt3D);
+//        points2d.push_back(pt2D);
+//        points3d.push_back(pt3D);
 
     }
 
-    auto endTime = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
+//    auto endTime = std::chrono::high_resolution_clock::now();
+//    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
 
-    cout << duration << endl;
+//    cout << duration << endl;
 
     ceres::Solver::Options options;
 //    options.minimizer_progress_to_stdout = true;

@@ -103,7 +103,7 @@ int main() {
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
-    string dir = home_dir;
+    string dir = ccv_dir;
 
     for (const auto &scene: scenes) {
         ofstream error;
@@ -115,8 +115,8 @@ int main() {
         vector<int> estimate_times; estimate_times.reserve(queries.size());
         vector<int> adjustment_times; adjustment_times.reserve(queries.size());
 
-//        for (int q = start; q < queries.size(); q++) {
-        for (int q = start; q < 1; q++) {
+        for (int q = start; q < queries.size(); q++) {
+//        for (int q = start; q < 1; q++) {
 
 
             cout << q + 1 << "/" << queries.size();
@@ -248,7 +248,7 @@ int main() {
 
                 startTime = std::chrono::high_resolution_clock::now();
 
-                functions::filter_points(15., K_q, R_estimation, T_estimation,
+                functions::filter_points(25., K_q, R_estimation, T_estimation,
                                          K_is, R_is, T_is,
                                          pts_q, pts_i);
 
