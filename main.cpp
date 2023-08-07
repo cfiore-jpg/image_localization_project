@@ -84,22 +84,22 @@ int main() {
 //    int cutoff = -1;
 
 //     vector<string> scenes = {"GreatCourt/", "KingsCollege/", "OldHospital/", "ShopFacade/", "StMarysChurch/"};
-     vector<string> scenes = {"KingsCollege/"};
-     string dataset = "cambridge/";
-     string error_file = "error_fast";
-     int cutoff = -1;
+    //  vector<string> scenes = {"KingsCollege/"};
+    //  string dataset = "cambridge/";
+    //  string error_file = "error_fast";
+    //  int cutoff = -1;
 
-    // vector<string> scenes = {"query/"};
-    // string dataset = "aachen/";
-    // string error_file = "Aachen_eval_MultiLoc";
-    // int cutoff = 3;
+    vector<string> scenes = {"query/"};
+    string dataset = "aachen/";
+    string error_file = "Aachen_eval_MultiLoc";
+    int cutoff = 3;
 
 //    vector<string> scenes = {"query/"};
 //    string dataset = "robotcar/";
 //    string error_file = "Robotcar_eval_MultiLoc";
 //    int cutoff = 2;
 
-    string relpose_file = "relpose_SP_all";
+    string relpose_file = "relpose_SP";
 
     string ccv_dir = "/users/cfiore/data/cfiore/image_localization_project/data/" + dataset;
     string home_dir = "/Users/cameronfiore/C++/image_localization_project/data/" + dataset;
@@ -157,13 +157,13 @@ int main() {
                 cout << endl;
             } else {
 
-                //// For speed testing lower K to top 10 ///
-                K = 10;
-                vector<Eigen::Matrix3d> R_is_top10(10);
-                vector<Eigen::Vector3d> T_is_top10(10);
-                vector<Eigen::Matrix3d> R_qis_top10(10);
-                vector<Eigen::Vector3d> T_qis_top10(10);
-                for (int i = 0; i < 10; i++) {
+                //// For speed testing lower K ///
+                K = min(int(anchors.size()), 50);
+                vector<Eigen::Matrix3d> R_is_top10(K);
+                vector<Eigen::Vector3d> T_is_top10(K);
+                vector<Eigen::Matrix3d> R_qis_top10(K);
+                vector<Eigen::Vector3d> T_qis_top10(K);
+                for (int i = 0; i < K; i++) {
                     R_is_top10[i] = R_is[i];
                     T_is_top10[i] = T_is[i];
                     R_qis_top10[i] = R_qis[i];
@@ -248,9 +248,9 @@ int main() {
 
                 startTime = std::chrono::high_resolution_clock::now();
 
-                functions::filter_points(25., K_q, R_estimation, T_estimation,
-                                         K_is, R_is, T_is,
-                                         pts_q, pts_i);
+                // functions::filter_points(6., K_q, R_estimation, T_estimation,
+                //                          K_is, R_is, T_is,
+                //                          pts_q, pts_i);
 
 //                vector<pair<pair<double,double>,vector<pair<int,int>>>> all_matches = functions::findSharedMatches(2, best_R_is, best_T_is, best_K_is, best_inliers_q, best_inliers_i);
 //                cv::Mat qIm = cv::imread(dir+query);
@@ -274,8 +274,8 @@ int main() {
 
                 Eigen::Matrix3d R_adjusted = R_estimation;
                 Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
-                auto adj_points = pose::adjustHypothesis(R_is, T_is, K_is,
-                                                         K_q, pts_q, pts_i,
+                auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is,
+                                                         K_q, best_inliers_q, best_inliers_i,
                                                          R_adjusted, T_adjusted);
                 Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
                 c_error_adj = functions::getDistBetween(c_q, c_adjusted);

@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /gpfs/data/bkimia/cfiore/image_localization_project
+CMAKE_SOURCE_DIR = /oscar/data/bkimia/cfiore/image_localization_project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /gpfs/data/bkimia/cfiore/image_localization_project/build
+CMAKE_BINARY_DIR = /oscar/data/bkimia/cfiore/image_localization_project/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/image_localization_project.dir/depend.make
@@ -72,128 +72,128 @@ include CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/main.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/main.cpp.o: ../main.cpp
 CMakeFiles/image_localization_project.dir/main.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/image_localization_project.dir/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/main.cpp.o -MF CMakeFiles/image_localization_project.dir/main.cpp.o.d -o CMakeFiles/image_localization_project.dir/main.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/image_localization_project.dir/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/main.cpp.o -MF CMakeFiles/image_localization_project.dir/main.cpp.o.d -o CMakeFiles/image_localization_project.dir/main.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/main.cpp
 
 CMakeFiles/image_localization_project.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/main.cpp > CMakeFiles/image_localization_project.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/main.cpp > CMakeFiles/image_localization_project.dir/main.cpp.i
 
 CMakeFiles/image_localization_project.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/main.cpp -o CMakeFiles/image_localization_project.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/main.cpp -o CMakeFiles/image_localization_project.dir/main.cpp.s
 
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: ../src/sevenScenes.cpp
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o -MF CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/src/sevenScenes.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o -MF CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/src/sevenScenes.cpp
 
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/src/sevenScenes.cpp > CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/src/sevenScenes.cpp > CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.i
 
 CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/src/sevenScenes.cpp -o CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/src/sevenScenes.cpp -o CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.s
 
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.cpp
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o -MF CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/src/synthetic.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o -MF CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/src/synthetic.cpp
 
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/synthetic.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/src/synthetic.cpp > CMakeFiles/image_localization_project.dir/src/synthetic.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/src/synthetic.cpp > CMakeFiles/image_localization_project.dir/src/synthetic.cpp.i
 
 CMakeFiles/image_localization_project.dir/src/synthetic.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/synthetic.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/src/synthetic.cpp -o CMakeFiles/image_localization_project.dir/src/synthetic.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/src/synthetic.cpp -o CMakeFiles/image_localization_project.dir/src/synthetic.cpp.s
 
 CMakeFiles/image_localization_project.dir/src/Space.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp
 CMakeFiles/image_localization_project.dir/src/Space.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/image_localization_project.dir/src/Space.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/Space.cpp.o -MF CMakeFiles/image_localization_project.dir/src/Space.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/Space.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/src/Space.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/image_localization_project.dir/src/Space.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/Space.cpp.o -MF CMakeFiles/image_localization_project.dir/src/Space.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/Space.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/src/Space.cpp
 
 CMakeFiles/image_localization_project.dir/src/Space.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/Space.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/src/Space.cpp > CMakeFiles/image_localization_project.dir/src/Space.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/src/Space.cpp > CMakeFiles/image_localization_project.dir/src/Space.cpp.i
 
 CMakeFiles/image_localization_project.dir/src/Space.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/Space.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/src/Space.cpp -o CMakeFiles/image_localization_project.dir/src/Space.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/src/Space.cpp -o CMakeFiles/image_localization_project.dir/src/Space.cpp.s
 
 CMakeFiles/image_localization_project.dir/src/functions.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/functions.cpp.o: ../src/functions.cpp
 CMakeFiles/image_localization_project.dir/src/functions.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/image_localization_project.dir/src/functions.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/functions.cpp.o -MF CMakeFiles/image_localization_project.dir/src/functions.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/functions.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/src/functions.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/image_localization_project.dir/src/functions.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/functions.cpp.o -MF CMakeFiles/image_localization_project.dir/src/functions.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/functions.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/src/functions.cpp
 
 CMakeFiles/image_localization_project.dir/src/functions.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/functions.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/src/functions.cpp > CMakeFiles/image_localization_project.dir/src/functions.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/src/functions.cpp > CMakeFiles/image_localization_project.dir/src/functions.cpp.i
 
 CMakeFiles/image_localization_project.dir/src/functions.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/functions.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/src/functions.cpp -o CMakeFiles/image_localization_project.dir/src/functions.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/src/functions.cpp -o CMakeFiles/image_localization_project.dir/src/functions.cpp.s
 
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseEstimation.cpp
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o -MF CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/src/poseEstimation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o -MF CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/src/poseEstimation.cpp
 
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/src/poseEstimation.cpp > CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/src/poseEstimation.cpp > CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.i
 
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/src/poseEstimation.cpp -o CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/src/poseEstimation.cpp -o CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.s
 
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../src/OptimalRotationSolver.cpp
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o -MF CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/src/OptimalRotationSolver.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o -MF CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/src/OptimalRotationSolver.cpp
 
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/src/OptimalRotationSolver.cpp > CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/src/OptimalRotationSolver.cpp > CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.i
 
 CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/src/OptimalRotationSolver.cpp -o CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/src/OptimalRotationSolver.cpp -o CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.s
 
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: ../src/CambridgeLandmarks.cpp
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o -MF CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/src/CambridgeLandmarks.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o -MF CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/src/CambridgeLandmarks.cpp
 
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/src/CambridgeLandmarks.cpp > CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/src/CambridgeLandmarks.cpp > CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.i
 
 CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/src/CambridgeLandmarks.cpp -o CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/src/CambridgeLandmarks.cpp -o CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.s
 
 CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: CMakeFiles/image_localization_project.dir/flags.make
 CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: ../src/aachen.cpp
 CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: CMakeFiles/image_localization_project.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/image_localization_project.dir/src/aachen.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/aachen.cpp.o -MF CMakeFiles/image_localization_project.dir/src/aachen.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/aachen.cpp.o -c /gpfs/data/bkimia/cfiore/image_localization_project/src/aachen.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/image_localization_project.dir/src/aachen.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/image_localization_project.dir/src/aachen.cpp.o -MF CMakeFiles/image_localization_project.dir/src/aachen.cpp.o.d -o CMakeFiles/image_localization_project.dir/src/aachen.cpp.o -c /oscar/data/bkimia/cfiore/image_localization_project/src/aachen.cpp
 
 CMakeFiles/image_localization_project.dir/src/aachen.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/image_localization_project.dir/src/aachen.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /gpfs/data/bkimia/cfiore/image_localization_project/src/aachen.cpp > CMakeFiles/image_localization_project.dir/src/aachen.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /oscar/data/bkimia/cfiore/image_localization_project/src/aachen.cpp > CMakeFiles/image_localization_project.dir/src/aachen.cpp.i
 
 CMakeFiles/image_localization_project.dir/src/aachen.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/image_localization_project.dir/src/aachen.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /gpfs/data/bkimia/cfiore/image_localization_project/src/aachen.cpp -o CMakeFiles/image_localization_project.dir/src/aachen.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /oscar/data/bkimia/cfiore/image_localization_project/src/aachen.cpp -o CMakeFiles/image_localization_project.dir/src/aachen.cpp.s
 
 # Object files for target image_localization_project
 image_localization_project_OBJECTS = \
@@ -299,7 +299,7 @@ image_localization_project: /usr/lib/x86_64-linux-gnu/libsuitesparseconfig.so
 image_localization_project: /usr/lib/x86_64-linux-gnu/librt.a
 image_localization_project: /usr/lib/x86_64-linux-gnu/libcxsparse.so
 image_localization_project: CMakeFiles/image_localization_project.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable image_localization_project"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable image_localization_project"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/image_localization_project.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -311,6 +311,6 @@ CMakeFiles/image_localization_project.dir/clean:
 .PHONY : CMakeFiles/image_localization_project.dir/clean
 
 CMakeFiles/image_localization_project.dir/depend:
-	cd /gpfs/data/bkimia/cfiore/image_localization_project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /gpfs/data/bkimia/cfiore/image_localization_project /gpfs/data/bkimia/cfiore/image_localization_project /gpfs/data/bkimia/cfiore/image_localization_project/build /gpfs/data/bkimia/cfiore/image_localization_project/build /gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles/image_localization_project.dir/DependInfo.cmake --color=$(COLOR)
+	cd /oscar/data/bkimia/cfiore/image_localization_project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /oscar/data/bkimia/cfiore/image_localization_project /oscar/data/bkimia/cfiore/image_localization_project /oscar/data/bkimia/cfiore/image_localization_project/build /oscar/data/bkimia/cfiore/image_localization_project/build /oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles/image_localization_project.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/image_localization_project.dir/depend
 

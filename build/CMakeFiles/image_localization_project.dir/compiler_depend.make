@@ -431,16 +431,16 @@ CMakeFiles/image_localization_project.dir/main.cpp.o: ../main.cpp \
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -454,27 +454,27 @@ CMakeFiles/image_localization_project.dir/main.cpp.o: ../main.cpp \
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -482,9 +482,9 @@ CMakeFiles/image_localization_project.dir/main.cpp.o: ../main.cpp \
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -580,12 +580,12 @@ CMakeFiles/image_localization_project.dir/main.cpp.o: ../main.cpp \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
   ../include/sevenScenes.h \
   /usr/include/c++/11/map \
   /usr/include/c++/11/bits/stl_tree.h \
@@ -606,44 +606,44 @@ CMakeFiles/image_localization_project.dir/main.cpp.o: ../main.cpp \
   ../include/functions.h \
   ../include/Space.h \
   ../include/sevenScenes.h \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -654,59 +654,59 @@ CMakeFiles/image_localization_project.dir/main.cpp.o: ../main.cpp \
   /usr/include/c++/11/bits/locale_facets_nonio.tcc \
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
   /usr/include/eigen3/Eigen/SVD \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ocl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ocl.hpp \
   /usr/include/c++/11/typeindex \
   ../include/OptimalRotationSolver.h \
   ../include/CambridgeLandmarks.h
@@ -1141,16 +1141,16 @@ CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: ../src/C
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -1164,27 +1164,27 @@ CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: ../src/C
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -1192,9 +1192,9 @@ CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: ../src/C
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -1290,60 +1290,60 @@ CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: ../src/C
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
   /usr/include/c++/11/map \
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_map.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
   /usr/include/c++/11/unordered_map \
   /usr/include/c++/11/bits/hashtable.h \
   /usr/include/c++/11/bits/hashtable_policy.h \
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -1354,53 +1354,53 @@ CMakeFiles/image_localization_project.dir/src/CambridgeLandmarks.cpp.o: ../src/C
   /usr/include/c++/11/bits/locale_facets_nonio.tcc \
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
@@ -1838,16 +1838,16 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../sr
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -1861,27 +1861,27 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../sr
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -1889,9 +1889,9 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../sr
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/local/include/ceres/ceres.h \
   /usr/local/include/ceres/autodiff_cost_function.h \
   /usr/local/include/ceres/internal/autodiff.h \
@@ -1977,47 +1977,47 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../sr
   /usr/local/include/ceres/version.h \
   /usr/local/include/ceres/rotation.h \
   ../include/OptimalRotationSolver.h \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -2029,51 +2029,51 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../sr
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
   /usr/include/c++/11/math.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -2166,8 +2166,8 @@ CMakeFiles/image_localization_project.dir/src/OptimalRotationSolver.cpp.o: ../sr
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp
 
 CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp \
   /usr/include/stdc-predef.h \
@@ -2599,16 +2599,16 @@ CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp \
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -2622,27 +2622,27 @@ CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp \
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -2650,9 +2650,9 @@ CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp \
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -2748,12 +2748,12 @@ CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
   ../include/sevenScenes.h \
   /usr/include/c++/11/map \
   /usr/include/c++/11/bits/stl_tree.h \
@@ -2764,49 +2764,49 @@ CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp \
   ../include/sevenScenes.h \
   ../include/synthetic.h \
   ../include/CambridgeLandmarks.h \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
   /usr/include/c++/11/unordered_map \
   /usr/include/c++/11/bits/hashtable.h \
   /usr/include/c++/11/bits/hashtable_policy.h \
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -2817,53 +2817,53 @@ CMakeFiles/image_localization_project.dir/src/Space.cpp.o: ../src/Space.cpp \
   /usr/include/c++/11/bits/locale_facets_nonio.tcc \
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp
 
 CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: ../src/aachen.cpp \
   /usr/include/stdc-predef.h \
@@ -3295,16 +3295,16 @@ CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: ../src/aachen.cpp \
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -3318,27 +3318,27 @@ CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: ../src/aachen.cpp \
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -3346,9 +3346,9 @@ CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: ../src/aachen.cpp \
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -3444,60 +3444,60 @@ CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: ../src/aachen.cpp \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
   /usr/include/c++/11/map \
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_map.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
   /usr/include/c++/11/unordered_map \
   /usr/include/c++/11/bits/hashtable.h \
   /usr/include/c++/11/bits/hashtable_policy.h \
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -3508,53 +3508,53 @@ CMakeFiles/image_localization_project.dir/src/aachen.cpp.o: ../src/aachen.cpp \
   /usr/include/c++/11/bits/locale_facets_nonio.tcc \
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
@@ -3999,16 +3999,16 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: ../src/functions.
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -4021,27 +4021,27 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: ../src/functions.
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -4049,9 +4049,9 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: ../src/functions.
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -4147,12 +4147,12 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: ../src/functions.
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
   ../include/CambridgeLandmarks.h \
   ../include/functions.h \
   /usr/include/c++/11/unordered_map \
@@ -4169,44 +4169,44 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: ../src/functions.
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -4216,53 +4216,53 @@ CMakeFiles/image_localization_project.dir/src/functions.cpp.o: ../src/functions.
   /usr/include/c++/11/bits/locale_facets_nonio.tcc \
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp
 
 CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseEstimation.cpp \
   /usr/include/stdc-predef.h \
@@ -4700,16 +4700,16 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseE
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -4722,27 +4722,27 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseE
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -4750,9 +4750,9 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseE
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -4848,12 +4848,12 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseE
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
   ../include/functions.h \
   /usr/include/c++/11/unordered_map \
   /usr/include/c++/11/bits/hashtable.h \
@@ -4867,44 +4867,44 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseE
   ../include/functions.h \
   ../include/Space.h \
   ../include/sevenScenes.h \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -4915,53 +4915,53 @@ CMakeFiles/image_localization_project.dir/src/poseEstimation.cpp.o: ../src/poseE
   /usr/include/c++/11/bits/locale_facets_nonio.tcc \
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
@@ -5471,16 +5471,16 @@ CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: ../src/sevenSce
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -5493,27 +5493,27 @@ CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: ../src/sevenSce
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -5521,9 +5521,9 @@ CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: ../src/sevenSce
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -5619,55 +5619,55 @@ CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: ../src/sevenSce
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
   /usr/include/c++/11/unordered_map \
   /usr/include/c++/11/bits/hashtable.h \
   /usr/include/c++/11/bits/hashtable_policy.h \
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -5678,53 +5678,53 @@ CMakeFiles/image_localization_project.dir/src/sevenScenes.cpp.o: ../src/sevenSce
   /usr/include/c++/11/bits/locale_facets_nonio.tcc \
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
@@ -6163,16 +6163,16 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
   /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h \
   /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_raw_storage_iter.h \
@@ -6186,27 +6186,27 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
   /usr/include/c++/11/ext/concurrence.h \
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp \
   /usr/include/c++/11/cfloat \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/chrono \
   /usr/include/c++/11/ratio \
@@ -6214,9 +6214,9 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
   /usr/include/c++/11/bits/parse_numbers.h \
   /usr/include/c++/11/bits/std_mutex.h \
   /usr/include/c++/11/bits/unique_lock.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor \
   /usr/include/eigen3/Eigen/Core \
   /usr/include/eigen3/unsupported/Eigen/SpecialFunctions \
@@ -6312,60 +6312,60 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h \
   /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h \
   /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp \
   /usr/include/c++/11/map \
   /usr/include/c++/11/bits/stl_tree.h \
   /usr/include/c++/11/bits/stl_map.h \
   /usr/include/c++/11/bits/stl_multimap.h \
   /usr/include/c++/11/bits/erase_if.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h \
   /usr/include/c++/11/set \
   /usr/include/c++/11/bits/stl_set.h \
   /usr/include/c++/11/bits/stl_multiset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h \
   /usr/include/c++/11/unordered_map \
   /usr/include/c++/11/bits/hashtable.h \
   /usr/include/c++/11/bits/hashtable_policy.h \
   /usr/include/c++/11/bits/enable_special_members.h \
   /usr/include/c++/11/bits/unordered_map.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h \
   /usr/include/c++/11/iomanip \
   /usr/include/c++/11/locale \
   /usr/include/c++/11/bits/locale_facets_nonio.h \
@@ -6376,53 +6376,53 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
   /usr/include/c++/11/bits/locale_facets_nonio.tcc \
   /usr/include/c++/11/bits/locale_conv.h \
   /usr/include/c++/11/bits/quoted_string.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h \
+  /oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/deque \
   /usr/include/c++/11/bits/stl_deque.h \
   /usr/include/c++/11/bits/deque.tcc \
   /usr/include/c++/11/bits/stl_queue.h \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
-  /gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp \
+  /oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp \
+  /oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp \
   /usr/include/c++/11/fstream \
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
@@ -6448,13 +6448,7 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/local/include/ceres/first_order_function.h:
 
-/usr/local/include/ceres/gradient_problem.h:
-
 /usr/local/include/ceres/gradient_checker.h:
-
-/usr/include/eigen3/Eigen/src/StlSupport/StdVector.h:
-
-/usr/local/include/ceres/covariance.h:
 
 /usr/local/include/ceres/dynamic_cost_function.h:
 
@@ -6488,7 +6482,11 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 
-/usr/include/x86_64-linux-gnu/bits/posix_opt.h:
+/usr/local/include/ceres/cost_function_to_functor.h:
+
+/usr/include/x86_64-linux-gnu/bits/confname.h:
+
+/usr/include/unistd.h:
 
 /usr/local/include/ceres/internal/memory.h:
 
@@ -6502,67 +6500,63 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/typeindex:
 
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ocl.hpp:
+
 /usr/local/include/ceres/solver.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
 
-/usr/include/c++/11/fstream:
+/oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp:
 
-/usr/local/include/ceres/cost_function_to_functor.h:
-
-/usr/include/x86_64-linux-gnu/bits/confname.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp:
-
-/usr/include/unistd.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/blenders.hpp:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/camera.hpp:
 
 /usr/include/c++/11/bits/stl_deque.h:
 
-/usr/include/c++/11/queue:
+/usr/include/c++/11/deque:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp:
+/usr/include/c++/11/queue:
 
 /usr/include/c++/11/bits/stl_list.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers_inl.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.inl.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/warpers.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/warpers.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h:
+/oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h:
+/oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h:
+/usr/include/c++/11/fstream:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h:
+/oscar/data/bkimia/cfiore/opencv/modules/videoio/include/opencv2/videoio.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h:
+/oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/background_segm.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/index_testing.h:
 
 /usr/include/c++/11/bits/quoted_string.h:
 
@@ -6576,57 +6570,59 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/iomanip:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h:
+/oscar/data/bkimia/cfiore/opencv/modules/highgui/include/opencv2/highgui.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_single_index.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/random.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/allocator.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dist.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix_opt.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/all_indices.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h:
 
 /usr/include/c++/11/bits/stl_multiset.h:
 
 /usr/include/c++/11/bits/stl_set.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/nn_index.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/params.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/matrix.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/general.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/utils/inference_engine.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dict.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp:
 
-/usr/include/c++/11/deque:
+/oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/async.hpp:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp:
+/oscar/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp:
 
 /usr/include/gflags/gflags_declare.h:
 
 ../include/Space.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/heap.h:
 
 /usr/include/c++/11/bits/unordered_map.h:
 
@@ -6635,6 +6631,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/Eigen/StdVector:
 
 /usr/include/c++/11/bits/hashtable_policy.h:
+
+/oscar/data/bkimia/cfiore/opencv/opencv_contrib/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp:
 
 /usr/include/c++/11/unordered_map:
 
@@ -6654,13 +6652,15 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 ../include/sevenScenes.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/config.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorFixedSize.h:
+
+/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/Tensor.h:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorStorage.h:
 
@@ -6718,15 +6718,11 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/limits:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp:
-
 /usr/include/eigen3/Eigen/src/Core/util/StaticAssert.h:
 
 /usr/include/c++/11/bits/refwrap.h:
 
 /usr/include/c++/11/bits/unique_lock.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/miniflann.hpp:
 
 /usr/include/c++/11/climits:
 
@@ -6754,8 +6750,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Core/CwiseUnaryView.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/result_set.h:
-
 /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h:
@@ -6764,13 +6758,13 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
 
+/usr/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h:
+
 /usr/include/c++/11/bits/postypes.h:
 
 /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
 /usr/include/eigen3/Eigen/src/LU/Determinant.h:
-
-/usr/include/c++/11/bits/stl_algo.h:
 
 /usr/include/eigen3/Eigen/src/Core/NestByValue.h:
 
@@ -6785,6 +6779,10 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/c++/11/bits/istream.tcc:
 
 /usr/include/eigen3/Eigen/src/Core/Diagonal.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/ground_truth.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp:
 
 /usr/include/c++/11/bits/basic_ios.tcc:
 
@@ -6804,6 +6802,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h:
 
+/usr/include/c++/11/ios:
+
 /usr/include/x86_64-linux-gnu/bits/fp-fast.h:
 
 /usr/include/c++/11/bits/basic_string.tcc:
@@ -6812,13 +6812,13 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/bits/functional_hash.h:
 
-/usr/include/glog/vlog_is_on.h:
+/usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.hpp:
+/usr/include/glog/vlog_is_on.h:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/error_t.h:
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/environments.h:
 
@@ -6831,6 +6831,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/asm-generic/errno.h:
 
 /usr/local/include/ceres/crs_matrix.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/version.hpp:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h:
 
@@ -6874,11 +6876,9 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Core/util/XprHelper.h:
 
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann.hpp:
+
 /usr/include/c++/11/cctype:
-
-/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/Tensor.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/util/Macros.h:
 
@@ -6891,6 +6891,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/defines.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
 
@@ -6910,13 +6912,15 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/plugins/CommonCwiseBinaryOps.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/hierarchical_clustering_index.h:
-
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
+
+/usr/include/c++/11/bits/stl_algo.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp:
 
 /usr/include/stdint.h:
 
-/usr/include/c++/11/bits/ptr_traits.h:
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp:
 
 /usr/include/x86_64-linux-gnu/sys/types.h:
 
@@ -6925,8 +6929,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/c++/11/bits/locale_classes.tcc:
 
 /usr/include/c++/11/ext/aligned_buffer.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
 
@@ -6948,19 +6950,21 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h:
-
 /usr/include/c++/11/initializer_list:
 
 /usr/include/c++/11/iosfwd:
 
 /usr/include/c++/11/streambuf:
 
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp:
+
 ../include/synthetic.h:
 
 /usr/include/c++/11/bits/concept_check.h:
 
 /usr/include/c++/11/bits/list.tcc:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/saving.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/gthr.h:
 
@@ -6969,8 +6973,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/Eigen/src/Core/functors/BinaryFunctors.h:
 
 /usr/include/eigen3/Eigen/src/plugins/CommonCwiseUnaryOps.h:
-
-/gpfs/data/bkimia/cfiore/opencv/include/opencv2/opencv.hpp:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorScan.h:
 
@@ -6986,11 +6988,11 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/bits/exception_defines.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching.hpp:
-
 /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cuda_types.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
 
@@ -7005,8 +7007,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/c++/11/bits/shared_ptr_base.h:
 
 /usr/include/x86_64-linux-gnu/bits/local_lim.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/exposure_compensate.hpp:
 
 /usr/include/c++/11/cstddef:
 
@@ -7032,13 +7032,21 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/bits/stl_tempbuf.h:
 
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp:
+
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h:
 
 /usr/include/c++/11/bits/nested_exception.h:
 
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kmeans_index.h:
+
 /usr/include/c++/11/bits/stl_algobase.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
+
+/usr/local/include/ceres/gradient_problem.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/util/Memory.h:
 
@@ -7054,15 +7062,11 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Core/Product.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp:
-
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
 
 /usr/include/eigen3/Eigen/src/Core/DiagonalProduct.h:
 
 /usr/include/x86_64-linux-gnu/asm/errno.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/vsx_utils.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
 
@@ -7071,6 +7075,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/x86_64-linux-gnu/bits/stdlib.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
+
+/usr/include/c++/11/ostream:
 
 /usr/include/eigen3/Eigen/src/Core/VectorBlock.h:
 
@@ -7084,13 +7090,13 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/complex:
 
+/oscar/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp:
+
 /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
 
 /usr/include/c++/11/bits/ostream_insert.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp:
 
 /usr/include/features-time64.h:
 
@@ -7102,6 +7108,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/chrono:
 
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util_inl.hpp:
+
 /usr/include/c++/11/bits/stl_function.h:
 
 /usr/include/c++/11/bits/memoryfwd.h:
@@ -7112,13 +7120,13 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsArrayAPI.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/util.hpp:
-
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorCostModel.h:
 
 /usr/local/include/ceres/conditioned_cost_function.h:
 
 /usr/local/include/ceres/internal/autodiff.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h:
 
 /usr/include/c++/11/algorithm:
 
@@ -7131,6 +7139,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp:
 
 /usr/include/c++/11/functional:
 
@@ -7150,11 +7160,15 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/bits/allocator.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/saturate.hpp:
-
 /usr/include/c++/11/cmath:
 
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_index.h:
+
 /usr/include/c++/11/type_traits:
+
+/oscar/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/autotuned_index.h:
 
 /usr/include/eigen3/Eigen/src/Core/CommaInitializer.h:
 
@@ -7168,21 +7182,19 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ocl.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
 
 /usr/include/eigen3/Eigen/src/Eigenvalues/HessenbergDecomposition.h:
-
-/usr/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp:
 
 /usr/include/c++/11/bits/hash_bytes.h:
 
 /usr/include/c++/11/bits/move.h:
 
 ../main.cpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/MathFunctionsImpl.h:
 
@@ -7194,43 +7206,27 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/x86_64-linux-gnu/bits/iscanonical.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/lsh_table.h:
-
 ../include/aachen.h:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorTraits.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/face.hpp:
-
 /usr/include/c++/11/bits/stringfwd.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp:
-
-/gpfs/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp:
 
 /usr/include/eigen3/Eigen/Core:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
-
-/usr/include/c++/11/bits/stl_construct.h:
-
 /usr/include/eigen3/Eigen/src/Core/ReturnByValue.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/layer.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/CwiseTernaryOp.h:
 
 /usr/include/eigen3/Eigen/src/Core/products/GeneralMatrixVector.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h:
-
 /usr/include/c++/11/bits/shared_ptr.h:
 
 ../src/CambridgeLandmarks.cpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc/segmentation.hpp:
-
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/logger.h:
 
 /usr/include/c++/11/cstdint:
 
@@ -7245,6 +7241,10 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/Eigen/src/Core/IO.h:
 
 /usr/include/x86_64-linux-gnu/bits/string_fortified.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video/tracking.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h:
 
 /usr/include/c++/11/memory:
 
@@ -7284,6 +7284,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/bits/predefined_ops.h:
 
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/dynamic_bitset.h:
+
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
 
 /usr/include/x86_64-linux-gnu/bits/sched.h:
@@ -7293,6 +7295,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
 
 /usr/include/eigen3/Eigen/src/Core/products/TriangularMatrixMatrix.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
@@ -7306,11 +7310,9 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
-/usr/include/c++/11/ostream:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp:
-
 /usr/include/c++/11/bits/localefwd.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvdef.h:
 
 /usr/local/include/ceres/jet.h:
 
@@ -7344,8 +7346,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/misc/Image.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp:
-
 /usr/include/eigen3/unsupported/Eigen/CXX11/Tensor:
 
 /usr/include/eigen3/Eigen/src/Core/Assign.h:
@@ -7374,8 +7374,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/strings.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp:
-
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
@@ -7397,10 +7395,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/Eigen/src/Core/DiagonalMatrix.h:
 
 /usr/include/eigen3/Eigen/src/plugins/IndexedViewMethods.h:
-
-/usr/include/c++/11/utility:
-
-/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorReduction.h:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls.h:
 
@@ -7429,6 +7423,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/Eigen/src/LU/FullPivLU.h:
 
 /usr/include/eigen3/Eigen/src/Core/arch/SSE/Complex.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/features2d/include/opencv2/features2d.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/arch/Default/Half.h:
 
@@ -7476,11 +7472,7 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseBinaryOps.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp:
-
 /usr/include/eigen3/Eigen/src/Core/EigenBase.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/linear_index.h:
 
 /usr/include/eigen3/unsupported/Eigen/SpecialFunctions:
 
@@ -7501,6 +7493,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/Eigen/src/Core/DenseStorage.h:
 
 /usr/include/eigen3/Eigen/src/Core/NoAlias.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/video/include/opencv2/video.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/CwiseBinaryOp.h:
 
@@ -7538,8 +7532,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Core/Ref.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn/dnn.inl.hpp:
-
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDeviceDefault.h:
 
 /usr/include/eigen3/Eigen/src/Core/Block.h:
@@ -7566,19 +7558,17 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Core/Inverse.h:
 
-/usr/include/eigen3/Eigen/src/Core/PermutationMatrix.h:
+/usr/include/c++/11/bits/ptr_traits.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/TriangularMatrix.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/ml/include/opencv2/ml/ml.inl.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/SelfAdjointView.h:
 
 /usr/include/c++/11/atomic:
 
 /usr/include/eigen3/Eigen/QR:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/any.h:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorFunctors.h:
 
@@ -7590,9 +7580,11 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/bits/atomic_lockfree_defines.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp:
+/usr/include/c++/11/utility:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/objdetect/include/opencv2/objdetect/detection_based_tracker.hpp:
+/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorReduction.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp:
 
 /usr/include/c++/11/unordered_set:
 
@@ -7622,6 +7614,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixMatrix.h:
 
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp:
+
 /usr/include/eigen3/Eigen/src/Core/products/SelfadjointProduct.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/float.h:
@@ -7638,6 +7632,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Core/CoreIterators.h:
 
+/usr/include/c++/11/numeric:
+
 /usr/include/eigen3/Eigen/src/Core/Select.h:
 
 /usr/include/eigen3/Eigen/src/Core/VectorwiseOp.h:
@@ -7645,6 +7641,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/Eigen/src/LU/arch/InverseSize4.h:
 
 /usr/include/eigen3/Eigen/src/Eigenvalues/Tridiagonalization.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/arch/Default/ConjHelper.h:
 
@@ -7658,15 +7656,19 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Core/Replicate.h:
 
+/usr/local/include/ceres/covariance.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp:
+
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorExecutor.h:
 
 /usr/include/eigen3/Eigen/src/Core/Reverse.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/matchers.hpp:
-
 /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h:
 
 /usr/include/eigen3/Eigen/src/Core/ArrayWrapper.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/composite_index.h:
 
 /usr/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h:
 
@@ -7704,6 +7706,8 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Householder/BlockHouseholder.h:
 
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/sampling.h:
+
 /usr/include/eigen3/Eigen/src/Core/Stride.h:
 
 /usr/include/eigen3/Eigen/src/QR/HouseholderQR.h:
@@ -7711,10 +7715,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorMap.h:
 
 /usr/include/eigen3/Eigen/src/QR/ColPivHouseholderQR.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/flann_base.hpp:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/bufferpool.hpp:
 
 /usr/include/eigen3/Eigen/src/Core/DenseBase.h:
 
@@ -7740,11 +7740,11 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Geometry/Quaternion.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/kdtree_index.h:
+/usr/include/eigen3/Eigen/src/Geometry/AngleAxis.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/base.hpp:
 
 /usr/include/eigen3/Eigen/src/Geometry/Scaling.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/photo/include/opencv2/photo.hpp:
 
 /usr/include/features.h:
 
@@ -7756,8 +7756,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Geometry/AlignedBox.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/affine.hpp:
-
 /usr/include/c++/11/sstream:
 
 /usr/include/eigen3/Eigen/src/Geometry/Umeyama.h:
@@ -7768,27 +7766,23 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/Eigen/src/Eigenvalues/ComplexEigenSolver.h:
 
-/usr/include/eigen3/Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h:
+/oscar/data/bkimia/cfiore/opencv/build/opencv2/opencv_modules.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/imgproc/include/opencv2/imgproc.hpp:
+/usr/include/eigen3/Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h:
 
 /usr/include/eigen3/Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h:
 
 /usr/local/include/ceres/dynamic_autodiff_cost_function.h:
 
+/oscar/data/bkimia/cfiore/opencv/modules/flann/include/opencv2/flann/timer.h:
+
 /usr/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h:
 
 /usr/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsImpl.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/eigen.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/version.hpp:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/hal/interface.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cv_cpu_dispatch.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp:
 
 /usr/include/c++/11/bits/stl_uninitialized.h:
 
@@ -7798,21 +7792,17 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/bits/align.h:
 
+/usr/include/eigen3/Eigen/src/Core/PermutationMatrix.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/utility.hpp:
+
 /usr/local/include/ceres/internal/array_selector.h:
 
 /usr/include/c++/11/bits/unique_ptr.h:
 
 /usr/include/assert.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd_wrapper.hpp:
-
 /usr/include/c++/11/bits/allocated_ptr.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp:
-
-/usr/include/eigen3/Eigen/src/Geometry/AngleAxis.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/neon_utils.hpp:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorExpr.h:
 
@@ -7824,25 +7814,47 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/backward/auto_ptr.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/check.hpp:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/fast_math.hpp:
+/usr/local/include/ceres/internal/numeric_diff.h:
 
-/usr/include/c++/11/numeric:
+/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorPadding.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/types.hpp:
+/usr/include/c++/11/istream:
+
+/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorForwardDeclarations.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/traits.hpp:
+
+/usr/include/eigen3/Eigen/src/Core/NumTraits.h:
+
+/usr/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsImpl.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
+
+/usr/include/c++/11/bits/stl_construct.h:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/matx.hpp:
 
 /usr/include/c++/11/bits/vector.tcc:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.hpp:
 
-/usr/include/linux/close_range.h:
+/oscar/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/seam_finders.hpp:
 
-/usr/include/c++/11/bits/stl_numeric.h:
+/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionGpu.h:
 
-/usr/include/c++/11/ios:
+/usr/include/eigen3/Eigen/src/StlSupport/StdVector.h:
 
-/gpfs/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp:
+/oscar/data/bkimia/cfiore/opencv/modules/dnn/include/opencv2/dnn.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/mat.inl.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/persistence.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/operations.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/cvstd.inl.hpp:
 
 /usr/include/c++/11/ratio:
 
@@ -7854,6 +7866,10 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/bits/std_mutex.h:
 
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/optim.hpp:
+
+/oscar/data/bkimia/cfiore/opencv/modules/core/include/opencv2/core/ovx.hpp:
+
 /usr/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsBFloat16.h:
 
 /usr/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsPacketMath.h:
@@ -7861,10 +7877,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/c++/11/bits/stl_heap.h:
 
 /usr/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsFunctors.h:
-
-/usr/include/eigen3/Eigen/src/Core/NumTraits.h:
-
-/usr/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsImpl.h:
 
 /usr/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsHalf.h:
 
@@ -7890,13 +7902,9 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/c++/11/random:
 
-/usr/local/include/ceres/internal/numeric_diff.h:
+/usr/include/linux/close_range.h:
 
-/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorPadding.h:
-
-/usr/include/c++/11/istream:
-
-/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorForwardDeclarations.h:
+/usr/include/c++/11/bits/stl_numeric.h:
 
 /usr/include/c++/11/debug/assertions.h:
 
@@ -7906,6 +7914,10 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDeviceGpu.h:
 
+/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorUInt128.h:
+
+/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIndexList.h:
+
 /usr/include/c++/11/bit:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDimensionList.h:
@@ -7914,17 +7926,7 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorInitializer.h:
 
-/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIndexList.h:
-
-/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorUInt128.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/calib3d/include/opencv2/calib3d.hpp:
-
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIntDiv.h:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/stitching/include/opencv2/stitching/detail/motion_estimators.hpp:
-
-/gpfs/data/bkimia/cfiore/opencv/modules/imgcodecs/include/opencv2/imgcodecs.hpp:
 
 /usr/include/c++/11/bits/stl_pair.h:
 
@@ -7937,8 +7939,6 @@ CMakeFiles/image_localization_project.dir/src/synthetic.cpp.o: ../src/synthetic.
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionMapper.h:
 
 /usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionBlocking.h:
-
-/usr/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionGpu.h:
 
 /usr/include/gflags/gflags_gflags.h:
 

@@ -623,20 +623,22 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 //    auto startTime = std::chrono::high_resolution_clock::now();
 //    double total = 0;
 
-    for (auto p : all_matches) {
-        cv::Point2d pt2D(p.first.first, p.first.second);
-        Eigen::Vector3d pt3D = pose::estimate3Dpoint(p.second, R_is, T_is, K_is, all_pts_i);
+    for (int i = 0; i < all_matches.size(); i++) {
+        auto p = all_matches[i];
 
-//        if (pose::reprojError(pt3D, R_q, T_q, K_q, pt2D.x, pt2D.y) > 20) continue;
-//
-//        points3d_adj[i][0] = pt3D[0];
-//        points3d_adj[i][1] = pt3D[1];
-//        points3d_adj[i][2] = pt3D[2];
-//
-//        for(const auto & m : p.second) {
-//            auto cost = NView::Create(R_is[m.first], T_is[m.first], K_is[m.first], pt2D);
-//            problem.AddResidualBlock(cost, loss, points3d_adj[i]);
-//        }
+        cv::Point2d pt2D(p.first.first, p.first.second);
+        Eigen::Vector3d pt3D = pose::nview(p.second, R_is, T_is, K_is, all_pts_i);
+
+    //    if (pose::reprojError(pt3D, R_q, T_q, K_q, pt2D.x, pt2D.y) > 15) continue;
+
+    //    points3d_adj[i][0] = pt3D[0];
+    //    points3d_adj[i][1] = pt3D[1];
+    //    points3d_adj[i][2] = pt3D[2];
+
+    //    for(const auto & m : p.second) {
+    //        auto cost = NView::Create(R_is[m.first], T_is[m.first], K_is[m.first], pt2D);
+    //        problem.AddResidualBlock(cost, loss, points3d_adj[i]);
+    //    }
 
         auto cost = ReprojectionError::Create(pt2D, pt3D, K_q);
         problem.AddResidualBlock(cost, loss, camera);
@@ -652,9 +654,9 @@ pose::adjustHypothesis (const vector<Eigen::Matrix3d> & R_is,
 
     ceres::Solver::Options options;
 //    options.minimizer_progress_to_stdout = true;
-//    options.function_tolerance = 1e-12;
-//    options.gradient_tolerance = 1e-12;
-    options.linear_solver_type = ceres::DENSE_SCHUR;
+   options.function_tolerance = 1e-12;
+   options.gradient_tolerance = 1e-12;
+    options.linear_solver_type = ceres::ITERATIVE_SCHUR;
     ceres::Solver::Summary summary;
     if (problem.NumResidualBlocks() > 0) {
         ceres::Solve(options, &problem, &summary);

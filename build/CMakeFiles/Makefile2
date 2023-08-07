@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /gpfs/data/bkimia/cfiore/image_localization_project
+CMAKE_SOURCE_DIR = /oscar/data/bkimia/cfiore/image_localization_project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /gpfs/data/bkimia/cfiore/image_localization_project/build
+CMAKE_BINARY_DIR = /oscar/data/bkimia/cfiore/image_localization_project/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/image_localization_project.dir/clean
 CMakeFiles/image_localization_project.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/image_localization_project.dir/build.make CMakeFiles/image_localization_project.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10 "Built target image_localization_project"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10 "Built target image_localization_project"
 .PHONY : CMakeFiles/image_localization_project.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/image_localization_project.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles 10
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/image_localization_project.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /gpfs/data/bkimia/cfiore/image_localization_project/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /oscar/data/bkimia/cfiore/image_localization_project/build/CMakeFiles 0
 .PHONY : CMakeFiles/image_localization_project.dir/rule
 
 # Convenience name for target.
