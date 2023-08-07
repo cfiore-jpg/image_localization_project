@@ -272,14 +272,14 @@ int main() {
 //                cv::waitKey();
 
 
-                Eigen::Matrix3d R_adjusted = R_estimation;
-                Eigen::Vector3d T_adjusted = -R_estimation * c_estimation;
+                R_adjustment = R_estimation;
+                T_adjustment = -R_estimation * c_estimation;
                 auto adj_points = pose::adjustHypothesis(best_R_is, best_T_is, best_K_is,
                                                          K_q, best_inliers_q, best_inliers_i,
-                                                         R_adjusted, T_adjusted);
-                Eigen::Vector3d c_adjusted = -R_adjusted.transpose() * T_adjusted;
+                                                         R_adjustment, T_adjustment);
+                Eigen::Vector3d c_adjusted = -R_adjustment.transpose() * T_adjustment;
                 c_error_adj = functions::getDistBetween(c_q, c_adjusted);
-                r_error_adj = functions::rotationDifference(R_q, R_adjusted);
+                r_error_adj = functions::rotationDifference(R_q, R_adjustment);
 
 
                 endTime = std::chrono::high_resolution_clock::now();
